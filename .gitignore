@@ -1,0 +1,36 @@
+# Dependências Node
+node_modules/
+
+# Pastas de build compiladas pelo Webpack/TypeScript
+dist/
+out/
+build/
+
+# Artefatos do VS Code
+.vscode-test/
+*.vsix
+
+# Logs e arquivos de debug do npm/yarn
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Python (para os scripts do extrator)
+__pycache__/
+*.pyc
+
+# C/C++ (para os arquivos compilados no test-targets)
+*.o
+*.out
+*.exe
+.gdb_history
+
+# Sistema Operacional (Windows/Mac/Linux)
+.DS_Store
+Thumbs.db
