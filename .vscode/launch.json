@@ -10,7 +10,10 @@
             ],
             "outFiles": [
                 "${workspaceFolder}/packages/extension/dist/**/*.js"
-            ]
+            ],
+            "env": {
+                "NODE_OPTIONS": "--no-deprecation"
+            }
         }
     ]
 }
