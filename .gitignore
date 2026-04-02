@@ -1,8 +1,15 @@
 # Dependências Node
 node_modules/
-
-# Pastas de build compiladas pelo Webpack/TypeScript
+.yarn
+.cache/
 dist/
+
+# Arquivos de depuração
+vscode-profile-*
+
+# Arquivos de Build
+dist/
+packages/*/dist/
 out/
 build/
 
@@ -10,12 +17,11 @@ build/
 .vscode-test/
 *.vsix
 
-# Logs e arquivos de debug do npm/yarn
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Yarn
+.yarn/install-state.gz
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/cache/
 
 # dotenv environment variables file
 .env

@@ -1,0 +1,13 @@
+{
+  "name": "dbg-algo",
+  "private": true,
+  "packageManager": "yarn@4.13.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^20",
+    "dbg-algo-extension": "workspace:^",
+    "typescript": "~5.9.3"
+  }
+}
