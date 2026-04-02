@@ -460,7 +460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/vscode@npm:^1.110.0":
+"@types/vscode@npm:^1.95.0":
   version: 1.110.0
   resolution: "@types/vscode@npm:1.110.0"
   checksum: 10c0/e02bf7186de6958c2eb51e12d9c58364f1b2a8f2a237592b93e90e256afbe254455e12eadcfb6b7b47b587f49b2824fc71d659bbd2532ac0c4ffda9d118df322
@@ -1053,7 +1053,7 @@ __metadata:
   dependencies:
     "@types/express": "npm:^5.0.6"
     "@types/node": "npm:^20"
-    "@types/vscode": "npm:^1.110.0"
+    "@types/vscode": "npm:^1.95.0"
     "@types/ws": "npm:^8.18.1"
     esbuild: "npm:^0.27.4"
     express: "npm:^5.2.1"
@@ -2820,7 +2820,7 @@ __metadata:
     uuid: ^3.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^13.0.0
     vis-data: ">=8.0.0"
     vis-util: ">=6.0.0"
-  checksum: 10c0/c28750254abe82e6aecf1014a7bb1d3ac7955c3f731a333fb6386522cf4922ecf47abd503f394cfcd8c00b457a14747f2bcc10e7eec56a2105df4334204a0116
+  checksum: 10c0/ed5e4591ddad21e4a1f63e9cdd2a0b33cd241d7abf89bc66e51a61aec980df5594d47de6f4d958a8822181fd1926a37cd42db2b14fb65c1d052e208a9db0b4c2
   languageName: node
   linkType: hard
 

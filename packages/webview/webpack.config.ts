@@ -1,12 +1,16 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import * as path from 'path';
 import * as webpack from 'webpack';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const config: webpack.Configuration = {
     mode: 'development',
     entry: './src/index.tsx',
     output: {
-        path: path.resolve(import.meta.dirname, 'dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
         // Limpa a pasta dist antes de cada build
         clean: true,
