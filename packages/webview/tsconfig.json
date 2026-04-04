@@ -4,15 +4,11 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["node"],
-    "tsBuildInfoFile": "./.cache/tsconfig.tsbuildinfo"
+    "types": []
   },
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
-  "include": ["src/**/*", "webpack.config.ts"]
+  "include": ["src/**/*"]
 }

@@ -1,29 +1,26 @@
 const esbuild = require('esbuild');
+const { mkdirSync } = require('fs');
+const { resolve } = require('path');
 
-// Verifica se o script foi chamado com a flag --watch (para modo de desenvolvimento)
 const isWatch = process.argv.includes('--watch');
+const outDir = resolve(__dirname, 'dist');
+
+// Garante que a pasta dist exista antes do início da compilação
+mkdirSync(outDir, { recursive: true });
 
 const buildOptions = {
-  // Ponto de entrada do backend
   entryPoints: ['./src/extension.ts'],
-
-  // Arquivo final empacotado
   outfile: './dist/extension.js',
-
-  // Junta todas as dependências em um único arquivo
   bundle: true,
-
-  // Define que o ambiente de execução é o Node.js
   platform: 'node',
-
-  // Ignora o módulo vscode
+  // Define CommonJS para o VS Code extension host
+  format: 'cjs',
+  // Node 20 (VS Code ^1.95.0 usa Node 20 runtime)
+  target: ['node20'],
   external: ['vscode'],
-
-  // Minifica o código para economizar espaço
   minify: !isWatch,
-
-  // Gera source maps para facilitar o debug (breakpoints no VS Code)
   sourcemap: true,
+  loader: { '.ts': 'ts' },
 };
 
 async function build() {
@@ -37,4 +34,7 @@ async function build() {
   }
 }
 
-build().catch(() => process.exit(1));
+build().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
