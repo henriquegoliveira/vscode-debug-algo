@@ -1,10 +1,6 @@
-import esbuild from 'esbuild';
-import { copyFileSync, mkdirSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const esbuild = require('esbuild');
+const { copyFileSync, mkdirSync } = require('fs');
+const { resolve, dirname } = require('path');
 
 const isWatch = process.argv.includes('--watch');
 
@@ -48,4 +44,7 @@ async function build() {
   }
 }
 
-build().catch(() => process.exit(1));
+build().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

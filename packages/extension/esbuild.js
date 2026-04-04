@@ -27,10 +27,10 @@ async function build() {
   if (isWatch) {
     const context = await esbuild.context(buildOptions);
     await context.watch();
-    console.log('Observando mudancas no codigo da extensao...');
+    console.log('Watching extension changes...');
   } else {
     await esbuild.build(buildOptions);
-    console.log('Build da extensao concluido com sucesso!');
+    console.log('Extension build completed successfully!');
   }
 }
 

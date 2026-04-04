@@ -1,6 +1,5 @@
 {
   "name": "dbga-webview",
-  "type": "module",
   "scripts": {
     "build": "tsc --noEmit && node esbuild.js",
     "dev": "node esbuild.js --watch",
