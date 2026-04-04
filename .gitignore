@@ -1,3 +1,5 @@
+docs/
+
 # Dependências Node
 node_modules/
 .yarn
