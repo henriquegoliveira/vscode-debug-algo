@@ -1,19 +1,15 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Run Extension",
-            "type": "extensionHost",
-            "request": "launch",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}/packages/extension"
-            ],
-            "outFiles": [
-                "${workspaceFolder}/packages/extension/dist/**/*.js"
-            ],
-            "env": {
-                "NODE_OPTIONS": "--no-deprecation"
-            }
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}/packages/extension"],
+      "outFiles": ["${workspaceFolder}/packages/extension/dist/**/*.js"],
+      "env": {
+        "NODE_OPTIONS": "--no-deprecation"
+      }
+    }
+  ]
 }

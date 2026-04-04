@@ -1,27 +1,18 @@
 {
-    "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["node"],
+    "tsBuildInfoFile": "./.cache/tsconfig.tsbuildinfo"
+  },
+  "ts-node": {
     "compilerOptions": {
-        "target": "ES2022",
-        "module": "ESNext",
-        "moduleResolution": "bundler",
-        "jsx": "react-jsx",
-        "lib": [
-            "DOM",
-            "DOM.Iterable",
-            "ESNext"
-        ],
-        "types": [
-            "node"
-        ],
-        "tsBuildInfoFile": "./.cache/tsconfig.tsbuildinfo"
-    },
-    "ts-node": {
-        "compilerOptions": {
-            "module": "CommonJS"
-        }
-    },
-    "include": [
-        "src/**/*",
-        "webpack.config.ts"
-    ]
+      "module": "CommonJS"
+    }
+  },
+  "include": ["src/**/*", "webpack.config.ts"]
 }
