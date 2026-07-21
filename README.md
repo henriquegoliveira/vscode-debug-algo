@@ -14,7 +14,7 @@ Este projeto é fruto de uma pesquisa de Iniciação Científica desenvolvida na
 
 ## Arquitetura e Stack Tecnológico
 
-A arquitetura adota um modelo de múltiplos módulos (Monorepo) estruturado com o **Yarn Moderno (Plug'n'Play)** e workspaces bem definidos, focando em alta performance e escalabilidade.
+A arquitetura adota um modelo de múltiplos módulos (Monorepo) estruturado com **Yarn Workspaces** (usando o linker `node-modules`, sem Plug'n'Play), focando em organização e escalabilidade.
 
 ### Backend (Extensão VS Code)
 
@@ -30,8 +30,7 @@ A arquitetura adota um modelo de múltiplos módulos (Monorepo) estruturado com 
 
 ### Infraestrutura e Metodologia
 
-- **Docker:** Utilizado para orquestrar e conteinerizar testes práticos, garantindo um ambiente isolado e controlado para validar o comportamento dos depuradores.
-- **UML:** Modelagem estruturada (Diagramas de Componentes, Classes e Sequência) para guiar o fluxo assíncrono entre C++, Python, Node.js e React.
+- **UML:** Modelagem estruturada (Diagramas de Componentes, Classes e Sequência) para guiar o fluxo assíncrono entre C/C++, Python, Node.js e React.
 
 ## Como Rodar Localmente
 
@@ -48,19 +47,14 @@ A arquitetura adota um modelo de múltiplos módulos (Monorepo) estruturado com 
 
    ```bash
    git clone <ainda privado>
-   cd dbg-algo-extension
+   cd vscode-dbg-algo
    ```
 
-2. Ative a versão correta do Yarn e instale as dependências. Como usamos **Yarn PnP**, você não verá pastas `node_modules` massivas:
+2. Ative a versão correta do Yarn e instale as dependências:
 
    ```bash
    corepack enable
    yarn install
-   ```
-
-3. Gere o SDK do VS Code para suporte de intelliSense do TypeScript:
-   ```bash
-   yarn dlx @yarnpkg/sdks vscode
    ```
 
 ### Construção (Build) e Execução
@@ -70,20 +64,16 @@ O projeto é dividido em dois workspaces principais: `packages/extension` e `pac
 1. **Compile o Frontend (Webview):**
 
    ```bash
-   yarn workspace dbg-algo-webview build
+   yarn workspace dbga-webview build
    ```
 
 2. **Inicie o Modo de Observação no Backend:**
 
    ```bash
-   yarn workspace dbg-algo-extension dev
+   yarn workspace dbga-extension dev
    ```
 
 3. **Inicie a Extensão:**
    - Abra o projeto no VS Code.
    - Pressione `F5` para iniciar o _Extension Development Host_.
    - Na nova janela que se abrir, inicie uma sessão de depuração de um programa C/C++ ou abra a paleta de comandos (`Ctrl + Shift + P`) e execute **DbgAlgo: Iniciar Visualizador**.
-
-## Sobre a Pesquisa
-
-Este projeto faz parte do escopo "_Plug-in para Visualização de Algoritmos e Estruturas de Dados no VS Code: Integração de Depuração e Aprendizagem de Algoritmos em C/C++_". É voltado para a melhoria do ensino de metodologias e técnicas da computação, transformando variáveis abstratas em topologias interativas de fácil compreensão acadêmica.
