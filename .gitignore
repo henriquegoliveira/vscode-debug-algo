@@ -15,7 +15,7 @@ packages/*/dist/
 out/
 build/
 
-# Artefatos do VS Code
+# VS Code
 .vscode-test/
 *.vsix
 

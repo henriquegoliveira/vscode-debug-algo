@@ -11,7 +11,6 @@ export default [
   {
     ignores: [
       '**/.yarn/**',
-      '**/.pnp.*',
       '**/dist/**',
       '**/node_modules/**',
       '**/.cache/**',
