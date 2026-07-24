@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://dbg-algo/schemas/graph-snapshot.schema.json",
+  "title": "GraphSnapshot",
+  "description": "Snapshot minimo de uma estrutura de dados dinamica",
+  "type": "object",
+  "required": ["nodes", "edges"],
+  "additionalProperties": false,
+  "properties": {
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/GraphNode" }
+    },
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/GraphEdge" }
+    }
+  },
+  "definitions": {
+    "GraphNode": {
+      "type": "object",
+      "required": ["id", "value"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]+$",
+          "description": "Endereco de memoria do node 'hex(int(ponteiro))' em Python."
+        },
+        "value": {
+          "type": "integer",
+          "description": "Valor escalar armazenado no node. Apenas Int no momento"
+        }
+      }
+    },
+    "GraphEdge": {
+      "type": "object",
+      "required": ["from", "to"],
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]+$",
+          "description": "id (endereco) do node de origem. "
+        },
+        "to": {
+          "type": "string",
+          "pattern": "^0x[0-9a-f]+$",
+          "description": "id (endereco) do node de destino. "
+        }
+      }
+    }
+  }
+}

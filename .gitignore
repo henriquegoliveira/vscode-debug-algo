@@ -1,44 +1,29 @@
-docs/
-
 # Dependências Node
 node_modules/
-.yarn
-.cache/
-dist/
 
-# Arquivos de depuração
-vscode-profile-*
+# Yarn
+.yarn/
 
 # Arquivos de Build
 dist/
-packages/*/dist/
 out/
 build/
+bin/
 
-# VS Code
-.vscode-test/
-*.vsix
-
-# Yarn
-.yarn/install-state.gz
-.yarn/unplugged/
-.yarn/build-state.yml
-.yarn/cache/
-
-# dotenv environment variables file
-.env
-.env.test
-
-# Python (para os scripts do extrator)
+# Python
 __pycache__/
 *.pyc
 
-# C/C++ (para os arquivos compilados no test-targets)
+# C/C++
 *.o
 *.out
 *.exe
 .gdb_history
 
-# Sistema Operacional (Windows/Mac/Linux)
-.DS_Store
-Thumbs.db
+# VS Code
+vscode-profile-*
+.vscode-test/
+*.vsix
+
+.env
+.env.test
