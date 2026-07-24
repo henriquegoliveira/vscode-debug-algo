@@ -10,6 +10,9 @@ out/
 build/
 bin/
 
+# Arquivos de test
+expected/
+
 # Python
 __pycache__/
 *.pyc
