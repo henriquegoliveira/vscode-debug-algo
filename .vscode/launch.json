@@ -1,16 +1,35 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Run Extension",
-            "type": "extensionHost",
-            "request": "launch",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}/packages/extension"
-            ],
-            "outFiles": [
-                "${workspaceFolder}/packages/extension/dist/**/*.js"
-            ]
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}/packages/extension"],
+      "outFiles": ["${workspaceFolder}/packages/extension/dist/**/*.js"],
+      "env": {
+        "NODE_OPTIONS": "--no-deprecation"
+      }
+    },
+    {
+      "name": "[TEST] linked_list_simple (GDB / cpptools)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/test-targets/bin/linked_list_simple",
+      "args": [],
+      "cwd": "${workspaceFolder}/test-targets",
+      "MIMode": "gdb",
+      "preLaunchTask": "build: test-targets",
+      "stopAtEntry": false
+    },
+    {
+      "name": "[TEST] linked_list_simple (LLDB / CodeLLDB)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/test-targets/bin/linked_list_simple",
+      "args": [],
+      "cwd": "${workspaceFolder}/test-targets",
+      "preLaunchTask": "build: test-targets"
+    }
+  ]
 }
