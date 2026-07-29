@@ -1,12 +1,23 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import { DebugSessionManager } from './debugSessionManager';
+import { ExtractorInvoker } from './extractorInvoker';
+import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extensão DbgAlgo ativada com sucesso!');
 
-  // Registra o comando exatamente como está no package.json
+  const invoker = new ExtractorInvoker(context.extensionPath);
+  const sessionManager = new DebugSessionManager(invoker);
+  context.subscriptions.push(sessionManager);
+
+  // Registra o comando que está no package.json
   let disposable = vscode.commands.registerCommand('dbg-algo.start', () => {
+    // Avisa ao usuário se não houver como extrair dados agora.
+    // Não impede de abrir o painel.
+    warnIfNoSupportedDebugSession(sessionManager);
+
     // Cria a aba do Webview
     const panel = vscode.window.createWebviewPanel(
       'dbgAlgoWebview',
