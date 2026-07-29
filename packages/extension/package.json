@@ -13,7 +13,6 @@
     "Education"
   ],
   "activationEvents": [
-    "onCommand",
     "onDebug"
   ],
   "main": "./dist/extension.js",
