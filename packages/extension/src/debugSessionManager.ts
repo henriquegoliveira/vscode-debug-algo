@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { DebuggerType } from './debuggerType';
 import { ExtractorInvoker } from './extractorInvoker';
+import { GraphSnapshot } from './graphSnapshot';
 
 /**
  * Gerencia o ciclo de vida das sessões de depuração, identificando o tipo de
@@ -10,6 +11,11 @@ import { ExtractorInvoker } from './extractorInvoker';
  *   sessões, não a cada pausa. Usado para manter o rastro da sessão atual.
  * - Para detectar pausas, o tráfego do Debug Adapter Protocol (DAP) é interceptado
  *   usando `registerDebugAdapterTrackerFactory` e escutando o evento `stopped`.
+ * - O mesmo tracker também escuta o evento `process` (dispara no início da sessão,
+ *   bem antes de qualquer `stopped`), de onde vem o `systemProcessId`, o PID do
+ *   processo depurado, necessário pra montar o caminho do arquivo de snapshot
+ *   (`dbg-algo-snapshot-<pid>.json`). Sem isso o `ExtractorInvoker` não tem como
+ *   saber qual arquivo ler depois de disparar a extração.
  */
 
 export class DebugSessionManager implements vscode.Disposable {
@@ -31,6 +37,14 @@ export class DebugSessionManager implements vscode.Disposable {
   private readonly importedSessions = new Set<string>();
 
   /**
+   * PID do processo depurado, por sessão. Vem do evento DAP `process`
+   * (campo `systemProcessId`), capturado antes de qualquer `stopped`.
+   * Necessário porque o script Python nomeia o arquivo de snapshot com
+   * esse mesmo PID, sem isso o backend não sabe qual arquivo ler.
+   */
+  private readonly sessionPids = new Map<string, number>();
+
+  /**
    * Coleção de inscrições de eventos e recursos que precisam ser liberados.
    *
    * Na API do VS Code, métodos de registro (como `vscode.debug.on*`) retornam
@@ -47,8 +61,12 @@ export class DebugSessionManager implements vscode.Disposable {
    * monitorar a troca, o encerramento e o tráfego DAP das sessões de depuração.
    *
    * @param invoker Instância responsável por disparar os comandos de extração.
+   * @param onSnapshot Callback chamado com o snapshot lido e validado a cada pausa. (provisório)
    */
-  constructor(private readonly invoker: ExtractorInvoker) {
+  constructor(
+    private readonly invoker: ExtractorInvoker,
+    private readonly onSnapshot: (snapshot: GraphSnapshot, session: vscode.DebugSession) => void,
+  ) {
     this.disposables.push(
       // Mantém 'currentSession' sincronizado quando o usuário troca de abas/sessões
       vscode.debug.onDidChangeActiveDebugSession((session) => {
@@ -58,6 +76,7 @@ export class DebugSessionManager implements vscode.Disposable {
       // Limpa o rastro de importação e esvazia a sessão ativa se ela for encerrada
       vscode.debug.onDidTerminateDebugSession((session) => {
         this.importedSessions.delete(session.id);
+        this.sessionPids.delete(session.id);
         if (this.currentSession?.id === session.id) {
           this.currentSession = undefined;
         }
@@ -75,11 +94,18 @@ export class DebugSessionManager implements vscode.Disposable {
 
   /**
    * Analisa todas as mensagens trafegadas entre o VS Code e o depurador.
-   * Funciona como um filtro: a execução só prossegue se a mensagem for uma pausa
-   * válida e originada de um depurador suportado pela extensão.
+   * Dois eventos interessam: `process` (guarda o PID) e `stopped` (dispara
+   * a extração). Qualquer outra mensagem é ignorada.
    */
   private handleDapMessage(session: vscode.DebugSession, message: unknown): void {
-    if (!isStoppedEvent(message)) {
+    const processInfo = asProcessEvent(message) ?? asLaunchedProcessOutput(message);
+    if (processInfo !== undefined) {
+      this.sessionPids.set(session.id, processInfo.systemProcessId);
+      return;
+    }
+
+    const stoppedInfo = asStoppedEvent(message);
+    if (stoppedInfo === undefined) {
       return;
     }
 
@@ -88,20 +114,42 @@ export class DebugSessionManager implements vscode.Disposable {
       return;
     }
 
-    void this.onSessionStopped(session, type);
+    void this.onSessionStopped(session, type, stoppedInfo.threadId);
   }
 
   /**
    * Acionado toda vez que uma sessão suportada entra em pausa.
-   * Determina se é o momento de importar o módulo base (apenas na 1ª pausa)
-   * e comanda a injeção do script de dump.
+   * Determina se é o momento de importar o módulo base (apenas na 1ª pausa),
+   * resolve o PID já capturado e comanda a injeção do script de dump.
    */
-  private async onSessionStopped(session: vscode.DebugSession, type: DebuggerType): Promise<void> {
+  private async onSessionStopped(
+    session: vscode.DebugSession,
+    type: DebuggerType,
+    threadId: number,
+  ): Promise<void> {
+    const pid = this.sessionPids.get(session.id);
+    if (pid == undefined) {
+      console.warn(
+        `[DbgAlgo] sessao ${session.id} parou mas o PID do processo depurado ainda nao foi capturado`,
+      );
+      return;
+    }
+
     const firstPauseThisSession = !this.importedSessions.has(session.id);
     if (firstPauseThisSession) {
       this.importedSessions.add(session.id);
     }
-    await this.invoker.invoke(session, type, { importModule: firstPauseThisSession });
+
+    try {
+      const snapshot = await this.invoker.invoke(session, type, {
+        importModule: firstPauseThisSession,
+        pid,
+        threadId,
+      });
+      this.onSnapshot(snapshot, session);
+    } catch (err) {
+      console.error(`[DbgAlgo] falha ao extrair/ler snapshot da sessao ${session.id}`, err);
+    }
   }
 
   /**
@@ -131,15 +179,70 @@ export class DebugSessionManager implements vscode.Disposable {
 }
 
 /**
- * Função de validação (Type Guard) que inspeciona uma mensagem desconhecida (unknown)
- * e confirma se ela possui a assinatura de um evento DAP de parada (stopped).
+ * Type guard pro evento DAP `stopped`. Retorna o `threadId` (necessário
+ * pro `ExtractorInvoker` resolver o `frameId`) se a mensagem for esse
+ * evento e trouxer `body.threadId`, ou `undefined` caso contrário.
  *
  * O evento `stopped` indica que a execução bateu em um breakpoint, exceção ou fim de passo (step).
  */
-function isStoppedEvent(message: unknown): boolean {
+function asStoppedEvent(message: unknown): { threadId: number } | undefined {
   if (typeof message !== 'object' || message === null) {
-    return false;
+    return undefined;
   }
-  const candidate = message as { type?: unknown; event?: unknown };
-  return candidate.type === 'event' && candidate.event === 'stopped';
+  const candidate = message as { type?: unknown; event?: unknown; body?: unknown };
+  if (candidate.type !== 'event' || candidate.event !== 'stopped') {
+    return undefined;
+  }
+  const body = candidate.body as { threadId?: unknown } | undefined;
+  if (typeof body?.threadId !== 'number') {
+    return undefined;
+  }
+
+  return { threadId: body.threadId };
+}
+
+/**
+ * Fallback pro PID quando o depurador não manda o evento `process`.
+ * Não é parte do DAP, é comportamento específico do CodeLLDB.
+ *
+ * Cobre só o caso `launch`.
+ */
+function asLaunchedProcessOutput(message: unknown): { systemProcessId: number } | undefined {
+  if (typeof message !== 'object' || message === null) {
+    return undefined;
+  }
+  const candidate = message as { type?: unknown; event?: unknown; body?: unknown };
+  if (candidate.type !== 'event' || candidate.event !== 'output') {
+    return undefined;
+  }
+  const body = candidate.body as { category?: unknown; output?: unknown } | undefined;
+  if (body?.category !== 'console' || typeof body.output !== 'string') {
+    return undefined;
+  }
+  const match = /^Launched process (\d+) from/.exec(body.output);
+  if (match === null) {
+    return undefined;
+  }
+  return { systemProcessId: Number(match[1]) };
+}
+
+/**
+ * Type guard pro evento DAP `process`. Retorna o corpo tipado
+ * (`{ systemProcessId }`) se a mensagem for esse evento, ou `undefined`
+ * caso contrário.
+ */
+function asProcessEvent(message: unknown): { systemProcessId: number } | undefined {
+  if (typeof message !== 'object' || message === null) {
+    return undefined;
+  }
+  const candidate = message as { type?: unknown; event?: unknown; body?: unknown };
+  if (candidate.type !== 'event' || candidate.event !== 'process') {
+    return undefined;
+  }
+  const body = candidate.body as { systemProcessId?: unknown } | undefined;
+  if (typeof body?.systemProcessId !== 'number') {
+    return undefined;
+  }
+
+  return { systemProcessId: body.systemProcessId };
 }

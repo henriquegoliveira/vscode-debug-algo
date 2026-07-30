@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as os from 'os';
 import { DebuggerType } from './debuggerType';
+import { SnapshotReader } from './snapshotReader';
+import { GraphSnapshot } from './graphSnapshot';
 
 /**
  * Opções de configuração para o disparo da extração de variáveis.
@@ -16,6 +19,20 @@ export interface InvokeOptions {
    * Nome da variável a ser inspecionada no frame atual.
    */
   rootVar?: string;
+
+  /**
+   * PID do processo depurado (não o do GDB/LLDB em si). Usado pra montar
+   * o caminho do arquivo de snapshot, mesma convenção usada pelo script
+   * Python: `<tmpdir>/dbg-algo-snapshot-<pid>.json`. Vem do evento DAP
+   * `process`, capturado pelo `DebugSessionManager`.
+   */
+  pid: number;
+
+  /**
+   * ID da thread parada, vindo do `body.threadId` do evento DAP `stoped`.
+   * Necessário para resolver o `frameId` do `evaluate`.
+   */
+  threadId: number;
 }
 
 /**
@@ -24,13 +41,21 @@ export interface InvokeOptions {
  * A requisição DAP `evaluate` usa `context: "repl"` para rodar comandos
  * no console de depuração, garantindo que o depurador não bloqueie a
  * importação de módulos.
+ *
+ * O path é lido via PID pois o retorno do `evaluate` só é confiável no GDB,
+ * no LLDB o stdout do script não chega de forma confiável.
+ * O PID (via evento DAP `process`) funciona igual nos dois.
  */
 export class ExtractorInvoker {
   /**
    * @param extensionPath Caminho absoluto raiz da extensão. Usado como base
    *                      para localizar os scripts Python que serão injetados.
+   * @param reader
    */
-  constructor(private readonly extensionPath: string) {}
+  constructor(
+    private readonly extensionPath: string,
+    private readonly reader: SnapshotReader,
+  ) {}
 
   /**
    * Coordena a injeção do script e a execução da extração de dados.
@@ -43,11 +68,42 @@ export class ExtractorInvoker {
     session: vscode.DebugSession,
     type: DebuggerType,
     options: InvokeOptions,
-  ): Promise<void> {
+  ): Promise<GraphSnapshot> {
+    const frameId = await this.resolveFrameId(session, options.threadId);
+
     if (options.importModule) {
-      await this.sendEvaluate(session, type, this.importCommand(type));
+      await this.sendEvaluate(session, type, this.importCommand(type), frameId);
     }
-    await this.sendEvaluate(session, type, this.dumpCommand(type, options.rootVar));
+    await this.sendEvaluate(session, type, this.dumpCommand(type, options.rootVar), frameId);
+
+    // Obs: O script .py já implementa medidas contra race condition.
+    return this.reader.read(this.snapshotPathFor(options.pid));
+  }
+
+  /**
+   * Pede ao depurador o topo da pilha da thread parada (`stackTrace`,
+   * `startFrame: 0, levels: 1`). O `id` desse frame é o `frameId` que o `evaluate`
+   * exige.
+   *
+   * @see https://microsoft.github.io/debug-adapter-protocol/specification#Requests_StackTrace
+   */
+  private async resolveFrameId(session: vscode.DebugSession, threadId: number): Promise<number> {
+    const response = await session.customRequest('stackTrace', {
+      threadId,
+      startFrame: 0,
+      levels: 1,
+    });
+
+    const frame = response?.stackFrames?.[0];
+    if (frame === undefined) {
+      console.log(`nao consegui resolver o frame da thread ${threadId} (stackTrace vazio)`);
+    }
+
+    return frame.id;
+  }
+
+  private snapshotPathFor(pid: number): string {
+    return path.join(os.tmpdir(), `dbg-algo-snapshot-${pid}.json`);
   }
 
   /**
@@ -113,10 +169,11 @@ export class ExtractorInvoker {
     session: vscode.DebugSession,
     type: DebuggerType,
     pythonCode: string,
+    frameId: number,
   ): Promise<unknown> {
     const expression =
       type === DebuggerType.GDB ? `-exec python ${pythonCode}` : `script ${pythonCode}`;
 
-    return session.customRequest('evaluate', { expression, context: 'repl' });
+    return session.customRequest('evaluate', { expression, context: 'repl', frameId });
   }
 }

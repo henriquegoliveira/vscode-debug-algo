@@ -3,13 +3,20 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DebugSessionManager } from './debugSessionManager';
 import { ExtractorInvoker } from './extractorInvoker';
+import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Extensão DbgAlgo ativada com sucesso!');
 
-  const invoker = new ExtractorInvoker(context.extensionPath);
-  const sessionManager = new DebugSessionManager(invoker);
+  const schemaPath = path.join(context.extensionPath, 'schemas', 'graph-snapshot.schema.json');
+  const reader = new SnapshotReader(schemaPath);
+  const invoker = new ExtractorInvoker(context.extensionPath, reader);
+
+  // Provisório: TransportServer não implementado ainda
+  const sessionManager = new DebugSessionManager(invoker, (snapshot, session) => {
+    console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
+  });
   context.subscriptions.push(sessionManager);
 
   // Registra o comando que está no package.json
