@@ -14,7 +14,7 @@ Este projeto é fruto de uma pesquisa de Iniciação Científica desenvolvida na
 
 ## Arquitetura e Stack Tecnológico
 
-A arquitetura adota um modelo de múltiplos módulos (Monorepo) estruturado com **Yarn Workspaces** (usando o linker `node-modules`, sem Plug'n'Play), focando em organização e escalabilidade.
+A arquitetura adota um modelo de múltiplos módulos (Monorepo) estruturado com **Yarn Workspaces**.
 
 ### Backend (Extensão VS Code)
 

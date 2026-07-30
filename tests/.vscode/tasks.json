@@ -2,12 +2,12 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "build: test-targets",
+      "label": "build: targets",
       "type": "shell",
       "command": "make",
       "args": [],
       "options": {
-        "cwd": "${workspaceFolder}/test-targets"
+        "cwd": "${workspaceFolder}/targets"
       },
       "problemMatcher": ["$gcc"]
     }
