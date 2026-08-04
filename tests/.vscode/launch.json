@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "(GDB / cpptools)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceRoot}/targets/bin/${fileBasenameNoExtension}",
+      "args": [],
+      "cwd": "${workspaceFolder}/targets",
+      "MIMode": "gdb",
+      "preLaunchTask": "build: targets",
+      "stopAtEntry": false
+    },
+    {
+      "name": "(LLDB / CodeLLDB)",
+      "type": "lldb",
+      "request": "launch",
+      "program": "${workspaceFolder}/targets/bin/${fileBasenameNoExtension}",
+      "args": [],
+      "cwd": "${workspaceFolder}/targets",
+      "preLaunchTask": "build: targets"
+    },
+  ]
+}
