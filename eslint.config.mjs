@@ -16,6 +16,8 @@ export default [
       '**/.cache/**',
       '**/esbuild.js',
       '**/webpack.config.ts',
+      // Gerado por `yarn workspace dbga-extension gen:types` a partir do schema
+      'packages/extension/src/graphSnapshot.ts',
     ],
   },
 
