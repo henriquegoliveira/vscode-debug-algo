@@ -2,11 +2,15 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://dbg-algo/schemas/graph-snapshot.schema.json",
   "title": "GraphSnapshot",
-  "description": "Snapshot minimo de uma estrutura de dados dinamica",
   "type": "object",
-  "required": ["nodes", "edges"],
+  "required": ["meta", "roots", "nodes", "edges"],
   "additionalProperties": false,
   "properties": {
+    "meta": { "$ref": "#/definitions/Meta" },
+    "roots": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Root" }
+    },
     "nodes": {
       "type": "array",
       "items": { "$ref": "#/definitions/GraphNode" }
@@ -17,36 +21,405 @@
     }
   },
   "definitions": {
-    "GraphNode": {
+    "Address": {
+      "type": "string",
+      "pattern": "^0x[0-9a-f]+$"
+    },
+    "AddressOrNull": {
+      "type": ["string", "null"],
+      "pattern": "^0x[0-9a-f]+$"
+    },
+
+    "Meta": {
       "type": "object",
-      "required": ["id", "value"],
       "additionalProperties": false,
+      "required": [
+        "version",
+        "debugger",
+        "generatedAt",
+        "truncated",
+        "truncationReasons",
+        "framesScanned",
+        "framesSkipped",
+        "observedTypes",
+        "errors"
+      ],
       "properties": {
-        "id": {
-          "type": "string",
-          "pattern": "^0x[0-9a-f]+$",
-          "description": "Endereco de memoria do node 'hex(int(ponteiro))' em Python."
+        "version": {
+          "const": 2
         },
-        "value": {
-          "type": "integer",
-          "description": "Valor escalar armazenado no node. Apenas Int no momento"
+        "debugger": {
+          "enum": ["GDB", "LLDB"]
+        },
+        "generatedAt": {
+          "type": "integer"
+        },
+        "truncated": {
+          "type": "boolean"
+        },
+        "truncationReasons": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "nodeLimit",
+              "edgeLimit",
+              "depthLimit",
+              "frameLimit",
+              "cellLimit",
+              "fieldLimit",
+              "timeBudget"
+            ]
+          }
+        },
+        "framesScanned": {
+          "type": "integer"
+        },
+        "framesSkipped": {
+          "type": "integer"
+        },
+        "observedTypes": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ObservedType" }
+        },
+        "errors": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ExtractionError" }
         }
       }
     },
+
+    "ObservedType": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "pointerFields", "scalarFields", "count", "maxDegree"],
+      "properties": {
+        "type": { "type": "string" },
+        "pointerFields": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "scalarFields": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "count": {
+          "type": "integer"
+        },
+        "maxDegree": {
+          "type": "integer"
+        }
+      }
+    },
+
+    "ExtractionError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope", "message"],
+      "properties": {
+        "scope": { "enum": ["frame", "root", "node", "edge", "annotation", "general"] },
+        "reference": {
+          "type": ["string", "null"]
+        },
+        "message": { "type": "string" }
+      }
+    },
+
+    "Value": {
+      "oneOf": [
+        { "$ref": "#/definitions/IntValue" },
+        { "$ref": "#/definitions/RealValue" },
+        { "$ref": "#/definitions/BoolValue" },
+        { "$ref": "#/definitions/CharValue" },
+        { "$ref": "#/definitions/EnumValue" },
+        { "$ref": "#/definitions/TextValue" },
+        { "$ref": "#/definitions/OpaqueValue" }
+      ]
+    },
+    "IntValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "v", "signed"],
+      "properties": {
+        "t": { "const": "int" },
+        "v": { "type": "integer" },
+        "signed": {
+          "type": "boolean"
+        },
+        "hex": {
+          "type": "string"
+        }
+      }
+    },
+    "RealValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "v"],
+      "properties": {
+        "t": { "const": "real" },
+        "v": {
+          "type": ["number", "null"]
+        },
+        "special": { "enum": ["nan", "inf", "-inf"] }
+      }
+    },
+    "BoolValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "v"],
+      "properties": {
+        "t": { "const": "bool" },
+        "v": { "type": "boolean" }
+      }
+    },
+    "CharValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "v", "text"],
+      "properties": {
+        "t": { "const": "char" },
+        "v": { "type": "integer" },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "EnumValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "v", "name"],
+      "properties": {
+        "t": { "const": "enum" },
+        "v": { "type": "integer" },
+        "name": {
+          "type": ["string", "null"]
+        }
+      }
+    },
+    "TextValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "v", "truncated"],
+      "properties": {
+        "t": { "const": "text" },
+        "v": { "type": "string" },
+        "truncated": {
+          "type": "boolean"
+        }
+      }
+    },
+    "OpaqueValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "reason"],
+      "properties": {
+        "t": { "const": "opaque" },
+        "reason": {
+          "enum": [
+            "unreadable",
+            "optimizedOut",
+            "void",
+            "functionPointer",
+            "null",
+            "deepNesting",
+            "unknownType",
+            "error"
+          ]
+        },
+        "address": { "$ref": "#/definitions/AddressOrNull" },
+        "detail": { "type": ["string", "null"] }
+      }
+    },
+
+    "Field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "value"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "value": { "$ref": "#/definitions/Value" }
+      }
+    },
+
+    "InlineArray": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "elementType", "length", "cells", "truncated", "expanded"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "elementType": { "type": "string" },
+        "length": {
+          "type": "integer"
+        },
+        "cells": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Value" }
+        },
+        "truncated": { "type": "boolean" },
+        "expanded": {
+          "type": "boolean"
+        }
+      }
+    },
+
+    "GraphNode": {
+      "oneOf": [
+        { "$ref": "#/definitions/RecordNode" },
+        { "$ref": "#/definitions/ArrayNode" },
+        { "$ref": "#/definitions/OpaqueNode" }
+      ]
+    },
+    "RecordNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "type", "aggregate", "sizeBytes", "fields", "arrays"],
+      "properties": {
+        "kind": { "const": "record" },
+        "id": { "$ref": "#/definitions/Address" },
+        "type": {
+          "type": "string"
+        },
+        "aggregate": { "enum": ["struct", "union"] },
+        "sizeBytes": { "type": "integer" },
+        "fields": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Field" }
+        },
+        "arrays": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/InlineArray" }
+        },
+        "uncertain": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ArrayNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "id",
+        "type",
+        "elementType",
+        "length",
+        "cells",
+        "cellsArePointers",
+        "truncated",
+        "origin"
+      ],
+      "properties": {
+        "kind": { "const": "array" },
+        "id": { "$ref": "#/definitions/Address" },
+        "type": { "type": "string" },
+        "elementType": { "type": "string" },
+        "length": { "type": "integer" },
+        "cells": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Value" }
+        },
+        "cellsArePointers": { "type": "boolean" },
+        "truncated": { "type": "boolean" },
+        "origin": {
+          "enum": ["static", "annotated"]
+        }
+      }
+    },
+    "OpaqueNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "id", "reason"],
+      "properties": {
+        "kind": { "const": "opaque" },
+        "id": { "$ref": "#/definitions/Address" },
+        "type": { "type": ["string", "null"] },
+        "reason": {
+          "enum": [
+            "unreadable",
+            "misaligned",
+            "zeroPage",
+            "void",
+            "functionPointer",
+            "notExpanded",
+            "nodeLimit",
+            "depthLimit",
+            "error"
+          ]
+        },
+        "detail": { "type": ["string", "null"] }
+      }
+    },
+
     "GraphEdge": {
       "type": "object",
-      "required": ["from", "to"],
       "additionalProperties": false,
+      "required": ["from", "field", "to"],
       "properties": {
-        "from": {
-          "type": "string",
-          "pattern": "^0x[0-9a-f]+$",
-          "description": "id (endereco) do node de origem. "
+        "from": { "$ref": "#/definitions/Address" },
+        "field": {
+          "type": "string"
         },
         "to": {
-          "type": "string",
-          "pattern": "^0x[0-9a-f]+$",
-          "description": "id (endereco) do node de destino. "
+          "$ref": "#/definitions/AddressOrNull"
+        },
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+
+    "Root": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "function",
+        "frameLevel",
+        "origin",
+        "type",
+        "category",
+        "address",
+        "target",
+        "indirections",
+        "node",
+        "status"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "function": {
+          "type": "string"
+        },
+        "frameLevel": {
+          "type": "integer"
+        },
+        "origin": { "enum": ["local", "parameter"] },
+        "type": { "type": "string" },
+        "category": { "enum": ["pointer", "aggregate", "scalar"] },
+        "address": {
+          "$ref": "#/definitions/AddressOrNull"
+        },
+        "target": {
+          "$ref": "#/definitions/AddressOrNull"
+        },
+        "indirections": {
+          "type": "integer"
+        },
+        "node": {
+          "$ref": "#/definitions/AddressOrNull"
+        },
+        "value": {
+          "oneOf": [{ "$ref": "#/definitions/Value" }, { "type": "null" }]
+        },
+        "status": {
+          "enum": ["ok", "null", "unreadable", "optimizedOut", "deepIndirection", "notFollowed"]
         }
       }
     }
