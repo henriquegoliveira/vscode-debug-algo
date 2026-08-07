@@ -6,24 +6,40 @@ import { ExtractorInvoker } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
 
-export function activate(context: vscode.ExtensionContext) {
-  console.log('Extensão DbgAlgo ativada com sucesso!');
+export class ExtensionController {
+  private sessionManager: DebugSessionManager;
+  private invoker: ExtractorInvoker;
+  private reader: SnapshotReader;
 
-  const schemaPath = path.join(context.extensionPath, 'schemas', 'graph-snapshot.schema.json');
-  const reader = new SnapshotReader(schemaPath);
-  const invoker = new ExtractorInvoker(context.extensionPath, reader);
+  constructor(private context: vscode.ExtensionContext) {
+    const schemaPath = path.join(context.extensionPath, 'schemas', 'graph-snapshot.schema.json');
+    this.reader = new SnapshotReader(schemaPath);
+    this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
 
-  // Provisório: TransportServer não implementado ainda
-  const sessionManager = new DebugSessionManager(invoker, (snapshot, session) => {
-    console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
-  });
-  context.subscriptions.push(sessionManager);
+    // Provisório: TransportServer não implementado ainda
+    this.sessionManager = new DebugSessionManager(this.invoker, (snapshot, session) => {
+      console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
+    });
+  }
 
-  // Registra o comando que está no package.json
-  let disposable = vscode.commands.registerCommand('dbg-algo.start', () => {
+  public activate(): void {
+    console.log('Extensão DbgAlgo ativada com sucesso!');
+
+    // Registra os disposables no contexto
+    this.context.subscriptions.push(this.sessionManager);
+
+    // Registra o comando de inicialização
+    const commandDisposable = vscode.commands.registerCommand('dbg-algo.start', () =>
+      this.startWebViewCommand(),
+    );
+    this.context.subscriptions.push(commandDisposable);
+  }
+
+  public deactivate(): void {}
+
+  private startWebViewCommand(): void {
     // Avisa ao usuário se não houver como extrair dados agora.
-    // Não impede de abrir o painel.
-    warnIfNoSupportedDebugSession(sessionManager);
+    warnIfNoSupportedDebugSession(this.sessionManager);
 
     // Cria a aba do Webview
     const panel = vscode.window.createWebviewPanel(
@@ -31,30 +47,42 @@ export function activate(context: vscode.ExtensionContext) {
       'DbgAlgo Visualizer',
       vscode.ViewColumn.One,
       {
-        enableScripts: true, // Permite rodar o React (JS)
-        localResourceRoots: [vscode.Uri.file(path.join(context.extensionPath, '../webview/dist'))],
+        enableScripts: true,
+        localResourceRoots: [
+          vscode.Uri.file(path.join(this.context.extensionPath, '../webview/dist')),
+        ],
       },
     );
 
-    // Caminhos para a pasta dist do frontend
-    const webviewDistPath = path.join(context.extensionPath, '../webview/dist');
+    // Configura o HTML
+    panel.webview.html = this.getWebViewContent(panel.webview);
+  }
+
+  private getWebViewContent(webview: vscode.Webview): string {
+    const webviewDistPath = path.join(this.context.extensionPath, '../webview/dist');
     const htmlPath = path.join(webviewDistPath, 'index.html');
 
-    // Lê o HTML gerado pelo HtmlWebpackPlugin
-    let html = fs.readFileSync(htmlPath, 'utf8');
+    // Lê o HTML copiado para dist/ pelo plugin 'copy-html' do esbuild (packages/webview/esbuild.js)
+    const html = fs.readFileSync(htmlPath, 'utf8');
 
-    // Pega o caminho do bundle.js e converte para um URI especial de segurança do VS Code
+    // Pega o caminho do bundle.js e converte para um URI especial de segurança
     const scriptPathOnDisk = vscode.Uri.file(path.join(webviewDistPath, 'bundle.js'));
-    const scriptUri = panel.webview.asWebviewUri(scriptPathOnDisk);
+    const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
-    // Injeta a URI correta no HTML (substitui o src="bundle.js" genérico)
-    html = html.replace('bundle.js', scriptUri.toString());
-
-    // Joga o HTML atualizado na tela
-    panel.webview.html = html;
-  });
-
-  context.subscriptions.push(disposable);
+    // Injeta a URI correta no HTML
+    return html.replace('bundle.js', scriptUri.toString());
+  }
 }
 
-export function deactivate() {}
+let controller: ExtensionController | undefined;
+
+export function activate(context: vscode.ExtensionContext) {
+  controller = new ExtensionController(context);
+  controller.activate();
+}
+
+export function deactivate() {
+  if (controller) {
+    controller.deactivate();
+  }
+}

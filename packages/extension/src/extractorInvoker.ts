@@ -22,9 +22,9 @@ export interface InvokeOptions {
 
   /**
    * PID do processo depurado (não o do GDB/LLDB em si). Usado pra montar
-   * o caminho do arquivo de snapshot, mesma convenção usada pelo script
-   * Python: `<tmpdir>/dbg-algo-snapshot-<pid>.json`. Vem do evento DAP
-   * `process`, capturado pelo `DebugSessionManager`.
+   * o caminho do arquivo de snapshot em `snapshotPathFor`, que é então
+   * enviado ao script Python. Vem do evento DAP `process`, capturado pelo
+   * `DebugSessionManager`.
    */
   pid: number;
 
@@ -42,9 +42,10 @@ export interface InvokeOptions {
  * no console de depuração, garantindo que o depurador não bloqueie a
  * importação de módulos.
  *
- * O path é lido via PID pois o retorno do `evaluate` só é confiável no GDB,
- * no LLDB o stdout do script não chega de forma confiável.
- * O PID (via evento DAP `process`) funciona igual nos dois.
+ * O snapshot trafega por arquivo, e não pelo retorno do `evaluate`, porque esse
+ * retorno só é confiável no GDB: no LLDB o stdout do script não chega de forma
+ * consistente. Já o PID (via evento DAP `process`) funciona igual nos dois, então
+ * o caminho é derivado dele aqui e enviado ao script como argumento.
  */
 export class ExtractorInvoker {
   /**
@@ -70,14 +71,20 @@ export class ExtractorInvoker {
     options: InvokeOptions,
   ): Promise<GraphSnapshot> {
     const frameId = await this.resolveFrameId(session, options.threadId);
+    const snapshotPath = this.snapshotPathFor(options.pid);
 
     if (options.importModule) {
       await this.sendEvaluate(session, type, this.importCommand(type), frameId);
     }
-    await this.sendEvaluate(session, type, this.dumpCommand(type, options.rootVar), frameId);
+    await this.sendEvaluate(
+      session,
+      type,
+      this.dumpCommand(type, snapshotPath, options.rootVar),
+      frameId,
+    );
 
     // Obs: O script .py já implementa medidas contra race condition.
-    return this.reader.read(this.snapshotPathFor(options.pid));
+    return this.reader.read(snapshotPath);
   }
 
   /**
@@ -102,6 +109,16 @@ export class ExtractorInvoker {
     return frame.id;
   }
 
+  /**
+   * Define onde o extrator deve escrever o snapshot.
+   *
+   * Esta é a única definição da convenção de nome do arquivo: o caminho é
+   * enviado como argumento para `dump_structs`, então os scripts Python não
+   * precisam reconstruí-lo.
+   *
+   * O PID é o do processo depurado, não o do GDB/LLDB, e serve para isolar
+   * sessões simultâneas.
+   */
   private snapshotPathFor(pid: number): string {
     return path.join(os.tmpdir(), `dbg-algo-snapshot-${pid}.json`);
   }
@@ -143,13 +160,19 @@ export class ExtractorInvoker {
   /**
    * Constrói a chamada para a função principal do script Python.
    *
-   * @param rootVar Se fornecida, passa a string empacotada em JSON (com aspas)
-   *                como argumento da função. Se não, passa vazio.
+   * O `outPath` é obrigatório e vem sempre do `snapshotPathFor`. O `rootVar` é
+   * opcional: omitido, o script usa seu próprio default.
+   *
+   * Ambos passam por `JSON.stringify`, que adiciona aspas e escapa barras
+   * invertidas (caminhos do Windows), produzindo literais Python válidos.
    */
-  private dumpCommand(type: DebuggerType, rootVar?: string): string {
+  private dumpCommand(type: DebuggerType, outPath: string, rootVar?: string): string {
     const moduleName = this.moduleNameFor(type);
-    const arg = rootVar !== undefined ? JSON.stringify(rootVar) : '';
-    return `${moduleName}.dump_structs(${arg})`;
+    const args = [JSON.stringify(outPath)];
+    if (rootVar !== undefined) {
+      args.push(JSON.stringify(rootVar));
+    }
+    return `${moduleName}.dump_structs(${args.join(', ')})`;
   }
 
   /**
