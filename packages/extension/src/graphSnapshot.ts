@@ -5,30 +5,160 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-/**
- * Snapshot minimo de uma estrutura de dados dinamica
- */
+export type AddressOrNull = string | null;
+export type Value =
+  IntValue | RealValue | BoolValue | CharValue | EnumValue | TextValue | OpaqueValue;
+export type GraphNode = RecordNode | ArrayNode | OpaqueNode;
+export type Address = string;
+
 export interface GraphSnapshot {
+  meta: Meta;
+  roots: Root[];
   nodes: GraphNode[];
   edges: GraphEdge[];
 }
-export interface GraphNode {
-  /**
-   * Endereco de memoria do node 'hex(int(ponteiro))' em Python.
-   */
-  id: string;
-  /**
-   * Valor escalar armazenado no node. Apenas Int no momento
-   */
-  value: number;
+export interface Meta {
+  version: 2;
+  debugger: 'GDB' | 'LLDB';
+  generatedAt: number;
+  truncated: boolean;
+  truncationReasons: (
+    | 'nodeLimit'
+    | 'edgeLimit'
+    | 'depthLimit'
+    | 'frameLimit'
+    | 'cellLimit'
+    | 'fieldLimit'
+    | 'timeBudget'
+  )[];
+  framesScanned: number;
+  framesSkipped: number;
+  observedTypes: ObservedType[];
+  errors: ExtractionError[];
+}
+export interface ObservedType {
+  type: string;
+  pointerFields: string[];
+  scalarFields: string[];
+  count: number;
+  maxDegree: number;
+}
+export interface ExtractionError {
+  scope: 'frame' | 'root' | 'node' | 'edge' | 'annotation' | 'general';
+  reference?: string | null;
+  message: string;
+}
+export interface Root {
+  name: string;
+  function: string;
+  frameLevel: number;
+  origin: 'local' | 'parameter';
+  type: string;
+  category: 'pointer' | 'aggregate' | 'scalar';
+  address: AddressOrNull;
+  target: AddressOrNull;
+  indirections: number;
+  node: AddressOrNull;
+  value?: Value | null;
+  status: 'ok' | 'null' | 'unreadable' | 'optimizedOut' | 'deepIndirection' | 'notFollowed';
+}
+export interface IntValue {
+  t: 'int';
+  v: number;
+  signed: boolean;
+  hex?: string;
+}
+export interface RealValue {
+  t: 'real';
+  v: number | null;
+  special?: 'nan' | 'inf' | '-inf';
+}
+export interface BoolValue {
+  t: 'bool';
+  v: boolean;
+}
+export interface CharValue {
+  t: 'char';
+  v: number;
+  text: string;
+}
+export interface EnumValue {
+  t: 'enum';
+  v: number;
+  name: string | null;
+}
+export interface TextValue {
+  t: 'text';
+  v: string;
+  truncated: boolean;
+}
+export interface OpaqueValue {
+  t: 'opaque';
+  reason:
+    | 'unreadable'
+    | 'optimizedOut'
+    | 'void'
+    | 'functionPointer'
+    | 'null'
+    | 'deepNesting'
+    | 'unknownType'
+    | 'error';
+  address?: AddressOrNull;
+  detail?: string | null;
+}
+export interface RecordNode {
+  kind: 'record';
+  id: Address;
+  type: string;
+  aggregate: 'struct' | 'union';
+  sizeBytes: number;
+  fields: Field[];
+  arrays: InlineArray[];
+  uncertain?: boolean;
+}
+export interface Field {
+  name: string;
+  type: string;
+  value: Value;
+}
+export interface InlineArray {
+  name: string;
+  elementType: string;
+  length: number;
+  cells: Value[];
+  truncated: boolean;
+  expanded: boolean;
+}
+export interface ArrayNode {
+  kind: 'array';
+  id: Address;
+  type: string;
+  elementType: string;
+  length: number;
+  cells: Value[];
+  cellsArePointers: boolean;
+  truncated: boolean;
+  origin: 'static' | 'annotated';
+}
+export interface OpaqueNode {
+  kind: 'opaque';
+  id: Address;
+  type?: string | null;
+  reason:
+    | 'unreadable'
+    | 'misaligned'
+    | 'zeroPage'
+    | 'void'
+    | 'functionPointer'
+    | 'notExpanded'
+    | 'nodeLimit'
+    | 'depthLimit'
+    | 'error';
+  detail?: string | null;
 }
 export interface GraphEdge {
-  /**
-   * id (endereco) do node de origem.
-   */
-  from: string;
-  /**
-   * id (endereco) do node de destino.
-   */
-  to: string;
+  from: Address;
+  field: string;
+  to: AddressOrNull;
+  type?: string;
 }

@@ -8,7 +8,6 @@ const outDir = resolve(__dirname, 'dist');
 const htmlFile = resolve(__dirname, 'src/index.html');
 const outHtmlFile = resolve(outDir, 'index.html');
 
-// Garante que a pasta dist exista antes de copiar
 mkdirSync(outDir, { recursive: true });
 
 const buildOptions = {

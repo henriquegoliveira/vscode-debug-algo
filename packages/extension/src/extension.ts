@@ -16,7 +16,6 @@ export class ExtensionController {
     this.reader = new SnapshotReader(schemaPath);
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
 
-    // Provisório: TransportServer não implementado ainda
     this.sessionManager = new DebugSessionManager(this.invoker, (snapshot, session) => {
       console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
     });
@@ -25,10 +24,8 @@ export class ExtensionController {
   public activate(): void {
     console.log('Extensão DbgAlgo ativada com sucesso!');
 
-    // Registra os disposables no contexto
     this.context.subscriptions.push(this.sessionManager);
 
-    // Registra o comando de inicialização
     const commandDisposable = vscode.commands.registerCommand('dbg-algo.start', () =>
       this.startWebViewCommand(),
     );
@@ -38,10 +35,8 @@ export class ExtensionController {
   public deactivate(): void {}
 
   private startWebViewCommand(): void {
-    // Avisa ao usuário se não houver como extrair dados agora.
     warnIfNoSupportedDebugSession(this.sessionManager);
 
-    // Cria a aba do Webview
     const panel = vscode.window.createWebviewPanel(
       'dbgAlgoWebview',
       'DbgAlgo Visualizer',
@@ -54,7 +49,6 @@ export class ExtensionController {
       },
     );
 
-    // Configura o HTML
     panel.webview.html = this.getWebViewContent(panel.webview);
   }
 
@@ -62,14 +56,11 @@ export class ExtensionController {
     const webviewDistPath = path.join(this.context.extensionPath, '../webview/dist');
     const htmlPath = path.join(webviewDistPath, 'index.html');
 
-    // Lê o HTML copiado para dist/ pelo plugin 'copy-html' do esbuild (packages/webview/esbuild.js)
     const html = fs.readFileSync(htmlPath, 'utf8');
 
-    // Pega o caminho do bundle.js e converte para um URI especial de segurança
     const scriptPathOnDisk = vscode.Uri.file(path.join(webviewDistPath, 'bundle.js'));
     const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
-    // Injeta a URI correta no HTML
     return html.replace('bundle.js', scriptUri.toString());
   }
 }
