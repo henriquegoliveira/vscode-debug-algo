@@ -1,8 +1,40 @@
 import * as vscode from 'vscode';
 import { DebugSessionManager } from './debugSessionManager';
+import { DebuggerType } from './debuggerType';
 
 const CPPTOOLS_EXTENSION_ID = 'ms-vscode.cpptools';
 const CODELLDB_EXTENSION_ID = 'vadimcn.vscode-lldb';
+
+const WINDOWS_LLDB_HINT_KEY = 'dbg-algo.windowsLldbHintShown';
+
+const WINDOWS_LLDB_HINT = 'TODO:';
+const WINDOWS_LLDB_HINT_ACTION = 'TODO:';
+
+export async function suggestLldbOnWindows(
+  state: vscode.Memento,
+  type: DebuggerType,
+): Promise<void> {
+  if (process.platform !== 'win32' || type !== DebuggerType.GDB) {
+    return;
+  }
+  if (state.get<boolean>(WINDOWS_LLDB_HINT_KEY) === true) {
+    return;
+  }
+  if (vscode.extensions.getExtension(CODELLDB_EXTENSION_ID) !== undefined) {
+    return;
+  }
+
+  await state.update(WINDOWS_LLDB_HINT_KEY, true);
+
+  const choice = await vscode.window.showInformationMessage(
+    WINDOWS_LLDB_HINT,
+    WINDOWS_LLDB_HINT_ACTION,
+  );
+
+  if (choice === WINDOWS_LLDB_HINT_ACTION) {
+    void vscode.commands.executeCommand('workbench.extensions.search', CODELLDB_EXTENSION_ID);
+  }
+}
 
 export function warnIfNoSupportedDebugSession(sessionManager: DebugSessionManager): void {
   const activeType = sessionManager.detectDebuggerType(vscode.debug.activeDebugSession);

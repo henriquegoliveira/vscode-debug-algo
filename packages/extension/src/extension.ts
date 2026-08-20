@@ -16,9 +16,13 @@ export class ExtensionController {
     this.reader = new SnapshotReader(schemaPath);
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
 
-    this.sessionManager = new DebugSessionManager(this.invoker, (snapshot, session) => {
-      console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
-    });
+    this.sessionManager = new DebugSessionManager(
+      this.invoker,
+      context.globalState,
+      (snapshot, session) => {
+        console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
+      },
+    );
   }
 
   public activate(): void {

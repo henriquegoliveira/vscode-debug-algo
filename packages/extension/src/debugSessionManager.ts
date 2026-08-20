@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { DebuggerType } from './debuggerType';
 import { DebuggerPythonMissingError, ExtractorInvoker } from './extractorInvoker';
 import { readExtractionOptions } from './extractionSettings';
+import { suggestLldbOnWindows } from './debuggerAvailability';
 import { GraphSnapshot } from './graphSnapshot';
 
 export class DebugSessionManager implements vscode.Disposable {
@@ -19,6 +20,7 @@ export class DebugSessionManager implements vscode.Disposable {
 
   constructor(
     private readonly invoker: ExtractorInvoker,
+    private readonly state: vscode.Memento,
     private readonly onSnapshot: (snapshot: GraphSnapshot, session: vscode.DebugSession) => void,
   ) {
     this.disposables.push(
@@ -89,6 +91,10 @@ export class DebugSessionManager implements vscode.Disposable {
     }
 
     const firstPauseThisSession = !this.importedSessions.has(session.id);
+    if (firstPauseThisSession) {
+      void suggestLldbOnWindows(this.state, type);
+    }
+
     this.extractingSessions.add(session.id);
 
     try {
