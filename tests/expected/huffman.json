@@ -1,0 +1,1871 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "combined",
+      "function": "buildHuffmanTree",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "NodeTree *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "frequencyArray",
+      "function": "buildHuffmanTree",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 1,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "left",
+      "function": "buildHuffmanTree",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "NodeTree *",
+      "category": "pointer",
+      "address": "#4",
+      "target": "#5",
+      "indirections": 1,
+      "node": "#5",
+      "status": "ok"
+    },
+    {
+      "name": "n",
+      "function": "buildHuffmanTree",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#6",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 12,
+        "signed": true
+      }
+    },
+    {
+      "name": "nodes",
+      "function": "buildHuffmanTree",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "NodeTree *[256]",
+      "category": "aggregate",
+      "address": "#7",
+      "target": null,
+      "indirections": 0,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "right",
+      "function": "buildHuffmanTree",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "NodeTree *",
+      "category": "pointer",
+      "address": "#8",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "bitBuffer",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "unsigned char",
+      "category": "scalar",
+      "address": "#10",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "opaque",
+        "reason": "unknownType"
+      }
+    },
+    {
+      "name": "buffer",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "char[257]",
+      "category": "aggregate",
+      "address": "#11",
+      "target": null,
+      "indirections": 0,
+      "node": "#11",
+      "status": "ok"
+    },
+    {
+      "name": "byte",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "unsigned char",
+      "category": "scalar",
+      "address": "#12",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "opaque",
+        "reason": "unknownType"
+      }
+    },
+    {
+      "name": "codes",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "char *[256]",
+      "category": "aggregate",
+      "address": "#13",
+      "target": null,
+      "indirections": 0,
+      "node": "#13",
+      "status": "ok"
+    },
+    {
+      "name": "frequencyArray",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int[256]",
+      "category": "aggregate",
+      "address": "#3",
+      "target": null,
+      "indirections": 0,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "huffmanTree",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "NodeTree *",
+      "category": "pointer",
+      "address": "#14",
+      "target": "#1",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "in",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "_IO_FILE *",
+      "category": "pointer",
+      "address": "#15",
+      "target": "#16",
+      "indirections": 1,
+      "node": "#16",
+      "status": "ok"
+    },
+    {
+      "name": "inputFile",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#17",
+      "target": "#18",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed"
+    },
+    {
+      "name": "out",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "_IO_FILE *",
+      "category": "pointer",
+      "address": "#19",
+      "target": "#20",
+      "indirections": 1,
+      "node": "#20",
+      "status": "ok"
+    },
+    {
+      "name": "outputFile",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#21",
+      "target": "#22",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed"
+    },
+    {
+      "name": "sizeBits",
+      "function": "compress",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "unsigned int",
+      "category": "scalar",
+      "address": "#23",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": false
+      }
+    },
+    {
+      "name": "argc",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#24",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "argv",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "char **",
+      "category": "pointer",
+      "address": "#25",
+      "target": "#26",
+      "indirections": 2,
+      "node": null,
+      "status": "notFollowed"
+    },
+    {
+      "name": "compressedFile",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#27",
+      "target": "#22",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed"
+    },
+    {
+      "name": "originalFile",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#28",
+      "target": "#18",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed"
+    },
+    {
+      "name": "outputFile",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "char[300]",
+      "category": "aggregate",
+      "address": "#29",
+      "target": null,
+      "indirections": 0,
+      "node": "#29",
+      "status": "ok"
+    },
+    {
+      "name": "restoredFile",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#30",
+      "target": "#31",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed"
+    },
+    {
+      "name": "sample",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "_IO_FILE *",
+      "category": "pointer",
+      "address": "#32",
+      "target": "#16",
+      "indirections": 1,
+      "node": "#16",
+      "status": "ok"
+    },
+    {
+      "name": "status",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#33",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#3",
+      "reason": "notExpanded",
+      "type": "int[256]"
+    },
+    {
+      "kind": "record",
+      "id": "#5",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "opaque",
+      "id": "#7",
+      "reason": "notExpanded",
+      "type": "NodeTree *[256]"
+    },
+    {
+      "kind": "record",
+      "id": "#9",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "opaque",
+      "id": "#11",
+      "reason": "notExpanded",
+      "type": "char[257]"
+    },
+    {
+      "kind": "opaque",
+      "id": "#13",
+      "reason": "notExpanded",
+      "type": "char *[256]"
+    },
+    {
+      "kind": "record",
+      "id": "#16",
+      "type": "_IO_FILE",
+      "aggregate": "struct",
+      "sizeBytes": 216,
+      "fields": [
+        {
+          "name": "_flags",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -72539000,
+            "signed": true
+          }
+        },
+        {
+          "name": "_IO_read_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_backup_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_fileno",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 3,
+            "signed": true
+          }
+        },
+        {
+          "name": "_flags2",
+          "type": "int",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_old_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_cur_column",
+          "type": "unsigned short",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        },
+        {
+          "name": "_vtable_offset",
+          "type": "signed char",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_mode",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_unused3",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_total_written",
+          "type": "unsigned long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "_short_backupbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_shortbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_unused2",
+          "elementType": "char",
+          "length": 8,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "record",
+      "id": "#20",
+      "type": "_IO_FILE",
+      "aggregate": "struct",
+      "sizeBytes": 216,
+      "fields": [
+        {
+          "name": "_flags",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -72539004,
+            "signed": true
+          }
+        },
+        {
+          "name": "_IO_read_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_backup_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_fileno",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 4,
+            "signed": true
+          }
+        },
+        {
+          "name": "_flags2",
+          "type": "int",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_old_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_cur_column",
+          "type": "unsigned short",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        },
+        {
+          "name": "_vtable_offset",
+          "type": "signed char",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_mode",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_unused3",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_total_written",
+          "type": "unsigned long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "_short_backupbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_shortbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_unused2",
+          "elementType": "char",
+          "length": 8,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "opaque",
+      "id": "#29",
+      "reason": "notExpanded",
+      "type": "char[300]"
+    },
+    {
+      "kind": "record",
+      "id": "#34",
+      "type": "_IO_FILE",
+      "aggregate": "struct",
+      "sizeBytes": 216,
+      "fields": [
+        {
+          "name": "_flags",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -72540026,
+            "signed": true
+          }
+        },
+        {
+          "name": "_IO_read_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_backup_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_fileno",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 2,
+            "signed": true
+          }
+        },
+        {
+          "name": "_flags2",
+          "type": "int",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_old_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_cur_column",
+          "type": "unsigned short",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        },
+        {
+          "name": "_vtable_offset",
+          "type": "signed char",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_mode",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_unused3",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_total_written",
+          "type": "unsigned long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "_short_backupbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_shortbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_unused2",
+          "elementType": "char",
+          "length": 8,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "opaque",
+      "id": "#35",
+      "reason": "void",
+      "type": "void"
+    },
+    {
+      "kind": "opaque",
+      "id": "#36",
+      "reason": "notExpanded",
+      "type": "_IO_FILE *"
+    },
+    {
+      "kind": "opaque",
+      "id": "#37",
+      "reason": "error",
+      "type": "_IO_wide_data",
+      "detail": "invalidSize"
+    },
+    {
+      "kind": "opaque",
+      "id": "#38",
+      "reason": "void",
+      "type": "void"
+    },
+    {
+      "kind": "opaque",
+      "id": "#39",
+      "reason": "notExpanded",
+      "type": "_IO_FILE *"
+    },
+    {
+      "kind": "opaque",
+      "id": "#40",
+      "reason": "error",
+      "type": "_IO_wide_data",
+      "detail": "invalidSize"
+    },
+    {
+      "kind": "record",
+      "id": "#41",
+      "type": "_IO_FILE",
+      "aggregate": "struct",
+      "sizeBytes": 216,
+      "fields": [
+        {
+          "name": "_flags",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -72540028,
+            "signed": true
+          }
+        },
+        {
+          "name": "_IO_read_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_backup_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_fileno",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_flags2",
+          "type": "int",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_old_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_cur_column",
+          "type": "unsigned short",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        },
+        {
+          "name": "_vtable_offset",
+          "type": "signed char",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_mode",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_unused3",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_total_written",
+          "type": "unsigned long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "_short_backupbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_shortbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_unused2",
+          "elementType": "char",
+          "length": 8,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "opaque",
+      "id": "#42",
+      "reason": "void",
+      "type": "void"
+    },
+    {
+      "kind": "opaque",
+      "id": "#43",
+      "reason": "notExpanded",
+      "type": "_IO_FILE *"
+    },
+    {
+      "kind": "opaque",
+      "id": "#44",
+      "reason": "error",
+      "type": "_IO_wide_data",
+      "detail": "invalidSize"
+    },
+    {
+      "kind": "record",
+      "id": "#45",
+      "type": "_IO_FILE",
+      "aggregate": "struct",
+      "sizeBytes": 216,
+      "fields": [
+        {
+          "name": "_flags",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -72540024,
+            "signed": true
+          }
+        },
+        {
+          "name": "_IO_read_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_read_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_ptr",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_write_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_buf_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_backup_base",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_IO_save_end",
+          "type": "char *",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_fileno",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_flags2",
+          "type": "int",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_old_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_cur_column",
+          "type": "unsigned short",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        },
+        {
+          "name": "_vtable_offset",
+          "type": "signed char",
+          "value": {
+            "t": "opaque",
+            "reason": "unknownType"
+          }
+        },
+        {
+          "name": "_offset",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "_mode",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_unused3",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "_total_written",
+          "type": "unsigned long",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": false
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "_short_backupbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_shortbuf",
+          "elementType": "char",
+          "length": 1,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "_unused2",
+          "elementType": "char",
+          "length": 8,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "opaque",
+      "id": "#46",
+      "reason": "void",
+      "type": "void"
+    },
+    {
+      "kind": "opaque",
+      "id": "#47",
+      "reason": "notExpanded",
+      "type": "_IO_FILE *"
+    },
+    {
+      "kind": "opaque",
+      "id": "#48",
+      "reason": "error",
+      "type": "_IO_wide_data",
+      "detail": "invalidSize"
+    },
+    {
+      "kind": "opaque",
+      "id": "#49",
+      "reason": "void",
+      "type": "void"
+    },
+    {
+      "kind": "opaque",
+      "id": "#50",
+      "reason": "notExpanded",
+      "type": "_IO_FILE *"
+    },
+    {
+      "kind": "opaque",
+      "id": "#51",
+      "reason": "error",
+      "type": "_IO_wide_data",
+      "detail": "invalidSize"
+    }
+  ],
+  "edges": [
+    {
+      "from": "#5",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#5",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#9",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#9",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#16",
+      "field": "_chain",
+      "to": "#34",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#16",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#16",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#16",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#16",
+      "field": "_lock",
+      "to": "#35",
+      "type": "void *"
+    },
+    {
+      "from": "#16",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#16",
+      "field": "_prevchain",
+      "to": "#36",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#16",
+      "field": "_wide_data",
+      "to": "#37",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#20",
+      "field": "_chain",
+      "to": "#16",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#20",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#20",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#20",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#20",
+      "field": "_lock",
+      "to": "#38",
+      "type": "void *"
+    },
+    {
+      "from": "#20",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#20",
+      "field": "_prevchain",
+      "to": "#39",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#20",
+      "field": "_wide_data",
+      "to": "#40",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#34",
+      "field": "_chain",
+      "to": "#41",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#34",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#34",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#34",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#34",
+      "field": "_lock",
+      "to": "#42",
+      "type": "void *"
+    },
+    {
+      "from": "#34",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#34",
+      "field": "_prevchain",
+      "to": "#43",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#34",
+      "field": "_wide_data",
+      "to": "#44",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#41",
+      "field": "_chain",
+      "to": "#45",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#41",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#41",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#41",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#41",
+      "field": "_lock",
+      "to": "#46",
+      "type": "void *"
+    },
+    {
+      "from": "#41",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#41",
+      "field": "_prevchain",
+      "to": "#47",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#41",
+      "field": "_wide_data",
+      "to": "#48",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#45",
+      "field": "_chain",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#45",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#45",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#45",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#45",
+      "field": "_lock",
+      "to": "#49",
+      "type": "void *"
+    },
+    {
+      "from": "#45",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#45",
+      "field": "_prevchain",
+      "to": "#50",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#45",
+      "field": "_wide_data",
+      "to": "#51",
+      "type": "_IO_wide_data *"
+    }
+  ]
+}

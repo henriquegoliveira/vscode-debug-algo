@@ -185,8 +185,28 @@ def extract(adapter, config):
     return builder.build()
 
 
+REFINABLE_CATEGORIES = (
+    dbga_adapter.POINTER,
+    dbga_adapter.REFERENCE,
+    dbga_adapter.RECORD,
+    dbga_adapter.UNION,
+)
+
+
+def _refined_type(adapter, ref, type_info):
+    if type_info is None or type_info.category not in REFINABLE_CATEGORIES:
+        return type_info
+    try:
+        dynamic = adapter.dynamic_type_of(ref)
+    except Exception:
+        return type_info
+    return type_info if dynamic is None else dynamic
+
+
 def classify_root(builder, frontier, adapter, frame, var, config):
     type_info = adapter.type_of(var.ref)
+    if var.valid:
+        type_info = _refined_type(adapter, var.ref, type_info)
     category = _root_category(type_info)
 
     if not var.valid:
@@ -288,7 +308,7 @@ def _reference_root(builder, frontier, adapter, frame, var, type_info, config):
         )
         return
 
-    referent_type = adapter.type_of(referent)
+    referent_type = _refined_type(adapter, referent, adapter.type_of(referent))
     address = adapter.address_of(referent)
     node, status = _adopt(builder, frontier, adapter, address, referent_type, 1, config)
     builder.root(
@@ -482,6 +502,7 @@ def _collect(builder, frontier, adapter, reference, type_info, node_address, pre
 
 
 def _pointer_field(builder, frontier, adapter, node_address, name, child, child_type, fields, depth, config, counter):
+    child_type = _refined_type(adapter, child, child_type)
     pointee = child_type.target
 
     if pointee is not None and pointee.category == dbga_adapter.CHAR:

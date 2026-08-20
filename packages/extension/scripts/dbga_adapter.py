@@ -19,6 +19,98 @@ PARAMETER = "parameter"
 
 _UNRESOLVED = object()
 
+ELABORATED_KEYWORDS = ("struct", "class", "union", "enum")
+TYPE_QUALIFIERS = ("const", "volatile")
+
+_IDENTIFIER_EXTRA = "_$:"
+_OPEN_PUNCTUATION = ("(", "[")
+_CLOSE_PUNCTUATION = (")", "]", ",")
+_INDIRECTION = ("*", "&")
+
+
+def _is_identifier(token):
+    if not token:
+        return False
+    head = token[0]
+    return head.isalpha() or head.isdigit() or head in _IDENTIFIER_EXTRA
+
+
+def _tokenize_type_name(name):
+    tokens = []
+    current = []
+
+    for char in name:
+        if char.isalnum() or char in _IDENTIFIER_EXTRA:
+            current.append(char)
+            continue
+        if current:
+            tokens.append("".join(current))
+            current = []
+        if not char.isspace():
+            tokens.append(char)
+
+    if current:
+        tokens.append("".join(current))
+
+    return tokens
+
+
+def _strip_keywords(tokens):
+    kept = []
+    index = 0
+
+    while index < len(tokens):
+        token = tokens[index]
+
+        if token in TYPE_QUALIFIERS:
+            index += 1
+            continue
+        if (
+            token in ELABORATED_KEYWORDS
+            and index + 1 < len(tokens)
+            and _is_identifier(tokens[index + 1])
+        ):
+            index += 1
+            continue
+
+        kept.append(token)
+        index += 1
+
+    return kept
+
+
+def _needs_space(previous, token):
+    if previous in _OPEN_PUNCTUATION:
+        return False
+    if token in _CLOSE_PUNCTUATION or token in _OPEN_PUNCTUATION:
+        return False
+    if token in _INDIRECTION:
+        return previous not in _INDIRECTION
+    if previous in _INDIRECTION:
+        return _is_identifier(token)
+    return _is_identifier(previous) and _is_identifier(token)
+
+
+def canonical_type_name(name):
+    if name is None:
+        return None
+
+    text = str(name)
+    tokens = _strip_keywords(_tokenize_type_name(text))
+    if not tokens:
+        return text.strip()
+
+    parts = []
+    previous = None
+    for token in tokens:
+        if previous is not None and _needs_space(previous, token):
+            parts.append(" ")
+        parts.append(token)
+        previous = token
+
+    return "".join(parts)
+
+
 
 class FrameInfo(object):
     __slots__ = ("level", "function", "user_code", "handle")
