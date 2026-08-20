@@ -1,0 +1,448 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "promotedChild",
+      "function": "splitPage",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "BTreePage **",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 2,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "promotedKey",
+      "function": "splitPage",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 1,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "ptNewPage",
+      "function": "splitPage",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#4",
+      "target": "#5",
+      "indirections": 1,
+      "node": "#5",
+      "status": "ok"
+    },
+    {
+      "name": "ptPage",
+      "function": "splitPage",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#6",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "f",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#8",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "g",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#10",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 4,
+        "signed": true
+      }
+    },
+    {
+      "name": "level",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#11",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "p",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#12",
+      "target": "#13",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "path",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "BTreePage *[32]",
+      "category": "aggregate",
+      "address": "#14",
+      "target": null,
+      "indirections": 0,
+      "node": "#14",
+      "status": "ok"
+    },
+    {
+      "name": "position",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int[32]",
+      "category": "aggregate",
+      "address": "#15",
+      "target": null,
+      "indirections": 0,
+      "node": "#15",
+      "status": "ok"
+    },
+    {
+      "name": "promotedChild",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#1",
+      "target": "#13",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "promotedKey",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#3",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 90,
+        "signed": true
+      }
+    },
+    {
+      "name": "pt",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#16",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "ptNewRoot",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#17",
+      "target": "#18",
+      "indirections": 1,
+      "node": "#18",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptRoot",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "BTreePage **",
+      "category": "pointer",
+      "address": "#19",
+      "target": "#20",
+      "indirections": 2,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "x",
+      "function": "insertionBTree",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#21",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 90,
+        "signed": true
+      }
+    },
+    {
+      "name": "f",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#9",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "g",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#22",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "i",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "unsigned int",
+      "category": "scalar",
+      "address": "#23",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 4,
+        "signed": false
+      }
+    },
+    {
+      "name": "keysToInsert",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int[30]",
+      "category": "aggregate",
+      "address": "#24",
+      "target": null,
+      "indirections": 0,
+      "node": "#24",
+      "status": "ok"
+    },
+    {
+      "name": "pt",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#25",
+      "target": "#13",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "ptRoot",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "BTreePage *",
+      "category": "pointer",
+      "address": "#20",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#3",
+      "reason": "notExpanded",
+      "type": "int"
+    },
+    {
+      "kind": "record",
+      "id": "#5",
+      "type": "BTreePage",
+      "aggregate": "struct",
+      "sizeBytes": 72,
+      "fields": [
+        {
+          "name": "m",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "keys",
+          "elementType": "int",
+          "length": 5,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "children",
+          "elementType": "BTreePage *",
+          "length": 6,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "record",
+      "id": "#7",
+      "type": "BTreePage",
+      "aggregate": "struct",
+      "sizeBytes": 72,
+      "fields": [
+        {
+          "name": "m",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 5,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "keys",
+          "elementType": "int",
+          "length": 5,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        },
+        {
+          "name": "children",
+          "elementType": "BTreePage *",
+          "length": 6,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "opaque",
+      "id": "#9",
+      "reason": "notExpanded",
+      "type": "int"
+    },
+    {
+      "kind": "opaque",
+      "id": "#14",
+      "reason": "notExpanded",
+      "type": "BTreePage *[32]"
+    },
+    {
+      "kind": "opaque",
+      "id": "#15",
+      "reason": "notExpanded",
+      "type": "int[32]"
+    },
+    {
+      "kind": "opaque",
+      "id": "#18",
+      "reason": "zeroPage",
+      "type": "BTreePage"
+    },
+    {
+      "kind": "opaque",
+      "id": "#24",
+      "reason": "notExpanded",
+      "type": "int[30]"
+    }
+  ],
+  "edges": []
+}

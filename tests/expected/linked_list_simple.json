@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 2,
+    "framesSkipped": 0,
+    "observedTypes": [],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "curr",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Node *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "unreadable"
+    },
+    {
+      "name": "head_ref",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Node **",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 2,
+      "node": "#4",
+      "status": "ok"
+    },
+    {
+      "name": "prev",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Node *",
+      "category": "pointer",
+      "address": "#5",
+      "target": "#6",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "value",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#7",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 20,
+        "signed": true
+      }
+    },
+    {
+      "name": "head",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "Node *",
+      "category": "pointer",
+      "address": "#3",
+      "target": "#4",
+      "indirections": 1,
+      "node": "#4",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#1",
+      "reason": "zeroPage",
+      "type": "Node"
+    },
+    {
+      "kind": "record",
+      "id": "#4",
+      "type": "Node",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#8",
+      "type": "Node",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#9",
+      "type": "Node",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "#4",
+      "field": "next",
+      "to": "#8",
+      "type": "Node *"
+    },
+    {
+      "from": "#8",
+      "field": "next",
+      "to": "#9",
+      "type": "Node *"
+    },
+    {
+      "from": "#9",
+      "field": "next",
+      "to": null,
+      "type": "Node *"
+    }
+  ]
+}

@@ -6,6 +6,8 @@ import dbga_traversal
 
 CHAR_TYPE_NAMES = frozenset(["char", "signed char", "unsigned char"])
 
+ANONYMOUS_MARKER = "{...}"
+
 MEMORY_ERRORS = (gdb.MemoryError, gdb.error, OverflowError, ValueError)
 
 
@@ -121,7 +123,7 @@ class GdbAdapter(dbga_adapter.Adapter):
         return dbga_adapter.TypeInfo(
             self,
             self._category(stripped),
-            _attribute(gdb_type, "name") or str(gdb_type),
+            dbga_adapter.canonical_type_name(_declared_name(gdb_type)),
             size,
             alignment,
             signed,
@@ -145,7 +147,7 @@ class GdbAdapter(dbga_adapter.Adapter):
         if code == gdb.TYPE_CODE_CHAR:
             return dbga_adapter.CHAR
         if code == gdb.TYPE_CODE_INT:
-            plain = _attribute(stripped, "name") or str(stripped)
+            plain = dbga_adapter.canonical_type_name(_declared_name(stripped))
             return dbga_adapter.CHAR if plain in CHAR_TYPE_NAMES else dbga_adapter.INT
         if code == gdb.TYPE_CODE_FLT:
             return dbga_adapter.REAL
@@ -261,6 +263,29 @@ class GdbAdapter(dbga_adapter.Adapter):
             return int(gdb.parse_and_eval(expression))
         except (gdb.error, ValueError):
             return None
+
+
+def _declared_name(gdb_type):
+    stripped = gdb_type.strip_typedefs()
+    code = stripped.code
+
+    if code == gdb.TYPE_CODE_PTR:
+        target = stripped.target()
+        if target.code != gdb.TYPE_CODE_FUNC:
+            return _declared_name(target) + " *"
+    elif code == gdb.TYPE_CODE_REF or code == getattr(gdb, "TYPE_CODE_RVALUE_REF", -1):
+        return _declared_name(stripped.target()) + " &"
+    elif code == gdb.TYPE_CODE_ARRAY:
+        try:
+            low, high = stripped.range()
+            return "%s[%d]" % (_declared_name(stripped.target()), max(0, high - low + 1))
+        except Exception:
+            pass
+
+    rendered = str(stripped)
+    if ANONYMOUS_MARKER in rendered:
+        return str(gdb_type)
+    return rendered
 
 
 def _attribute(source, name):

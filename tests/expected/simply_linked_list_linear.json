@@ -1,0 +1,215 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 2,
+    "framesSkipped": 0,
+    "observedTypes": [],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "list",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "ListNode **",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 2,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "nodeToRemove",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "ListNode *",
+      "category": "pointer",
+      "address": "#3",
+      "target": "#4",
+      "indirections": 1,
+      "node": "#4",
+      "status": "ok"
+    },
+    {
+      "name": "previous",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "ListNode *",
+      "category": "pointer",
+      "address": "#5",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "valueToRemove",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#6",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 20,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "ListNode *",
+      "category": "pointer",
+      "address": "#1",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#2",
+      "type": "ListNode",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#4",
+      "type": "ListNode",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#7",
+      "type": "ListNode",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#8",
+      "type": "ListNode",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#9",
+      "type": "ListNode",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "#2",
+      "field": "next",
+      "to": "#4",
+      "type": "ListNode *"
+    },
+    {
+      "from": "#4",
+      "field": "next",
+      "to": "#7",
+      "type": "ListNode *"
+    },
+    {
+      "from": "#7",
+      "field": "next",
+      "to": "#8",
+      "type": "ListNode *"
+    },
+    {
+      "from": "#8",
+      "field": "next",
+      "to": "#9",
+      "type": "ListNode *"
+    },
+    {
+      "from": "#9",
+      "field": "next",
+      "to": null,
+      "type": "ListNode *"
+    }
+  ]
+}
