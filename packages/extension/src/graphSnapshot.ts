@@ -54,7 +54,7 @@ export interface Root {
   frameLevel: number;
   origin: 'local' | 'parameter';
   type: string;
-  category: 'pointer' | 'aggregate' | 'scalar';
+  category: 'pointer' | 'reference' | 'aggregate' | 'scalar';
   address: AddressOrNull;
   target: AddressOrNull;
   indirections: number;
