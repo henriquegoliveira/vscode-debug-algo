@@ -14,6 +14,8 @@ struct Payload {
     Payload *next;
 };
 
+static size_t const DEAD_BLOCK_BYTES = 1024 * 1024;
+
 static double half(double const value);
 static void poisonStack(void);
 static void inspect(Payload *ptValid, Payload *ptDead);
@@ -21,12 +23,16 @@ static void probe(Payload *ptValid, Payload *ptDead);
 
 int main(void) {
     Payload *ptValid = new Payload{7, nullptr};
-    Payload *ptDead = new Payload{13, nullptr};
+    Payload *ptReturned = static_cast<Payload *>(std::malloc(DEAD_BLOCK_BYTES));
 
-    delete ptDead;
+    ptReturned->key = 13;
+    ptReturned->next = nullptr;
+
+    uintptr_t const deadAddress = reinterpret_cast<uintptr_t>(ptReturned);
+    std::free(ptReturned);
 
     poisonStack();
-    probe(ptValid, ptDead);
+    probe(ptValid, reinterpret_cast<Payload *>(deadAddress));
 
     delete ptValid;
 
