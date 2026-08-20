@@ -36,7 +36,7 @@
       "target": "#2",
       "indirections": 1,
       "node": "#2",
-      "status": "ok"
+      "status": "unreadable"
     },
     {
       "name": "ptFunction",
@@ -179,7 +179,7 @@
       "target": "#2",
       "indirections": 1,
       "node": "#2",
-      "status": "ok"
+      "status": "unreadable"
     },
     {
       "name": "ptValid",
@@ -195,17 +195,35 @@
       "status": "ok"
     },
     {
-      "name": "ptDead",
+      "name": "deadAddress",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "unsigned long",
+      "category": "scalar",
+      "address": "#23",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 140737344696336,
+        "signed": false
+      }
+    },
+    {
+      "name": "ptReturned",
       "function": "main",
       "frameLevel": 2,
       "origin": "local",
       "type": "Payload *",
       "category": "pointer",
-      "address": "#23",
+      "address": "#24",
       "target": "#2",
       "indirections": 1,
       "node": "#2",
-      "status": "ok"
+      "status": "unreadable"
     },
     {
       "name": "ptValid",
@@ -214,7 +232,7 @@
       "origin": "local",
       "type": "Payload *",
       "category": "pointer",
-      "address": "#24",
+      "address": "#25",
       "target": "#12",
       "indirections": 1,
       "node": "#12",
@@ -260,23 +278,10 @@
       "uncertain": true
     },
     {
-      "kind": "record",
+      "kind": "opaque",
       "id": "#2",
-      "type": "Payload",
-      "aggregate": "struct",
-      "sizeBytes": 16,
-      "fields": [
-        {
-          "name": "key",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 1431655787,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
+      "reason": "unreadable",
+      "type": "Payload"
     },
     {
       "kind": "opaque",
@@ -326,12 +331,6 @@
       "id": "#20",
       "reason": "zeroPage",
       "type": "Payload"
-    },
-    {
-      "kind": "opaque",
-      "id": "#25",
-      "reason": "misaligned",
-      "type": "Payload"
     }
   ],
   "edges": [
@@ -340,12 +339,6 @@
       "field": "asPointer",
       "to": "#12",
       "type": "void *"
-    },
-    {
-      "from": "#2",
-      "field": "next",
-      "to": "#25",
-      "type": "Payload *"
     },
     {
       "from": "#12",
