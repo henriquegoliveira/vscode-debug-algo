@@ -42,6 +42,17 @@ export default [
   },
 
   {
+    files: ['tests/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+
+  {
     files: ['packages/webview/src/**/*.{ts,tsx,js,jsx}'],
     plugins: {
       react: reactPlugin,

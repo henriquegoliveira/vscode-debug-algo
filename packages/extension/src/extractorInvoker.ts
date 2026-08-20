@@ -5,12 +5,43 @@ import { DebuggerType } from './debuggerType';
 import { SnapshotReader } from './snapshotReader';
 import { GraphSnapshot } from './graphSnapshot';
 
+export interface ExtractionLimits {
+  maxNodes?: number;
+  maxEdges?: number;
+}
+
+export interface ExtractionOptions {
+  dynamicArrays?: string[];
+  rootFilter?: string[];
+  limits?: ExtractionLimits;
+}
+
 export interface InvokeOptions {
   importModule: boolean;
-  rootVar?: string;
+  options: ExtractionOptions;
   pid: number;
   threadId: number;
 }
+
+export class DebuggerPythonMissingError extends Error {
+  constructor(
+    readonly debuggerType: DebuggerType,
+    readonly cause: unknown,
+  ) {
+    super(
+      `O ${debuggerType} desta maquina foi compilado sem Python embutido, entao o DbgAlgo nao ` +
+        'consegue injetar o extrator. No Windows, instale o GDB do MinGW-w64 ' +
+        '(mingw-w64-x86_64-gdb no MSYS2);',
+    );
+    this.name = 'DebuggerPythonMissingError';
+  }
+}
+
+const PYTHON_MISSING_PATTERNS = [
+  /python scripting is not supported/i,
+  /undefined command: "python"/i,
+  /scripting in the "python" language is not supported/i,
+];
 
 export class ExtractorInvoker {
   constructor(
@@ -27,12 +58,20 @@ export class ExtractorInvoker {
     const snapshotPath = this.snapshotPathFor(options.pid);
 
     if (options.importModule) {
-      await this.sendEvaluate(session, type, this.importCommand(type), frameId);
+      try {
+        await this.sendEvaluate(session, type, this.importCommand(type), frameId);
+      } catch (err) {
+        if (isPythonMissing(err)) {
+          throw new DebuggerPythonMissingError(type, err);
+        }
+        throw err;
+      }
     }
+
     await this.sendEvaluate(
       session,
       type,
-      this.dumpCommand(type, snapshotPath, options.rootVar),
+      this.dumpCommand(type, snapshotPath, options.options),
       frameId,
     );
 
@@ -48,7 +87,9 @@ export class ExtractorInvoker {
 
     const frame = response?.stackFrames?.[0];
     if (frame === undefined) {
-      console.log(`nao consegui resolver o frame da thread ${threadId} (stackTrace vazio)`);
+      throw new Error(
+        `nao consegui resolver o frame da thread ${threadId}: stackTrace voltou sem frames`,
+      );
     }
 
     return frame.id;
@@ -59,7 +100,7 @@ export class ExtractorInvoker {
   }
 
   private scriptPathFor(type: DebuggerType): string {
-    const filename = type === DebuggerType.GDB ? 'extractor_gdb.py' : 'extractor_lldb.py';
+    const filename = type === DebuggerType.GDB ? 'dbga_extractor_gdb.py' : 'dbga_extractor_lldb.py';
     return path.join(this.extensionPath, 'scripts', filename);
   }
 
@@ -71,18 +112,14 @@ export class ExtractorInvoker {
     const scriptDir = path.dirname(this.scriptPathFor(type));
     const moduleName = this.moduleNameFor(type);
 
-    return `import sys; \
-            sys.path.insert(0, ${JSON.stringify(scriptDir)}); \
-            import ${moduleName}`;
+    return `import sys; sys.path.insert(0, ${JSON.stringify(scriptDir)}); import ${moduleName}`;
   }
 
-  private dumpCommand(type: DebuggerType, outPath: string, rootVar?: string): string {
+  private dumpCommand(type: DebuggerType, outPath: string, options: ExtractionOptions): string {
     const moduleName = this.moduleNameFor(type);
-    const args = [JSON.stringify(outPath)];
-    if (rootVar !== undefined) {
-      args.push(JSON.stringify(rootVar));
-    }
-    return `${moduleName}.dump_structs(${args.join(', ')})`;
+    const literal = `__import__("json").loads(${JSON.stringify(JSON.stringify(options))})`;
+
+    return `${moduleName}.dump_structs(${JSON.stringify(outPath)}, options=${literal})`;
   }
 
   private async sendEvaluate(
@@ -96,4 +133,9 @@ export class ExtractorInvoker {
 
     return session.customRequest('evaluate', { expression, context: 'repl', frameId });
   }
+}
+
+function isPythonMissing(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err);
+  return PYTHON_MISSING_PATTERNS.some((pattern) => pattern.test(message));
 }

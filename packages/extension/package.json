@@ -24,6 +24,28 @@
         "category": "Visualização"
       }
     ],
+    "configuration": {
+      "title": "DbgAlgo",
+      "properties": {
+        "dbgAlgo.rootFilter": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "dbgAlgo.limits.maxNodes": {
+          "type": "number",
+          "minimum": 1,
+          "default": 2000
+        },
+        "dbgAlgo.limits.maxEdges": {
+          "type": "number",
+          "minimum": 1,
+          "default": 6000
+        }
+      }
+    },
     "menus": {
       "commandPalette": [
         {
