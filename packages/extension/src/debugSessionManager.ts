@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { DebuggerType } from './debuggerType';
-import { ExtractorInvoker } from './extractorInvoker';
+import { DebuggerPythonMissingError, ExtractorInvoker } from './extractorInvoker';
+import { readExtractionOptions } from './extractionSettings';
 import { GraphSnapshot } from './graphSnapshot';
 
 export class DebugSessionManager implements vscode.Disposable {
@@ -9,6 +10,10 @@ export class DebugSessionManager implements vscode.Disposable {
   private readonly importedSessions = new Set<string>();
 
   private readonly sessionPids = new Map<string, number>();
+
+  private readonly extractingSessions = new Set<string>();
+
+  private readonly unusableSessions = new Set<string>();
 
   private readonly disposables: vscode.Disposable[] = [];
 
@@ -24,6 +29,8 @@ export class DebugSessionManager implements vscode.Disposable {
       vscode.debug.onDidTerminateDebugSession((session) => {
         this.importedSessions.delete(session.id);
         this.sessionPids.delete(session.id);
+        this.extractingSessions.delete(session.id);
+        this.unusableSessions.delete(session.id);
         if (this.currentSession?.id === session.id) {
           this.currentSession = undefined;
         }
@@ -70,20 +77,38 @@ export class DebugSessionManager implements vscode.Disposable {
       return;
     }
 
-    const firstPauseThisSession = !this.importedSessions.has(session.id);
-    if (firstPauseThisSession) {
-      this.importedSessions.add(session.id);
+    if (this.unusableSessions.has(session.id)) {
+      return;
     }
+
+    if (this.extractingSessions.has(session.id)) {
+      console.warn(
+        `[DbgAlgo] sessao ${session.id} parou de novo com uma extracao em voo; descartando esta pausa`,
+      );
+      return;
+    }
+
+    const firstPauseThisSession = !this.importedSessions.has(session.id);
+    this.extractingSessions.add(session.id);
 
     try {
       const snapshot = await this.invoker.invoke(session, type, {
         importModule: firstPauseThisSession,
+        options: readExtractionOptions(),
         pid,
         threadId,
       });
+      this.importedSessions.add(session.id);
       this.onSnapshot(snapshot, session);
     } catch (err) {
+      if (err instanceof DebuggerPythonMissingError) {
+        this.unusableSessions.add(session.id);
+        void vscode.window.showErrorMessage(err.message);
+        return;
+      }
       console.error(`[DbgAlgo] falha ao extrair/ler snapshot da sessao ${session.id}`, err);
+    } finally {
+      this.extractingSessions.delete(session.id);
     }
   }
 
