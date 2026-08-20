@@ -20,6 +20,7 @@ export interface GraphSnapshot {
 export interface Meta {
   version: 2;
   debugger: 'GDB' | 'LLDB';
+  debuggerVersion: string | null;
   generatedAt: number;
   truncated: boolean;
   truncationReasons: (

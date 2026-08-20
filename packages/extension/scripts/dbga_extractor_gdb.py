@@ -19,6 +19,15 @@ class GdbAdapter(dbga_adapter.Adapter):
         except Exception:
             self._progspace = None
 
+    def debugger_version(self):
+        version = _attribute(gdb, "VERSION")
+        if version is not None:
+            return str(version)
+        try:
+            return gdb.execute("show version", to_string=True).splitlines()[0].strip() or None
+        except Exception:
+            return None
+
     def frames(self):
         collected = []
         try:
@@ -263,9 +272,13 @@ def _attribute(source, name):
 
 def dump_structs(out_path, options=None):
     try:
-        snapshot = dbga_traversal.extract(GdbAdapter(), dbga_traversal.Config.from_dict(options))
+        adapter = GdbAdapter()
+        snapshot = dbga_traversal.extract(adapter, dbga_traversal.Config.from_dict(options))
     except Exception as error:
-        snapshot = dbga_snapshot.minimal_snapshot(GdbAdapter.debugger_name, error)
+        version = _attribute(gdb, "VERSION")
+        snapshot = dbga_snapshot.minimal_snapshot(
+            GdbAdapter.debugger_name, None if version is None else str(version), error
+        )
 
     try:
         dbga_snapshot.write_atomic(out_path, snapshot)

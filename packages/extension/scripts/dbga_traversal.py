@@ -121,7 +121,9 @@ def _bounded_int(candidate, fallback):
 
 
 def extract(adapter, config):
-    builder = dbga_snapshot.SnapshotBuilder(adapter.debugger_name, config)
+    builder = dbga_snapshot.SnapshotBuilder(
+        adapter.debugger_name, adapter.debugger_version(), config
+    )
     frontier = Frontier()
     deadline = time.monotonic() + config.time_budget_seconds
 

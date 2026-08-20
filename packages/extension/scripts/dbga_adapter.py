@@ -97,6 +97,9 @@ class TypeInfo(object):
 class Adapter(object):
     debugger_name = None
 
+    def debugger_version(self):
+        raise NotImplementedError
+
     def frames(self):
         raise NotImplementedError
 

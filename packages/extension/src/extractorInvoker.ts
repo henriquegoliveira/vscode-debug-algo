@@ -23,16 +23,17 @@ export interface InvokeOptions {
   threadId: number;
 }
 
+const PYTHON_MISSING_MESSAGE =
+  'DbgAlgo precisa de um depurador com Python embutido e o desta sessão não tem. ' +
+  'Use o CodeLLDB, que traz o próprio LLDB, ou um GDB com Python ' +
+  '(no Windows, mingw-w64-x86_64-gdb pelo MSYS2).';
+
 export class DebuggerPythonMissingError extends Error {
   constructor(
     readonly debuggerType: DebuggerType,
     readonly cause: unknown,
   ) {
-    super(
-      `O ${debuggerType} desta maquina foi compilado sem Python embutido, entao o DbgAlgo nao ` +
-        'consegue injetar o extrator. No Windows, instale o GDB do MinGW-w64 ' +
-        '(mingw-w64-x86_64-gdb no MSYS2);',
-    );
+    super(PYTHON_MISSING_MESSAGE);
     this.name = 'DebuggerPythonMissingError';
   }
 }

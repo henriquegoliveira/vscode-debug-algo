@@ -71,8 +71,9 @@ def inline_array(name, element_type, length, cells, truncated, expanded):
 
 
 class SnapshotBuilder(object):
-    def __init__(self, debugger_name, config):
+    def __init__(self, debugger_name, debugger_version, config):
         self._debugger = debugger_name
+        self._debugger_version = debugger_version
         self._config = config
         self._roots = []
         self._nodes = []
@@ -226,6 +227,7 @@ class SnapshotBuilder(object):
             "meta": {
                 "version": SCHEMA_VERSION,
                 "debugger": self._debugger,
+                "debuggerVersion": self._debugger_version,
                 "generatedAt": int(time.time() * 1000),
                 "truncated": len(self._truncation_reasons) > 0,
                 "truncationReasons": list(self._truncation_reasons),
@@ -240,11 +242,12 @@ class SnapshotBuilder(object):
         }
 
 
-def minimal_snapshot(debugger_name, exception):
+def minimal_snapshot(debugger_name, debugger_version, exception):
     return {
         "meta": {
             "version": SCHEMA_VERSION,
             "debugger": debugger_name,
+            "debuggerVersion": debugger_version,
             "generatedAt": int(time.time() * 1000),
             "truncated": False,
             "truncationReasons": [],
