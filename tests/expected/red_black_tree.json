@@ -244,8 +244,9 @@
           "name": "color",
           "type": "Color",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "enum",
+            "v": 0,
+            "name": "RED"
           }
         }
       ],
@@ -271,8 +272,9 @@
           "name": "color",
           "type": "Color",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "enum",
+            "v": 1,
+            "name": "BLACK"
           }
         }
       ],
@@ -298,8 +300,9 @@
           "name": "color",
           "type": "Color",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "enum",
+            "v": 0,
+            "name": "RED"
           }
         }
       ],
@@ -325,8 +328,9 @@
           "name": "color",
           "type": "Color",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "enum",
+            "v": 0,
+            "name": "RED"
           }
         }
       ],

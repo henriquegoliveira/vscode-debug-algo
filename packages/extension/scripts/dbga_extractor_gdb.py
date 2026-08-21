@@ -4,7 +4,7 @@ import dbga_adapter
 import dbga_snapshot
 import dbga_traversal
 
-CHAR_TYPE_NAMES = frozenset(["char", "signed char", "unsigned char"])
+CHAR_TYPE_NAMES = frozenset(["char", "signed char", "unsigned char", "wchar_t"])
 
 ANONYMOUS_MARKER = "{...}"
 
@@ -16,6 +16,7 @@ class GdbAdapter(dbga_adapter.Adapter):
 
     def __init__(self):
         self._inferior = gdb.selected_inferior()
+        self._enums = {}
         try:
             self._progspace = gdb.current_progspace().filename
         except Exception:
@@ -243,19 +244,42 @@ class GdbAdapter(dbga_adapter.Adapter):
     def read_int(self, ref):
         return int(ref)
 
-    def read_real(self, ref):
-        return float(ref)
-
     def read_bool(self, ref):
-        return bool(ref)
+        return bool(int(ref))
 
     def read_enum(self, ref):
         return int(ref)
 
-    def read_text(self, address, limit):
-        char_pointer = gdb.lookup_type("char").pointer()
-        raw = gdb.Value(address).cast(char_pointer).string(errors="replace", length=limit)
-        return raw, len(raw) >= limit
+    def enumerators(self, type_info):
+        name = type_info.name
+        if name and name in self._enums:
+            return self._enums[name]
+
+        collected = []
+        try:
+            for entry in type_info.handle.fields():
+                if entry.name is None:
+                    continue
+                collected.append((entry.name.rpartition("::")[2], int(entry.enumval)))
+        except (gdb.error, TypeError, AttributeError):
+            collected = []
+
+        if name:
+            self._enums[name] = collected
+        return collected
+
+    def value_bytes(self, ref):
+        raw = _attribute(ref, "bytes")
+        if raw is not None:
+            return bytes(raw)
+        address = self.address_of(ref)
+        size = _attribute(ref.type.strip_typedefs(), "sizeof")
+        if address is None or not size:
+            return None
+        return self.read_bytes(address, size)
+
+    def read_bytes(self, address, length):
+        return self._inferior.read_memory(address, length).tobytes()
 
     def eval_int(self, frame, expression):
         try:

@@ -38,8 +38,8 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "real",
+        "v": 12
       }
     },
     {
@@ -166,24 +166,25 @@
           "name": "visible",
           "type": "unsigned char",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "char",
+            "v": 1,
+            "text": "\\x01"
           }
         },
         {
           "name": "width",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 4
           }
         },
         {
           "name": "height",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 3
           }
         }
       ],
@@ -218,32 +219,33 @@
           "name": "visible",
           "type": "unsigned char",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "char",
+            "v": 1,
+            "text": "\\x01"
           }
         },
         {
           "name": "width",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 5
           }
         },
         {
           "name": "height",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 5
           }
         },
         {
           "name": "side",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 5
           }
         }
       ],
@@ -278,24 +280,25 @@
           "name": "visible",
           "type": "unsigned char",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "char",
+            "v": 1,
+            "text": "\\x01"
           }
         },
         {
           "name": "width",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 2.5
           }
         },
         {
           "name": "height",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 8
           }
         }
       ],

@@ -36,7 +36,12 @@
       "target": "#3",
       "indirections": 1,
       "node": null,
-      "status": "notFollowed"
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "vetor dinamico",
+        "truncated": false
+      }
     },
     {
       "name": "ratioCount",
@@ -142,7 +147,12 @@
       "target": "#3",
       "indirections": 1,
       "node": null,
-      "status": "notFollowed"
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "vetor dinamico",
+        "truncated": false
+      }
     },
     {
       "name": "ratioCount",
@@ -230,7 +240,12 @@
       "target": "#3",
       "indirections": 1,
       "node": null,
-      "status": "notFollowed"
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "vetor dinamico",
+        "truncated": false
+      }
     },
     {
       "name": "ratioCount",
