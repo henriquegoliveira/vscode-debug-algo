@@ -1,3 +1,6 @@
+import math
+import struct
+
 POINTER = "pointer"
 REFERENCE = "reference"
 RECORD = "record"
@@ -109,6 +112,89 @@ def canonical_type_name(name):
         previous = token
 
     return "".join(parts)
+
+
+X87_SIZES = (10, 12, 16)
+
+SURROGATE_RANGE = (0xD800, 0xDFFF)
+
+MAX_CODE_POINT = 0x10FFFF
+
+
+def _classify_real(value):
+    if math.isnan(value):
+        return None, "nan"
+    if math.isinf(value):
+        return None, "-inf" if value < 0 else "inf"
+    return value, None
+
+
+def _decode_x87(raw):
+    mantissa = int.from_bytes(raw[0:8], "little")
+    tail = int.from_bytes(raw[8:10], "little")
+    sign = -1.0 if tail & 0x8000 else 1.0
+    exponent = tail & 0x7FFF
+
+    if exponent == 0x7FFF:
+        if mantissa & ((1 << 63) - 1):
+            return None, "nan"
+        return None, "-inf" if sign < 0 else "inf"
+
+    try:
+        if exponent == 0:
+            scaled = mantissa * (2.0 ** -16382) * (2.0 ** -63)
+        else:
+            scaled = mantissa * (2.0 ** (exponent - 16383 - 63))
+    except OverflowError:
+        return None, "-inf" if sign < 0 else "inf"
+
+    return _classify_real(sign * scaled)
+
+
+def decode_real(raw, size):
+    if raw is None:
+        return None, None
+
+    if size == 4 and len(raw) >= 4:
+        return _classify_real(struct.unpack("<f", bytes(raw[:4]))[0])
+    if size == 8 and len(raw) >= 8:
+        return _classify_real(struct.unpack("<d", bytes(raw[:8]))[0])
+    if size in X87_SIZES and len(raw) >= 10:
+        return _decode_x87(bytes(raw[:10]))
+
+    return None, None
+
+
+def char_text(value, width):
+    size = width if width in (1, 2, 4) else 4
+    point = int(value) & ((1 << (size * 8)) - 1)
+
+    if size == 1:
+        if 0x20 <= point <= 0x7E:
+            return chr(point)
+        return "\\x%02x" % point
+
+    printable = (
+        point <= MAX_CODE_POINT
+        and not (SURROGATE_RANGE[0] <= point <= SURROGATE_RANGE[1])
+        and chr(point).isprintable()
+    )
+    if printable:
+        return chr(point)
+    if point <= 0xFFFF:
+        return "\\u%04x" % point
+    return "\\U%08x" % point
+
+
+def cut_text(raw):
+    if raw is None:
+        return "", False
+
+    body = bytes(raw)
+    cut = body.find(b"\x00")
+    if cut >= 0:
+        return body[:cut].decode("utf-8", "replace"), False
+    return body.decode("utf-8", "replace"), True
 
 
 
@@ -234,16 +320,19 @@ class Adapter(object):
     def read_int(self, ref):
         raise NotImplementedError
 
-    def read_real(self, ref):
-        raise NotImplementedError
-
     def read_bool(self, ref):
         raise NotImplementedError
 
     def read_enum(self, ref):
         raise NotImplementedError
 
-    def read_text(self, address, limit):
+    def enumerators(self, type_info):
+        raise NotImplementedError
+
+    def value_bytes(self, ref):
+        raise NotImplementedError
+
+    def read_bytes(self, address, length):
         raise NotImplementedError
 
     def eval_int(self, frame, expression):

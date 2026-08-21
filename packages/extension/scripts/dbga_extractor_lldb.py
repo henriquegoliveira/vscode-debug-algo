@@ -24,7 +24,14 @@ WIDE_CHAR_BASIC_TYPES = frozenset(
     _basic
     for _basic in (
         getattr(lldb, _name, None)
-        for _name in ("eBasicTypeChar8", "eBasicTypeChar16", "eBasicTypeChar32")
+        for _name in (
+            "eBasicTypeChar8",
+            "eBasicTypeChar16",
+            "eBasicTypeChar32",
+            "eBasicTypeWChar",
+            "eBasicTypeSignedWChar",
+            "eBasicTypeUnsignedWChar",
+        )
     )
     if _basic is not None
 )
@@ -69,6 +76,7 @@ class LldbAdapter(dbga_adapter.Adapter):
         self._process = self._target.GetProcess()
         self._executable = None
         self._records = {}
+        self._enums = {}
 
         executable = self._target.GetExecutable()
         if executable.IsValid():
@@ -319,27 +327,45 @@ class LldbAdapter(dbga_adapter.Adapter):
             return int(ref.GetValueAsSigned())
         return int(ref.GetValueAsUnsigned())
 
-    def read_real(self, ref):
-        data = ref.GetData()
-        error = lldb.SBError()
-        value = data.GetDouble(error, 0)
-        if not error.Success():
-            raise ValueError(error.GetCString() or "leitura de real falhou")
-        return float(value)
-
     def read_bool(self, ref):
         return bool(ref.GetValueAsUnsigned())
 
     def read_enum(self, ref):
-        return int(ref.GetValueAsSigned())
+        return self.read_int(ref)
 
-    def read_text(self, address, limit):
+    def enumerators(self, type_info):
+        name = type_info.name
+        if name and name in self._enums:
+            return self._enums[name]
+
+        collected = []
+        handle = type_info.handle
+        try:
+            signed = bool(handle.GetTypeFlags() & lldb.eTypeIsSigned)
+            members = handle.GetEnumMembers()
+            for index in range(members.GetSize()):
+                member = members.GetTypeEnumMemberAtIndex(index)
+                value = member.GetValueAsSigned() if signed else member.GetValueAsUnsigned()
+                collected.append((member.GetName(), int(value)))
+        except Exception:
+            collected = []
+
+        if name:
+            self._enums[name] = collected
+        return collected
+
+    def value_bytes(self, ref):
+        data = ref.GetData()
+        if not data.IsValid():
+            return None
+        return bytes(bytearray(data.uint8))
+
+    def read_bytes(self, address, length):
         error = lldb.SBError()
-        raw = self._process.ReadCStringFromMemory(int(address), int(limit), error)
+        raw = self._process.ReadMemory(int(address), int(length), error)
         if not error.Success():
-            raise ValueError(error.GetCString() or "leitura de texto falhou")
-        text = raw or ""
-        return text, len(text) >= limit
+            raise ValueError(error.GetCString() or "leitura de memoria falhou")
+        return bytes(raw)
 
     def eval_int(self, frame, expression):
         try:

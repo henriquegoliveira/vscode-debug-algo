@@ -202,24 +202,27 @@
           "name": "key",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 40,
+            "signed": true
           }
         },
         {
           "name": "balance",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": -1,
+            "signed": true
           }
         },
         {
           "name": "reserved",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 0,
+            "signed": true
           }
         }
       ],
@@ -236,24 +239,27 @@
           "name": "key",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 30,
+            "signed": true
           }
         },
         {
           "name": "balance",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": -1,
+            "signed": true
           }
         },
         {
           "name": "reserved",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 0,
+            "signed": true
           }
         }
       ],
@@ -270,24 +276,27 @@
           "name": "key",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 50,
+            "signed": true
           }
         },
         {
           "name": "balance",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": -1,
+            "signed": true
           }
         },
         {
           "name": "reserved",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 0,
+            "signed": true
           }
         }
       ],
@@ -304,24 +313,27 @@
           "name": "key",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 20,
+            "signed": true
           }
         },
         {
           "name": "balance",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 0,
+            "signed": true
           }
         },
         {
           "name": "reserved",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 0,
+            "signed": true
           }
         }
       ],
@@ -338,24 +350,27 @@
           "name": "key",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 60,
+            "signed": true
           }
         },
         {
           "name": "balance",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 0,
+            "signed": true
           }
         },
         {
           "name": "reserved",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 0,
+            "signed": true
           }
         }
       ],

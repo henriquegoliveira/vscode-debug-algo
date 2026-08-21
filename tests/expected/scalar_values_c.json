@@ -25,8 +25,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "enum",
+        "v": 1,
+        "name": "MEDIUM"
       }
     },
     {
@@ -42,8 +43,8 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "real",
+        "v": 1.2345678901234567
       }
     },
     {
@@ -123,8 +124,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "char",
+        "v": 122,
+        "text": "z"
       }
     },
     {
@@ -138,7 +140,12 @@
       "target": "#10",
       "indirections": 1,
       "node": null,
-      "status": "notFollowed"
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "cadeia literal",
+        "truncated": false
+      }
     },
     {
       "name": "medium",
@@ -189,8 +196,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "enum",
+        "v": 1,
+        "name": "GREEN"
       }
     },
     {
@@ -206,8 +214,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "real",
+        "v": null,
+        "special": "-inf"
       }
     },
     {
@@ -223,8 +232,8 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "bool",
+        "v": false
       }
     },
     {
@@ -240,8 +249,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "real",
+        "v": null,
+        "special": "nan"
       }
     },
     {
@@ -283,8 +293,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "real",
+        "v": null,
+        "special": "inf"
       }
     },
     {
@@ -298,7 +309,12 @@
       "target": null,
       "indirections": 0,
       "node": "#22",
-      "status": "ok"
+      "status": "ok",
+      "value": {
+        "t": "text",
+        "v": "abcd",
+        "truncated": true
+      }
     },
     {
       "name": "signedLetter",
@@ -313,8 +329,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "char",
+        "v": -3,
+        "text": "\\xfd"
       }
     },
     {
@@ -364,7 +381,12 @@
       "target": null,
       "indirections": 0,
       "node": "#26",
-      "status": "ok"
+      "status": "ok",
+      "value": {
+        "t": "text",
+        "v": "terminada",
+        "truncated": false
+      }
     },
     {
       "name": "tiny",
@@ -379,8 +401,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "char",
+        "v": -8,
+        "text": "\\xf8"
       }
     },
     {
@@ -396,8 +419,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "char",
+        "v": 200,
+        "text": "\\xc8"
       }
     },
     {
@@ -413,8 +437,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "enum",
+        "v": 99,
+        "name": null
       }
     },
     {
@@ -430,8 +455,9 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "char",
+        "v": 250,
+        "text": "\\xfa"
       }
     },
     {
@@ -465,8 +491,8 @@
       "node": null,
       "status": "ok",
       "value": {
-        "t": "opaque",
-        "reason": "unknownType"
+        "t": "bool",
+        "v": true
       }
     },
     {
@@ -549,88 +575,96 @@
           "name": "available",
           "type": "bool",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "bool",
+            "v": true
           }
         },
         {
           "name": "grade",
           "type": "char",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "char",
+            "v": 65,
+            "text": "A"
           }
         },
         {
           "name": "color",
           "type": "Color",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "enum",
+            "v": 2,
+            "name": "BLUE"
           }
         },
         {
           "name": "level",
           "type": "Level",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "enum",
+            "v": 2,
+            "name": "HIGH"
           }
         },
         {
           "name": "ratio",
           "type": "float",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 0.5
           }
         },
         {
           "name": "weight",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 2.718281828459045
           }
         },
         {
           "name": "name",
           "type": "char *",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "text",
+            "v": "estrutura de teste",
+            "truncated": false
           }
         },
         {
           "name": "packed.flag",
           "type": "unsigned int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 1,
+            "signed": false
           }
         },
         {
           "name": "packed.level",
           "type": "unsigned int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 5,
+            "signed": false
           }
         },
         {
           "name": "packed.counter",
           "type": "unsigned int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": 3000,
+            "signed": false
           }
         },
         {
           "name": "packed.offset",
           "type": "int",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "int",
+            "v": -777,
+            "signed": true
           }
         }
       ],
@@ -674,8 +708,8 @@
           "name": "asReal",
           "type": "double",
           "value": {
-            "t": "opaque",
-            "reason": "unknownType"
+            "t": "real",
+            "v": 2393736.541207228
           }
         }
       ],
