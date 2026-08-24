@@ -834,10 +834,56 @@
       "type": "int"
     },
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#50",
-      "reason": "notExpanded",
-      "type": "char *[8]"
+      "type": "char *[8]",
+      "elementType": "char *",
+      "length": 8,
+      "cells": [
+        {
+          "t": "text",
+          "v": "bubbleSortOriginal",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "bubbleSortImproved",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "insertionSort",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "mergeSort",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "quickSortLastElem",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "quickSortRandomPivot",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "quickSortMedian3",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "heapSort",
+          "truncated": false
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
     }
   ],
   "edges": []

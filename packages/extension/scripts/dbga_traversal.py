@@ -83,7 +83,7 @@ class Config(object):
         self.max_depth = 64
         self.max_frames = 32
         self.max_vars_per_frame = 128
-        self.max_cells = 512
+        self.max_cells = 64
         self.max_fields = 64
         self.max_text = 200
         self.max_value_nesting = 3
@@ -429,6 +429,9 @@ def visit(builder, frontier, adapter, address, type_info, depth, config, reason=
     if type_info is not None and type_info.category in (dbga_adapter.RECORD, dbga_adapter.UNION):
         _visit_record(builder, frontier, adapter, address, type_info, depth, config)
         return
+    if type_info is not None and type_info.category == dbga_adapter.ARRAY:
+        _visit_array(builder, frontier, adapter, address, type_info, depth, config)
+        return
     builder.opaque_node(address, "notExpanded", None if type_info is None else type_info.name)
 
 
@@ -436,9 +439,10 @@ def _visit_record(builder, frontier, adapter, address, type_info, depth, config)
     reference = adapter.object_at(address, type_info)
     fields = []
     arrays = []
+    pointers = []
     counter = [0]
 
-    _collect(builder, frontier, adapter, reference, type_info, address, "", fields, arrays, depth, config, counter)
+    _collect(builder, frontier, adapter, reference, type_info, address, "", fields, arrays, pointers, depth, config, counter)
 
     is_union = type_info.category == dbga_adapter.UNION
     builder.record_node(
@@ -448,11 +452,13 @@ def _visit_record(builder, frontier, adapter, address, type_info, depth, config)
         type_info.size,
         fields,
         arrays,
+        pointers,
+        [entry["name"] for entry in fields],
         is_union,
     )
 
 
-def _collect(builder, frontier, adapter, reference, type_info, node_address, prefix, fields, arrays, depth, config, counter):
+def _collect(builder, frontier, adapter, reference, type_info, node_address, prefix, fields, arrays, pointers, depth, config, counter):
     for info in type_info.fields:
         if info.is_artificial:
             continue
@@ -473,7 +479,7 @@ def _collect(builder, frontier, adapter, reference, type_info, node_address, pre
             continue
 
         if info.is_base:
-            _collect(builder, frontier, adapter, child, child_type, node_address, prefix, fields, arrays, depth, config, counter)
+            _collect(builder, frontier, adapter, child, child_type, node_address, prefix, fields, arrays, pointers, depth, config, counter)
             continue
 
         name = _path(prefix, info.name)
@@ -481,32 +487,22 @@ def _collect(builder, frontier, adapter, reference, type_info, node_address, pre
         category = child_type.category
 
         if category in (dbga_adapter.RECORD, dbga_adapter.UNION):
-            _collect(builder, frontier, adapter, child, child_type, node_address, name, fields, arrays, depth, config, counter)
+            _collect(builder, frontier, adapter, child, child_type, node_address, name, fields, arrays, pointers, depth, config, counter)
             continue
 
         if category == dbga_adapter.ARRAY:
-            element = child_type.target
-            arrays.append(
-                dbga_snapshot.inline_array(
-                    name,
-                    "" if element is None else element.name,
-                    child_type.element_count or 0,
-                    [],
-                    False,
-                    False,
-                )
-            )
+            _inline_array(builder, frontier, adapter, node_address, name, child, child_type, arrays, pointers, depth, config)
             continue
 
         if category == dbga_adapter.POINTER:
-            _pointer_field(builder, frontier, adapter, node_address, name, child, child_type, fields, depth, config, counter)
+            _pointer_field(builder, frontier, adapter, node_address, name, child, child_type, fields, pointers, depth, config, counter)
             continue
 
         counter[0] += 1
         fields.append(dbga_snapshot.field(name, child_type.name, _scalar_value(adapter, child, child_type)))
 
 
-def _pointer_field(builder, frontier, adapter, node_address, name, child, child_type, fields, depth, config, counter):
+def _pointer_field(builder, frontier, adapter, node_address, name, child, child_type, fields, pointers, depth, config, counter):
     child_type = _refined_type(adapter, child, child_type)
     pointee = child_type.target
 
@@ -523,6 +519,8 @@ def _pointer_field(builder, frontier, adapter, node_address, name, child, child_
         builder.truncate("edgeLimit")
         return
 
+    pointers.append(name)
+
     value = adapter.pointer_value(child)
     if value == 0:
         builder.edge(node_address, name, None, child_type.name)
@@ -530,6 +528,149 @@ def _pointer_field(builder, frontier, adapter, node_address, name, child, child_
 
     node, _status = _follow(builder, frontier, adapter, value, pointee, depth + 1, config)
     builder.edge(node_address, name, value if node is None else node, child_type.name)
+
+
+CELL_SCALAR = "scalar"
+CELL_TEXT = "text"
+CELL_POINTER = "pointer"
+CELL_OPAQUE = "opaque"
+
+
+def _cell_kind(element_type):
+    if element_type is None or element_type.is_aggregate():
+        return CELL_OPAQUE
+    if element_type.category == dbga_adapter.POINTER:
+        return CELL_TEXT if _is_narrow_char(element_type.target) else CELL_POINTER
+    return CELL_SCALAR
+
+
+def _cell_limit(builder, count, config):
+    if count > config.max_cells:
+        builder.truncate("cellLimit")
+        return config.max_cells, True
+    return count, False
+
+
+def _read_cells(builder, adapter, reference, element_type, count, config, kind):
+    limit, truncated = _cell_limit(builder, count, config)
+    cells = []
+
+    for index in range(limit):
+        try:
+            cell = adapter.element(reference, index)
+            if kind == CELL_TEXT:
+                cells.append(
+                    _text_from_pointer(adapter, adapter.pointer_value(cell), config.max_text)
+                )
+            else:
+                cells.append(_scalar_value(adapter, cell, element_type))
+        except Exception as error:
+            cells.append(dbga_snapshot.opaque_value("error", detail=str(error)))
+
+    return cells, truncated
+
+
+def _pointer_cells(builder, frontier, adapter, reference, source, label, element_type, count, depth, config):
+    limit, truncated = _cell_limit(builder, count, config)
+    pointee = element_type.target
+
+    for index in range(limit):
+        if builder.edge_count() >= config.max_edges:
+            builder.truncate("edgeLimit")
+            return truncated
+
+        name = "%s[%d]" % (label, index)
+
+        try:
+            value = adapter.pointer_value(adapter.element(reference, index))
+        except Exception as error:
+            builder.error("edge", name, error)
+            continue
+
+        if value == 0:
+            builder.edge(source, name, None, element_type.name)
+            continue
+
+        node, _status = _follow(builder, frontier, adapter, value, pointee, depth + 1, config)
+        builder.edge(source, name, value if node is None else node, element_type.name)
+
+    return truncated
+
+
+def _inline_array(builder, frontier, adapter, node_address, name, child, child_type, arrays, pointers, depth, config):
+    element_type = child_type.target
+    element_name = "" if element_type is None else element_type.name
+    count = child_type.element_count or 0
+    kind = _cell_kind(element_type)
+
+    if count <= 0 or kind == CELL_OPAQUE:
+        arrays.append(dbga_snapshot.inline_array(name, element_name, count, [], False, False))
+        return
+
+    if kind == CELL_POINTER:
+        pointers.append(name)
+        truncated = _pointer_cells(
+            builder, frontier, adapter, child, node_address, name, element_type, count, depth, config
+        )
+        arrays.append(dbga_snapshot.inline_array(name, element_name, count, [], truncated, True))
+        return
+
+    cells, truncated = _read_cells(builder, adapter, child, element_type, count, config, kind)
+    arrays.append(dbga_snapshot.inline_array(name, element_name, count, cells, truncated, True))
+
+
+def _visit_array(builder, frontier, adapter, address, type_info, depth, config):
+    element_type = type_info.target
+    count = type_info.element_count
+
+    if element_type is None or count is None or count <= 0:
+        builder.opaque_node(address, "notExpanded", type_info.name)
+        return
+
+    if element_type.category in (dbga_adapter.RECORD, dbga_adapter.UNION):
+        _expand_elements(builder, frontier, adapter, address, element_type, count, depth, config)
+        return
+
+    kind = _cell_kind(element_type)
+    if kind == CELL_OPAQUE:
+        builder.opaque_node(address, "notExpanded", type_info.name)
+        return
+
+    reference = adapter.object_at(address, type_info)
+
+    if kind == CELL_POINTER:
+        cells = []
+        truncated = _pointer_cells(
+            builder, frontier, adapter, reference, address, "", element_type, count, depth, config
+        )
+    else:
+        cells, truncated = _read_cells(builder, adapter, reference, element_type, count, config, kind)
+
+    builder.array_node(
+        address,
+        type_info.name,
+        element_type.name,
+        count,
+        cells,
+        kind == CELL_POINTER,
+        truncated,
+        "static",
+    )
+
+
+def _expand_elements(builder, frontier, adapter, address, element_type, count, depth, config):
+    size = element_type.size
+    if not size or size <= 0:
+        builder.opaque_node(address, "notExpanded", element_type.name)
+        return
+
+    _visit_record(builder, frontier, adapter, address, element_type, depth, config)
+
+    for index in range(1, count):
+        if builder.node_count() >= config.max_nodes:
+            builder.truncate("nodeLimit")
+            return
+        _adopt(builder, frontier, adapter, address + index * size, element_type, depth, config)
 
 
 def _path(prefix, name):

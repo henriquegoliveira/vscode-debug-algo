@@ -8,7 +8,20 @@
     "truncationReasons": [],
     "framesScanned": 3,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "Buffer",
+        "pointerFields": [
+          "data"
+        ],
+        "scalarFields": [
+          "count",
+          "capacity"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      }
+    ],
     "errors": []
   },
   "roots": [

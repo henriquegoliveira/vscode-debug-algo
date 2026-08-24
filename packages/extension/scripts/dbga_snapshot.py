@@ -78,6 +78,7 @@ class SnapshotBuilder(object):
         self._roots = []
         self._nodes = []
         self._nodes_by_id = {}
+        self._type_shape = {}
         self._edges = []
         self._visited = set()
         self._errors = []
@@ -159,7 +160,21 @@ class SnapshotBuilder(object):
         self._nodes.append(node)
         return node
 
-    def record_node(self, address, type_name, aggregate, size_bytes, fields, arrays, uncertain=False):
+    def record_node(
+        self,
+        address,
+        type_name,
+        aggregate,
+        size_bytes,
+        fields,
+        arrays,
+        pointer_fields,
+        scalar_fields,
+        uncertain=False,
+    ):
+        if type_name is not None and type_name not in self._type_shape:
+            self._type_shape[type_name] = (list(pointer_fields), list(scalar_fields))
+
         node = {
             "kind": "record",
             "id": to_address(address),
@@ -208,6 +223,38 @@ class SnapshotBuilder(object):
         self._edges.append(entry)
         return entry
 
+    def _observed_types(self):
+        degrees = {}
+        for entry in self._edges:
+            if entry["to"] is None:
+                continue
+            degrees[entry["from"]] = degrees.get(entry["from"], 0) + 1
+
+        counts = {}
+        maximums = {}
+        for node in self._nodes:
+            if node["kind"] != "record":
+                continue
+            type_name = node["type"]
+            counts[type_name] = counts.get(type_name, 0) + 1
+            degree = degrees.get(node["id"], 0)
+            if degree > maximums.get(type_name, 0):
+                maximums[type_name] = degree
+
+        collected = []
+        for type_name in sorted(counts):
+            pointer_fields, scalar_fields = self._type_shape.get(type_name, ([], []))
+            collected.append(
+                {
+                    "type": type_name,
+                    "pointerFields": list(pointer_fields),
+                    "scalarFields": list(scalar_fields),
+                    "count": counts[type_name],
+                    "maxDegree": maximums.get(type_name, 0),
+                }
+            )
+        return collected
+
     def _close_dangling(self):
         reason = "nodeLimit" if self._truncation_reasons else "notExpanded"
         pending = []
@@ -223,6 +270,7 @@ class SnapshotBuilder(object):
 
     def build(self):
         self._close_dangling()
+        observed_types = self._observed_types()
         return {
             "meta": {
                 "version": SCHEMA_VERSION,
@@ -233,7 +281,7 @@ class SnapshotBuilder(object):
                 "truncationReasons": list(self._truncation_reasons),
                 "framesScanned": self._frames_scanned,
                 "framesSkipped": self._frames_skipped,
-                "observedTypes": [],
+                "observedTypes": observed_types,
                 "errors": self._errors,
             },
             "roots": self._roots,

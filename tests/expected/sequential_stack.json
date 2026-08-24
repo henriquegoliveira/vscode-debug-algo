@@ -8,7 +8,17 @@
     "truncationReasons": [],
     "framesScanned": 3,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "SequentialStack",
+        "pointerFields": [],
+        "scalarFields": [
+          "top"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      }
+    ],
     "errors": []
   },
   "roots": [
@@ -148,9 +158,90 @@
           "name": "data",
           "elementType": "int",
           "length": 16,
-          "cells": [],
+          "cells": [
+            {
+              "t": "int",
+              "v": 7,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 14,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 21,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 28,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 35,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 42,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 49,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 56,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 63,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     }
