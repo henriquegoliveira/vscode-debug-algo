@@ -198,6 +198,72 @@ def cut_text(raw):
 
 
 
+INTEGER_CATEGORIES = (INT, ENUM, BOOL)
+
+ANNOTATION_SYNTAX = "annotationSyntax"
+ANNOTATION_CALL = "annotationCall"
+
+_ANNOTATION_IDENTIFIER_EXTRA = "_$:"
+
+
+def _is_annotation_identifier(text):
+    if not text:
+        return False
+    if not (text[0].isalpha() or text[0] == "_"):
+        return False
+    for char in text:
+        if not (char.isalnum() or char in _ANNOTATION_IDENTIFIER_EXTRA):
+            return False
+    return True
+
+
+def _split_function(text):
+    index = 0
+    while index < len(text):
+        if text[index] != ":":
+            index += 1
+            continue
+        if index + 1 < len(text) and text[index + 1] == ":":
+            index += 2
+            continue
+        return text[:index], text[index + 1 :]
+    return None, text
+
+
+def _calls_function(text):
+    previous = None
+    for char in text:
+        if char.isspace():
+            continue
+        if char == "(" and previous is not None:
+            if previous.isalnum() or previous in _ANNOTATION_IDENTIFIER_EXTRA:
+                return True
+        previous = char
+    return False
+
+
+def parse_annotation(text):
+    head, separator, length = str(text).strip().partition("@")
+    if not separator:
+        return None, ANNOTATION_SYNTAX
+
+    function, path = _split_function(head)
+    path = path.strip()
+    length = length.strip()
+
+    if not path or not length:
+        return None, ANNOTATION_SYNTAX
+    if function is not None:
+        function = function.strip()
+        if not _is_annotation_identifier(function):
+            return None, ANNOTATION_SYNTAX
+
+    if _calls_function(path) or _calls_function(length):
+        return None, ANNOTATION_CALL
+
+    return (function, path, length), None
+
+
 class FrameInfo(object):
     __slots__ = ("level", "function", "user_code", "handle")
 
@@ -335,5 +401,5 @@ class Adapter(object):
     def read_bytes(self, address, length):
         raise NotImplementedError
 
-    def eval_int(self, frame, expression):
+    def eval(self, frame, expression):
         raise NotImplementedError

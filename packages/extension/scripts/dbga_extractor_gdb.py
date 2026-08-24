@@ -91,7 +91,6 @@ class GdbAdapter(dbga_adapter.Adapter):
                 except gdb.error:
                     value = None
                     valid = False
-
                 if value is None:
                     continue
 
@@ -281,10 +280,10 @@ class GdbAdapter(dbga_adapter.Adapter):
     def read_bytes(self, address, length):
         return self._inferior.read_memory(address, length).tobytes()
 
-    def eval_int(self, frame, expression):
+    def eval(self, frame, expression):
         try:
             frame.handle.select()
-            return int(gdb.parse_and_eval(expression))
+            return gdb.parse_and_eval(expression)
         except (gdb.error, ValueError):
             return None
 

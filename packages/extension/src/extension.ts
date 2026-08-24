@@ -5,6 +5,7 @@ import { DebugSessionManager } from './debugSessionManager';
 import { ExtractorInvoker } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
+import { appendDynamicArray } from './extractionSettings';
 
 export class ExtensionController {
   private sessionManager: DebugSessionManager;
@@ -30,13 +31,33 @@ export class ExtensionController {
 
     this.context.subscriptions.push(this.sessionManager);
 
-    const commandDisposable = vscode.commands.registerCommand('dbg-algo.start', () =>
-      this.startWebViewCommand(),
+    this.context.subscriptions.push(
+      vscode.commands.registerCommand('dbg-algo.start', () => this.startWebViewCommand()),
+      vscode.commands.registerCommand('dbg-algo.annotateArray', () => this.annotateArrayCommand()),
     );
-    this.context.subscriptions.push(commandDisposable);
   }
 
   public deactivate(): void {}
+
+  private async annotateArrayCommand(): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    const selected = editor?.document.getText(editor.selection).trim() ?? '';
+
+    const typed = await vscode.window.showInputBox({
+      value: selected.length > 0 ? `${selected}@` : '',
+      valueSelection: [selected.length + 1, selected.length + 1],
+    });
+    if (typed === undefined) {
+      return;
+    }
+
+    const annotation = typed.trim();
+    if (annotation.length === 0) {
+      return;
+    }
+
+    await appendDynamicArray(annotation);
+  }
 
   private startWebViewCommand(): void {
     warnIfNoSupportedDebugSession(this.sessionManager);

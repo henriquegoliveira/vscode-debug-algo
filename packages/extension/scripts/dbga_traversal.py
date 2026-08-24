@@ -7,6 +7,7 @@ import dbga_snapshot
 ZERO_PAGE = 0x1000
 PAGE_SIZE = 0x1000
 MAX_OBJECT_SIZE = 1 << 20
+MAX_ANNOTATED_LENGTH = 1 << 20
 
 GATE_NODE_REASON = {
     "zeroPage": ("zeroPage", None),
@@ -86,7 +87,6 @@ class Config(object):
         self.max_cells = 64
         self.max_fields = 64
         self.max_text = 200
-        self.max_value_nesting = 3
         self.time_budget_seconds = 2.0
         self.root_filter = None
         self.dynamic_arrays = []
@@ -127,8 +127,10 @@ def extract(adapter, config):
     )
     frontier = Frontier()
     deadline = time.monotonic() + config.time_budget_seconds
+    frames = adapter.frames()
+    annotations = _resolve_annotations(builder, frontier, adapter, frames, config)
 
-    for frame in adapter.frames():
+    for frame in frames:
         if frame.level >= config.max_frames:
             builder.truncate("frameLimit")
             break
@@ -176,7 +178,9 @@ def extract(adapter, config):
         builder.mark_visited(address)
 
         try:
-            visit(builder, frontier, adapter, address, type_info, depth, config, reason)
+            visit(
+                builder, frontier, adapter, address, type_info, depth, config, reason, annotations
+            )
         except Exception as error:
             if builder.has_node(address):
                 builder.error("node", dbga_snapshot.to_address(address), error)
@@ -422,9 +426,13 @@ def _adopt(builder, frontier, adapter, address, type_info, depth, config):
     return address, "ok"
 
 
-def visit(builder, frontier, adapter, address, type_info, depth, config, reason=None):
+def visit(builder, frontier, adapter, address, type_info, depth, config, reason=None, annotations=None):
     if reason is not None:
         builder.opaque_node(address, reason[0], None if type_info is None else type_info.name, reason[1])
+        return
+    annotated = None if annotations is None else annotations.get(address)
+    if annotated is not None:
+        _visit_annotated(builder, frontier, adapter, address, annotated[0], annotated[1], depth, config)
         return
     if type_info is not None and type_info.category in (dbga_adapter.RECORD, dbga_adapter.UNION):
         _visit_record(builder, frontier, adapter, address, type_info, depth, config)
@@ -551,26 +559,42 @@ def _cell_limit(builder, count, config):
     return count, False
 
 
-def _read_cells(builder, adapter, reference, element_type, count, config, kind):
+def _element_cell(adapter, reference):
+    def cell(index):
+        return adapter.element(reference, index)
+
+    return cell
+
+
+def _memory_cell(adapter, address, element_type):
+    size = element_type.size
+
+    def cell(index):
+        return adapter.object_at(address + index * size, element_type)
+
+    return cell
+
+
+def _read_cells(builder, adapter, cell, element_type, count, config, kind):
     limit, truncated = _cell_limit(builder, count, config)
     cells = []
 
     for index in range(limit):
         try:
-            cell = adapter.element(reference, index)
+            reference = cell(index)
             if kind == CELL_TEXT:
                 cells.append(
-                    _text_from_pointer(adapter, adapter.pointer_value(cell), config.max_text)
+                    _text_from_pointer(adapter, adapter.pointer_value(reference), config.max_text)
                 )
             else:
-                cells.append(_scalar_value(adapter, cell, element_type))
+                cells.append(_scalar_value(adapter, reference, element_type))
         except Exception as error:
             cells.append(dbga_snapshot.opaque_value("error", detail=str(error)))
 
     return cells, truncated
 
 
-def _pointer_cells(builder, frontier, adapter, reference, source, label, element_type, count, depth, config):
+def _pointer_cells(builder, frontier, adapter, cell, source, label, element_type, count, depth, config):
     limit, truncated = _cell_limit(builder, count, config)
     pointee = element_type.target
 
@@ -582,7 +606,7 @@ def _pointer_cells(builder, frontier, adapter, reference, source, label, element
         name = "%s[%d]" % (label, index)
 
         try:
-            value = adapter.pointer_value(adapter.element(reference, index))
+            value = adapter.pointer_value(cell(index))
         except Exception as error:
             builder.error("edge", name, error)
             continue
@@ -610,12 +634,15 @@ def _inline_array(builder, frontier, adapter, node_address, name, child, child_t
     if kind == CELL_POINTER:
         pointers.append(name)
         truncated = _pointer_cells(
-            builder, frontier, adapter, child, node_address, name, element_type, count, depth, config
+            builder, frontier, adapter, _element_cell(adapter, child), node_address, name,
+            element_type, count, depth, config,
         )
         arrays.append(dbga_snapshot.inline_array(name, element_name, count, [], truncated, True))
         return
 
-    cells, truncated = _read_cells(builder, adapter, child, element_type, count, config, kind)
+    cells, truncated = _read_cells(
+        builder, adapter, _element_cell(adapter, child), element_type, count, config, kind
+    )
     arrays.append(dbga_snapshot.inline_array(name, element_name, count, cells, truncated, True))
 
 
@@ -641,10 +668,13 @@ def _visit_array(builder, frontier, adapter, address, type_info, depth, config):
     if kind == CELL_POINTER:
         cells = []
         truncated = _pointer_cells(
-            builder, frontier, adapter, reference, address, "", element_type, count, depth, config
+            builder, frontier, adapter, _element_cell(adapter, reference), address, "",
+            element_type, count, depth, config,
         )
     else:
-        cells, truncated = _read_cells(builder, adapter, reference, element_type, count, config, kind)
+        cells, truncated = _read_cells(
+            builder, adapter, _element_cell(adapter, reference), element_type, count, config, kind
+        )
 
     builder.array_node(
         address,
@@ -655,6 +685,138 @@ def _visit_array(builder, frontier, adapter, address, type_info, depth, config):
         kind == CELL_POINTER,
         truncated,
         "static",
+    )
+
+
+ANNOTATION_UNRESOLVED = "annotationUnresolved"
+ANNOTATION_NOT_POINTER = "annotationNotPointer"
+ANNOTATION_NON_INTEGER_LENGTH = "annotationNonIntegerLength"
+ANNOTATION_LENGTH = "annotationLength"
+ANNOTATION_DUPLICATE = "annotationDuplicate"
+ANNOTATION_NOT_SUPPORTED = "annotationNotSupported"
+
+
+def _annotation_frames(frames, function):
+    if function is None:
+        return [frame for frame in frames if frame.user_code]
+    return [frame for frame in frames if frame.user_code and frame.function == function]
+
+
+def _annotation_pointer(adapter, frames, path):
+    for frame in frames:
+        reference = adapter.eval(frame, path)
+        if reference is None:
+            continue
+        try:
+            return frame, reference, adapter.type_of(reference)
+        except Exception:
+            continue
+    return None, None, None
+
+
+def _annotation_length(adapter, frame, expression):
+    reference = adapter.eval(frame, expression)
+    if reference is None:
+        return None, ANNOTATION_UNRESOLVED
+
+    try:
+        type_info = adapter.type_of(reference)
+    except Exception:
+        return None, ANNOTATION_UNRESOLVED
+
+    if type_info is None or type_info.category not in dbga_adapter.INTEGER_CATEGORIES:
+        return None, ANNOTATION_NON_INTEGER_LENGTH
+
+    try:
+        length = int(adapter.read_int(reference))
+    except Exception:
+        return None, ANNOTATION_UNRESOLVED
+
+    if length <= 0 or length > MAX_ANNOTATED_LENGTH:
+        return None, ANNOTATION_LENGTH
+    return length, None
+
+
+def _annotated_element(type_info):
+    element_type = type_info.target
+
+    if element_type is None or _cell_kind(element_type) == CELL_OPAQUE:
+        return None
+    if element_type.category in (dbga_adapter.VOID, dbga_adapter.FUNCTION):
+        return None
+    if not element_type.size or element_type.size <= 0:
+        return None
+    return element_type
+
+
+def _resolve_annotations(builder, frontier, adapter, frames, config):
+    resolved = {}
+
+    for text in config.dynamic_arrays:
+        parsed, reason = dbga_adapter.parse_annotation(text)
+        if reason is not None:
+            builder.error("annotation", text, reason)
+            continue
+
+        function, path, size = parsed
+        frame, reference, type_info = _annotation_pointer(
+            adapter, _annotation_frames(frames, function), path
+        )
+
+        if frame is None:
+            builder.error("annotation", text, ANNOTATION_UNRESOLVED)
+            continue
+        if type_info is None or type_info.category != dbga_adapter.POINTER:
+            builder.error("annotation", text, ANNOTATION_NOT_POINTER)
+            continue
+
+        length, reason = _annotation_length(adapter, frame, size)
+        if reason is not None:
+            builder.error("annotation", text, reason)
+            continue
+
+        element_type = _annotated_element(type_info)
+        if element_type is None:
+            builder.error("annotation", text, ANNOTATION_NOT_SUPPORTED)
+            continue
+
+        address = adapter.pointer_value(reference)
+        if address in resolved:
+            builder.error("annotation", text, ANNOTATION_DUPLICATE)
+            continue
+
+        gate = _gate(adapter, address, element_type)
+        if gate is not None:
+            _push_gate_failure(frontier, address, gate, element_type, 0)
+            continue
+
+        resolved[address] = (element_type, length)
+        frontier.push(address, element_type, 0)
+
+    return resolved
+
+
+def _visit_annotated(builder, frontier, adapter, address, element_type, length, depth, config):
+    kind = _cell_kind(element_type)
+    cell = _memory_cell(adapter, address, element_type)
+
+    if kind == CELL_POINTER:
+        cells = []
+        truncated = _pointer_cells(
+            builder, frontier, adapter, cell, address, "", element_type, length, depth, config
+        )
+    else:
+        cells, truncated = _read_cells(builder, adapter, cell, element_type, length, config, kind)
+
+    builder.array_node(
+        address,
+        "%s[%d]" % (element_type.name, length),
+        element_type.name,
+        length,
+        cells,
+        kind == CELL_POINTER,
+        truncated,
+        "annotated",
     )
 
 
