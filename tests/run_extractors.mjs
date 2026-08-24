@@ -24,6 +24,25 @@ const SCENES = {
   b_tree: { continues: 6 },
 };
 
+const VARIANTS = {
+  dynamic_array: {
+    annotated: {
+      dynamicArrays: [
+        'values@valueCount',
+        'buffer->data@buffer->count',
+        'label@5',
+        'valueCount@valueCount',
+        'missing@valueCount',
+        'values@valueCount - 100',
+        'appendToBuffer(buffer,999)@1',
+      ],
+    },
+  },
+  linked_stack: {
+    annotated: { dynamicArrays: ['top@1'] },
+  },
+};
+
 const ASSERTIONS = {
   linked_list_simple: assertLinkedListSimple,
   linked_list_cyclic: assertLinkedListCyclic,
@@ -126,17 +145,17 @@ function dumpCommand(debuggerSpec, outPath, options) {
   return `${debuggerSpec.module}.dump_structs(${JSON.stringify(outPath)}, options=${literal})`;
 }
 
-function runTarget(target, key) {
+function runTarget(job, key) {
   const debuggerSpec = DEBUGGERS[key];
-  const outPath = path.join(OUTPUT, `${target}.${key}.json`);
+  const outPath = path.join(OUTPUT, `${job.file}.${key}.json`);
   rmSync(outPath, { force: true });
 
   const args = [
     ...debuggerSpec.flags,
-    ...sceneArgs(target, debuggerSpec),
+    ...sceneArgs(job.target, debuggerSpec),
     ...debuggerSpec.script(importCommand(debuggerSpec)),
-    ...debuggerSpec.script(dumpCommand(debuggerSpec, outPath, {})),
-    path.join(BIN, target),
+    ...debuggerSpec.script(dumpCommand(debuggerSpec, outPath, job.options)),
+    path.join(BIN, job.target),
   ];
 
   let stderr = '';
@@ -301,7 +320,9 @@ function checkObservedTypes(snapshot, fail) {
       continue;
     }
     if (observed.count !== counts.get(observed.type)) {
-      fail(`observedTypes ${observed.type}: count ${observed.count} != ${counts.get(observed.type)}`);
+      fail(
+        `observedTypes ${observed.type}: count ${observed.count} != ${counts.get(observed.type)}`,
+      );
     }
     if (observed.maxDegree !== maximums.get(observed.type)) {
       fail(
@@ -336,8 +357,8 @@ function parseArguments(argv) {
   return { keys: keys.length > 0 ? keys : ['gdb', 'lldb'], names, update };
 }
 
-function extract(target, key, validate, fail) {
-  const { outPath, stderr } = runTarget(target, key);
+function extract(job, key, validate, fail) {
+  const { outPath, stderr } = runTarget(job, key);
   const spec = DEBUGGERS[key];
 
   let snapshot;
@@ -356,7 +377,9 @@ function extract(target, key, validate, fail) {
   }
 
   checkIntegrity(snapshot, (message) => fail(`${spec.label}: ${message}`));
-  ASSERTIONS[target]?.(snapshot, (message) => fail(`${spec.label}: ${message}`));
+  if (job.variant === null) {
+    ASSERTIONS[job.target]?.(snapshot, (message) => fail(`${spec.label}: ${message}`));
+  }
 
   return snapshot;
 }
@@ -383,8 +406,8 @@ function checkParity(snapshots, fail) {
   return reference;
 }
 
-function checkBaseline(target, normalized, fail, update) {
-  const baseline = path.join(EXPECTED, `${target}.json`);
+function checkBaseline(job, normalized, fail, update) {
+  const baseline = path.join(EXPECTED, `${job.file}.json`);
 
   if (update) {
     mkdirSync(EXPECTED, { recursive: true });
@@ -414,6 +437,16 @@ function main() {
   const { keys, names, update } = parseArguments(process.argv.slice(2));
   const available = readdirSync(BIN).sort();
   const targets = names.length > 0 ? available.filter((t) => names.includes(t)) : available;
+  const jobs = targets.flatMap((target) => [
+    { target, variant: null, label: target, file: target, options: {} },
+    ...Object.entries(VARIANTS[target] ?? {}).map(([variant, options]) => ({
+      target,
+      variant,
+      label: `${target}#${variant}`,
+      file: `${target}.${variant}`,
+      options,
+    })),
+  ]);
 
   if (targets.length === 0) {
     console.error('nenhum alvo encontrado em tests/targets/bin — rode make -C tests/targets');
@@ -426,26 +459,26 @@ function main() {
 
   let failures = 0;
 
-  for (const target of targets) {
+  for (const job of jobs) {
     const problems = [];
     const fail = (message) => problems.push(message);
 
     const snapshots = {};
     for (const key of keys) {
-      const snapshot = extract(target, key, validate, fail);
+      const snapshot = extract(job, key, validate, fail);
       if (snapshot !== null) snapshots[key] = snapshot;
     }
 
     const normalized = checkParity(snapshots, fail);
-    if (normalized !== null) checkBaseline(target, normalized, fail, update);
+    if (normalized !== null) checkBaseline(job, normalized, fail, update);
 
     if (problems.length > 0) failures += 1;
-    report(target, problems, snapshots, keys);
+    report(job.label, problems, snapshots, keys);
   }
 
   const labels = keys.map((key) => DEBUGGERS[key].label).join(' + ');
   console.log(
-    `\n${targets.length - failures}/${targets.length} alvos ok sob ${labels}` +
+    `\n${jobs.length - failures}/${jobs.length} alvos ok sob ${labels}` +
       (failures > 0 ? ` — ${failures} com problema` : ''),
   );
   process.exit(failures > 0 ? 1 : 0);

@@ -367,14 +367,14 @@ class LldbAdapter(dbga_adapter.Adapter):
             raise ValueError(error.GetCString() or "leitura de memoria falhou")
         return bytes(raw)
 
-    def eval_int(self, frame, expression):
+    def eval(self, frame, expression):
         try:
             value = frame.handle.EvaluateExpression(expression)
         except Exception:
             return None
         if not value.IsValid() or not value.GetError().Success():
             return None
-        return int(value.GetValueAsSigned())
+        return value
 
 
 def _function_name(frame):
