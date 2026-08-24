@@ -21,6 +21,7 @@ const SCENES = {
   linked_list_cyclic: { breakAt: 'remove_node' },
   recursion: { continues: 5 },
   sorting_algorithms: { continues: 7 },
+  b_tree: { continues: 6 },
 };
 
 const ASSERTIONS = {
@@ -218,6 +219,100 @@ function checkIntegrity(snapshot, fail) {
   }
   for (const error of snapshot.meta.errors) {
     if (error.message === 'addressCollision') fail(`addressCollision em ${error.reference}`);
+  }
+
+  checkArrays(snapshot, fail);
+  checkObservedTypes(snapshot, fail);
+}
+
+function checkCells(label, length, cells, truncated, fail) {
+  if (cells.length > length) fail(`${label}: ${cells.length} celulas > length ${length}`);
+  if (truncated && cells.length >= length) fail(`${label}: truncated sem perda de celula`);
+  if (!truncated && cells.length !== length) {
+    fail(`${label}: ${cells.length} celulas != length ${length} sem truncated`);
+  }
+}
+
+function checkArrays(snapshot, fail) {
+  const labelled = new Set();
+  for (const edge of snapshot.edges) {
+    labelled.add(`${edge.from} ${edge.field.replace(/\[\d+\]$/, '')}`);
+  }
+
+  for (const node of snapshot.nodes) {
+    if (node.kind === 'array') {
+      if (node.cellsArePointers) {
+        if (node.cells.length > 0) fail(`array ${node.id}: celulas de ponteiro nao vazias`);
+      } else {
+        checkCells(`array ${node.id}`, node.length, node.cells, node.truncated, fail);
+      }
+      continue;
+    }
+
+    if (node.kind !== 'record') continue;
+
+    if (node.uncertain !== undefined && node.aggregate !== 'union') {
+      fail(`no ${node.id}: uncertain em aggregate ${node.aggregate}`);
+    }
+
+    for (const array of node.arrays) {
+      const label = `${node.id}.${array.name}`;
+
+      if (!array.expanded) {
+        if (array.cells.length > 0) fail(`${label}: cells nao vazio com expanded false`);
+        continue;
+      }
+
+      if (array.cells.length === 0 && array.length > 0) {
+        if (!labelled.has(`${node.id} ${array.name}`)) {
+          fail(`${label}: expandido sem celula e sem aresta indexada`);
+        }
+        continue;
+      }
+
+      checkCells(label, array.length, array.cells, array.truncated, fail);
+    }
+  }
+}
+
+function checkObservedTypes(snapshot, fail) {
+  const degrees = new Map();
+  for (const edge of snapshot.edges) {
+    if (edge.to === null) continue;
+    degrees.set(edge.from, (degrees.get(edge.from) ?? 0) + 1);
+  }
+
+  const counts = new Map();
+  const maximums = new Map();
+  for (const node of snapshot.nodes) {
+    if (node.kind !== 'record') continue;
+    counts.set(node.type, (counts.get(node.type) ?? 0) + 1);
+    const degree = degrees.get(node.id) ?? 0;
+    maximums.set(node.type, Math.max(maximums.get(node.type) ?? 0, degree));
+  }
+
+  const seen = new Set();
+  for (const observed of snapshot.meta.observedTypes) {
+    if (seen.has(observed.type)) fail(`observedTypes duplica ${observed.type}`);
+    seen.add(observed.type);
+
+    if (!counts.has(observed.type)) {
+      fail(`observedTypes tem ${observed.type} sem no record`);
+      continue;
+    }
+    if (observed.count !== counts.get(observed.type)) {
+      fail(`observedTypes ${observed.type}: count ${observed.count} != ${counts.get(observed.type)}`);
+    }
+    if (observed.maxDegree !== maximums.get(observed.type)) {
+      fail(
+        `observedTypes ${observed.type}: maxDegree ${observed.maxDegree} != ` +
+          `${maximums.get(observed.type)}`,
+      );
+    }
+  }
+
+  for (const type of counts.keys()) {
+    if (!seen.has(type)) fail(`observedTypes nao lista ${type}`);
   }
 }
 

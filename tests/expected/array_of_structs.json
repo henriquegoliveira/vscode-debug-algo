@@ -1,0 +1,314 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 2,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "Item",
+        "pointerFields": [
+          "related"
+        ],
+        "scalarFields": [
+          "code",
+          "price"
+        ],
+        "count": 4,
+        "maxDegree": 1
+      },
+      {
+        "type": "Shelf",
+        "pointerFields": [],
+        "scalarFields": [
+          "occupied"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "catalog",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Item *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "highlighted",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Item *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 1,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "shelf",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Shelf *",
+      "category": "pointer",
+      "address": "#4",
+      "target": "#5",
+      "indirections": 1,
+      "node": "#5",
+      "status": "ok"
+    },
+    {
+      "name": "total",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "double",
+      "category": "scalar",
+      "address": "#6",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "real",
+        "v": 16.5
+      }
+    },
+    {
+      "name": "catalog",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "Item[4]",
+      "category": "aggregate",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "highlighted",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "Item *",
+      "category": "pointer",
+      "address": "#7",
+      "target": "#3",
+      "indirections": 1,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "shelf",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "Shelf",
+      "category": "aggregate",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": "#5",
+      "status": "ok"
+    },
+    {
+      "name": "total",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "double",
+      "category": "scalar",
+      "address": "#8",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "real",
+        "v": 0
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#1",
+      "type": "Item",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "code",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 100,
+            "signed": true
+          }
+        },
+        {
+          "name": "price",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 1.5
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#3",
+      "type": "Item",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "code",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 121,
+            "signed": true
+          }
+        },
+        {
+          "name": "price",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 6
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#5",
+      "type": "Shelf",
+      "aggregate": "struct",
+      "sizeBytes": 80,
+      "fields": [
+        {
+          "name": "occupied",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 3,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "slots",
+          "elementType": "Item",
+          "length": 3,
+          "cells": [],
+          "truncated": false,
+          "expanded": false
+        }
+      ]
+    },
+    {
+      "kind": "record",
+      "id": "#9",
+      "type": "Item",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "code",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 114,
+            "signed": true
+          }
+        },
+        {
+          "name": "price",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 4.5
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#10",
+      "type": "Item",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "code",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 107,
+            "signed": true
+          }
+        },
+        {
+          "name": "price",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 3
+          }
+        }
+      ],
+      "arrays": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "#1",
+      "field": "related",
+      "to": "#9",
+      "type": "Item *"
+    },
+    {
+      "from": "#3",
+      "field": "related",
+      "to": null,
+      "type": "Item *"
+    },
+    {
+      "from": "#9",
+      "field": "related",
+      "to": "#3",
+      "type": "Item *"
+    },
+    {
+      "from": "#10",
+      "field": "related",
+      "to": null,
+      "type": "Item *"
+    }
+  ]
+}

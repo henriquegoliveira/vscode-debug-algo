@@ -8,7 +8,20 @@
     "truncationReasons": [],
     "framesScanned": 2,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "DoublyNode",
+        "pointerFields": [
+          "previous",
+          "next"
+        ],
+        "scalarFields": [
+          "value"
+        ],
+        "count": 6,
+        "maxDegree": 2
+      }
+    ],
     "errors": []
   },
   "roots": [

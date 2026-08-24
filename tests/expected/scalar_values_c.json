@@ -8,7 +8,40 @@
     "truncationReasons": [],
     "framesScanned": 3,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "Inventory",
+        "pointerFields": [],
+        "scalarFields": [
+          "identifier",
+          "available",
+          "grade",
+          "color",
+          "level",
+          "ratio",
+          "weight",
+          "name",
+          "packed.flag",
+          "packed.level",
+          "packed.counter",
+          "packed.offset"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      },
+      {
+        "type": "Overlay",
+        "pointerFields": [
+          "asPointer"
+        ],
+        "scalarFields": [
+          "asInteger",
+          "asReal"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      }
+    ],
     "errors": []
   },
   "roots": [
@@ -673,17 +706,89 @@
           "name": "label",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 99,
+              "text": "c"
+            },
+            {
+              "t": "char",
+              "v": 104,
+              "text": "h"
+            },
+            {
+              "t": "char",
+              "v": 97,
+              "text": "a"
+            },
+            {
+              "t": "char",
+              "v": 118,
+              "text": "v"
+            },
+            {
+              "t": "char",
+              "v": 101,
+              "text": "e"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "values",
           "elementType": "int",
           "length": 6,
-          "cells": [],
+          "cells": [
+            {
+              "t": "int",
+              "v": 11,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 22,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 33,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 44,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 55,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 66,
+              "signed": true
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
@@ -718,24 +823,177 @@
           "name": "asBytes",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 72,
+              "text": "H"
+            },
+            {
+              "t": "char",
+              "v": 71,
+              "text": "G"
+            },
+            {
+              "t": "char",
+              "v": 70,
+              "text": "F"
+            },
+            {
+              "t": "char",
+              "v": 69,
+              "text": "E"
+            },
+            {
+              "t": "char",
+              "v": 68,
+              "text": "D"
+            },
+            {
+              "t": "char",
+              "v": 67,
+              "text": "C"
+            },
+            {
+              "t": "char",
+              "v": 66,
+              "text": "B"
+            },
+            {
+              "t": "char",
+              "v": 65,
+              "text": "A"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ],
       "uncertain": true
     },
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#22",
-      "reason": "notExpanded",
-      "type": "char[4]"
+      "type": "char[4]",
+      "elementType": "char",
+      "length": 4,
+      "cells": [
+        {
+          "t": "char",
+          "v": 97,
+          "text": "a"
+        },
+        {
+          "t": "char",
+          "v": 98,
+          "text": "b"
+        },
+        {
+          "t": "char",
+          "v": 99,
+          "text": "c"
+        },
+        {
+          "t": "char",
+          "v": 100,
+          "text": "d"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
     },
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#26",
-      "reason": "notExpanded",
-      "type": "char[16]"
+      "type": "char[16]",
+      "elementType": "char",
+      "length": 16,
+      "cells": [
+        {
+          "t": "char",
+          "v": 116,
+          "text": "t"
+        },
+        {
+          "t": "char",
+          "v": 101,
+          "text": "e"
+        },
+        {
+          "t": "char",
+          "v": 114,
+          "text": "r"
+        },
+        {
+          "t": "char",
+          "v": 109,
+          "text": "m"
+        },
+        {
+          "t": "char",
+          "v": 105,
+          "text": "i"
+        },
+        {
+          "t": "char",
+          "v": 110,
+          "text": "n"
+        },
+        {
+          "t": "char",
+          "v": 97,
+          "text": "a"
+        },
+        {
+          "t": "char",
+          "v": 100,
+          "text": "d"
+        },
+        {
+          "t": "char",
+          "v": 97,
+          "text": "a"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
     },
     {
       "kind": "opaque",

@@ -8,7 +8,22 @@
     "truncationReasons": [],
     "framesScanned": 4,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "s_node_tree",
+        "pointerFields": [
+          "left",
+          "right"
+        ],
+        "scalarFields": [
+          "key",
+          "balance",
+          "reserved"
+        ],
+        "count": 5,
+        "maxDegree": 2
+      }
+    ],
     "errors": []
   },
   "roots": [

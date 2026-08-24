@@ -8,7 +8,31 @@
     "truncationReasons": [],
     "framesScanned": 3,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "Mixed",
+        "pointerFields": [
+          "asPointer"
+        ],
+        "scalarFields": [
+          "asInteger",
+          "asReal"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      },
+      {
+        "type": "Payload",
+        "pointerFields": [
+          "next"
+        ],
+        "scalarFields": [
+          "key"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      }
+    ],
     "errors": []
   },
   "roots": [
@@ -275,9 +299,30 @@
           "name": "asBytes",
           "elementType": "char",
           "length": 4,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 32,
+              "text": " "
+            },
+            {
+              "t": "char",
+              "v": -80,
+              "text": "\\xb0"
+            },
+            {
+              "t": "char",
+              "v": 86,
+              "text": "V"
+            },
+            {
+              "t": "char",
+              "v": 85,
+              "text": "U"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ],
       "uncertain": true

@@ -4,11 +4,65 @@
     "debugger": "",
     "debuggerVersion": "",
     "generatedAt": 0,
-    "truncated": false,
-    "truncationReasons": [],
+    "truncated": true,
+    "truncationReasons": [
+      "cellLimit"
+    ],
     "framesScanned": 3,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "NodeTree",
+        "pointerFields": [
+          "left",
+          "right"
+        ],
+        "scalarFields": [
+          "symbol",
+          "frequency"
+        ],
+        "count": 14,
+        "maxDegree": 0
+      },
+      {
+        "type": "_IO_FILE",
+        "pointerFields": [
+          "_markers",
+          "_chain",
+          "_lock",
+          "_codecvt",
+          "_wide_data",
+          "_freeres_list",
+          "_freeres_buf",
+          "_prevchain"
+        ],
+        "scalarFields": [
+          "_flags",
+          "_IO_read_ptr",
+          "_IO_read_end",
+          "_IO_read_base",
+          "_IO_write_base",
+          "_IO_write_ptr",
+          "_IO_write_end",
+          "_IO_buf_base",
+          "_IO_buf_end",
+          "_IO_save_base",
+          "_IO_backup_base",
+          "_IO_save_end",
+          "_fileno",
+          "_flags2",
+          "_old_offset",
+          "_cur_column",
+          "_vtable_offset",
+          "_offset",
+          "_mode",
+          "_unused3",
+          "_total_written"
+        ],
+        "count": 5,
+        "maxDegree": 4
+      }
+    ],
     "errors": []
   },
   "roots": [
@@ -405,10 +459,336 @@
   ],
   "nodes": [
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#3",
-      "reason": "notExpanded",
-      "type": "int[256]"
+      "type": "int[256]",
+      "elementType": "int",
+      "length": 256,
+      "cells": [
+        {
+          "t": "int",
+          "v": 1,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 2,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": true,
+      "origin": "static"
     },
     {
       "kind": "record",
@@ -439,10 +819,15 @@
       "arrays": []
     },
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#7",
-      "reason": "notExpanded",
-      "type": "NodeTree *[256]"
+      "type": "NodeTree *[256]",
+      "elementType": "NodeTree *",
+      "length": 256,
+      "cells": [],
+      "cellsArePointers": true,
+      "truncated": true,
+      "origin": "static"
     },
     {
       "kind": "record",
@@ -473,16 +858,604 @@
       "arrays": []
     },
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#11",
-      "reason": "notExpanded",
-      "type": "char[257]"
+      "type": "char[257]",
+      "elementType": "char",
+      "length": 257,
+      "cells": [
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": true,
+      "origin": "static"
     },
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#13",
-      "reason": "notExpanded",
-      "type": "char *[256]"
+      "type": "char *[256]",
+      "elementType": "char *",
+      "length": 256,
+      "cells": [
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        },
+        {
+          "t": "opaque",
+          "reason": "null"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": true,
+      "origin": "static"
     },
     {
       "kind": "record",
@@ -683,25 +1656,78 @@
           "name": "_short_backupbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_shortbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_unused2",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
@@ -896,37 +1922,752 @@
           "name": "_short_backupbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_shortbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_unused2",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
     {
-      "kind": "opaque",
+      "kind": "array",
       "id": "#29",
-      "reason": "notExpanded",
-      "type": "char[300]"
+      "type": "char[300]",
+      "elementType": "char",
+      "length": 300,
+      "cells": [
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": true,
+      "origin": "static"
     },
     {
       "kind": "record",
       "id": "#34",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 127,
+            "text": "\\x7f"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#35",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 76,
+            "text": "L"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 3,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#36",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 65,
+            "text": "A"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 5,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#37",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 10,
+            "text": "\\x0a"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 2,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#38",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 128,
+            "text": "\\x80"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#39",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 70,
+            "text": "F"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 2,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#40",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 77,
+            "text": "M"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 2,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#41",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 255,
+            "text": "\\xff"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 3,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#42",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 68,
+            "text": "D"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 2,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#43",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 66,
+            "text": "B"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 11,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#44",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 72,
+            "text": "H"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 5,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#45",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 67,
+            "text": "C"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 4,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#46",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -1115,69 +2856,122 @@
           "name": "_short_backupbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_shortbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_unused2",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
     {
       "kind": "opaque",
-      "id": "#35",
+      "id": "#47",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#36",
+      "id": "#48",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#37",
+      "id": "#49",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "opaque",
-      "id": "#38",
+      "id": "#50",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#39",
+      "id": "#51",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#40",
+      "id": "#52",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "record",
-      "id": "#41",
+      "id": "#53",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -1366,50 +3160,103 @@
           "name": "_short_backupbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_shortbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_unused2",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
     {
       "kind": "opaque",
-      "id": "#42",
+      "id": "#54",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#43",
+      "id": "#55",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#44",
+      "id": "#56",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "record",
-      "id": "#45",
+      "id": "#57",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -1598,62 +3445,115 @@
           "name": "_short_backupbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_shortbuf",
           "elementType": "char",
           "length": 1,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         },
         {
           "name": "_unused2",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
     {
       "kind": "opaque",
-      "id": "#46",
+      "id": "#58",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#47",
+      "id": "#59",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#48",
+      "id": "#60",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "opaque",
-      "id": "#49",
+      "id": "#61",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#50",
+      "id": "#62",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#51",
+      "id": "#63",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
@@ -1673,6 +3573,390 @@
       "type": "NodeTree *"
     },
     {
+      "from": "#7",
+      "field": "[0]",
+      "to": "#34",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[10]",
+      "to": "#35",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[11]",
+      "to": "#36",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[12]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[13]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[14]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[15]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[16]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[17]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[18]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[19]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[1]",
+      "to": "#37",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[20]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[21]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[22]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[23]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[24]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[25]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[26]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[27]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[28]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[29]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[2]",
+      "to": "#38",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[30]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[31]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[32]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[33]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[34]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[35]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[36]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[37]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[38]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[39]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[3]",
+      "to": "#39",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[40]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[41]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[42]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[43]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[44]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[45]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[46]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[47]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[48]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[49]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[4]",
+      "to": "#40",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[50]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[51]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[52]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[53]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[54]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[55]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[56]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[57]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[58]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[59]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[5]",
+      "to": "#41",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[60]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[61]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[62]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[63]",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[6]",
+      "to": "#42",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[7]",
+      "to": "#43",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[8]",
+      "to": "#44",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#7",
+      "field": "[9]",
+      "to": "#45",
+      "type": "NodeTree *"
+    },
+    {
       "from": "#9",
       "field": "left",
       "to": null,
@@ -1687,7 +3971,7 @@
     {
       "from": "#16",
       "field": "_chain",
-      "to": "#34",
+      "to": "#46",
       "type": "_IO_FILE *"
     },
     {
@@ -1711,7 +3995,7 @@
     {
       "from": "#16",
       "field": "_lock",
-      "to": "#35",
+      "to": "#47",
       "type": "void *"
     },
     {
@@ -1723,13 +4007,13 @@
     {
       "from": "#16",
       "field": "_prevchain",
-      "to": "#36",
+      "to": "#48",
       "type": "_IO_FILE **"
     },
     {
       "from": "#16",
       "field": "_wide_data",
-      "to": "#37",
+      "to": "#49",
       "type": "_IO_wide_data *"
     },
     {
@@ -1759,169 +4043,313 @@
     {
       "from": "#20",
       "field": "_lock",
-      "to": "#38",
-      "type": "void *"
-    },
-    {
-      "from": "#20",
-      "field": "_markers",
-      "to": null,
-      "type": "_IO_marker *"
-    },
-    {
-      "from": "#20",
-      "field": "_prevchain",
-      "to": "#39",
-      "type": "_IO_FILE **"
-    },
-    {
-      "from": "#20",
-      "field": "_wide_data",
-      "to": "#40",
-      "type": "_IO_wide_data *"
-    },
-    {
-      "from": "#34",
-      "field": "_chain",
-      "to": "#41",
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#34",
-      "field": "_codecvt",
-      "to": null,
-      "type": "_IO_codecvt *"
-    },
-    {
-      "from": "#34",
-      "field": "_freeres_buf",
-      "to": null,
-      "type": "void *"
-    },
-    {
-      "from": "#34",
-      "field": "_freeres_list",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#34",
-      "field": "_lock",
-      "to": "#42",
-      "type": "void *"
-    },
-    {
-      "from": "#34",
-      "field": "_markers",
-      "to": null,
-      "type": "_IO_marker *"
-    },
-    {
-      "from": "#34",
-      "field": "_prevchain",
-      "to": "#43",
-      "type": "_IO_FILE **"
-    },
-    {
-      "from": "#34",
-      "field": "_wide_data",
-      "to": "#44",
-      "type": "_IO_wide_data *"
-    },
-    {
-      "from": "#41",
-      "field": "_chain",
-      "to": "#45",
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#41",
-      "field": "_codecvt",
-      "to": null,
-      "type": "_IO_codecvt *"
-    },
-    {
-      "from": "#41",
-      "field": "_freeres_buf",
-      "to": null,
-      "type": "void *"
-    },
-    {
-      "from": "#41",
-      "field": "_freeres_list",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#41",
-      "field": "_lock",
-      "to": "#46",
-      "type": "void *"
-    },
-    {
-      "from": "#41",
-      "field": "_markers",
-      "to": null,
-      "type": "_IO_marker *"
-    },
-    {
-      "from": "#41",
-      "field": "_prevchain",
-      "to": "#47",
-      "type": "_IO_FILE **"
-    },
-    {
-      "from": "#41",
-      "field": "_wide_data",
-      "to": "#48",
-      "type": "_IO_wide_data *"
-    },
-    {
-      "from": "#45",
-      "field": "_chain",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#45",
-      "field": "_codecvt",
-      "to": null,
-      "type": "_IO_codecvt *"
-    },
-    {
-      "from": "#45",
-      "field": "_freeres_buf",
-      "to": null,
-      "type": "void *"
-    },
-    {
-      "from": "#45",
-      "field": "_freeres_list",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#45",
-      "field": "_lock",
-      "to": "#49",
-      "type": "void *"
-    },
-    {
-      "from": "#45",
-      "field": "_markers",
-      "to": null,
-      "type": "_IO_marker *"
-    },
-    {
-      "from": "#45",
-      "field": "_prevchain",
       "to": "#50",
+      "type": "void *"
+    },
+    {
+      "from": "#20",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#20",
+      "field": "_prevchain",
+      "to": "#51",
       "type": "_IO_FILE **"
     },
     {
-      "from": "#45",
+      "from": "#20",
       "field": "_wide_data",
-      "to": "#51",
+      "to": "#52",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#34",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#34",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#35",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#35",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#36",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#36",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#37",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#37",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#38",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#38",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#39",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#39",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#40",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#40",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#41",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#41",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#42",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#42",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#43",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#43",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#44",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#44",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#45",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#45",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#46",
+      "field": "_chain",
+      "to": "#53",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#46",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#46",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#46",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#46",
+      "field": "_lock",
+      "to": "#54",
+      "type": "void *"
+    },
+    {
+      "from": "#46",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#46",
+      "field": "_prevchain",
+      "to": "#55",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#46",
+      "field": "_wide_data",
+      "to": "#56",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#53",
+      "field": "_chain",
+      "to": "#57",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#53",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#53",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#53",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#53",
+      "field": "_lock",
+      "to": "#58",
+      "type": "void *"
+    },
+    {
+      "from": "#53",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#53",
+      "field": "_prevchain",
+      "to": "#59",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#53",
+      "field": "_wide_data",
+      "to": "#60",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#57",
+      "field": "_chain",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#57",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#57",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#57",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#57",
+      "field": "_lock",
+      "to": "#61",
+      "type": "void *"
+    },
+    {
+      "from": "#57",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#57",
+      "field": "_prevchain",
+      "to": "#62",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#57",
+      "field": "_wide_data",
+      "to": "#63",
       "type": "_IO_wide_data *"
     }
   ]

@@ -274,8 +274,8 @@ static void insertionBTree(int const x, BTreePage **ptRoot, int *f) {
         return;
     }
 
-    BTreePage *path[BTREE_MAX_HEIGHT];
-    int position[BTREE_MAX_HEIGHT];
+    BTreePage *path[BTREE_MAX_HEIGHT] = {NULL};
+    int position[BTREE_MAX_HEIGHT] = {0};
     int level = 0;
     BTreePage *p = *ptRoot;
 
@@ -315,8 +315,8 @@ static void removalBTree(int const x, BTreePage **ptRoot, int *f) {
         return;
     }
 
-    BTreePage *path[BTREE_MAX_HEIGHT];
-    int position[BTREE_MAX_HEIGHT];
+    BTreePage *path[BTREE_MAX_HEIGHT] = {NULL};
+    int position[BTREE_MAX_HEIGHT] = {0};
     int level = 0;
     BTreePage *p = *ptRoot;
 

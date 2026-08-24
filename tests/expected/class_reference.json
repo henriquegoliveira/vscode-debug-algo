@@ -8,7 +8,37 @@
     "truncationReasons": [],
     "framesScanned": 3,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "Rectangle",
+        "pointerFields": [
+          "next"
+        ],
+        "scalarFields": [
+          "identifier",
+          "visible",
+          "width",
+          "height"
+        ],
+        "count": 2,
+        "maxDegree": 1
+      },
+      {
+        "type": "Square",
+        "pointerFields": [
+          "next"
+        ],
+        "scalarFields": [
+          "identifier",
+          "visible",
+          "width",
+          "height",
+          "side"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      }
+    ],
     "errors": []
   },
   "roots": [
@@ -193,9 +223,50 @@
           "name": "label",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 82,
+              "text": "R"
+            },
+            {
+              "t": "char",
+              "v": 49,
+              "text": "1"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
@@ -254,9 +325,50 @@
           "name": "label",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 82,
+              "text": "R"
+            },
+            {
+              "t": "char",
+              "v": 50,
+              "text": "2"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
@@ -307,9 +419,50 @@
           "name": "label",
           "elementType": "char",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "char",
+              "v": 82,
+              "text": "R"
+            },
+            {
+              "t": "char",
+              "v": 51,
+              "text": "3"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     }

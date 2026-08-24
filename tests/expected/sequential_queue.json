@@ -8,7 +8,19 @@
     "truncationReasons": [],
     "framesScanned": 3,
     "framesSkipped": 0,
-    "observedTypes": [],
+    "observedTypes": [
+      {
+        "type": "SequentialQueue",
+        "pointerFields": [],
+        "scalarFields": [
+          "front",
+          "rear",
+          "count"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      }
+    ],
     "errors": []
   },
   "roots": [
@@ -160,9 +172,50 @@
           "name": "items",
           "elementType": "int",
           "length": 8,
-          "cells": [],
+          "cells": [
+            {
+              "t": "int",
+              "v": 11,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 22,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 33,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 44,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 55,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 66,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            }
+          ],
           "truncated": false,
-          "expanded": false
+          "expanded": true
         }
       ]
     },
