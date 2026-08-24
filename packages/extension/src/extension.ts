@@ -5,6 +5,7 @@ import { DebugSessionManager } from './debugSessionManager';
 import { ExtractorInvoker } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
+import { appendDynamicArray } from './extractionSettings';
 
 export class ExtensionController {
   private sessionManager: DebugSessionManager;
@@ -16,32 +17,51 @@ export class ExtensionController {
     this.reader = new SnapshotReader(schemaPath);
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
 
-    // Provisório: TransportServer não implementado ainda
-    this.sessionManager = new DebugSessionManager(this.invoker, (snapshot, session) => {
-      console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
-    });
+    this.sessionManager = new DebugSessionManager(
+      this.invoker,
+      context.globalState,
+      (snapshot, session) => {
+        console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
+      },
+    );
   }
 
   public activate(): void {
     console.log('Extensão DbgAlgo ativada com sucesso!');
 
-    // Registra os disposables no contexto
     this.context.subscriptions.push(this.sessionManager);
 
-    // Registra o comando de inicialização
-    const commandDisposable = vscode.commands.registerCommand('dbg-algo.start', () =>
-      this.startWebViewCommand(),
+    this.context.subscriptions.push(
+      vscode.commands.registerCommand('dbg-algo.start', () => this.startWebViewCommand()),
+      vscode.commands.registerCommand('dbg-algo.annotateArray', () => this.annotateArrayCommand()),
     );
-    this.context.subscriptions.push(commandDisposable);
   }
 
   public deactivate(): void {}
 
+  private async annotateArrayCommand(): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    const selected = editor?.document.getText(editor.selection).trim() ?? '';
+
+    const typed = await vscode.window.showInputBox({
+      value: selected.length > 0 ? `${selected}@` : '',
+      valueSelection: [selected.length + 1, selected.length + 1],
+    });
+    if (typed === undefined) {
+      return;
+    }
+
+    const annotation = typed.trim();
+    if (annotation.length === 0) {
+      return;
+    }
+
+    await appendDynamicArray(annotation);
+  }
+
   private startWebViewCommand(): void {
-    // Avisa ao usuário se não houver como extrair dados agora.
     warnIfNoSupportedDebugSession(this.sessionManager);
 
-    // Cria a aba do Webview
     const panel = vscode.window.createWebviewPanel(
       'dbgAlgoWebview',
       'DbgAlgo Visualizer',
@@ -54,7 +74,6 @@ export class ExtensionController {
       },
     );
 
-    // Configura o HTML
     panel.webview.html = this.getWebViewContent(panel.webview);
   }
 
@@ -62,14 +81,11 @@ export class ExtensionController {
     const webviewDistPath = path.join(this.context.extensionPath, '../webview/dist');
     const htmlPath = path.join(webviewDistPath, 'index.html');
 
-    // Lê o HTML copiado para dist/ pelo plugin 'copy-html' do esbuild (packages/webview/esbuild.js)
     const html = fs.readFileSync(htmlPath, 'utf8');
 
-    // Pega o caminho do bundle.js e converte para um URI especial de segurança
     const scriptPathOnDisk = vscode.Uri.file(path.join(webviewDistPath, 'bundle.js'));
     const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
-    // Injeta a URI correta no HTML
     return html.replace('bundle.js', scriptUri.toString());
   }
 }

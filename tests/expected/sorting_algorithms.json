@@ -1,0 +1,890 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 8,
+    "framesSkipped": 0,
+    "observedTypes": [],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "end1",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "end2",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 9,
+        "signed": true
+      }
+    },
+    {
+      "name": "ind",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#2",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "init1",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#3",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "init2",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#4",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 9,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 64,
+        "signed": true
+      }
+    },
+    {
+      "name": "lTmp",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#6",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "list",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#8",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "nro",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#10",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "saveInit1",
+      "function": "intercalateMerge",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#11",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#12",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 64,
+        "signed": true
+      }
+    },
+    {
+      "name": "lTmp",
+      "function": "mergeSort",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#13",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "left",
+      "function": "mergeSort",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#14",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "mergeSort",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#15",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "middle",
+      "function": "mergeSort",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#16",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "right",
+      "function": "mergeSort",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#17",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 9,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#18",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 64,
+        "signed": true
+      }
+    },
+    {
+      "name": "lTmp",
+      "function": "mergeSort",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#19",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "left",
+      "function": "mergeSort",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#20",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "mergeSort",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#21",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "middle",
+      "function": "mergeSort",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#22",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 9,
+        "signed": true
+      }
+    },
+    {
+      "name": "right",
+      "function": "mergeSort",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#23",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 11,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#24",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 64,
+        "signed": true
+      }
+    },
+    {
+      "name": "lTmp",
+      "function": "mergeSort",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#25",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "left",
+      "function": "mergeSort",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#26",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 8,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "mergeSort",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#27",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "middle",
+      "function": "mergeSort",
+      "frameLevel": 3,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#28",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 11,
+        "signed": true
+      }
+    },
+    {
+      "name": "right",
+      "function": "mergeSort",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#29",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 15,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 4,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#30",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 64,
+        "signed": true
+      }
+    },
+    {
+      "name": "lTmp",
+      "function": "mergeSort",
+      "frameLevel": 4,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#31",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "left",
+      "function": "mergeSort",
+      "frameLevel": 4,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#32",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "mergeSort",
+      "frameLevel": 4,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#33",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "middle",
+      "function": "mergeSort",
+      "frameLevel": 4,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#34",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 7,
+        "signed": true
+      }
+    },
+    {
+      "name": "right",
+      "function": "mergeSort",
+      "frameLevel": 4,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#35",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 15,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 5,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#36",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 64,
+        "signed": true
+      }
+    },
+    {
+      "name": "lTmp",
+      "function": "mergeSort",
+      "frameLevel": 5,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#37",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "left",
+      "function": "mergeSort",
+      "frameLevel": 5,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#38",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "mergeSort",
+      "frameLevel": 5,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#39",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "middle",
+      "function": "mergeSort",
+      "frameLevel": 5,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#40",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 15,
+        "signed": true
+      }
+    },
+    {
+      "name": "right",
+      "function": "mergeSort",
+      "frameLevel": 5,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#41",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 31,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 6,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#42",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 64,
+        "signed": true
+      }
+    },
+    {
+      "name": "lTmp",
+      "function": "mergeSort",
+      "frameLevel": 6,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#43",
+      "target": "#7",
+      "indirections": 1,
+      "node": "#7",
+      "status": "ok"
+    },
+    {
+      "name": "left",
+      "function": "mergeSort",
+      "frameLevel": 6,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#44",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "mergeSort",
+      "frameLevel": 6,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#45",
+      "target": "#9",
+      "indirections": 1,
+      "node": "#9",
+      "status": "ok"
+    },
+    {
+      "name": "middle",
+      "function": "mergeSort",
+      "frameLevel": 6,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#46",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 31,
+        "signed": true
+      }
+    },
+    {
+      "name": "right",
+      "function": "mergeSort",
+      "frameLevel": 6,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#47",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 63,
+        "signed": true
+      }
+    },
+    {
+      "name": "algorithm",
+      "function": "main",
+      "frameLevel": 7,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#48",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 3,
+        "signed": true
+      }
+    },
+    {
+      "name": "failed",
+      "function": "main",
+      "frameLevel": 7,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#49",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "names",
+      "function": "main",
+      "frameLevel": 7,
+      "origin": "local",
+      "type": "char *[8]",
+      "category": "aggregate",
+      "address": "#50",
+      "target": null,
+      "indirections": 0,
+      "node": "#50",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#7",
+      "reason": "notExpanded",
+      "type": "int"
+    },
+    {
+      "kind": "opaque",
+      "id": "#9",
+      "reason": "notExpanded",
+      "type": "int"
+    },
+    {
+      "kind": "array",
+      "id": "#50",
+      "type": "char *[8]",
+      "elementType": "char *",
+      "length": 8,
+      "cells": [
+        {
+          "t": "text",
+          "v": "bubbleSortOriginal",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "bubbleSortImproved",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "insertionSort",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "mergeSort",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "quickSortLastElem",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "quickSortRandomPivot",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "quickSortMedian3",
+          "truncated": false
+        },
+        {
+          "t": "text",
+          "v": "heapSort",
+          "truncated": false
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    }
+  ],
+  "edges": []
+}

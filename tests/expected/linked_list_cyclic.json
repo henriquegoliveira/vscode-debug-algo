@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 2,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "Node",
+        "pointerFields": [
+          "next"
+        ],
+        "scalarFields": [
+          "value"
+        ],
+        "count": 3,
+        "maxDegree": 1
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "curr",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Node *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "head_ref",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Node **",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 2,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "prev",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Node *",
+      "category": "pointer",
+      "address": "#4",
+      "target": "#5",
+      "indirections": 1,
+      "node": "#5",
+      "status": "unreadable"
+    },
+    {
+      "name": "value",
+      "function": "remove_node",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#6",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 20,
+        "signed": true
+      }
+    },
+    {
+      "name": "head",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "Node *",
+      "category": "pointer",
+      "address": "#3",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#1",
+      "type": "Node",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "opaque",
+      "id": "#5",
+      "reason": "zeroPage",
+      "type": "Node"
+    },
+    {
+      "kind": "record",
+      "id": "#7",
+      "type": "Node",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#8",
+      "type": "Node",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "#1",
+      "field": "next",
+      "to": "#7",
+      "type": "Node *"
+    },
+    {
+      "from": "#7",
+      "field": "next",
+      "to": "#8",
+      "type": "Node *"
+    },
+    {
+      "from": "#8",
+      "field": "next",
+      "to": "#1",
+      "type": "Node *"
+    }
+  ]
+}

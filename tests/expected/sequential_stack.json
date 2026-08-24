@@ -1,0 +1,250 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "SequentialStack",
+        "pointerFields": [],
+        "scalarFields": [
+          "top"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "recoveredValue",
+      "function": "pop",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "stack",
+      "function": "pop",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "SequentialStack *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 1,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "howMany",
+      "function": "drain",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#4",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 3,
+        "signed": true
+      }
+    },
+    {
+      "name": "i",
+      "function": "drain",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "recoveredValue",
+      "function": "drain",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 63,
+        "signed": true
+      }
+    },
+    {
+      "name": "stack",
+      "function": "drain",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "SequentialStack *",
+      "category": "pointer",
+      "address": "#6",
+      "target": "#3",
+      "indirections": 1,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "stack",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "SequentialStack",
+      "category": "aggregate",
+      "address": "#3",
+      "target": null,
+      "indirections": 0,
+      "node": "#3",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#1",
+      "reason": "notExpanded",
+      "type": "int"
+    },
+    {
+      "kind": "record",
+      "id": "#3",
+      "type": "SequentialStack",
+      "aggregate": "struct",
+      "sizeBytes": 68,
+      "fields": [
+        {
+          "name": "top",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 8,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "data",
+          "elementType": "int",
+          "length": 16,
+          "cells": [
+            {
+              "t": "int",
+              "v": 7,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 14,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 21,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 28,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 35,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 42,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 49,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 56,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 63,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ]
+    }
+  ],
+  "edges": []
+}

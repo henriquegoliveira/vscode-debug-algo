@@ -1,0 +1,470 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "TreeNode",
+        "pointerFields": [
+          "left",
+          "right"
+        ],
+        "scalarFields": [
+          "key"
+        ],
+        "count": 9,
+        "maxDegree": 2
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "pt",
+      "function": "searchForParent",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "TreeNode **",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 2,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "ptParent",
+      "function": "searchForParent",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "TreeNode **",
+      "category": "pointer",
+      "address": "#3",
+      "target": "#4",
+      "indirections": 2,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "x",
+      "function": "searchForParent",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 30,
+        "signed": true
+      }
+    },
+    {
+      "name": "f",
+      "function": "removal",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#6",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "ptRoot",
+      "function": "removal",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "TreeNode **",
+      "category": "pointer",
+      "address": "#7",
+      "target": "#1",
+      "indirections": 2,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "x",
+      "function": "removal",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#8",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 30,
+        "signed": true
+      }
+    },
+    {
+      "name": "z",
+      "function": "removal",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "TreeNode *",
+      "category": "pointer",
+      "address": "#9",
+      "target": "#10",
+      "indirections": 1,
+      "node": "#10",
+      "status": "ok"
+    },
+    {
+      "name": "zParent",
+      "function": "removal",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "TreeNode *",
+      "category": "pointer",
+      "address": "#4",
+      "target": "#11",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "predecessor",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "TreeNode *",
+      "category": "pointer",
+      "address": "#12",
+      "target": "#13",
+      "indirections": 1,
+      "node": "#13",
+      "status": "ok"
+    },
+    {
+      "name": "ptRoot",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "TreeNode *",
+      "category": "pointer",
+      "address": "#1",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "successor",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "TreeNode *",
+      "category": "pointer",
+      "address": "#14",
+      "target": "#15",
+      "indirections": 1,
+      "node": "#15",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#2",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#10",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#13",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 35,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#15",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#16",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#17",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#18",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#19",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#20",
+      "type": "TreeNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "#2",
+      "field": "left",
+      "to": "#10",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#2",
+      "field": "right",
+      "to": "#16",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#10",
+      "field": "left",
+      "to": "#17",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#10",
+      "field": "right",
+      "to": "#18",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#13",
+      "field": "left",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#13",
+      "field": "right",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#15",
+      "field": "left",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#15",
+      "field": "right",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#16",
+      "field": "left",
+      "to": "#19",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#16",
+      "field": "right",
+      "to": "#20",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#17",
+      "field": "left",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#17",
+      "field": "right",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#18",
+      "field": "left",
+      "to": "#13",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#18",
+      "field": "right",
+      "to": "#15",
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#19",
+      "field": "left",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#19",
+      "field": "right",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#20",
+      "field": "left",
+      "to": null,
+      "type": "TreeNode *"
+    },
+    {
+      "from": "#20",
+      "field": "right",
+      "to": null,
+      "type": "TreeNode *"
+    }
+  ]
+}

@@ -1,0 +1,230 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "SequentialQueue",
+        "pointerFields": [],
+        "scalarFields": [
+          "front",
+          "rear",
+          "count"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "queue",
+      "function": "dequeue",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "SequentialQueue *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "recoveredValue",
+      "function": "dequeue",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 1,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "howMany",
+      "function": "serve",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#4",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 4,
+        "signed": true
+      }
+    },
+    {
+      "name": "i",
+      "function": "serve",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "queue",
+      "function": "serve",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "SequentialQueue *",
+      "category": "pointer",
+      "address": "#6",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "recoveredValue",
+      "function": "serve",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#3",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 11,
+        "signed": true
+      }
+    },
+    {
+      "name": "queue",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "SequentialQueue",
+      "category": "aggregate",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": "#1",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#1",
+      "type": "SequentialQueue",
+      "aggregate": "struct",
+      "sizeBytes": 44,
+      "fields": [
+        {
+          "name": "front",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": true
+          }
+        },
+        {
+          "name": "rear",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 6,
+            "signed": true
+          }
+        },
+        {
+          "name": "count",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 5,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "items",
+          "elementType": "int",
+          "length": 8,
+          "cells": [
+            {
+              "t": "int",
+              "v": 11,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 22,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 33,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 44,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 55,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 66,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 0,
+              "signed": true
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ]
+    },
+    {
+      "kind": "opaque",
+      "id": "#3",
+      "reason": "notExpanded",
+      "type": "int"
+    }
+  ],
+  "edges": []
+}

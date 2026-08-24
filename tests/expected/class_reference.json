@@ -1,0 +1,490 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "Rectangle",
+        "pointerFields": [
+          "next"
+        ],
+        "scalarFields": [
+          "identifier",
+          "visible",
+          "width",
+          "height"
+        ],
+        "count": 2,
+        "maxDegree": 1
+      },
+      {
+        "type": "Square",
+        "pointerFields": [
+          "next"
+        ],
+        "scalarFields": [
+          "identifier",
+          "visible",
+          "width",
+          "height",
+          "side"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "counterRef",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#0",
+      "status": "ok"
+    },
+    {
+      "name": "measured",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "double",
+      "category": "scalar",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "real",
+        "v": 12
+      }
+    },
+    {
+      "name": "nodeRef",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Rectangle &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "shapeRef",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Rectangle &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "counter",
+      "function": "traverse",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#0",
+      "status": "ok"
+    },
+    {
+      "name": "pt",
+      "function": "traverse",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "Rectangle *",
+      "category": "pointer",
+      "address": "#3",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "ptHead",
+      "function": "traverse",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "Rectangle *",
+      "category": "pointer",
+      "address": "#4",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "counter",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "ptHead",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "Rectangle *",
+      "category": "pointer",
+      "address": "#5",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#0",
+      "reason": "notExpanded",
+      "type": "int"
+    },
+    {
+      "kind": "record",
+      "id": "#2",
+      "type": "Rectangle",
+      "aggregate": "struct",
+      "sizeBytes": 48,
+      "fields": [
+        {
+          "name": "identifier",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": true
+          }
+        },
+        {
+          "name": "visible",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 1,
+            "text": "\\x01"
+          }
+        },
+        {
+          "name": "width",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 4
+          }
+        },
+        {
+          "name": "height",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 3
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "label",
+          "elementType": "char",
+          "length": 8,
+          "cells": [
+            {
+              "t": "char",
+              "v": 82,
+              "text": "R"
+            },
+            {
+              "t": "char",
+              "v": 49,
+              "text": "1"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ]
+    },
+    {
+      "kind": "record",
+      "id": "#6",
+      "type": "Square",
+      "aggregate": "struct",
+      "sizeBytes": 56,
+      "fields": [
+        {
+          "name": "identifier",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 2,
+            "signed": true
+          }
+        },
+        {
+          "name": "visible",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 1,
+            "text": "\\x01"
+          }
+        },
+        {
+          "name": "width",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 5
+          }
+        },
+        {
+          "name": "height",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 5
+          }
+        },
+        {
+          "name": "side",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 5
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "label",
+          "elementType": "char",
+          "length": 8,
+          "cells": [
+            {
+              "t": "char",
+              "v": 82,
+              "text": "R"
+            },
+            {
+              "t": "char",
+              "v": 50,
+              "text": "2"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ]
+    },
+    {
+      "kind": "record",
+      "id": "#7",
+      "type": "Rectangle",
+      "aggregate": "struct",
+      "sizeBytes": 48,
+      "fields": [
+        {
+          "name": "identifier",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 3,
+            "signed": true
+          }
+        },
+        {
+          "name": "visible",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 1,
+            "text": "\\x01"
+          }
+        },
+        {
+          "name": "width",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 2.5
+          }
+        },
+        {
+          "name": "height",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 8
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "label",
+          "elementType": "char",
+          "length": 8,
+          "cells": [
+            {
+              "t": "char",
+              "v": 82,
+              "text": "R"
+            },
+            {
+              "t": "char",
+              "v": 51,
+              "text": "3"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "#2",
+      "field": "next",
+      "to": "#6",
+      "type": "Square *"
+    },
+    {
+      "from": "#6",
+      "field": "next",
+      "to": "#7",
+      "type": "Rectangle *"
+    },
+    {
+      "from": "#7",
+      "field": "next",
+      "to": null,
+      "type": "Rectangle *"
+    }
+  ]
+}

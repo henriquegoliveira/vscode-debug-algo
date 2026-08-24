@@ -5,66 +5,51 @@ import { DebuggerType } from './debuggerType';
 import { SnapshotReader } from './snapshotReader';
 import { GraphSnapshot } from './graphSnapshot';
 
-/**
- * Opções de configuração para o disparo da extração de variáveis.
- */
+export interface ExtractionLimits {
+  maxNodes?: number;
+  maxEdges?: number;
+}
+
+export interface ExtractionOptions {
+  dynamicArrays?: string[];
+  rootFilter?: string[];
+  limits?: ExtractionLimits;
+}
+
 export interface InvokeOptions {
-  /**
-   * Se `true`, injeta o módulo Python no processo alvo antes de chamar a
-   * função de extração. Geralmente é `true` apenas na primeira pausa da sessão.
-   */
   importModule: boolean;
-
-  /**
-   * Nome da variável a ser inspecionada no frame atual.
-   */
-  rootVar?: string;
-
-  /**
-   * PID do processo depurado (não o do GDB/LLDB em si). Usado pra montar
-   * o caminho do arquivo de snapshot em `snapshotPathFor`, que é então
-   * enviado ao script Python. Vem do evento DAP `process`, capturado pelo
-   * `DebugSessionManager`.
-   */
+  options: ExtractionOptions;
   pid: number;
-
-  /**
-   * ID da thread parada, vindo do `body.threadId` do evento DAP `stoped`.
-   * Necessário para resolver o `frameId` do `evaluate`.
-   */
   threadId: number;
 }
 
-/**
- * Injeta os scripts de extração no processo atual usando o formato correto para o depurador ativo.
- *
- * A requisição DAP `evaluate` usa `context: "repl"` para rodar comandos
- * no console de depuração, garantindo que o depurador não bloqueie a
- * importação de módulos.
- *
- * O snapshot trafega por arquivo, e não pelo retorno do `evaluate`, porque esse
- * retorno só é confiável no GDB: no LLDB o stdout do script não chega de forma
- * consistente. Já o PID (via evento DAP `process`) funciona igual nos dois, então
- * o caminho é derivado dele aqui e enviado ao script como argumento.
- */
+const PYTHON_MISSING_MESSAGE =
+  'DbgAlgo precisa de um depurador com Python embutido e o desta sessão não tem. ' +
+  'Use o CodeLLDB, que traz o próprio LLDB, ou um GDB com Python ' +
+  '(no Windows, mingw-w64-x86_64-gdb pelo MSYS2).';
+
+export class DebuggerPythonMissingError extends Error {
+  constructor(
+    readonly debuggerType: DebuggerType,
+    readonly cause: unknown,
+  ) {
+    super(PYTHON_MISSING_MESSAGE);
+    this.name = 'DebuggerPythonMissingError';
+  }
+}
+
+const PYTHON_MISSING_PATTERNS = [
+  /python scripting is not supported/i,
+  /undefined command: "python"/i,
+  /scripting in the "python" language is not supported/i,
+];
+
 export class ExtractorInvoker {
-  /**
-   * @param extensionPath Caminho absoluto raiz da extensão. Usado como base
-   *                      para localizar os scripts Python que serão injetados.
-   * @param reader
-   */
   constructor(
     private readonly extensionPath: string,
     private readonly reader: SnapshotReader,
   ) {}
 
-  /**
-   * Coordena a injeção do script e a execução da extração de dados.
-   *
-   * @param session A sessão de depuração ativa do VS Code.
-   * @param type Identifica se o depurador por baixo dos panos é GDB ou LLDB.
-   * @param options Define se é necessário importar o módulo base e qual variável extrair.
-   */
   async invoke(
     session: vscode.DebugSession,
     type: DebuggerType,
@@ -74,26 +59,26 @@ export class ExtractorInvoker {
     const snapshotPath = this.snapshotPathFor(options.pid);
 
     if (options.importModule) {
-      await this.sendEvaluate(session, type, this.importCommand(type), frameId);
+      try {
+        await this.sendEvaluate(session, type, this.importCommand(type), frameId);
+      } catch (err) {
+        if (isPythonMissing(err)) {
+          throw new DebuggerPythonMissingError(type, err);
+        }
+        throw err;
+      }
     }
+
     await this.sendEvaluate(
       session,
       type,
-      this.dumpCommand(type, snapshotPath, options.rootVar),
+      this.dumpCommand(type, snapshotPath, options.options),
       frameId,
     );
 
-    // Obs: O script .py já implementa medidas contra race condition.
     return this.reader.read(snapshotPath);
   }
 
-  /**
-   * Pede ao depurador o topo da pilha da thread parada (`stackTrace`,
-   * `startFrame: 0, levels: 1`). O `id` desse frame é o `frameId` que o `evaluate`
-   * exige.
-   *
-   * @see https://microsoft.github.io/debug-adapter-protocol/specification#Requests_StackTrace
-   */
   private async resolveFrameId(session: vscode.DebugSession, threadId: number): Promise<number> {
     const response = await session.customRequest('stackTrace', {
       threadId,
@@ -103,91 +88,41 @@ export class ExtractorInvoker {
 
     const frame = response?.stackFrames?.[0];
     if (frame === undefined) {
-      console.log(`nao consegui resolver o frame da thread ${threadId} (stackTrace vazio)`);
+      throw new Error(
+        `nao consegui resolver o frame da thread ${threadId}: stackTrace voltou sem frames`,
+      );
     }
 
     return frame.id;
   }
 
-  /**
-   * Define onde o extrator deve escrever o snapshot.
-   *
-   * Esta é a única definição da convenção de nome do arquivo: o caminho é
-   * enviado como argumento para `dump_structs`, então os scripts Python não
-   * precisam reconstruí-lo.
-   *
-   * O PID é o do processo depurado, não o do GDB/LLDB, e serve para isolar
-   * sessões simultâneas.
-   */
   private snapshotPathFor(pid: number): string {
     return path.join(os.tmpdir(), `dbg-algo-snapshot-${pid}.json`);
   }
 
-  /**
-   * Resolve o caminho absoluto do script Python contendo a lógica de extração.
-   * Retorna o arquivo correto dependendo do depurador ativo.
-   */
   private scriptPathFor(type: DebuggerType): string {
-    const filename = type === DebuggerType.GDB ? 'extractor_gdb.py' : 'extractor_lldb.py';
+    const filename = type === DebuggerType.GDB ? 'dbga_extractor_gdb.py' : 'dbga_extractor_lldb.py';
     return path.join(this.extensionPath, 'scripts', filename);
   }
 
-  /**
-   * Extrai apenas o nome do arquivo sem a extensão (ex: 'extractor_gdb').
-   * Esse nome é usado diretamente como o nome do módulo no `import` do Python.
-   */
   private moduleNameFor(type: DebuggerType): string {
     return path.basename(this.scriptPathFor(type), '.py');
   }
 
-  /**
-   * Constrói o comando Python responsável por adicionar o diretório dos
-   * scripts ao `sys.path` e importar o módulo.
-   *
-   * O `JSON.stringify` atua como um formatador de segurança: ele adiciona aspas
-   * ao redor do caminho e escapa barras invertidas (ambientes Windows),
-   * garantindo que o interpretador Python leia uma string válida.
-   */
   private importCommand(type: DebuggerType): string {
     const scriptDir = path.dirname(this.scriptPathFor(type));
     const moduleName = this.moduleNameFor(type);
 
-    return `import sys; \
-            sys.path.insert(0, ${JSON.stringify(scriptDir)}); \
-            import ${moduleName}`;
+    return `import sys; sys.path.insert(0, ${JSON.stringify(scriptDir)}); import ${moduleName}`;
   }
 
-  /**
-   * Constrói a chamada para a função principal do script Python.
-   *
-   * O `outPath` é obrigatório e vem sempre do `snapshotPathFor`. O `rootVar` é
-   * opcional: omitido, o script usa seu próprio default.
-   *
-   * Ambos passam por `JSON.stringify`, que adiciona aspas e escapa barras
-   * invertidas (caminhos do Windows), produzindo literais Python válidos.
-   */
-  private dumpCommand(type: DebuggerType, outPath: string, rootVar?: string): string {
+  private dumpCommand(type: DebuggerType, outPath: string, options: ExtractionOptions): string {
     const moduleName = this.moduleNameFor(type);
-    const args = [JSON.stringify(outPath)];
-    if (rootVar !== undefined) {
-      args.push(JSON.stringify(rootVar));
-    }
-    return `${moduleName}.dump_structs(${args.join(', ')})`;
+    const literal = `__import__("json").loads(${JSON.stringify(JSON.stringify(options))})`;
+
+    return `${moduleName}.dump_structs(${JSON.stringify(outPath)}, options=${literal})`;
   }
 
-  /**
-   * Envia a instrução final para o depurador usando a requisição `evaluate` do DAP.
-   *
-   * Como o GDB e o LLDB esperam comandos do seu próprio CLI (e não Python puro),
-   * o código Python é encapsulado usando o prefixo nativo de cada um:
-   * - GDB: usa `-exec python <código>`
-   * - LLDB: usa `script <código>`
-   *
-   * O VS Code expõe a função `customRequest` para enviar mensagens DAP arbitrárias.
-   *
-   * @see https://microsoft.github.io/debug-adapter-protocol/specification#Requests_Evaluate
-   * @see https://code.visualstudio.com/api/references/vscode-api#DebugSession.customRequest
-   */
   private async sendEvaluate(
     session: vscode.DebugSession,
     type: DebuggerType,
@@ -199,4 +134,9 @@ export class ExtractorInvoker {
 
     return session.customRequest('evaluate', { expression, context: 'repl', frameId });
   }
+}
+
+function isPythonMissing(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err);
+  return PYTHON_MISSING_PATTERNS.some((pattern) => pattern.test(message));
 }

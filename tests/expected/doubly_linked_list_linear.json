@@ -1,0 +1,302 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 2,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "DoublyNode",
+        "pointerFields": [
+          "previous",
+          "next"
+        ],
+        "scalarFields": [
+          "value"
+        ],
+        "count": 6,
+        "maxDegree": 2
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "list",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "DoublyNode *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "nextNode",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "DoublyNode *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "nodeToRemove",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "DoublyNode *",
+      "category": "pointer",
+      "address": "#4",
+      "target": "#5",
+      "indirections": 1,
+      "node": "#5",
+      "status": "ok"
+    },
+    {
+      "name": "previousNode",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "DoublyNode *",
+      "category": "pointer",
+      "address": "#6",
+      "target": "#3",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "valueToRemove",
+      "function": "removal",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#7",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 30,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "main",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "DoublyNode *",
+      "category": "pointer",
+      "address": "#8",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#1",
+      "type": "DoublyNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#5",
+      "type": "DoublyNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#9",
+      "type": "DoublyNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#10",
+      "type": "DoublyNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#11",
+      "type": "DoublyNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#12",
+      "type": "DoublyNode",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "#1",
+      "field": "next",
+      "to": "#9",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#1",
+      "field": "previous",
+      "to": null,
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#5",
+      "field": "next",
+      "to": "#10",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#5",
+      "field": "previous",
+      "to": "#11",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#9",
+      "field": "next",
+      "to": "#11",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#9",
+      "field": "previous",
+      "to": "#1",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#10",
+      "field": "next",
+      "to": "#12",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#10",
+      "field": "previous",
+      "to": "#5",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#11",
+      "field": "next",
+      "to": "#5",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#11",
+      "field": "previous",
+      "to": "#9",
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#12",
+      "field": "next",
+      "to": null,
+      "type": "DoublyNode *"
+    },
+    {
+      "from": "#12",
+      "field": "previous",
+      "to": "#10",
+      "type": "DoublyNode *"
+    }
+  ]
+}

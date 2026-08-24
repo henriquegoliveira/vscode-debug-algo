@@ -20,6 +20,6 @@
       "args": [],
       "cwd": "${workspaceFolder}/targets",
       "preLaunchTask": "build: targets"
-    },
+    }
   ]
 }

@@ -11,7 +11,8 @@ build/
 bin/
 
 # Arquivos de test
-expected/
+tests/output/
+huffman_sample.*
 
 # Python
 __pycache__/

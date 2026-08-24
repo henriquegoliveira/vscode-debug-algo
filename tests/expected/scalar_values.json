@@ -1,0 +1,1049 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "Inventory",
+        "pointerFields": [],
+        "scalarFields": [
+          "identifier",
+          "available",
+          "grade",
+          "color",
+          "heading",
+          "ratio",
+          "weight",
+          "name",
+          "packed.flag",
+          "packed.level",
+          "packed.counter",
+          "packed.offset"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      },
+      {
+        "type": "Overlay",
+        "pointerFields": [
+          "asPointer"
+        ],
+        "scalarFields": [
+          "asInteger",
+          "asReal"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "extended",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long double",
+      "category": "scalar",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "real",
+        "v": 1.2345678901234567
+      }
+    },
+    {
+      "name": "functionPointer",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "double(*)(double)",
+      "category": "pointer",
+      "address": "#1",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
+      "name": "inventory",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Inventory &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "large",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#4",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": -9000000000000000000,
+        "signed": true,
+        "hex": "0x831993af1d7c0000"
+      }
+    },
+    {
+      "name": "largeUnsigned",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "unsigned long",
+      "category": "scalar",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 18000000000000000000,
+        "signed": false,
+        "hex": "0xf9ccd8a1c5080000"
+      }
+    },
+    {
+      "name": "letter",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "char",
+      "category": "scalar",
+      "address": "#6",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": 122,
+        "text": "z"
+      }
+    },
+    {
+      "name": "literal",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#7",
+      "target": "#8",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "cadeia literal",
+        "truncated": false
+      }
+    },
+    {
+      "name": "medium",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#9",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": -2000000000,
+        "signed": true
+      }
+    },
+    {
+      "name": "mediumUnsigned",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "unsigned int",
+      "category": "scalar",
+      "address": "#10",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 4000000000,
+        "signed": false
+      }
+    },
+    {
+      "name": "named",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Color",
+      "category": "scalar",
+      "address": "#11",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "enum",
+        "v": 1,
+        "name": "GREEN"
+      }
+    },
+    {
+      "name": "negativeInfinity",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "double",
+      "category": "scalar",
+      "address": "#12",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "real",
+        "v": null,
+        "special": "-inf"
+      }
+    },
+    {
+      "name": "no",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "bool",
+      "category": "scalar",
+      "address": "#13",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "bool",
+        "v": false
+      }
+    },
+    {
+      "name": "notANumber",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long double",
+      "category": "scalar",
+      "address": "#14",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "real",
+        "v": null,
+        "special": "nan"
+      }
+    },
+    {
+      "name": "opaque",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "void *",
+      "category": "pointer",
+      "address": "#15",
+      "target": "#16",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "overlay",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Overlay &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#17",
+      "status": "ok"
+    },
+    {
+      "name": "positiveInfinity",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "float",
+      "category": "scalar",
+      "address": "#18",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "real",
+        "v": null,
+        "special": "inf"
+      }
+    },
+    {
+      "name": "raw",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "char[4]",
+      "category": "aggregate",
+      "address": "#19",
+      "target": null,
+      "indirections": 0,
+      "node": "#19",
+      "status": "ok",
+      "value": {
+        "t": "text",
+        "v": "abcd",
+        "truncated": true
+      }
+    },
+    {
+      "name": "scoped",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Direction",
+      "category": "scalar",
+      "address": "#20",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "enum",
+        "v": 30,
+        "name": "EAST"
+      }
+    },
+    {
+      "name": "signedLetter",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "signed char",
+      "category": "scalar",
+      "address": "#21",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": -3,
+        "text": "\\xfd"
+      }
+    },
+    {
+      "name": "small",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "short",
+      "category": "scalar",
+      "address": "#22",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": -30000,
+        "signed": true
+      }
+    },
+    {
+      "name": "smallUnsigned",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "unsigned short",
+      "category": "scalar",
+      "address": "#23",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 60000,
+        "signed": false
+      }
+    },
+    {
+      "name": "terminated",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "char[16]",
+      "category": "aggregate",
+      "address": "#24",
+      "target": null,
+      "indirections": 0,
+      "node": "#24",
+      "status": "ok",
+      "value": {
+        "t": "text",
+        "v": "terminada",
+        "truncated": false
+      }
+    },
+    {
+      "name": "tiny",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "signed char",
+      "category": "scalar",
+      "address": "#25",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": -8,
+        "text": "\\xf8"
+      }
+    },
+    {
+      "name": "tinyUnsigned",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "unsigned char",
+      "category": "scalar",
+      "address": "#26",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": 200,
+        "text": "\\xc8"
+      }
+    },
+    {
+      "name": "unnamed",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Color",
+      "category": "scalar",
+      "address": "#27",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "enum",
+        "v": 99,
+        "name": null
+      }
+    },
+    {
+      "name": "unsignedLetter",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "unsigned char",
+      "category": "scalar",
+      "address": "#28",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": 250,
+        "text": "\\xfa"
+      }
+    },
+    {
+      "name": "utf16",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "char16_t",
+      "category": "scalar",
+      "address": "#29",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": 231,
+        "text": "ç"
+      }
+    },
+    {
+      "name": "utf32",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "char32_t",
+      "category": "scalar",
+      "address": "#30",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": 128512,
+        "text": "😀"
+      }
+    },
+    {
+      "name": "wide",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "wchar_t",
+      "category": "scalar",
+      "address": "#31",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "char",
+        "v": 87,
+        "text": "W"
+      }
+    },
+    {
+      "name": "yes",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "bool",
+      "category": "scalar",
+      "address": "#32",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "bool",
+        "v": true
+      }
+    },
+    {
+      "name": "inventory",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "Inventory &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "overlay",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "Overlay &",
+      "category": "reference",
+      "address": null,
+      "target": null,
+      "indirections": 0,
+      "node": "#17",
+      "status": "ok"
+    },
+    {
+      "name": "inventory",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "Inventory",
+      "category": "aggregate",
+      "address": "#3",
+      "target": null,
+      "indirections": 0,
+      "node": "#3",
+      "status": "ok"
+    },
+    {
+      "name": "overlay",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "Overlay",
+      "category": "aggregate",
+      "address": "#17",
+      "target": null,
+      "indirections": 0,
+      "node": "#17",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#2",
+      "reason": "functionPointer",
+      "type": "double(double)"
+    },
+    {
+      "kind": "record",
+      "id": "#3",
+      "type": "Inventory",
+      "aggregate": "struct",
+      "sizeBytes": 80,
+      "fields": [
+        {
+          "name": "identifier",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -1234,
+            "signed": true
+          }
+        },
+        {
+          "name": "available",
+          "type": "bool",
+          "value": {
+            "t": "bool",
+            "v": true
+          }
+        },
+        {
+          "name": "grade",
+          "type": "char",
+          "value": {
+            "t": "char",
+            "v": 65,
+            "text": "A"
+          }
+        },
+        {
+          "name": "color",
+          "type": "Color",
+          "value": {
+            "t": "enum",
+            "v": 2,
+            "name": "BLUE"
+          }
+        },
+        {
+          "name": "heading",
+          "type": "Direction",
+          "value": {
+            "t": "enum",
+            "v": 40,
+            "name": "WEST"
+          }
+        },
+        {
+          "name": "ratio",
+          "type": "float",
+          "value": {
+            "t": "real",
+            "v": 0.5
+          }
+        },
+        {
+          "name": "weight",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 2.718281828459045
+          }
+        },
+        {
+          "name": "name",
+          "type": "char *",
+          "value": {
+            "t": "text",
+            "v": "estrutura de teste",
+            "truncated": false
+          }
+        },
+        {
+          "name": "packed.flag",
+          "type": "unsigned int",
+          "value": {
+            "t": "int",
+            "v": 1,
+            "signed": false
+          }
+        },
+        {
+          "name": "packed.level",
+          "type": "unsigned int",
+          "value": {
+            "t": "int",
+            "v": 5,
+            "signed": false
+          }
+        },
+        {
+          "name": "packed.counter",
+          "type": "unsigned int",
+          "value": {
+            "t": "int",
+            "v": 3000,
+            "signed": false
+          }
+        },
+        {
+          "name": "packed.offset",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -777,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "label",
+          "elementType": "char",
+          "length": 8,
+          "cells": [
+            {
+              "t": "char",
+              "v": 99,
+              "text": "c"
+            },
+            {
+              "t": "char",
+              "v": 104,
+              "text": "h"
+            },
+            {
+              "t": "char",
+              "v": 97,
+              "text": "a"
+            },
+            {
+              "t": "char",
+              "v": 118,
+              "text": "v"
+            },
+            {
+              "t": "char",
+              "v": 101,
+              "text": "e"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            },
+            {
+              "t": "char",
+              "v": 0,
+              "text": "\\x00"
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        },
+        {
+          "name": "values",
+          "elementType": "int",
+          "length": 6,
+          "cells": [
+            {
+              "t": "int",
+              "v": 11,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 22,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 33,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 44,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 55,
+              "signed": true
+            },
+            {
+              "t": "int",
+              "v": 66,
+              "signed": true
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ]
+    },
+    {
+      "kind": "record",
+      "id": "#17",
+      "type": "Overlay",
+      "aggregate": "union",
+      "sizeBytes": 8,
+      "fields": [
+        {
+          "name": "asInteger",
+          "type": "long",
+          "value": {
+            "t": "int",
+            "v": 4702394921427290000,
+            "signed": true,
+            "hex": "#33"
+          }
+        },
+        {
+          "name": "asReal",
+          "type": "double",
+          "value": {
+            "t": "real",
+            "v": 2393736.541207228
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "asBytes",
+          "elementType": "char",
+          "length": 8,
+          "cells": [
+            {
+              "t": "char",
+              "v": 72,
+              "text": "H"
+            },
+            {
+              "t": "char",
+              "v": 71,
+              "text": "G"
+            },
+            {
+              "t": "char",
+              "v": 70,
+              "text": "F"
+            },
+            {
+              "t": "char",
+              "v": 69,
+              "text": "E"
+            },
+            {
+              "t": "char",
+              "v": 68,
+              "text": "D"
+            },
+            {
+              "t": "char",
+              "v": 67,
+              "text": "C"
+            },
+            {
+              "t": "char",
+              "v": 66,
+              "text": "B"
+            },
+            {
+              "t": "char",
+              "v": 65,
+              "text": "A"
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ],
+      "uncertain": true
+    },
+    {
+      "kind": "array",
+      "id": "#19",
+      "type": "char[4]",
+      "elementType": "char",
+      "length": 4,
+      "cells": [
+        {
+          "t": "char",
+          "v": 97,
+          "text": "a"
+        },
+        {
+          "t": "char",
+          "v": 98,
+          "text": "b"
+        },
+        {
+          "t": "char",
+          "v": 99,
+          "text": "c"
+        },
+        {
+          "t": "char",
+          "v": 100,
+          "text": "d"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "array",
+      "id": "#24",
+      "type": "char[16]",
+      "elementType": "char",
+      "length": 16,
+      "cells": [
+        {
+          "t": "char",
+          "v": 116,
+          "text": "t"
+        },
+        {
+          "t": "char",
+          "v": 101,
+          "text": "e"
+        },
+        {
+          "t": "char",
+          "v": 114,
+          "text": "r"
+        },
+        {
+          "t": "char",
+          "v": 109,
+          "text": "m"
+        },
+        {
+          "t": "char",
+          "v": 105,
+          "text": "i"
+        },
+        {
+          "t": "char",
+          "v": 110,
+          "text": "n"
+        },
+        {
+          "t": "char",
+          "v": 97,
+          "text": "a"
+        },
+        {
+          "t": "char",
+          "v": 100,
+          "text": "d"
+        },
+        {
+          "t": "char",
+          "v": 97,
+          "text": "a"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "opaque",
+      "id": "#33",
+      "reason": "void",
+      "type": "void"
+    }
+  ],
+  "edges": [
+    {
+      "from": "#17",
+      "field": "asPointer",
+      "to": "#33",
+      "type": "void *"
+    }
+  ]
+}

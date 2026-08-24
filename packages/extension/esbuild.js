@@ -5,7 +5,6 @@ const { resolve } = require('path');
 const isWatch = process.argv.includes('--watch');
 const outDir = resolve(__dirname, 'dist');
 
-// Garante que a pasta dist exista antes do início da compilação
 mkdirSync(outDir, { recursive: true });
 
 const buildOptions = {
@@ -13,9 +12,7 @@ const buildOptions = {
   outfile: './dist/extension.js',
   bundle: true,
   platform: 'node',
-  // Define CommonJS para o VS Code extension host
   format: 'cjs',
-  // Node 20 (VS Code ^1.95.0 usa Node 20 runtime)
   target: ['node20'],
   external: ['vscode'],
   minify: !isWatch,

@@ -1,0 +1,457 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 4,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "s_node_tree",
+        "pointerFields": [
+          "left",
+          "right"
+        ],
+        "scalarFields": [
+          "key",
+          "balance",
+          "reserved"
+        ],
+        "count": 5,
+        "maxDegree": 2
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "h",
+      "function": "rightRotationInsert",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "pt",
+      "function": "rightRotationInsert",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "s_node_tree **",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 2,
+      "node": "#4",
+      "status": "ok"
+    },
+    {
+      "name": "ptu",
+      "function": "rightRotationInsert",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "s_node_tree *",
+      "category": "pointer",
+      "address": "#5",
+      "target": "#6",
+      "indirections": 1,
+      "node": "#6",
+      "status": "ok"
+    },
+    {
+      "name": "h",
+      "function": "insertionTree",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#7",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "key",
+      "function": "insertionTree",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#8",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 20,
+        "signed": true
+      }
+    },
+    {
+      "name": "pt",
+      "function": "insertionTree",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "s_node_tree **",
+      "category": "pointer",
+      "address": "#9",
+      "target": "#3",
+      "indirections": 2,
+      "node": "#4",
+      "status": "ok"
+    },
+    {
+      "name": "h",
+      "function": "insertionTree",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#10",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "key",
+      "function": "insertionTree",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#11",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 20,
+        "signed": true
+      }
+    },
+    {
+      "name": "pt",
+      "function": "insertionTree",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "s_node_tree **",
+      "category": "pointer",
+      "address": "#12",
+      "target": "#13",
+      "indirections": 2,
+      "node": "#14",
+      "status": "ok"
+    },
+    {
+      "name": "found",
+      "function": "main",
+      "frameLevel": 3,
+      "origin": "local",
+      "type": "s_node_tree *",
+      "category": "pointer",
+      "address": "#15",
+      "target": "#16",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "h",
+      "function": "main",
+      "frameLevel": 3,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "ptRoot",
+      "function": "main",
+      "frameLevel": 3,
+      "origin": "local",
+      "type": "s_node_tree *",
+      "category": "pointer",
+      "address": "#13",
+      "target": "#14",
+      "indirections": 1,
+      "node": "#14",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "opaque",
+      "id": "#1",
+      "reason": "notExpanded",
+      "type": "int"
+    },
+    {
+      "kind": "record",
+      "id": "#4",
+      "type": "s_node_tree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          }
+        },
+        {
+          "name": "balance",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "reserved",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#6",
+      "type": "s_node_tree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          }
+        },
+        {
+          "name": "balance",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "reserved",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#14",
+      "type": "s_node_tree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          }
+        },
+        {
+          "name": "balance",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": -1,
+            "signed": true
+          }
+        },
+        {
+          "name": "reserved",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#17",
+      "type": "s_node_tree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          }
+        },
+        {
+          "name": "balance",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "reserved",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#18",
+      "type": "s_node_tree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          }
+        },
+        {
+          "name": "balance",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        },
+        {
+          "name": "reserved",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 0,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "#4",
+      "field": "left",
+      "to": "#6",
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#4",
+      "field": "right",
+      "to": null,
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#6",
+      "field": "left",
+      "to": "#17",
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#6",
+      "field": "right",
+      "to": null,
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#14",
+      "field": "left",
+      "to": "#4",
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#14",
+      "field": "right",
+      "to": "#18",
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#17",
+      "field": "left",
+      "to": null,
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#17",
+      "field": "right",
+      "to": null,
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#18",
+      "field": "left",
+      "to": null,
+      "type": "s_node_tree *"
+    },
+    {
+      "from": "#18",
+      "field": "right",
+      "to": null,
+      "type": "s_node_tree *"
+    }
+  ]
+}

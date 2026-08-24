@@ -20,15 +20,61 @@
     "commands": [
       {
         "command": "dbg-algo.start",
-        "title": "DbgAlgo: Iniciar WebView",
-        "category": "Visualização"
+        "title": "Iniciar WebView",
+        "category": "DbgAlgo"
+      },
+      {
+        "command": "dbg-algo.annotateArray",
+        "title": "Anotar vetor dinâmico (v@n)",
+        "category": "DbgAlgo",
+        "icon": "$(symbol-array)"
       }
     ],
+    "configuration": {
+      "title": "DbgAlgo",
+      "properties": {
+        "dbgAlgo.dynamicArrays": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "dbgAlgo.rootFilter": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "dbgAlgo.limits.maxNodes": {
+          "type": "number",
+          "minimum": 1,
+          "default": 2000
+        },
+        "dbgAlgo.limits.maxEdges": {
+          "type": "number",
+          "minimum": 1,
+          "default": 6000
+        }
+      }
+    },
     "menus": {
       "commandPalette": [
         {
           "command": "dbg-algo.start",
           "when": "true"
+        },
+        {
+          "command": "dbg-algo.annotateArray",
+          "when": "true"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "dbg-algo.annotateArray",
+          "when": "activeWebviewPanelId == dbgAlgoWebview",
+          "group": "navigation"
         }
       ]
     }

@@ -1,0 +1,542 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "Buffer",
+        "pointerFields": [
+          "data"
+        ],
+        "scalarFields": [
+          "count",
+          "capacity"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      }
+    ],
+    "errors": [
+      {
+        "scope": "annotation",
+        "message": "annotationNotPointer",
+        "reference": "valueCount@valueCount"
+      },
+      {
+        "scope": "annotation",
+        "message": "annotationUnresolved",
+        "reference": "missing@valueCount"
+      },
+      {
+        "scope": "annotation",
+        "message": "annotationLength",
+        "reference": "values@valueCount - 100"
+      },
+      {
+        "scope": "annotation",
+        "message": "annotationCall",
+        "reference": "appendToBuffer(buffer,999)@1"
+      }
+    ]
+  },
+  "roots": [
+    {
+      "name": "buffer",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Buffer *",
+      "category": "pointer",
+      "address": "#0",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "label",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#3",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "vetor dinamico",
+        "truncated": false
+      }
+    },
+    {
+      "name": "ratioCount",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#4",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 5,
+        "signed": true
+      }
+    },
+    {
+      "name": "ratios",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "double *",
+      "category": "pointer",
+      "address": "#5",
+      "target": "#6",
+      "indirections": 1,
+      "node": "#6",
+      "status": "ok"
+    },
+    {
+      "name": "total",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#7",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 650,
+        "signed": true
+      }
+    },
+    {
+      "name": "valueCount",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#8",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 12,
+        "signed": true
+      }
+    },
+    {
+      "name": "values",
+      "function": "summarize",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#9",
+      "target": "#10",
+      "indirections": 1,
+      "node": "#10",
+      "status": "ok"
+    },
+    {
+      "name": "buffer",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "Buffer *",
+      "category": "pointer",
+      "address": "#11",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "label",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#12",
+      "target": "#3",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "vetor dinamico",
+        "truncated": false
+      }
+    },
+    {
+      "name": "ratioCount",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#13",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 5,
+        "signed": true
+      }
+    },
+    {
+      "name": "ratios",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "double *",
+      "category": "pointer",
+      "address": "#14",
+      "target": "#6",
+      "indirections": 1,
+      "node": "#6",
+      "status": "ok"
+    },
+    {
+      "name": "valueCount",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#15",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 12,
+        "signed": true
+      }
+    },
+    {
+      "name": "values",
+      "function": "report",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#16",
+      "target": "#10",
+      "indirections": 1,
+      "node": "#10",
+      "status": "ok"
+    },
+    {
+      "name": "buffer",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "Buffer *",
+      "category": "pointer",
+      "address": "#17",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "label",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#18",
+      "target": "#3",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "vetor dinamico",
+        "truncated": false
+      }
+    },
+    {
+      "name": "ratioCount",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#19",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 5,
+        "signed": true
+      }
+    },
+    {
+      "name": "ratios",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "double *",
+      "category": "pointer",
+      "address": "#20",
+      "target": "#6",
+      "indirections": 1,
+      "node": "#6",
+      "status": "ok"
+    },
+    {
+      "name": "valueCount",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#21",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 12,
+        "signed": true
+      }
+    },
+    {
+      "name": "values",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#22",
+      "target": "#10",
+      "indirections": 1,
+      "node": "#10",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#1",
+      "type": "Buffer",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "count",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 6,
+            "signed": true
+          }
+        },
+        {
+          "name": "capacity",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 8,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "array",
+      "id": "#3",
+      "type": "char[5]",
+      "elementType": "char",
+      "length": 5,
+      "cells": [
+        {
+          "t": "char",
+          "v": 118,
+          "text": "v"
+        },
+        {
+          "t": "char",
+          "v": 101,
+          "text": "e"
+        },
+        {
+          "t": "char",
+          "v": 116,
+          "text": "t"
+        },
+        {
+          "t": "char",
+          "v": 111,
+          "text": "o"
+        },
+        {
+          "t": "char",
+          "v": 114,
+          "text": "r"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "annotated"
+    },
+    {
+      "kind": "opaque",
+      "id": "#6",
+      "reason": "notExpanded",
+      "type": "double"
+    },
+    {
+      "kind": "array",
+      "id": "#10",
+      "type": "int[12]",
+      "elementType": "int",
+      "length": 12,
+      "cells": [
+        {
+          "t": "int",
+          "v": 1,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 4,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 16,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 25,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 36,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 49,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 64,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 81,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 100,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 121,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 144,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "annotated"
+    },
+    {
+      "kind": "array",
+      "id": "#23",
+      "type": "int[6]",
+      "elementType": "int",
+      "length": 6,
+      "cells": [
+        {
+          "t": "int",
+          "v": 3,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 6,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 12,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 15,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 18,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "annotated"
+    }
+  ],
+  "edges": [
+    {
+      "from": "#1",
+      "field": "data",
+      "to": "#23",
+      "type": "int *"
+    }
+  ]
+}

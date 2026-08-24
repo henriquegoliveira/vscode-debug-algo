@@ -1,0 +1,400 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [
+      {
+        "type": "Mixed",
+        "pointerFields": [
+          "asPointer"
+        ],
+        "scalarFields": [
+          "asInteger",
+          "asReal"
+        ],
+        "count": 1,
+        "maxDegree": 1
+      },
+      {
+        "type": "Payload",
+        "pointerFields": [
+          "next"
+        ],
+        "scalarFields": [
+          "key"
+        ],
+        "count": 1,
+        "maxDegree": 0
+      }
+    ],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "mixed",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Mixed",
+      "category": "aggregate",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": "#0",
+      "status": "ok"
+    },
+    {
+      "name": "ptDead",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#1",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptFunction",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "double(*)(double)",
+      "category": "pointer",
+      "address": "#3",
+      "target": "#4",
+      "indirections": 1,
+      "node": "#4",
+      "status": "ok"
+    },
+    {
+      "name": "ptGarbage",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#5",
+      "target": "#6",
+      "indirections": 1,
+      "node": "#6",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptLiteral",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "char *",
+      "category": "pointer",
+      "address": "#7",
+      "target": "#8",
+      "indirections": 1,
+      "node": null,
+      "status": "notFollowed",
+      "value": {
+        "t": "text",
+        "v": "somente leitura",
+        "truncated": false
+      }
+    },
+    {
+      "name": "ptMisaligned",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#9",
+      "target": "#10",
+      "indirections": 1,
+      "node": "#10",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptOpaque",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "void *",
+      "category": "pointer",
+      "address": "#11",
+      "target": "#12",
+      "indirections": 1,
+      "node": "#12",
+      "status": "ok"
+    },
+    {
+      "name": "ptSlot",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Payload **",
+      "category": "pointer",
+      "address": "#13",
+      "target": "#5",
+      "indirections": 2,
+      "node": "#6",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptSmall",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#14",
+      "target": "#15",
+      "indirections": 1,
+      "node": "#15",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptValid",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#16",
+      "target": "#12",
+      "indirections": 1,
+      "node": "#12",
+      "status": "ok"
+    },
+    {
+      "name": "ptVoidNull",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "void *",
+      "category": "pointer",
+      "address": "#17",
+      "target": "#18",
+      "indirections": 1,
+      "node": null,
+      "status": "null"
+    },
+    {
+      "name": "ptZeroPage",
+      "function": "inspect",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#19",
+      "target": "#20",
+      "indirections": 1,
+      "node": "#20",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptDead",
+      "function": "probe",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#21",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptValid",
+      "function": "probe",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#22",
+      "target": "#12",
+      "indirections": 1,
+      "node": "#12",
+      "status": "ok"
+    },
+    {
+      "name": "deadAddress",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "unsigned long",
+      "category": "scalar",
+      "address": "#23",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 140737344696336,
+        "signed": false
+      }
+    },
+    {
+      "name": "ptReturned",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#24",
+      "target": "#2",
+      "indirections": 1,
+      "node": "#2",
+      "status": "unreadable"
+    },
+    {
+      "name": "ptValid",
+      "function": "main",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "Payload *",
+      "category": "pointer",
+      "address": "#25",
+      "target": "#12",
+      "indirections": 1,
+      "node": "#12",
+      "status": "ok"
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "record",
+      "id": "#0",
+      "type": "Mixed",
+      "aggregate": "union",
+      "sizeBytes": 8,
+      "fields": [
+        {
+          "name": "asInteger",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 1431744544,
+            "signed": true
+          }
+        },
+        {
+          "name": "asReal",
+          "type": "float",
+          "value": {
+            "t": "real",
+            "v": 14753246216192
+          }
+        }
+      ],
+      "arrays": [
+        {
+          "name": "asBytes",
+          "elementType": "char",
+          "length": 4,
+          "cells": [
+            {
+              "t": "char",
+              "v": 32,
+              "text": " "
+            },
+            {
+              "t": "char",
+              "v": -80,
+              "text": "\\xb0"
+            },
+            {
+              "t": "char",
+              "v": 86,
+              "text": "V"
+            },
+            {
+              "t": "char",
+              "v": 85,
+              "text": "U"
+            }
+          ],
+          "truncated": false,
+          "expanded": true
+        }
+      ],
+      "uncertain": true
+    },
+    {
+      "kind": "opaque",
+      "id": "#2",
+      "reason": "unreadable",
+      "type": "Payload"
+    },
+    {
+      "kind": "opaque",
+      "id": "#4",
+      "reason": "functionPointer",
+      "type": "double(double)"
+    },
+    {
+      "kind": "opaque",
+      "id": "#6",
+      "reason": "misaligned",
+      "type": "Payload"
+    },
+    {
+      "kind": "opaque",
+      "id": "#10",
+      "reason": "misaligned",
+      "type": "Payload"
+    },
+    {
+      "kind": "record",
+      "id": "#12",
+      "type": "Payload",
+      "aggregate": "struct",
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "key",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 7,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "opaque",
+      "id": "#15",
+      "reason": "zeroPage",
+      "type": "Payload"
+    },
+    {
+      "kind": "opaque",
+      "id": "#20",
+      "reason": "zeroPage",
+      "type": "Payload"
+    }
+  ],
+  "edges": [
+    {
+      "from": "#0",
+      "field": "asPointer",
+      "to": "#12",
+      "type": "void *"
+    },
+    {
+      "from": "#12",
+      "field": "next",
+      "to": null,
+      "type": "Payload *"
+    }
+  ]
+}
