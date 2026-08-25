@@ -1,21 +1,22 @@
 const esbuild = require('esbuild');
 const { copyFileSync, mkdirSync } = require('fs');
-const { resolve, dirname } = require('path');
+const { resolve } = require('path');
 
 const isWatch = process.argv.includes('--watch');
 
-const outDir = resolve(__dirname, 'dist');
+const outDir = resolve(__dirname, '../extension/media');
 const htmlFile = resolve(__dirname, 'src/index.html');
 const outHtmlFile = resolve(outDir, 'index.html');
+const outBundleFile = resolve(outDir, 'bundle.js');
 
 mkdirSync(outDir, { recursive: true });
 
 const buildOptions = {
   entryPoints: ['./src/index.tsx'],
-  outfile: './dist/bundle.js',
+  outfile: outBundleFile,
   bundle: true,
   minify: !isWatch,
-  sourcemap: true,
+  sourcemap: isWatch ? 'inline' : false,
   format: 'esm',
   target: ['es2020'],
   loader: { '.tsx': 'tsx', '.ts': 'ts' },
@@ -25,7 +26,7 @@ const buildOptions = {
       setup(build) {
         build.onEnd(() => {
           copyFileSync(htmlFile, outHtmlFile);
-          console.log('Copied index.html to dist/');
+          console.log('Copied index.html to ../extension/media/');
         });
       },
     },

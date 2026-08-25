@@ -1,21 +1,23 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as fs from 'fs';
 import { DebugSessionManager } from './debugSessionManager';
 import { ExtractorInvoker } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
 import { appendDynamicArray } from './extractionSettings';
+import { VisualizerPanel } from './visualizerPanel';
 
 export class ExtensionController {
   private sessionManager: DebugSessionManager;
   private invoker: ExtractorInvoker;
   private reader: SnapshotReader;
+  private panel: VisualizerPanel;
 
   constructor(private context: vscode.ExtensionContext) {
     const schemaPath = path.join(context.extensionPath, 'schemas', 'graph-snapshot.schema.json');
     this.reader = new SnapshotReader(schemaPath);
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
+    this.panel = new VisualizerPanel(context.extensionUri);
 
     this.sessionManager = new DebugSessionManager(
       this.invoker,
@@ -29,7 +31,7 @@ export class ExtensionController {
   public activate(): void {
     console.log('Extensão DbgAlgo ativada com sucesso!');
 
-    this.context.subscriptions.push(this.sessionManager);
+    this.context.subscriptions.push(this.sessionManager, this.panel);
 
     this.context.subscriptions.push(
       vscode.commands.registerCommand('dbg-algo.start', () => this.startWebViewCommand()),
@@ -61,32 +63,7 @@ export class ExtensionController {
 
   private startWebViewCommand(): void {
     warnIfNoSupportedDebugSession(this.sessionManager);
-
-    const panel = vscode.window.createWebviewPanel(
-      'dbgAlgoWebview',
-      'DbgAlgo Visualizer',
-      vscode.ViewColumn.One,
-      {
-        enableScripts: true,
-        localResourceRoots: [
-          vscode.Uri.file(path.join(this.context.extensionPath, '../webview/dist')),
-        ],
-      },
-    );
-
-    panel.webview.html = this.getWebViewContent(panel.webview);
-  }
-
-  private getWebViewContent(webview: vscode.Webview): string {
-    const webviewDistPath = path.join(this.context.extensionPath, '../webview/dist');
-    const htmlPath = path.join(webviewDistPath, 'index.html');
-
-    const html = fs.readFileSync(htmlPath, 'utf8');
-
-    const scriptPathOnDisk = vscode.Uri.file(path.join(webviewDistPath, 'bundle.js'));
-    const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
-
-    return html.replace('bundle.js', scriptUri.toString());
+    this.panel.show();
   }
 }
 

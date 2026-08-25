@@ -9,6 +9,7 @@ dist/
 out/
 build/
 bin/
+packages/extension/media/
 
 # Arquivos de test
 tests/output/
