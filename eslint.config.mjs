@@ -11,6 +11,7 @@ export default [
     ignores: [
       '**/.yarn/**',
       '**/dist/**',
+      'packages/extension/media/**',
       '**/node_modules/**',
       '**/.cache/**',
       '**/esbuild.js',
