@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as os from 'os';
 import { DebuggerType } from './debuggerType';
 import { SnapshotReader } from './snapshotReader';
-import { GraphSnapshot } from './graphSnapshot';
+import { GraphSnapshot } from 'dbga-contract';
 
 export interface ExtractionLimits {
   maxNodes?: number;

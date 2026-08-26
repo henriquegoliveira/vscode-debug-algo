@@ -1,39 +1,56 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import * as fs from 'fs';
 import { DebugSessionManager } from './debugSessionManager';
 import { ExtractorInvoker } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
 import { appendDynamicArray } from './extractionSettings';
+import { MISSING_BUNDLE_MESSAGE, VisualizerPanel } from './visualizerPanel';
+import { SnapshotBroker } from './snapshotBroker';
+import { WebviewChannel } from './webviewChannel';
+import { HttpWsChannel, MissingBundleError } from './httpWsChannel';
+
+const SERVER_FAILED_MESSAGE =
+  'DbgAlgo não conseguiu abrir o servidor local da Visualização. Tente de novo; se continuar ' +
+  'falhando, algo no sistema está bloqueando conexões em 127.0.0.1.';
+
+const OPEN_IN_BROWSER_ACTION = 'Abrir no navegador';
 
 export class ExtensionController {
   private sessionManager: DebugSessionManager;
   private invoker: ExtractorInvoker;
   private reader: SnapshotReader;
+  private panel: VisualizerPanel;
+  private broker: SnapshotBroker;
+  private httpChannel: HttpWsChannel | undefined;
 
   constructor(private context: vscode.ExtensionContext) {
     const schemaPath = path.join(context.extensionPath, 'schemas', 'graph-snapshot.schema.json');
     this.reader = new SnapshotReader(schemaPath);
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
+    this.panel = new VisualizerPanel(context.extensionUri);
+
+    this.broker = new SnapshotBroker();
+    this.broker.register(new WebviewChannel(this.panel, (channel) => this.broker.replay(channel)));
 
     this.sessionManager = new DebugSessionManager(
       this.invoker,
       context.globalState,
-      (snapshot, session) => {
-        console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
-      },
+      (snapshot, session) => this.broker.publish(snapshot, session),
+      (message, session) => this.broker.publishError(message, session),
     );
   }
 
   public activate(): void {
     console.log('Extensão DbgAlgo ativada com sucesso!');
 
-    this.context.subscriptions.push(this.sessionManager);
+    this.context.subscriptions.push(this.sessionManager, this.panel, this.broker);
 
     this.context.subscriptions.push(
-      vscode.commands.registerCommand('dbg-algo.start', () => this.startWebViewCommand()),
+      vscode.debug.onDidTerminateDebugSession((session) => this.broker.publishSessionEnd(session)),
+      vscode.commands.registerCommand('dbg-algo.start', () => this.startVisualizerCommand()),
       vscode.commands.registerCommand('dbg-algo.annotateArray', () => this.annotateArrayCommand()),
+      vscode.commands.registerCommand('dbg-algo.startServer', () => this.startServerCommand()),
     );
   }
 
@@ -59,35 +76,50 @@ export class ExtensionController {
     await appendDynamicArray(annotation);
   }
 
-  private startWebViewCommand(): void {
+  private startVisualizerCommand(): void {
+    warnIfNoSupportedDebugSession(this.sessionManager);
+    this.panel.show();
+  }
+
+  private async startServerCommand(): Promise<void> {
+    if (this.httpChannel === undefined) {
+      const channel = new HttpWsChannel(this.context.extensionPath, (target) =>
+        this.broker.replay(target),
+      );
+
+      try {
+        await channel.listen();
+      } catch (error) {
+        void vscode.window.showErrorMessage(
+          error instanceof MissingBundleError ? MISSING_BUNDLE_MESSAGE : SERVER_FAILED_MESSAGE,
+        );
+        return;
+      }
+
+      this.httpChannel = channel;
+      this.broker.register(channel);
+    }
+
     warnIfNoSupportedDebugSession(this.sessionManager);
 
-    const panel = vscode.window.createWebviewPanel(
-      'dbgAlgoWebview',
-      'DbgAlgo Visualizer',
-      vscode.ViewColumn.One,
-      {
-        enableScripts: true,
-        localResourceRoots: [
-          vscode.Uri.file(path.join(this.context.extensionPath, '../webview/dist')),
-        ],
-      },
+    const external = await vscode.env.asExternalUri(vscode.Uri.parse(this.httpChannel.address));
+    const url = external.toString(true);
+
+    await vscode.env.clipboard.writeText(url);
+
+    const action = await vscode.window.showInformationMessage(
+      serverReadyMessage(url),
+      OPEN_IN_BROWSER_ACTION,
     );
 
-    panel.webview.html = this.getWebViewContent(panel.webview);
+    if (action === OPEN_IN_BROWSER_ACTION) {
+      await vscode.env.openExternal(external);
+    }
   }
+}
 
-  private getWebViewContent(webview: vscode.Webview): string {
-    const webviewDistPath = path.join(this.context.extensionPath, '../webview/dist');
-    const htmlPath = path.join(webviewDistPath, 'index.html');
-
-    const html = fs.readFileSync(htmlPath, 'utf8');
-
-    const scriptPathOnDisk = vscode.Uri.file(path.join(webviewDistPath, 'bundle.js'));
-    const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
-
-    return html.replace('bundle.js', scriptUri.toString());
-  }
+function serverReadyMessage(url: string): string {
+  return `Visualização disponível em ${url} — o link já está na área de transferência.`;
 }
 
 let controller: ExtensionController | undefined;

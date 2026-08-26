@@ -20,7 +20,7 @@
     "commands": [
       {
         "command": "dbg-algo.start",
-        "title": "Iniciar WebView",
+        "title": "Iniciar Visualização",
         "category": "DbgAlgo"
       },
       {
@@ -28,6 +28,11 @@
         "title": "Anotar vetor dinâmico (v@n)",
         "category": "DbgAlgo",
         "icon": "$(symbol-array)"
+      },
+      {
+        "command": "dbg-algo.startServer",
+        "title": "Iniciar Visualização no Navegador",
+        "category": "DbgAlgo"
       }
     ],
     "configuration": {
@@ -68,6 +73,10 @@
         {
           "command": "dbg-algo.annotateArray",
           "when": "true"
+        },
+        {
+          "command": "dbg-algo.startServer",
+          "when": "true"
         }
       ],
       "editor/title": [
@@ -83,11 +92,12 @@
     "dev": "node esbuild.js --watch",
     "build": "tsc --noEmit && node esbuild.js",
     "typecheck": "tsc --noEmit",
-    "gen:types": "json2ts schemas/graph-snapshot.schema.json -o src/graphSnapshot.ts --additionalProperties false --style.singleQuote --style.printWidth 100",
-    "check:types": "yarn gen:types && git diff --exit-code src/graphSnapshot.ts"
+    "gen:types": "json2ts schemas/graph-snapshot.schema.json -o ../contract/src/graphSnapshot.ts --additionalProperties false --style.singleQuote --style.printWidth 100",
+    "check:types": "yarn gen:types && git diff --exit-code ../contract/src/graphSnapshot.ts"
   },
   "dependencies": {
     "ajv": "^8.20.0",
+    "dbga-contract": "workspace:^",
     "express": "^5.2.1",
     "ws": "^8.20.0"
   },

@@ -3,7 +3,7 @@ import { DebuggerType } from './debuggerType';
 import { DebuggerPythonMissingError, ExtractorInvoker } from './extractorInvoker';
 import { readExtractionOptions } from './extractionSettings';
 import { suggestLldbOnWindows } from './debuggerAvailability';
-import { GraphSnapshot } from './graphSnapshot';
+import { GraphSnapshot } from 'dbga-contract';
 
 export class DebugSessionManager implements vscode.Disposable {
   private currentSession: vscode.DebugSession | undefined;
@@ -22,6 +22,7 @@ export class DebugSessionManager implements vscode.Disposable {
     private readonly invoker: ExtractorInvoker,
     private readonly state: vscode.Memento,
     private readonly onSnapshot: (snapshot: GraphSnapshot, session: vscode.DebugSession) => void,
+    private readonly onError: (message: string, session: vscode.DebugSession) => void,
   ) {
     this.disposables.push(
       vscode.debug.onDidChangeActiveDebugSession((session) => {
@@ -109,6 +110,7 @@ export class DebugSessionManager implements vscode.Disposable {
     } catch (err) {
       if (err instanceof DebuggerPythonMissingError) {
         this.unusableSessions.add(session.id);
+        this.onError(err.message, session);
         void vscode.window.showErrorMessage(err.message);
         return;
       }
