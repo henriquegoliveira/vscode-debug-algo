@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { randomBytes } from 'crypto';
+import { webviewContentSecurityPolicy } from './contentSecurityPolicy';
 
 const VIEW_TYPE = 'dbgAlgoWebview';
 const PANEL_TITLE = 'DbgAlgo Visualizer';
@@ -15,7 +16,7 @@ const BUNDLE_PLACEHOLDER = '%BUNDLE%';
 
 const NONCE_BYTES = 16;
 
-const MISSING_BUNDLE_MESSAGE =
+export const MISSING_BUNDLE_MESSAGE =
   'DbgAlgo não encontrou os arquivos da interface e não pode abrir o Visualizer. ' +
   'Construa o bundle da interface, se estiver rodando pelo código-fonte, ou reinstale a extensão.';
 
@@ -86,19 +87,8 @@ export class VisualizerPanel implements vscode.Disposable {
     const bundleUri = webview.asWebviewUri(vscode.Uri.joinPath(this.mediaRoot, BUNDLE_FILE));
 
     return template
-      .replaceAll(CSP_PLACEHOLDER, contentSecurityPolicy(webview, nonce))
+      .replaceAll(CSP_PLACEHOLDER, webviewContentSecurityPolicy(webview, nonce))
       .replaceAll(NONCE_PLACEHOLDER, nonce)
       .replaceAll(BUNDLE_PLACEHOLDER, bundleUri.toString());
   }
-}
-
-function contentSecurityPolicy(webview: vscode.Webview, nonce: string): string {
-  return [
-    "default-src 'none'",
-    `img-src ${webview.cspSource} data:`,
-    `font-src ${webview.cspSource}`,
-    `style-src ${webview.cspSource} 'unsafe-inline'`,
-    `script-src 'nonce-${nonce}'`,
-    "connect-src 'none'",
-  ].join('; ');
 }

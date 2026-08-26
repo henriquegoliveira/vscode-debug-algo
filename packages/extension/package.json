@@ -28,6 +28,11 @@
         "title": "Anotar vetor dinâmico (v@n)",
         "category": "DbgAlgo",
         "icon": "$(symbol-array)"
+      },
+      {
+        "command": "dbg-algo.startServer",
+        "title": "Iniciar Visualização no Navegador",
+        "category": "DbgAlgo"
       }
     ],
     "configuration": {
@@ -68,6 +73,10 @@
         {
           "command": "dbg-algo.annotateArray",
           "when": "true"
+        },
+        {
+          "command": "dbg-algo.startServer",
+          "when": "true"
         }
       ],
       "editor/title": [
@@ -88,11 +97,15 @@
   },
   "dependencies": {
     "ajv": "^8.20.0",
-    "dbga-contract": "workspace:^"
+    "dbga-contract": "workspace:^",
+    "express": "^5.2.1",
+    "ws": "^8.20.0"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^20",
     "@types/vscode": "^1.95.0",
+    "@types/ws": "^8.18.1",
     "esbuild": "^0.27.4",
     "json-schema-to-typescript": "^15.0.4",
     "typescript": "~5.9.3"

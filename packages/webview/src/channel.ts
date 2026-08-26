@@ -7,18 +7,72 @@ import {
 
 declare function acquireVsCodeApi(): { postMessage(message: unknown): void };
 
-const vscodeApi = acquireVsCodeApi();
+const TOKEN_PARAMETER = 'token';
 
 export function connectSnapshotChannel(): void {
+  if (typeof acquireVsCodeApi === 'function') {
+    connectOverVsCode();
+    return;
+  }
+
+  connectOverWebSocket();
+}
+
+function connectOverVsCode(): void {
+  const vscodeApi = acquireVsCodeApi();
+
   window.addEventListener('message', (event: MessageEvent<unknown>) => {
-    if (!isExtensionMessage(event.data)) {
-      return;
-    }
-    report(event.data);
+    deliver(event.data);
   });
 
-  const ready: WebviewMessage = { v: PROTOCOL_VERSION, type: 'ready' };
-  vscodeApi.postMessage(ready);
+  vscodeApi.postMessage(ready());
+}
+
+function connectOverWebSocket(): void {
+  const socket = new WebSocket(webSocketUrl());
+
+  socket.addEventListener('message', (event: MessageEvent<string>) => {
+    deliver(parse(event.data));
+  });
+
+  socket.addEventListener('open', () => {
+    socket.send(JSON.stringify(ready()));
+  });
+
+  socket.addEventListener('close', () => {
+    console.log('[DbgAlgo] conexao encerrada pelo servidor');
+  });
+
+  socket.addEventListener('error', () => {
+    console.log('[DbgAlgo] falha na conexao com o servidor');
+  });
+}
+
+function webSocketUrl(): string {
+  const scheme = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const token = new URLSearchParams(window.location.search).get(TOKEN_PARAMETER) ?? '';
+
+  return `${scheme}//${window.location.host}/?${TOKEN_PARAMETER}=${encodeURIComponent(token)}`;
+}
+
+function ready(): WebviewMessage {
+  return { v: PROTOCOL_VERSION, type: 'ready' };
+}
+
+function parse(payload: string): unknown {
+  try {
+    return JSON.parse(payload);
+  } catch {
+    return undefined;
+  }
+}
+
+function deliver(payload: unknown): void {
+  if (!isExtensionMessage(payload)) {
+    return;
+  }
+
+  report(payload);
 }
 
 function report(message: ExtensionMessage): void {
