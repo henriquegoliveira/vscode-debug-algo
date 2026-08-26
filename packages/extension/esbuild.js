@@ -14,7 +14,7 @@ const buildOptions = {
   platform: 'node',
   format: 'cjs',
   target: ['node20'],
-  external: ['vscode'],
+  external: ['vscode', 'bufferutil', 'utf-8-validate'],
   minify: !isWatch,
   sourcemap: true,
   loader: { '.ts': 'ts' },
