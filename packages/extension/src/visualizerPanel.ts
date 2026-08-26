@@ -16,11 +16,14 @@ const BUNDLE_PLACEHOLDER = '%BUNDLE%';
 const NONCE_BYTES = 16;
 
 const MISSING_BUNDLE_MESSAGE =
-  'DbgAlgo não encontrou os arquivos da interface e não pode abrir o visualizador. ' +
-  'Construa o webview, se estiver rodando pelo código-fonte, ou reinstale a extensão.';
+  'DbgAlgo não encontrou os arquivos da interface e não pode abrir o Visualizer. ' +
+  'Construa o bundle da interface, se estiver rodando pelo código-fonte, ou reinstale a extensão.';
 
 export class VisualizerPanel implements vscode.Disposable {
   private panel: vscode.WebviewPanel | undefined;
+  private readonly panelDisposables: vscode.Disposable[] = [];
+  private readonly messageEmitter = new vscode.EventEmitter<unknown>();
+  public readonly onDidReceiveMessage: vscode.Event<unknown> = this.messageEmitter.event;
   private readonly mediaRoot: vscode.Uri;
 
   constructor(extensionUri: vscode.Uri) {
@@ -39,21 +42,34 @@ export class VisualizerPanel implements vscode.Disposable {
       return;
     }
 
-    this.panel = vscode.window.createWebviewPanel(VIEW_TYPE, PANEL_TITLE, vscode.ViewColumn.One, {
+    const panel = vscode.window.createWebviewPanel(VIEW_TYPE, PANEL_TITLE, vscode.ViewColumn.One, {
       enableScripts: true,
       retainContextWhenHidden: false,
       localResourceRoots: [this.mediaRoot],
     });
+    this.panel = panel;
 
-    this.panel.onDidDispose(() => {
-      this.panel = undefined;
-    });
+    this.panelDisposables.push(
+      panel.onDidDispose(() => this.clearPanel()),
+      panel.webview.onDidReceiveMessage((message: unknown) => this.messageEmitter.fire(message)),
+    );
 
-    this.panel.webview.html = this.render(this.panel.webview, template);
+    panel.webview.html = this.render(panel.webview, template);
+  }
+
+  public postMessage(message: unknown): void {
+    void this.panel?.webview.postMessage(message);
   }
 
   public dispose(): void {
     this.panel?.dispose();
+    this.clearPanel();
+    this.messageEmitter.dispose();
+  }
+
+  private clearPanel(): void {
+    this.panelDisposables.forEach((disposable) => disposable.dispose());
+    this.panelDisposables.length = 0;
     this.panel = undefined;
   }
 
