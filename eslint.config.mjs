@@ -15,8 +15,9 @@ export default [
       '**/node_modules/**',
       '**/.cache/**',
       '**/esbuild.js',
+      'docs/**',
       '**/webpack.config.ts',
-      'packages/extension/src/graphSnapshot.ts',
+      'packages/contract/src/graphSnapshot.ts',
     ],
   },
 

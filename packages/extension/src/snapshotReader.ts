@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises';
 import { readFileSync } from 'fs';
 import Ajv, { ValidateFunction } from 'ajv';
-import { GraphSnapshot } from './graphSnapshot';
+import { GraphSnapshot } from 'dbga-contract';
 
 const READ_ATTEMPTS = 4;
 const FIRST_BACKOFF_MS = 10;

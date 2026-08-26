@@ -20,7 +20,7 @@
     "commands": [
       {
         "command": "dbg-algo.start",
-        "title": "Iniciar WebView",
+        "title": "Iniciar Visualização",
         "category": "DbgAlgo"
       },
       {
@@ -83,19 +83,16 @@
     "dev": "node esbuild.js --watch",
     "build": "tsc --noEmit && node esbuild.js",
     "typecheck": "tsc --noEmit",
-    "gen:types": "json2ts schemas/graph-snapshot.schema.json -o src/graphSnapshot.ts --additionalProperties false --style.singleQuote --style.printWidth 100",
-    "check:types": "yarn gen:types && git diff --exit-code src/graphSnapshot.ts"
+    "gen:types": "json2ts schemas/graph-snapshot.schema.json -o ../contract/src/graphSnapshot.ts --additionalProperties false --style.singleQuote --style.printWidth 100",
+    "check:types": "yarn gen:types && git diff --exit-code ../contract/src/graphSnapshot.ts"
   },
   "dependencies": {
     "ajv": "^8.20.0",
-    "express": "^5.2.1",
-    "ws": "^8.20.0"
+    "dbga-contract": "workspace:^"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6",
     "@types/node": "^20",
     "@types/vscode": "^1.95.0",
-    "@types/ws": "^8.18.1",
     "esbuild": "^0.27.4",
     "json-schema-to-typescript": "^15.0.4",
     "typescript": "~5.9.3"

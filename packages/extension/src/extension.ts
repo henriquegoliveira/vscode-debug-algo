@@ -6,12 +6,15 @@ import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
 import { appendDynamicArray } from './extractionSettings';
 import { VisualizerPanel } from './visualizerPanel';
+import { SnapshotBroker } from './snapshotBroker';
+import { WebviewChannel } from './webviewChannel';
 
 export class ExtensionController {
   private sessionManager: DebugSessionManager;
   private invoker: ExtractorInvoker;
   private reader: SnapshotReader;
   private panel: VisualizerPanel;
+  private broker: SnapshotBroker;
 
   constructor(private context: vscode.ExtensionContext) {
     const schemaPath = path.join(context.extensionPath, 'schemas', 'graph-snapshot.schema.json');
@@ -19,22 +22,25 @@ export class ExtensionController {
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
     this.panel = new VisualizerPanel(context.extensionUri);
 
+    this.broker = new SnapshotBroker();
+    this.broker.register(new WebviewChannel(this.panel, (channel) => this.broker.replay(channel)));
+
     this.sessionManager = new DebugSessionManager(
       this.invoker,
       context.globalState,
-      (snapshot, session) => {
-        console.log(`[DbgAlgo] snapshot da sessao ${session.id}:`, JSON.stringify(snapshot));
-      },
+      (snapshot, session) => this.broker.publish(snapshot, session),
+      (message, session) => this.broker.publishError(message, session),
     );
   }
 
   public activate(): void {
     console.log('Extensão DbgAlgo ativada com sucesso!');
 
-    this.context.subscriptions.push(this.sessionManager, this.panel);
+    this.context.subscriptions.push(this.sessionManager, this.panel, this.broker);
 
     this.context.subscriptions.push(
-      vscode.commands.registerCommand('dbg-algo.start', () => this.startWebViewCommand()),
+      vscode.debug.onDidTerminateDebugSession((session) => this.broker.publishSessionEnd(session)),
+      vscode.commands.registerCommand('dbg-algo.start', () => this.startVisualizerCommand()),
       vscode.commands.registerCommand('dbg-algo.annotateArray', () => this.annotateArrayCommand()),
     );
   }
@@ -61,7 +67,7 @@ export class ExtensionController {
     await appendDynamicArray(annotation);
   }
 
-  private startWebViewCommand(): void {
+  private startVisualizerCommand(): void {
     warnIfNoSupportedDebugSession(this.sessionManager);
     this.panel.show();
   }
