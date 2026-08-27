@@ -180,6 +180,10 @@ function inspectNode(index: InspectionIndex, node: GraphNode): NodeInspection {
       ),
     );
   } else {
+    if (node.value !== null && node.value !== undefined) {
+      entries.push({ label: 'value', value: formatValue(node.value) });
+    }
+
     entries.push({ label: 'reason', value: node.reason });
     if (node.detail !== null && node.detail !== undefined) {
       entries.push({ label: 'detail', value: node.detail });

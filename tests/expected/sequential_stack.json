@@ -134,7 +134,12 @@
       "kind": "opaque",
       "id": "#1",
       "reason": "notExpanded",
-      "type": "int"
+      "type": "int",
+      "value": {
+        "t": "int",
+        "v": 63,
+        "signed": true
+      }
     },
     {
       "kind": "record",

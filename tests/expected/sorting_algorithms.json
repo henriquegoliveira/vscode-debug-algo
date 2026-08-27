@@ -825,13 +825,23 @@
       "kind": "opaque",
       "id": "#7",
       "reason": "notExpanded",
-      "type": "int"
+      "type": "int",
+      "value": {
+        "t": "int",
+        "v": -47,
+        "signed": true
+      }
     },
     {
       "kind": "opaque",
       "id": "#9",
       "reason": "notExpanded",
-      "type": "int"
+      "type": "int",
+      "value": {
+        "t": "int",
+        "v": -47,
+        "signed": true
+      }
     },
     {
       "kind": "array",

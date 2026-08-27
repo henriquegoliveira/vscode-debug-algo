@@ -315,8 +315,10 @@ function arrayLabel(node: Extract<GraphNode, { kind: 'array' }>): string {
 
 function opaqueLabel(node: Extract<GraphNode, { kind: 'opaque' }>): string {
   const declared = node.type ?? null;
+  const detail =
+    node.value === null || node.value === undefined ? `<${node.reason}>` : formatValue(node.value);
 
-  return declared === null ? `<${node.reason}>` : `${declared}\n<${node.reason}>`;
+  return declared === null ? detail : `${declared}\n${detail}`;
 }
 
 function join(head: string, shown: string[], hidden: number): string {
