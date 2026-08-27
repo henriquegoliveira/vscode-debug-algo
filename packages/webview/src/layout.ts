@@ -3,6 +3,14 @@ import type { GraphSnapshot } from 'dbga-contract';
 
 export type LayoutKind = 'hierarchical' | 'physics' | 'default';
 
+export type LayoutChoice = 'auto' | 'physics' | 'hierarchical';
+
+export const DEFAULT_CHOICE: LayoutChoice = 'auto';
+
+export function layoutForChoice(choice: LayoutChoice, snapshot: GraphSnapshot): LayoutKind {
+  return choice === 'auto' ? resolveLayout(snapshot) : choice;
+}
+
 export function resolveLayout(snapshot: GraphSnapshot): LayoutKind {
   const hasPointerField = snapshot.meta.observedTypes.some((type) => type.pointerFields.length > 0);
 
@@ -10,7 +18,38 @@ export function resolveLayout(snapshot: GraphSnapshot): LayoutKind {
     return 'default';
   }
 
-  return hasCycle(snapshot) ? 'physics' : 'hierarchical';
+  if (hasCycle(snapshot)) {
+    return 'physics';
+  }
+
+  return branches(snapshot) ? 'hierarchical' : 'physics';
+}
+
+export function maxOutDegree(snapshot: GraphSnapshot): number {
+  const degree = new Map<string, number>();
+
+  snapshot.edges.forEach((edge) => {
+    if (edge.to === null) {
+      return;
+    }
+
+    degree.set(edge.from, (degree.get(edge.from) ?? 0) + 1);
+  });
+
+  let most = 0;
+  degree.forEach((value) => {
+    if (value > most) {
+      most = value;
+    }
+  });
+
+  return most;
+}
+
+export function branches(snapshot: GraphSnapshot): boolean {
+  const byType = snapshot.meta.observedTypes.some((type) => type.pointerFields.length >= 2);
+
+  return byType || maxOutDegree(snapshot) >= 2;
 }
 
 export function hasCycle(snapshot: GraphSnapshot): boolean {
@@ -71,18 +110,15 @@ export function hasCycle(snapshot: GraphSnapshot): boolean {
 export function layoutOptions(kind: LayoutKind): Options {
   if (kind === 'hierarchical') {
     return {
-      layout: {
-        hierarchical: {
-          enabled: true,
-          direction: 'UD',
-          sortMethod: 'directed',
-          shakeTowards: 'roots',
-          levelSeparation: 130,
-          nodeSpacing: 170,
-          treeSpacing: 220,
-        },
+      layout: { hierarchical: { enabled: false } },
+      physics: {
+        enabled: true,
+        solver: 'barnesHut',
+        barnesHut: { springLength: 110, avoidOverlap: 0.4 },
       },
-      physics: { enabled: false },
+      edges: {
+        smooth: { enabled: true, type: 'cubicBezier', forceDirection: 'vertical', roundness: 0.55 },
+      },
     };
   }
 
@@ -90,11 +126,13 @@ export function layoutOptions(kind: LayoutKind): Options {
     return {
       layout: { hierarchical: { enabled: false } },
       physics: { enabled: true, solver: 'barnesHut', barnesHut: { springLength: 140 } },
+      edges: { smooth: false },
     };
   }
 
   return {
     layout: { hierarchical: { enabled: false } },
     physics: { enabled: true, solver: 'barnesHut' },
+    edges: { smooth: false },
   };
 }

@@ -31,7 +31,13 @@ export class ExtensionController {
     this.panel = new VisualizerPanel(context.extensionUri);
 
     this.broker = new SnapshotBroker();
-    this.broker.register(new WebviewChannel(this.panel, (channel) => this.broker.replay(channel)));
+    this.broker.register(
+      new WebviewChannel(
+        this.panel,
+        (channel) => this.broker.replay(channel),
+        (annotation) => void appendDynamicArray(annotation),
+      ),
+    );
 
     this.sessionManager = new DebugSessionManager(
       this.invoker,
