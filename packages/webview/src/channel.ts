@@ -7,18 +7,48 @@ import {
 
 declare function acquireVsCodeApi(): VsCodeApi;
 
-interface VsCodeApi {
+export interface VsCodeApi {
   postMessage(message: unknown): void;
+  getState(): unknown;
+  setState(state: unknown): void;
 }
 
 const TOKEN_PARAMETER = 'token';
 
-let vsCodeApi: VsCodeApi | undefined;
+let acquired: VsCodeApi | undefined;
 
 export type SnapshotListener = (message: ExtensionMessage) => void;
 
+export function isEmbedded(): boolean {
+  return typeof acquireVsCodeApi === 'function';
+}
+
+export function hostApi(): VsCodeApi | undefined {
+  if (!isEmbedded()) {
+    return undefined;
+  }
+
+  if (acquired === undefined) {
+    acquired = acquireVsCodeApi();
+  }
+
+  return acquired;
+}
+
+export function sendAnnotation(annotation: string): boolean {
+  const api = hostApi();
+  if (api === undefined) {
+    return false;
+  }
+
+  const message: WebviewMessage = { v: PROTOCOL_VERSION, type: 'annotate', annotation };
+  api.postMessage(message);
+
+  return true;
+}
+
 export function connectSnapshotChannel(onMessage: SnapshotListener): () => void {
-  if (typeof acquireVsCodeApi === 'function') {
+  if (isEmbedded()) {
     return connectOverVsCode(onMessage);
   }
 
@@ -26,16 +56,14 @@ export function connectSnapshotChannel(onMessage: SnapshotListener): () => void 
 }
 
 function connectOverVsCode(onMessage: SnapshotListener): () => void {
-  if (vsCodeApi === undefined) {
-    vsCodeApi = acquireVsCodeApi();
-  }
+  const api = hostApi() as VsCodeApi;
 
   const listener = (event: MessageEvent<unknown>): void => {
     deliver(event.data, onMessage);
   };
 
   window.addEventListener('message', listener);
-  vsCodeApi.postMessage(ready());
+  api.postMessage(ready());
 
   return () => window.removeEventListener('message', listener);
 }

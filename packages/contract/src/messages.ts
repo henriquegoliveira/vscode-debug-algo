@@ -31,7 +31,14 @@ export interface ErrorMessage {
   id?: string;
 }
 
-export type WebviewMessage = ReadyMessage;
+export interface AnnotateMessage {
+  v: typeof PROTOCOL_VERSION;
+  type: 'annotate';
+  annotation: string;
+  id?: string;
+}
+
+export type WebviewMessage = ReadyMessage | AnnotateMessage;
 
 export type ExtensionMessage = SnapshotMessage | SessionEndMessage | ErrorMessage;
 
@@ -41,6 +48,7 @@ interface Envelope {
   sessionId?: unknown;
   snapshot?: unknown;
   message?: unknown;
+  annotation?: unknown;
   id?: unknown;
 }
 
@@ -50,7 +58,14 @@ export function isWebviewMessage(value: unknown): value is WebviewMessage {
     return false;
   }
 
-  return envelope.type === 'ready';
+  switch (envelope.type) {
+    case 'ready':
+      return true;
+    case 'annotate':
+      return typeof envelope.annotation === 'string' && envelope.annotation.length > 0;
+    default:
+      return false;
+  }
 }
 
 export function isExtensionMessage(value: unknown): value is ExtensionMessage {

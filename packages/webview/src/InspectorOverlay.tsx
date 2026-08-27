@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import type {
   ArrayView,
   Entry,
@@ -7,22 +7,29 @@ import type {
   RootInspection,
   TerminalInspection,
 } from './inspection';
-import { TEXT } from './text';
 
 interface Props {
   inspection: Inspection;
+  embedded: boolean;
+  onAnnotate: (annotation: string) => boolean;
   onSelect: (canvasId: string) => void;
   onClose: () => void;
 }
 
 type Select = Props['onSelect'];
 
-const InspectorOverlay: React.FC<Props> = ({ inspection, onSelect, onClose }) => (
+const InspectorOverlay: React.FC<Props> = ({
+  inspection,
+  embedded,
+  onAnnotate,
+  onSelect,
+  onClose,
+}) => (
   <aside style={styles.overlay}>
     <header style={styles.head}>
       <span style={styles.title}>{heading(inspection)}</span>
-      <button type="button" style={styles.close} onClick={onClose}>
-        {TEXT.closeOverlay}
+      <button type="button" style={styles.close} title="Fechar (Esc)" onClick={onClose}>
+        &#10005;
       </button>
     </header>
 
@@ -31,8 +38,63 @@ const InspectorOverlay: React.FC<Props> = ({ inspection, onSelect, onClose }) =>
       <TerminalBody inspection={inspection} onSelect={onSelect} />
     )}
     {inspection.space === 'root' && <RootBody inspection={inspection} onSelect={onSelect} />}
+
+    <AnnotateSection
+      key={annotationPrefill(inspection)}
+      prefill={annotationPrefill(inspection)}
+      embedded={embedded}
+      onAnnotate={onAnnotate}
+    />
   </aside>
 );
+
+const AnnotateSection: React.FC<{
+  prefill: string;
+  embedded: boolean;
+  onAnnotate: (annotation: string) => boolean;
+}> = ({ prefill, embedded, onAnnotate }) => {
+  const [draft, setDraft] = useState(prefill);
+
+  const submit = (): void => {
+    const annotation = draft.trim();
+
+    if (annotation.length > 0) {
+      onAnnotate(annotation);
+    }
+  };
+
+  return (
+    <section style={styles.section}>
+      <h5 style={styles.sectionTitle}>anotar vetor dinâmico</h5>
+      <div style={styles.annotateRow}>
+        <input
+          style={styles.annotateInput}
+          value={draft}
+          disabled={!embedded}
+          placeholder="caminho@tamanho"
+          onChange={(event) => setDraft(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              submit();
+            }
+          }}
+        />
+        <button type="button" style={styles.annotateButton} disabled={!embedded} onClick={submit}>
+          Anotar
+        </button>
+      </div>
+      {!embedded && (
+        <div style={styles.annotateNote}>
+          O navegador é somente leitura: a anotação só vale pelo painel do VS Code.
+        </div>
+      )}
+    </section>
+  );
+};
+
+function annotationPrefill(inspection: Inspection): string {
+  return inspection.space === 'root' ? `${inspection.name}@` : '';
+}
 
 function heading(inspection: Inspection): string {
   if (inspection.space === 'node') {
@@ -53,7 +115,7 @@ const NodeBody: React.FC<{ inspection: NodeInspection; onSelect: Select }> = ({
     <div style={styles.address}>{inspection.address}</div>
     <Entries entries={inspection.entries} />
 
-    {inspection.uncertain && <div style={styles.warn}>{TEXT.uncertainRecord}</div>}
+    {inspection.uncertain && <div style={styles.warn}>union: o membro ativo é incerto</div>}
 
     {inspection.errors.map((error, position) => (
       <div key={position} style={styles.warn}>
@@ -99,7 +161,7 @@ const ArraySection: React.FC<{ array: ArrayView; onSelect: Select }> = ({ array,
       {array.name}[{array.length}] <span style={styles.rowType}>{array.elementType}</span>
     </h5>
 
-    {array.state === 'unexpanded' && <div style={styles.warn}>{TEXT.unexpandedArray}</div>}
+    {array.state === 'unexpanded' && <div style={styles.warn}>vetor não expandido</div>}
 
     {array.state === 'cells' &&
       array.cells.map((cell) => (
@@ -117,7 +179,7 @@ const ArraySection: React.FC<{ array: ArrayView; onSelect: Select }> = ({ array,
         </div>
       ))}
 
-    {array.truncated && <div style={styles.warn}>{TEXT.truncatedArray}</div>}
+    {array.truncated && <div style={styles.warn}>vetor truncado no limite de células</div>}
   </section>
 );
 
@@ -226,13 +288,36 @@ const styles: Record<string, React.CSSProperties> = {
   close: {
     background: 'none',
     border: 'none',
-    padding: '0 2px',
+    padding: '0 4px',
     cursor: 'pointer',
-    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
-    font: 'inherit',
+    color: 'var(--vscode-errorForeground, #f14c4c)',
+    fontSize: '14px',
+    fontWeight: 700,
+    lineHeight: 1,
   },
   address: { opacity: 0.6, marginBottom: '6px', wordBreak: 'break-all' },
   section: { marginBottom: '8px' },
+  annotateRow: { display: 'flex', gap: '4px' },
+  annotateInput: {
+    flex: 1,
+    minWidth: 0,
+    background: 'var(--vscode-input-background, #3c3c3c)',
+    color: 'var(--vscode-input-foreground, #ccc)',
+    border: '1px solid var(--vscode-input-border, #3c3c3c)',
+    borderRadius: '2px',
+    padding: '2px 4px',
+    font: 'inherit',
+  },
+  annotateButton: {
+    background: 'var(--vscode-button-background, #0e639c)',
+    color: 'var(--vscode-button-foreground, #fff)',
+    border: 'none',
+    borderRadius: '2px',
+    padding: '2px 8px',
+    cursor: 'pointer',
+    font: 'inherit',
+  },
+  annotateNote: { marginTop: '4px', opacity: 0.7 },
   sectionTitle: {
     margin: '0 0 3px 0',
     fontSize: '11px',

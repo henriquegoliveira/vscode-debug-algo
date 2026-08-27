@@ -157,8 +157,16 @@ export class HttpWsChannel implements SnapshotChannel {
     socket.on('close', () => this.sockets.delete(socket));
     socket.on('message', (data: unknown) => {
       const message = parse(String(data));
-      if (isWebviewMessage(message) && message.type === 'ready') {
-        this.onReady(single(socket));
+      if (!isWebviewMessage(message)) {
+        return;
+      }
+
+      switch (message.type) {
+        case 'ready':
+          this.onReady(single(socket));
+          return;
+        case 'annotate':
+          return;
       }
     });
   }

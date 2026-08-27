@@ -1,6 +1,8 @@
 import type { GraphNode, GraphSnapshot, Root } from 'dbga-contract';
+import type { TreePosition } from './treeLayout';
 import { formatValue } from './format';
 import { CanvasNodeKind, FALLBACK_THEME, Theme } from './theme';
+import { structuralForest, structuralLevels, treePositions } from './treeLayout';
 
 const NODE_PREFIX = 'n:';
 const TERMINAL_PREFIX = 't:';
@@ -21,6 +23,11 @@ export interface CanvasNode {
   kind: CanvasNodeKind;
   label: string;
   shape: string;
+  level?: number;
+  x?: number;
+  y?: number;
+  fixed: boolean;
+  physics: boolean;
   color: { background: string; border: string };
   font: { color: string; face: string };
 }
@@ -33,7 +40,7 @@ export interface CanvasEdge {
   arrows: 'to';
   dashes: boolean;
   color: { color: string };
-  font: { color: string; strokeWidth: number; face: string; background: string };
+  font: { color: string; size: number; strokeWidth: number; face: string; background: string };
 }
 
 export interface FrameRoot {
@@ -61,9 +68,10 @@ export interface GraphModel {
 
 export interface GraphOptions {
   nullTerminals: boolean;
+  pinned: boolean;
 }
 
-export const DEFAULT_OPTIONS: GraphOptions = { nullTerminals: false };
+export const DEFAULT_OPTIONS: GraphOptions = { nullTerminals: false, pinned: false };
 
 const ARRAY_CELLS = 'cells';
 const NULL_MARK = 'NULL';
@@ -107,6 +115,8 @@ export function parseCanvasId(id: string): { space: CanvasSpace; address: string
   return null;
 }
 
+export { structuralForest, structuralLevels, treePositions };
+
 export function toGraph(
   snapshot: GraphSnapshot,
   theme: Theme = FALLBACK_THEME,
@@ -130,8 +140,11 @@ export function toGraph(
     }
   });
 
+  const levels = structuralLevels(snapshot);
+  const pinned = options.pinned ? treePositions(snapshot) : null;
+
   snapshot.nodes.forEach((node) =>
-    nodes.push(canvasNode(node, theme, nullMark(nullFieldsByOrigin.get(node.id)))),
+    nodes.push(canvasNode(node, theme, levels.get(node.id), pinned?.get(node.id))),
   );
 
   snapshot.edges.forEach((edge) => {
@@ -153,7 +166,17 @@ export function toGraph(
 
   if (options.nullTerminals) {
     nullFieldsByOrigin.forEach((fields, from) => {
-      nodes.push(styled(terminalCanvasId(from), 'null', NULL_MARK, theme));
+      const origin = levels.get(from);
+
+      nodes.push(
+        styled(
+          terminalCanvasId(from),
+          'null',
+          NULL_MARK,
+          theme,
+          origin === undefined ? undefined : origin + 1,
+        ),
+      );
       edges.push({
         id: `${EDGE_PREFIX}${from}:${NULL_FIELD}`,
         from: nodeCanvasId(from),
@@ -176,7 +199,13 @@ export function toGraph(
 
     if (onCanvas) {
       nodes.push(
-        styled(id, root.status === 'ok' ? 'root' : 'rootDegraded', rootLabel(root), theme),
+        styled(
+          id,
+          root.status === 'ok' ? 'root' : 'rootDegraded',
+          rootLabel(root),
+          theme,
+          levels.get(root.node as string),
+        ),
       );
       edges.push({
         id: `${ROOT_EDGE_PREFIX}${id}`,
@@ -218,6 +247,7 @@ export function toGraph(
 function edgeFont(theme: Theme): CanvasEdge['font'] {
   return {
     color: theme.edge.label,
+    size: 10,
     strokeWidth: 0,
     face: theme.fontFace,
     background: theme.edge.labelBackground,
@@ -240,14 +270,6 @@ function baseNames(fields: string[]): string[] {
   return seen;
 }
 
-function nullMark(fields: string[] | undefined): string | null {
-  if (fields === undefined) {
-    return null;
-  }
-
-  return `${baseNames(fields).join(', ')} \u2192 ${NULL_MARK}`;
-}
-
 function frameGroupKey(root: Root): string {
   return `${root.function}#${root.frameLevel}`;
 }
@@ -256,34 +278,39 @@ function rootLabel(root: Root): string {
   return `${root.name}\n${root.function} #${root.frameLevel}`;
 }
 
-function canvasNode(node: GraphNode, theme: Theme, mark: string | null): CanvasNode {
-  if (node.kind === 'record') {
-    return styled(nodeCanvasId(node.id), 'record', recordLabel(node, mark), theme);
-  }
+function canvasNode(
+  node: GraphNode,
+  theme: Theme,
+  level: number | undefined,
+  seat: TreePosition | undefined,
+): CanvasNode {
+  const kind = node.kind === 'record' ? 'record' : node.kind === 'array' ? 'array' : 'opaque';
+  const label =
+    node.kind === 'record'
+      ? recordLabel(node)
+      : node.kind === 'array'
+        ? arrayLabel(node)
+        : opaqueLabel(node);
 
-  if (node.kind === 'array') {
-    return styled(nodeCanvasId(node.id), 'array', arrayLabel(node, mark), theme);
-  }
-
-  return styled(nodeCanvasId(node.id), 'opaque', opaqueLabel(node), theme);
+  return styled(nodeCanvasId(node.id), kind, label, theme, level, seat);
 }
 
-function recordLabel(node: Extract<GraphNode, { kind: 'record' }>, mark: string | null): string {
+function recordLabel(node: Extract<GraphNode, { kind: 'record' }>): string {
   const entries = node.fields.map((field) => `${field.name} = ${formatValue(field.value)}`);
   const shown = entries.slice(0, MAX_LABEL_ENTRIES);
   const hidden = entries.length - shown.length + node.arrays.length;
 
-  return join(node.type, shown, hidden, mark);
+  return join(node.type, shown, hidden);
 }
 
-function arrayLabel(node: Extract<GraphNode, { kind: 'array' }>, mark: string | null): string {
+function arrayLabel(node: Extract<GraphNode, { kind: 'array' }>): string {
   if (node.cellsArePointers) {
-    return join(node.type, [], 0, mark);
+    return join(node.type, [], 0);
   }
 
   const shown = node.cells.slice(0, MAX_CELL_PREVIEW).map(formatValue);
 
-  return join(node.type, [shown.join(', ')], node.cells.length - shown.length, mark);
+  return join(node.type, [shown.join(', ')], node.cells.length - shown.length);
 }
 
 function opaqueLabel(node: Extract<GraphNode, { kind: 'opaque' }>): string {
@@ -292,22 +319,40 @@ function opaqueLabel(node: Extract<GraphNode, { kind: 'opaque' }>): string {
   return declared === null ? `<${node.reason}>` : `${declared}\n<${node.reason}>`;
 }
 
-function join(head: string, shown: string[], hidden: number, mark: string | null): string {
+function join(head: string, shown: string[], hidden: number): string {
   const tail = hidden > 0 ? [`+${hidden}`] : [];
-  const suffix = mark === null ? [] : [mark];
 
-  return [head, ...shown, ...tail, ...suffix].join('\n');
+  return [head, ...shown, ...tail].join('\n');
 }
 
-function styled(id: string, kind: CanvasNodeKind, label: string, theme: Theme): CanvasNode {
+function styled(
+  id: string,
+  kind: CanvasNodeKind,
+  label: string,
+  theme: Theme,
+  level?: number,
+  seat?: TreePosition,
+): CanvasNode {
   const palette = theme.nodes[kind];
-
-  return {
+  const node: CanvasNode = {
     id,
     kind,
     label,
     shape: NODE_SHAPE[kind],
+    fixed: seat !== undefined,
+    physics: seat === undefined,
     color: { background: palette.background, border: palette.border },
     font: { color: palette.text, face: theme.fontFace },
   };
+
+  if (level !== undefined) {
+    node.level = level;
+  }
+
+  if (seat !== undefined) {
+    node.x = seat.x;
+    node.y = seat.y;
+  }
+
+  return node;
 }

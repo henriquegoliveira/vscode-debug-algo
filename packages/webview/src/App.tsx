@@ -4,11 +4,19 @@ import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data';
 import { toGraph, CanvasEdge, CanvasNode, FrameRoot, GraphModel } from './graphModel';
 import { buildIndex, inspect } from './inspection';
-import { LayoutKind, layoutOptions, resolveLayout } from './layout';
+import { LayoutKind, layoutForChoice, layoutOptions } from './layout';
 import { FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './theme';
 import { useSnapshotChannel } from './state';
+import { isEmbedded, sendAnnotation } from './channel';
+import {
+  MAX_COLUMN_WIDTH,
+  MIN_COLUMN_WIDTH,
+  ViewState,
+  readViewState,
+  writeViewState,
+} from './persistence';
 import InspectorOverlay from './InspectorOverlay';
-import { TEXT } from './text';
+import Toolbar, { ColumnButton } from './Toolbar';
 
 const EMPTY_MODEL: GraphModel = { canvas: { nodes: [], edges: [] }, frames: [] };
 
@@ -23,27 +31,49 @@ const NETWORK_OPTIONS: Options = {
   },
   edges: {
     font: { align: 'horizontal' },
+    arrows: { to: { scaleFactor: 0.6 } },
+    width: 1,
+    selectionWidth: 1,
   },
 };
 
 const App: React.FC = () => {
   const state = useSnapshotChannel();
   const theme = useTheme();
+  const [view, updateView, viewRef] = useViewState();
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const columnRef = useRef<HTMLElement>(null);
   const nodesRef = useRef<DataSet<Node> | null>(null);
   const edgesRef = useRef<DataSet<Edge> | null>(null);
   const networkRef = useRef<Network | null>(null);
-  const selectedRef = useRef<string | null>(null);
-  const layoutSessionRef = useRef<string | undefined>(undefined);
+  const selectedRef = useRef<string | null>(view.selectedId);
+  const layoutAppliedRef = useRef<string | null>(null);
+  const scrollRestoredRef = useRef(false);
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(view.selectedId);
   const [layout, setLayout] = useState<LayoutKind | null>(null);
   const [dismissed, setDismissed] = useState<string | null>(null);
+  const [dragWidth, setDragWidth] = useState<number | null>(null);
+
+  const embedded = isEmbedded();
+  const columnWidth = dragWidth ?? view.columnWidth;
 
   const model = useMemo(
-    () => (state.snapshot === null ? EMPTY_MODEL : toGraph(state.snapshot, theme)),
-    [state.snapshot, theme],
+    () =>
+      state.snapshot === null
+        ? EMPTY_MODEL
+        : toGraph(state.snapshot, theme, {
+            nullTerminals: view.nullTerminals,
+            pinned: layout === 'hierarchical',
+          }),
+    [state.snapshot, theme, view.nullTerminals, layout],
+  );
+
+  const rootCount = useMemo(
+    () => model.frames.reduce((total, frame) => total + frame.roots.length, 0),
+    [model],
   );
 
   const index = useMemo(
@@ -56,35 +86,39 @@ const App: React.FC = () => {
     [index, selectedId],
   );
 
-  const select = useCallback((id: string | null, reveal = false) => {
-    const nodes = nodesRef.current;
-    const network = networkRef.current;
+  const select = useCallback(
+    (id: string | null, reveal = false) => {
+      const nodes = nodesRef.current;
+      const network = networkRef.current;
 
-    if (id !== null && (nodes === null || nodes.get(id) === null)) {
-      return;
-    }
+      if (id !== null && (nodes === null || nodes.get(id) === null)) {
+        return;
+      }
 
-    selectedRef.current = id;
-    setSelectedId(id);
+      selectedRef.current = id;
+      setSelectedId(id);
+      updateView({ selectedId: id });
 
-    if (network === null) {
-      return;
-    }
+      if (network === null) {
+        return;
+      }
 
-    if (id === null) {
-      network.unselectAll();
-      return;
-    }
+      if (id === null) {
+        network.unselectAll();
+        return;
+      }
 
-    network.selectNodes([id]);
+      network.selectNodes([id]);
 
-    if (reveal) {
-      network.focus(id, {
-        scale: network.getScale(),
-        animation: { duration: 300, easingFunction: 'easeInOutQuad' },
-      });
-    }
-  }, []);
+      if (reveal) {
+        network.focus(id, {
+          scale: network.getScale(),
+          animation: { duration: 300, easingFunction: 'easeInOutQuad' },
+        });
+      }
+    },
+    [updateView],
+  );
 
   useEffect(() => {
     if (containerRef.current === null) {
@@ -145,15 +179,33 @@ const App: React.FC = () => {
       return;
     }
 
-    if (layoutSessionRef.current === state.sessionId) {
+    const choice = view.layoutChoice;
+    const key = choice === 'auto' ? `auto:${state.sessionId ?? ''}` : `manual:${choice}`;
+
+    if (layoutAppliedRef.current === key) {
       return;
     }
 
-    const kind = resolveLayout(snapshot);
-    layoutSessionRef.current = state.sessionId ?? undefined;
+    const kind = layoutForChoice(choice, snapshot);
+    layoutAppliedRef.current = key;
     setLayout(kind);
     network.setOptions(layoutOptions(kind));
-  }, [state.snapshot, state.sessionId]);
+  }, [state.snapshot, state.sessionId, view.layoutChoice]);
+
+  useEffect(() => {
+    networkRef.current?.redraw();
+  }, [columnWidth, view.columnOpen]);
+
+  useEffect(() => {
+    const column = columnRef.current;
+
+    if (column === null || scrollRestoredRef.current || model.frames.length === 0) {
+      return;
+    }
+
+    column.scrollTop = viewRef.current.columnScroll;
+    scrollRestoredRef.current = true;
+  }, [model, view.columnOpen, viewRef]);
 
   useEffect(() => {
     const nodes = nodesRef.current;
@@ -181,6 +233,39 @@ const App: React.FC = () => {
     networkRef.current?.selectNodes([selected]);
   }, [model]);
 
+  const startDrag = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+
+      const body = bodyRef.current;
+      if (body === null) {
+        return;
+      }
+
+      const left = body.getBoundingClientRect().left;
+      const clamp = (x: number) => Math.min(Math.max(x - left, MIN_COLUMN_WIDTH), MAX_COLUMN_WIDTH);
+
+      const onMove = (move: MouseEvent) => setDragWidth(clamp(move.clientX));
+      const onUp = (up: MouseEvent) => {
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
+        setDragWidth(null);
+        updateView({ columnWidth: clamp(up.clientX) });
+      };
+
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    },
+    [updateView],
+  );
+
+  const onColumnScroll = useCallback(
+    (event: React.UIEvent<HTMLElement>) => {
+      writeViewState({ ...viewRef.current, columnScroll: event.currentTarget.scrollTop });
+    },
+    [viewRef],
+  );
+
   const meta = state.snapshot === null ? null : state.snapshot.meta;
   const loud = meta === null ? [] : meta.errors.filter((error) => !isQuiet(error));
   const quiet = meta === null ? 0 : meta.errors.length - loud.length;
@@ -201,7 +286,7 @@ const App: React.FC = () => {
           <div style={styles.alarmRows}>
             {meta.truncated && (
               <div style={styles.alarmRow}>
-                <span style={styles.alarmScope}>{TEXT.truncationAlarm}</span>
+                <span style={styles.alarmScope}>Grafo truncado</span>
                 <span>{meta.truncationReasons.join(', ')}</span>
               </div>
             )}
@@ -213,34 +298,66 @@ const App: React.FC = () => {
               </div>
             ))}
           </div>
-          <button type="button" style={styles.alarmClose} onClick={() => setDismissed(signature)}>
-            {TEXT.closeOverlay}
+          <button
+            type="button"
+            style={styles.alarmClose}
+            title="Fechar o aviso"
+            onClick={() => setDismissed(signature)}
+          >
+            &#10005;
           </button>
         </div>
       )}
 
-      <div style={styles.body}>
-        <aside style={styles.column}>
-          <h4 style={styles.columnTitle}>{TEXT.columnTitle}</h4>
-          {model.frames.map((frame) => (
-            <section key={frame.id} style={styles.frame}>
-              <div style={styles.frameTitle}>
-                {frame.function} #{frame.frameLevel}
-              </div>
-              {frame.roots.map((root) => (
-                <RootRow
-                  key={root.id}
-                  root={root}
-                  active={root.canvasId !== null && root.canvasId === selectedId}
-                  onSelect={select}
-                />
+      <div ref={bodyRef} style={styles.body}>
+        {view.columnOpen && (
+          <>
+            <aside
+              ref={columnRef}
+              style={{ ...styles.column, width: `${columnWidth}px` }}
+              onScroll={onColumnScroll}
+            >
+              <h4 style={styles.columnTitle}>Variáveis por frame</h4>
+              {model.frames.map((frame) => (
+                <section key={frame.id} style={styles.frame}>
+                  <div style={styles.frameTitle}>
+                    {frame.function} #{frame.frameLevel}
+                  </div>
+                  {frame.roots.map((root) => (
+                    <RootRow
+                      key={root.id}
+                      root={root}
+                      active={root.canvasId !== null && root.canvasId === selectedId}
+                      onSelect={select}
+                    />
+                  ))}
+                </section>
               ))}
-            </section>
-          ))}
-        </aside>
+            </aside>
+            <div
+              role="separator"
+              aria-orientation="vertical"
+              style={
+                dragWidth === null ? styles.divider : { ...styles.divider, ...styles.dividerOn }
+              }
+              onMouseDown={startDrag}
+            />
+          </>
+        )}
 
         <div style={styles.canvas}>
           <div ref={containerRef} style={styles.network} />
+          <ColumnButton
+            open={view.columnOpen}
+            count={rootCount}
+            onToggle={(columnOpen) => updateView({ columnOpen })}
+          />
+          <Toolbar
+            choice={view.layoutChoice}
+            onChoice={(layoutChoice) => updateView({ layoutChoice })}
+            nullTerminals={view.nullTerminals}
+            onNullTerminals={(nullTerminals) => updateView({ nullTerminals })}
+          />
           {state.phase === 'idle' && (
             <div style={styles.placeholder}>
               <p style={styles.placeholderLead}>
@@ -252,6 +369,8 @@ const App: React.FC = () => {
           {inspection !== null && (
             <InspectorOverlay
               inspection={inspection}
+              embedded={embedded}
+              onAnnotate={sendAnnotation}
               onSelect={(canvasId) => select(canvasId, true)}
               onClose={() => select(null)}
             />
@@ -260,16 +379,11 @@ const App: React.FC = () => {
       </div>
 
       <footer style={styles.footer}>
-        <span style={styles.footerLabel}>{TEXT.diagnosticsLabel}</span>
         <span>{meta === null ? '—' : meta.debugger}</span>
         <span>{meta === null || meta.debuggerVersion === null ? '—' : meta.debuggerVersion}</span>
         <span>framesScanned {meta === null ? '—' : meta.framesScanned}</span>
         <span>framesSkipped {meta === null ? '—' : meta.framesSkipped}</span>
-        {quiet > 0 && (
-          <span>
-            {TEXT.annotationsNotHere} {quiet}
-          </span>
-        )}
+        {quiet > 0 && <span>anotações de outro programa {quiet}</span>}
         <span style={styles.footerLayout}>layout {layout ?? '—'}</span>
       </footer>
     </div>
@@ -323,6 +437,27 @@ function rootCell(root: FrameRoot): string {
   }
 
   return root.canvasId !== null ? '→' : '';
+}
+
+function useViewState(): [
+  ViewState,
+  (patch: Partial<ViewState>) => void,
+  React.MutableRefObject<ViewState>,
+] {
+  const [view, setView] = useState<ViewState>(() => readViewState());
+  const viewRef = useRef<ViewState>(view);
+
+  const update = useCallback((patch: Partial<ViewState>) => {
+    setView((current) => {
+      const next = { ...current, ...patch };
+      viewRef.current = next;
+      writeViewState(next);
+
+      return next;
+    });
+  }, []);
+
+  return [view, update, viewRef];
 }
 
 function useTheme(): Theme {
@@ -422,14 +557,19 @@ const styles: Record<string, React.CSSProperties> = {
   body: { flex: 1, display: 'flex', minHeight: 0 },
   column: {
     flex: '0 0 auto',
-    width: 'clamp(220px, 24%, 380px)',
     overflowY: 'auto',
     padding: '8px 10px',
     boxSizing: 'border-box',
-    borderRight: '1px solid var(--vscode-editorWidget-border, #333)',
     fontFamily: 'monospace',
     fontSize: '12px',
   },
+  divider: {
+    flex: '0 0 auto',
+    width: '5px',
+    cursor: 'col-resize',
+    backgroundColor: 'var(--vscode-editorWidget-border, #333)',
+  },
+  dividerOn: { backgroundColor: 'var(--vscode-focusBorder, #007fd4)' },
   columnTitle: { margin: '0 0 8px 0', fontSize: '12px', opacity: 0.7 },
   frame: { marginBottom: '10px' },
   frameTitle: { opacity: 0.7, marginBottom: '2px' },
