@@ -2,6 +2,8 @@ import type { Value } from 'dbga-contract';
 
 const TRUNCATION_MARK = '…';
 
+const NAMED_ESCAPES: Record<number, string> = { 9: '\\t', 10: '\\n', 13: '\\r' };
+
 export function formatValue(value: Value | null | undefined): string {
   if (value === null || value === undefined) {
     return '';
@@ -19,10 +21,29 @@ export function formatValue(value: Value | null | undefined): string {
     case 'enum':
       return value.name ?? String(value.v);
     case 'text':
-      return value.truncated ? `"${value.v}${TRUNCATION_MARK}"` : `"${value.v}"`;
+      return value.truncated
+        ? `"${escapeControls(value.v)}${TRUNCATION_MARK}"`
+        : `"${escapeControls(value.v)}"`;
     case 'opaque':
       return `<${value.reason}>`;
   }
+}
+
+function escapeControls(text: string): string {
+  let escaped = '';
+
+  for (const character of text) {
+    const code = character.codePointAt(0) ?? 0;
+
+    if (code > 31 && code !== 127) {
+      escaped += character;
+      continue;
+    }
+
+    escaped += NAMED_ESCAPES[code] ?? `\\x${code.toString(16).padStart(2, '0')}`;
+  }
+
+  return escaped;
 }
 
 function formatReal(v: number | null, special: 'nan' | 'inf' | '-inf' | undefined): string {
