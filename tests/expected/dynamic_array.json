@@ -356,19 +356,33 @@
       "kind": "opaque",
       "id": "#6",
       "reason": "notExpanded",
-      "type": "double"
+      "type": "double",
+      "value": {
+        "t": "real",
+        "v": 0.25
+      }
     },
     {
       "kind": "opaque",
       "id": "#10",
       "reason": "notExpanded",
-      "type": "int"
+      "type": "int",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
     },
     {
       "kind": "opaque",
       "id": "#23",
       "reason": "notExpanded",
-      "type": "int"
+      "type": "int",
+      "value": {
+        "t": "int",
+        "v": 3,
+        "signed": true
+      }
     }
   ],
   "edges": [

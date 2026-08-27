@@ -223,7 +223,12 @@
       "kind": "opaque",
       "id": "#3",
       "reason": "notExpanded",
-      "type": "int"
+      "type": "int",
+      "value": {
+        "t": "int",
+        "v": 11,
+        "signed": true
+      }
     }
   ],
   "edges": []
