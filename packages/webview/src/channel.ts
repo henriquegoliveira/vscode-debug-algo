@@ -47,6 +47,18 @@ export function sendAnnotation(annotation: string): boolean {
   return true;
 }
 
+export function sendSaveView(file: string, state: unknown): boolean {
+  const api = hostApi();
+  if (api === undefined) {
+    return false;
+  }
+
+  const message: WebviewMessage = { v: PROTOCOL_VERSION, type: 'saveView', file, state };
+  api.postMessage(message);
+
+  return true;
+}
+
 export function connectSnapshotChannel(onMessage: SnapshotListener): () => void {
   if (isEmbedded()) {
     return connectOverVsCode(onMessage);

@@ -10,6 +10,7 @@ export class WebviewChannel implements SnapshotChannel {
     private readonly panel: VisualizerPanel,
     onReady: (channel: SnapshotChannel) => void,
     onAnnotate: (annotation: string) => void,
+    onSaveView: (file: string, state: unknown) => void,
   ) {
     this.subscription = panel.onDidReceiveMessage((message) => {
       if (!isWebviewMessage(message)) {
@@ -22,6 +23,9 @@ export class WebviewChannel implements SnapshotChannel {
           return;
         case 'annotate':
           onAnnotate(message.annotation);
+          return;
+        case 'saveView':
+          onSaveView(message.file, message.state);
           return;
       }
     });

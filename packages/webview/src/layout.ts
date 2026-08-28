@@ -1,11 +1,28 @@
 import type { Options } from 'vis-network';
 import type { GraphSnapshot } from 'dbga-contract';
+import { backFields, baseField } from './treeLayout';
+
+export { backFields, baseField };
+
+export const PHYSICS_SPRING_LENGTH = 140;
+export const PHYSICS_AVOID_OVERLAP = 0.3;
+export const PHYSICS_GRAVITY = -8000;
 
 export type LayoutKind = 'hierarchical' | 'physics' | 'default';
 
 export type LayoutChoice = 'auto' | 'physics' | 'hierarchical';
 
 export const DEFAULT_CHOICE: LayoutChoice = 'auto';
+
+export const LAYOUT_RANK: Record<LayoutKind, number> = {
+  default: 0,
+  physics: 1,
+  hierarchical: 2,
+};
+
+export function promotes(from: LayoutKind, to: LayoutKind): boolean {
+  return LAYOUT_RANK[to] > LAYOUT_RANK[from];
+}
 
 export function layoutForChoice(choice: LayoutChoice, snapshot: GraphSnapshot): LayoutKind {
   return choice === 'auto' ? resolveLayout(snapshot) : choice;
@@ -18,11 +35,29 @@ export function resolveLayout(snapshot: GraphSnapshot): LayoutKind {
     return 'default';
   }
 
-  if (hasCycle(snapshot)) {
-    return 'physics';
-  }
+  return forwardDegree(snapshot) >= 2 ? 'hierarchical' : 'physics';
+}
 
-  return branches(snapshot) ? 'hierarchical' : 'physics';
+export function forwardDegree(snapshot: GraphSnapshot): number {
+  const back = backFields(snapshot);
+  const degree = new Map<string, number>();
+
+  snapshot.edges.forEach((edge) => {
+    if (edge.to === null || back.has(baseField(edge.field))) {
+      return;
+    }
+
+    degree.set(edge.from, (degree.get(edge.from) ?? 0) + 1);
+  });
+
+  let most = 0;
+  degree.forEach((value) => {
+    if (value > most) {
+      most = value;
+    }
+  });
+
+  return most;
 }
 
 export function maxOutDegree(snapshot: GraphSnapshot): number {
@@ -125,7 +160,15 @@ export function layoutOptions(kind: LayoutKind): Options {
   if (kind === 'physics') {
     return {
       layout: { hierarchical: { enabled: false } },
-      physics: { enabled: true, solver: 'barnesHut', barnesHut: { springLength: 140 } },
+      physics: {
+        enabled: true,
+        solver: 'barnesHut',
+        barnesHut: {
+          springLength: PHYSICS_SPRING_LENGTH,
+          avoidOverlap: PHYSICS_AVOID_OVERLAP,
+          gravitationalConstant: PHYSICS_GRAVITY,
+        },
+      },
       edges: { smooth: false },
     };
   }

@@ -26,6 +26,7 @@ __pycache__/
 .gdb_history
 
 # VS Code
+tests/.vscode/settings.json
 vscode-profile-*
 .vscode-test/
 *.vsix

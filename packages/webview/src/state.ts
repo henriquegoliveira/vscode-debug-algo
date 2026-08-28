@@ -9,6 +9,8 @@ export interface ScreenState {
   sessionId: string | null;
   snapshot: GraphSnapshot | null;
   error: string | null;
+  file: string | null;
+  fileView: unknown;
 }
 
 export const INITIAL_STATE: ScreenState = {
@@ -16,17 +18,22 @@ export const INITIAL_STATE: ScreenState = {
   sessionId: null,
   snapshot: null,
   error: null,
+  file: null,
+  fileView: null,
 };
 
 export function reduce(state: ScreenState, message: ExtensionMessage): ScreenState {
   switch (message.type) {
     case 'snapshot':
       return {
+        ...state,
         phase: 'live',
         sessionId: message.sessionId,
         snapshot: message.snapshot,
         error: null,
       };
+    case 'view':
+      return { ...state, file: message.file, fileView: message.state };
     case 'sessionEnd':
       return { ...state, phase: 'ended' };
     case 'error':
