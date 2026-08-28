@@ -65,7 +65,7 @@ const DEBUGGERS = {
   gdb: {
     label: 'GDB',
     module: 'dbga_extractor_gdb',
-    resolve: () => process.env.DBGA_GDB || 'gdb',
+    resolve: resolveGdb,
     flags: ['-nx', '-batch'],
     command: (text) => ['-ex', text],
     script: (code) => ['-ex', `python ${code}`],
@@ -86,24 +86,82 @@ const require = createRequire(path.join(ROOT, 'packages', 'extension', 'package.
 const AjvModule = require('ajv');
 const Ajv = AjvModule.default ?? AjvModule;
 
+const MSYS2_SUBSYSTEMS = ['ucrt64', 'mingw64', 'clang64', 'mingw32'];
+const VSCODE_HOMES = ['.vscode', '.vscode-insiders', '.vscode-server', '.vscode-oss'];
+
+export function msys2Candidates(roots, subsystems, exe) {
+  const out = [];
+  for (const root of roots) {
+    for (const subsystem of subsystems) {
+      out.push(path.join(root, subsystem, 'bin', `gdb${exe}`));
+    }
+  }
+  return out;
+}
+
+export function extensionRoots(home, env) {
+  const roots = [];
+  if (env.VSCODE_EXTENSIONS) {
+    roots.push(env.VSCODE_EXTENSIONS);
+  }
+  for (const directory of VSCODE_HOMES) {
+    roots.push(path.join(home, directory, 'extensions'));
+  }
+  return roots;
+}
+
+function msys2Roots() {
+  const roots = [];
+  if (process.env.MSYS2_ROOT) {
+    roots.push(process.env.MSYS2_ROOT);
+  }
+  const drive = process.env.SystemDrive || 'C:';
+  roots.push(path.join(drive, path.sep, 'msys64'));
+  roots.push(path.join(drive, path.sep, 'msys32'));
+  roots.push(path.join(drive, path.sep, 'tools', 'msys64'));
+  return roots;
+}
+
+function resolveGdb() {
+  const override = process.env.DBGA_GDB;
+  if (override) {
+    return override;
+  }
+
+  if (process.platform !== 'win32') {
+    return 'gdb';
+  }
+
+  for (const candidate of msys2Candidates(msys2Roots(), MSYS2_SUBSYSTEMS, EXE)) {
+    if (existsSync(candidate)) {
+      return candidate;
+    }
+  }
+
+  return 'gdb';
+}
+
 function resolveLldb() {
   const override = process.env.DBGA_LLDB;
   if (override) {
     return override;
   }
 
-  const extensions = path.join(os.homedir(), '.vscode', 'extensions');
-  let entries;
-  try {
-    entries = readdirSync(extensions);
-  } catch {
-    entries = [];
-  }
+  const roots = extensionRoots(os.homedir(), process.env);
+  const candidates = [];
 
-  const candidates = entries
-    .filter((entry) => entry.startsWith('vadimcn.vscode-lldb-'))
-    .sort()
-    .map((entry) => path.join(extensions, entry, 'lldb', 'bin', `lldb${EXE}`));
+  for (const root of roots) {
+    let entries;
+    try {
+      entries = readdirSync(root);
+    } catch {
+      continue;
+    }
+
+    for (const entry of entries.filter((name) => name.startsWith('vadimcn.vscode-lldb-')).sort()) {
+      candidates.push(path.join(root, entry, 'lldb', 'bin', `lldb${EXE}`));
+    }
+  }
 
   for (const candidate of candidates.reverse()) {
     if (existsSync(candidate)) {
@@ -112,8 +170,9 @@ function resolveLldb() {
   }
 
   throw new Error(
-    `LLDB nao encontrado — esperado em ~/.vscode/extensions/vadimcn.vscode-lldb-*/lldb/bin/lldb${EXE}` +
-      ' — ou aponte DBGA_LLDB para o executavel',
+    `LLDB nao encontrado — procurado em ${roots.join(', ')}` +
+      ` (vadimcn.vscode-lldb-*/lldb/bin/lldb${EXE})` +
+      ' — instale o CodeLLDB, ou aponte DBGA_LLDB para o executavel',
   );
 }
 
