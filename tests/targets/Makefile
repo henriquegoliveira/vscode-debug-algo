@@ -6,6 +6,7 @@ BIN_DIR = bin
 
 ifeq ($(OS),Windows_NT)
 EXE = .exe
+CXXFLAGS += -static
 else
 EXE =
 endif

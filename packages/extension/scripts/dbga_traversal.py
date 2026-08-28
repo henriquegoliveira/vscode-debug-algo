@@ -124,13 +124,22 @@ def _bounded_int(candidate, fallback):
     return candidate
 
 
+def _frames_through_main(frames):
+    trimmed = []
+    for frame in frames:
+        trimmed.append(frame)
+        if frame.function == "main":
+            break
+    return trimmed
+
+
 def extract(adapter, config):
     builder = dbga_snapshot.SnapshotBuilder(
         adapter.debugger_name, adapter.debugger_version(), config
     )
     frontier = Frontier()
     deadline = time.monotonic() + config.time_budget_seconds
-    frames = adapter.frames()
+    frames = _frames_through_main(adapter.frames())
     annotations = _resolve_annotations(builder, frontier, adapter, frames, config)
 
     for frame in frames:

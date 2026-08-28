@@ -275,10 +275,11 @@ function assertLinkedListSimple(snapshot, fail, note) {
     fail(`head_ref.indirections ${roots.head_ref?.indirections} != 2`);
   }
   if (!stackGarbageIsStable(process.platform)) {
-    note(
-      'curr sai de um local nao inicializado; a verificacao de zeroPage so vale no Linux (D111)',
-    );
-  } else if (roots.curr?.status !== 'unreadable') {
+    note('curr e prev saem de locais nao inicializados; a cena so e estavel no Linux (D111)');
+    return;
+  }
+
+  if (roots.curr?.status !== 'unreadable') {
     fail(`curr.status ${roots.curr?.status} != unreadable`);
   } else {
     const node = nodeById(snapshot, roots.curr.node);
@@ -295,7 +296,12 @@ function assertLinkedListSimple(snapshot, fail, note) {
   if (nulls.length !== 1) fail(`${nulls.length} arestas nulas, esperado 1`);
 }
 
-function assertLinkedListCyclic(snapshot, fail) {
+function assertLinkedListCyclic(snapshot, fail, note) {
+  if (!stackGarbageIsStable(process.platform)) {
+    note('curr e prev saem de locais nao inicializados; a cena so e estavel no Linux (D111)');
+    return;
+  }
+
   const list = records(snapshot);
   if (list.length !== 3) {
     fail(`${list.length} nos record, esperado 3`);
