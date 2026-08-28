@@ -1,5 +1,8 @@
 import React from 'react';
 import type { LayoutChoice } from './layout';
+import type { FrameMode } from './persistence';
+
+export const ZOOM_STEP = 1.25;
 
 const CHOICES: { value: LayoutChoice; label: string }[] = [
   { value: 'auto', label: 'Automático' },
@@ -11,18 +14,65 @@ const FUTURE = ['Recursão', 'Ordenação'];
 
 export const ColumnButton: React.FC<{
   open: boolean;
-  count: number;
+  shown: number;
+  total: number;
+  offset: number;
   onToggle: (open: boolean) => void;
-}> = ({ open, count, onToggle }) => (
+}> = ({ open, shown, total, offset, onToggle }) => (
   <button
     type="button"
-    style={open ? { ...styles.square, ...styles.squareOn } : styles.square}
+    className="dbga-square"
+    style={offset === 0 ? styles.square : { ...styles.square, left: `${offset}px` }}
     aria-pressed={open}
-    title={`${open ? 'Ocultar' : 'Mostrar'} as ${count} variáveis`}
+    title={
+      shown === total
+        ? `${open ? 'Ocultar' : 'Mostrar'} as ${total} variáveis`
+        : `${open ? 'Ocultar' : 'Mostrar'} a coluna — ${shown} de ${total} variáveis no grafo`
+    }
     onClick={() => onToggle(!open)}
   >
-    {count}
+    {shown === total ? total : `${shown}/${total}`}
   </button>
+);
+
+export const ZoomControl: React.FC<{
+  scale: number;
+  onStep: (direction: number) => void;
+  onReset: () => void;
+  onFit: () => void;
+  onFocus: () => void;
+  canFocus: boolean;
+}> = ({ scale, onStep, onReset, onFit, onFocus, canFocus }) => (
+  <div style={styles.zoom}>
+    <button type="button" className="dbga-zoom" title="Afastar" onClick={() => onStep(-1)}>
+      &minus;
+    </button>
+    <button
+      type="button"
+      className="dbga-zoom dbga-zoom-label"
+      title="Voltar ao tamanho natural"
+      onClick={onReset}
+    >
+      {Math.round(scale * 100)}%
+    </button>
+    <button type="button" className="dbga-zoom" title="Aproximar" onClick={() => onStep(1)}>
+      +
+    </button>
+    <button type="button" className="dbga-zoom" title="Enquadrar o grafo inteiro" onClick={onFit}>
+      &#9974;
+    </button>
+    <button
+      type="button"
+      className="dbga-zoom"
+      disabled={!canFocus}
+      title={
+        canFocus ? 'Ir até o que mudou nesta pausa' : 'Nada mudou nesta pausa que esteja no grafo'
+      }
+      onClick={onFocus}
+    >
+      &#8982;
+    </button>
+  </div>
 );
 
 const Toolbar: React.FC<{
@@ -30,8 +80,25 @@ const Toolbar: React.FC<{
   onChoice: (choice: LayoutChoice) => void;
   nullTerminals: boolean;
   onNullTerminals: (enabled: boolean) => void;
-}> = ({ choice, onChoice, nullTerminals, onNullTerminals }) => (
-  <div style={styles.bar}>
+  frameMode: FrameMode;
+  manual: boolean;
+  onFrameMode: (mode: FrameMode) => void;
+  follow: boolean;
+  onFollow: (enabled: boolean) => void;
+  compact: boolean;
+}> = ({
+  choice,
+  onChoice,
+  nullTerminals,
+  onNullTerminals,
+  frameMode,
+  manual,
+  onFrameMode,
+  follow,
+  onFollow,
+  compact,
+}) => (
+  <div style={compact ? { ...styles.bar, ...styles.barCompact } : styles.bar}>
     <select
       style={styles.select}
       value={choice}
@@ -52,12 +119,42 @@ const Toolbar: React.FC<{
 
     <button
       type="button"
-      style={nullTerminals ? { ...styles.button, ...styles.buttonOn } : styles.button}
+      className="dbga-chip"
+      aria-pressed={!manual && frameMode === 'current'}
+      title="Mostrar só as variáveis do frame onde a execução parou"
+      onClick={() => onFrameMode('current')}
+    >
+      atual
+    </button>
+
+    <button
+      type="button"
+      className="dbga-chip"
+      aria-pressed={!manual && frameMode === 'all'}
+      title="Mostrar as variáveis de todos os frames"
+      onClick={() => onFrameMode('all')}
+    >
+      todos
+    </button>
+
+    <button
+      type="button"
+      className="dbga-chip"
       aria-pressed={nullTerminals}
       title="Desenhar os ponteiros nulos como terminais no grafo"
       onClick={() => onNullTerminals(!nullTerminals)}
     >
       NULL
+    </button>
+
+    <button
+      type="button"
+      className="dbga-chip"
+      aria-pressed={follow}
+      title="Trazer o canvas para o frame onde a execução parou a cada pausa"
+      onClick={() => onFollow(!follow)}
+    >
+      seguir
     </button>
   </div>
 );
@@ -79,28 +176,27 @@ const styles: Record<string, React.CSSProperties> = {
     bottom: '8px',
     left: '8px',
     display: 'flex',
+    flexWrap: 'wrap',
     gap: '4px',
     alignItems: 'stretch',
     padding: '4px',
   },
+  barCompact: { maxWidth: 'calc(100% - 148px)' },
+  zoom: {
+    ...PANEL,
+    bottom: '8px',
+    right: '8px',
+    display: 'flex',
+    alignItems: 'stretch',
+    padding: '2px',
+  },
   square: {
     ...PANEL,
+    zIndex: 4,
     top: '8px',
     left: '8px',
-    width: '28px',
+    minWidth: '28px',
     height: '28px',
-    padding: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
-    color: 'var(--vscode-foreground, #ccc)',
-    fontFamily: 'monospace',
-  },
-  squareOn: {
-    backgroundColor: 'var(--vscode-button-background, #0e639c)',
-    color: 'var(--vscode-button-foreground, #fff)',
-    borderColor: 'var(--vscode-button-background, #0e639c)',
   },
   select: {
     background: 'var(--vscode-dropdown-background, #3c3c3c)',
@@ -110,22 +206,6 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '2px 4px',
     font: 'inherit',
     cursor: 'pointer',
-  },
-  button: {
-    background: 'var(--vscode-button-secondaryBackground, #3a3d41)',
-    color: 'var(--vscode-button-secondaryForeground, #ccc)',
-    border: 'none',
-    borderRadius: '3px',
-    padding: '2px 10px',
-    fontFamily: 'monospace',
-    fontSize: '12px',
-    letterSpacing: '0.5px',
-    cursor: 'pointer',
-  },
-  buttonOn: {
-    background: 'var(--vscode-charts-green, #2ea043)',
-    color: 'var(--vscode-editor-background, #101010)',
-    fontWeight: 700,
   },
 };
 

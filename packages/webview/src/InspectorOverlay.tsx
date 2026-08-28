@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import type { FieldChoice } from './persistence';
 import type {
   ArrayView,
   Entry,
   Inspection,
   NodeInspection,
+  CardInspection,
   RootInspection,
   TerminalInspection,
 } from './inspection';
@@ -11,6 +13,8 @@ import type {
 interface Props {
   inspection: Inspection;
   embedded: boolean;
+  fields: Record<string, FieldChoice>;
+  onFieldChoice: (type: string, choice: FieldChoice | undefined) => void;
   onAnnotate: (annotation: string) => boolean;
   onSelect: (canvasId: string) => void;
   onClose: () => void;
@@ -21,6 +25,8 @@ type Select = Props['onSelect'];
 const InspectorOverlay: React.FC<Props> = ({
   inspection,
   embedded,
+  fields,
+  onFieldChoice,
   onAnnotate,
   onSelect,
   onClose,
@@ -28,16 +34,33 @@ const InspectorOverlay: React.FC<Props> = ({
   <aside style={styles.overlay}>
     <header style={styles.head}>
       <span style={styles.title}>{heading(inspection)}</span>
-      <button type="button" style={styles.close} title="Fechar (Esc)" onClick={onClose}>
+      <button
+        type="button"
+        className="dbga-icon"
+        style={styles.close}
+        title="Fechar (Esc)"
+        onClick={onClose}
+      >
         &#10005;
       </button>
     </header>
 
     {inspection.space === 'node' && <NodeBody inspection={inspection} onSelect={onSelect} />}
+    {inspection.space === 'node' && inspection.recordType !== null && (
+      <LabelFields
+        type={inspection.recordType}
+        names={inspection.labelNames}
+        auto={inspection.labelAuto}
+        choice={fields[inspection.recordType]}
+        embedded={embedded}
+        onChoice={onFieldChoice}
+      />
+    )}
     {inspection.space === 'terminal' && (
       <TerminalBody inspection={inspection} onSelect={onSelect} />
     )}
     {inspection.space === 'root' && <RootBody inspection={inspection} onSelect={onSelect} />}
+    {inspection.space === 'card' && <CardBody inspection={inspection} onSelect={onSelect} />}
 
     <AnnotateSection
       key={annotationPrefill(inspection)}
@@ -92,9 +115,117 @@ const AnnotateSection: React.FC<{
   );
 };
 
+const LabelFields: React.FC<{
+  type: string;
+  names: string[];
+  auto: string[];
+  choice: FieldChoice | undefined;
+  embedded: boolean;
+  onChoice: (type: string, choice: FieldChoice | undefined) => void;
+}> = ({ type, names, auto, choice, embedded, onChoice }) => {
+  const shown = (name: string): boolean => {
+    if (choice === undefined) {
+      return auto.includes(name);
+    }
+    if (choice === 'all') {
+      return true;
+    }
+    if (choice === 'none') {
+      return false;
+    }
+
+    return choice.includes(name);
+  };
+
+  const toggle = (name: string): void => {
+    const current = names.filter(shown);
+    const next = current.includes(name)
+      ? current.filter((entry) => entry !== name)
+      : names.filter((entry) => entry === name || current.includes(entry));
+
+    onChoice(type, next);
+  };
+
+  return (
+    <section style={styles.section}>
+      <h5 style={styles.sectionTitle}>campos no rótulo de {type}</h5>
+      <div style={styles.modeRow}>
+        <button
+          type="button"
+          className="dbga-chip"
+          aria-pressed={choice === undefined}
+          onClick={() => onChoice(type, undefined)}
+        >
+          automático
+        </button>
+        <button
+          type="button"
+          className="dbga-chip"
+          aria-pressed={choice === 'all'}
+          onClick={() => onChoice(type, 'all')}
+        >
+          todos
+        </button>
+        <button
+          type="button"
+          className="dbga-chip"
+          aria-pressed={choice === 'none'}
+          onClick={() => onChoice(type, 'none')}
+        >
+          nenhum
+        </button>
+      </div>
+      {names.map((name) => (
+        <button
+          key={name}
+          type="button"
+          className="dbga-check"
+          aria-pressed={shown(name)}
+          onClick={() => toggle(name)}
+        >
+          <span style={styles.rowIndex}>{shown(name) ? '\u2611' : '\u2610'}</span>
+          <span style={styles.rowName}>{name}</span>
+        </button>
+      ))}
+      <div style={styles.annotateNote}>
+        {embedded
+          ? 'A escolha vale para todo nó deste tipo e é guardada por arquivo depurado.'
+          : 'O navegador é somente leitura: a escolha vale nesta aba e não vai para as settings.'}
+      </div>
+    </section>
+  );
+};
+
 function annotationPrefill(inspection: Inspection): string {
   return inspection.space === 'root' ? `${inspection.name}@` : '';
 }
+
+const CardBody: React.FC<{ inspection: CardInspection; onSelect: Select }> = ({
+  inspection,
+  onSelect,
+}) => (
+  <>
+    <section style={styles.section}>
+      <h5 style={styles.sectionTitle}>variáveis</h5>
+      {inspection.variables.map((variable) => (
+        <div key={variable.canvasId} style={styles.row}>
+          <span style={styles.rowName}>{variable.name}</span>
+          <span style={styles.rowType}>{variable.frame}</span>
+          <button type="button" style={styles.link} onClick={() => onSelect(variable.canvasId)}>
+            {variable.status === 'ok' ? 'detalhe' : variable.status}
+          </button>
+        </div>
+      ))}
+    </section>
+
+    <section style={styles.section}>
+      <h5 style={styles.sectionTitle}>node</h5>
+      <div style={styles.row}>
+        <Target canvasId={inspection.nodeCanvasId} onSelect={onSelect} />
+      </div>
+    </section>
+  </>
+);
 
 function heading(inspection: Inspection): string {
   if (inspection.space === 'node') {
@@ -102,6 +233,9 @@ function heading(inspection: Inspection): string {
   }
   if (inspection.space === 'terminal') {
     return 'NULL';
+  }
+  if (inspection.space === 'card') {
+    return inspection.variables.map((variable) => variable.name).join(', ');
   }
 
   return inspection.name;
@@ -254,6 +388,7 @@ const Target: React.FC<{ canvasId: string | null; onSelect: Select }> = ({ canva
   );
 
 const styles: Record<string, React.CSSProperties> = {
+  modeRow: { display: 'flex', gap: '4px', margin: '0 0 4px 0' },
   overlay: {
     position: 'absolute',
     top: '8px',

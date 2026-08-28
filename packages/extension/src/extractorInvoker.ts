@@ -16,6 +16,11 @@ export interface ExtractionOptions {
   limits?: ExtractionLimits;
 }
 
+export interface Extraction {
+  snapshot: GraphSnapshot;
+  file: string | null;
+}
+
 export interface InvokeOptions {
   importModule: boolean;
   options: ExtractionOptions;
@@ -54,8 +59,9 @@ export class ExtractorInvoker {
     session: vscode.DebugSession,
     type: DebuggerType,
     options: InvokeOptions,
-  ): Promise<GraphSnapshot> {
-    const frameId = await this.resolveFrameId(session, options.threadId);
+  ): Promise<Extraction> {
+    const frame = await this.resolveFrame(session, options.threadId);
+    const frameId = frame.id;
     const snapshotPath = this.snapshotPathFor(options.pid);
 
     if (options.importModule) {
@@ -76,10 +82,13 @@ export class ExtractorInvoker {
       frameId,
     );
 
-    return this.reader.read(snapshotPath);
+    return { snapshot: await this.reader.read(snapshotPath), file: relativeSource(frame) };
   }
 
-  private async resolveFrameId(session: vscode.DebugSession, threadId: number): Promise<number> {
+  private async resolveFrame(
+    session: vscode.DebugSession,
+    threadId: number,
+  ): Promise<{ id: number; path: string | undefined }> {
     const response = await session.customRequest('stackTrace', {
       threadId,
       startFrame: 0,
@@ -93,7 +102,7 @@ export class ExtractorInvoker {
       );
     }
 
-    return frame.id;
+    return { id: frame.id, path: frame.source?.path };
   }
 
   private snapshotPathFor(pid: number): string {
@@ -139,4 +148,12 @@ export class ExtractorInvoker {
 function isPythonMissing(err: unknown): boolean {
   const message = err instanceof Error ? err.message : String(err);
   return PYTHON_MISSING_PATTERNS.some((pattern) => pattern.test(message));
+}
+
+function relativeSource(frame: { path: string | undefined }): string | null {
+  if (frame.path === undefined || frame.path.length === 0) {
+    return null;
+  }
+
+  return vscode.workspace.asRelativePath(frame.path, false).split(path.sep).join('/');
 }

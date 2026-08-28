@@ -1,24 +1,64 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { ExtractionError } from 'dbga-contract';
+import type { ExtractionError, GraphSnapshot } from 'dbga-contract';
 import { Edge, Network, Node, Options } from 'vis-network';
 import { DataSet } from 'vis-data';
-import { toGraph, CanvasEdge, CanvasNode, FrameRoot, GraphModel } from './graphModel';
-import { buildIndex, inspect } from './inspection';
-import { LayoutKind, layoutForChoice, layoutOptions } from './layout';
-import { FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './theme';
-import { useSnapshotChannel } from './state';
-import { isEmbedded, sendAnnotation } from './channel';
 import {
+  toGraph,
+  ARROW_SCALE,
+  CanvasEdge,
+  CanvasNode,
+  DRIFT_TOLERANCE,
+  FrameRoot,
+  GraphModel,
+  NO_CHANGES,
+  NodeChanges,
+  changedNodes,
+  focusTarget,
+  frameGroupKey,
+  rootFollowers,
+  visibleSnapshot,
+} from './graphModel';
+import { type Box, labelBox } from './boxes';
+import { buildIndex, inspect } from './inspection';
+import { LayoutKind, layoutForChoice, layoutOptions, promotes } from './layout';
+import { ChangeKind, FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './theme';
+import { useSnapshotChannel } from './state';
+import { isEmbedded, sendAnnotation, sendSaveView } from './channel';
+import {
+  FieldChoice,
+  FileView,
+  FrameMode,
   MAX_COLUMN_WIDTH,
+  MAX_SCALE,
   MIN_COLUMN_WIDTH,
-  ViewState,
-  readViewState,
-  writeViewState,
+  MIN_SCALE,
+  PanelState,
+  coerceFile,
+  readPanelState,
+  writePanelState,
 } from './persistence';
+import {
+  CAMERA_DURATION,
+  Viewport,
+  cameraPlan,
+  interpolate,
+  settled,
+  steppedScale,
+} from './camera';
 import InspectorOverlay from './InspectorOverlay';
-import Toolbar, { ColumnButton } from './Toolbar';
+import Toolbar, { ColumnButton, ZOOM_STEP, ZoomControl } from './Toolbar';
 
-const EMPTY_MODEL: GraphModel = { canvas: { nodes: [], edges: [] }, frames: [] };
+const EMPTY_MODEL: GraphModel = { canvas: { nodes: [], edges: [] }, frames: [], cards: [] };
+
+const EMPTY_BOX: Box = { width: 0, height: 0 };
+
+const NARROW_WIDTH = 620;
+const FOCUS_FILL = 0.9;
+const FOCUS_MIN_SHARE = 0.25;
+const FOCUS_MIN_SCALE = 0.3;
+const FOCUS_MAX_SCALE = 1;
+const FIT_MIN_SCALE = 0.05;
+const GESTURE_SLOP = 4;
 
 const NETWORK_OPTIONS: Options = {
   interaction: {
@@ -31,7 +71,7 @@ const NETWORK_OPTIONS: Options = {
   },
   edges: {
     font: { align: 'horizontal' },
-    arrows: { to: { scaleFactor: 0.6 } },
+    arrows: { to: { scaleFactor: ARROW_SCALE } },
     width: 1,
     selectionWidth: 1,
   },
@@ -40,7 +80,7 @@ const NETWORK_OPTIONS: Options = {
 const App: React.FC = () => {
   const state = useSnapshotChannel();
   const theme = useTheme();
-  const [view, updateView, viewRef] = useViewState();
+  const [panel, updatePanel, panelRef] = usePanelState();
 
   const containerRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -48,31 +88,159 @@ const App: React.FC = () => {
   const nodesRef = useRef<DataSet<Node> | null>(null);
   const edgesRef = useRef<DataSet<Edge> | null>(null);
   const networkRef = useRef<Network | null>(null);
-  const selectedRef = useRef<string | null>(view.selectedId);
-  const layoutAppliedRef = useRef<string | null>(null);
+  const selectedRef = useRef<string | null>(panel.selectedId);
+  const layoutAppliedRef = useRef<{ scope: string; kind: LayoutKind } | null>(null);
   const scrollRestoredRef = useRef(false);
+  const followersRef = useRef<Map<string, string[]>>(new Map());
+  const cardOfRef = useRef<Map<string, string>>(new Map());
+  const boxesRef = useRef<Map<string, Box>>(new Map());
+  const layoutRenderedRef = useRef<LayoutKind | null>(null);
+  const trailRef = useRef<Trail | null>(null);
+  const historyRef = useRef<History>({ seen: null, previous: null, session: null });
+  const glideRef = useRef<number | null>(null);
+  const saveRef = useRef<number | null>(null);
+  const rememberRef = useRef<() => void>(() => undefined);
+  const restoredRef = useRef(false);
+  const followRef = useRef(false);
+  const releaseRef = useRef<() => void>(() => undefined);
+  const revealRef = useRef<(id: string) => void>(() => undefined);
 
-  const [selectedId, setSelectedId] = useState<string | null>(view.selectedId);
+  const [selectedId, setSelectedId] = useState<string | null>(panel.selectedId);
   const [layout, setLayout] = useState<LayoutKind | null>(null);
   const [dismissed, setDismissed] = useState<string | null>(null);
   const [dragWidth, setDragWidth] = useState<number | null>(null);
+  const [edits, setEdits] = useState<{ file: string | null; view: FileView } | null>(null);
+  const [bodyWidth, setBodyWidth] = useState<number | null>(null);
+  const [scale, setScale] = useState(1);
 
   const embedded = isEmbedded();
-  const columnWidth = dragWidth ?? view.columnWidth;
+  const narrow = bodyWidth !== null && bodyWidth < NARROW_WIDTH;
+  const columnWidth =
+    narrow && bodyWidth !== null
+      ? Math.min(dragWidth ?? panel.columnWidth, Math.max(bodyWidth - 56, MIN_COLUMN_WIDTH))
+      : (dragWidth ?? panel.columnWidth);
+
+  const incoming = useMemo(() => coerceFile(state.fileView), [state.fileView]);
+  const cached = state.file === null ? undefined : panel.views[state.file];
+  const stored = state.fileView === null ? (cached ?? incoming) : incoming;
+  const fileView = edits !== null && edits.file === state.file ? edits.view : stored;
+  const follow = fileView.follow;
+
+  const frameIds = useMemo(() => {
+    const seen: { id: string; frameLevel: number }[] = [];
+
+    state.snapshot?.roots.forEach((root) => {
+      const id = frameGroupKey(root);
+
+      if (!seen.some((entry) => entry.id === id)) {
+        seen.push({ id, frameLevel: root.frameLevel });
+      }
+    });
+
+    return seen;
+  }, [state.snapshot]);
+
+  const manual = useMemo(
+    () => panel.frames !== null && panel.frames.every((id) => frameIds.some((e) => e.id === id)),
+    [panel.frames, frameIds],
+  );
+
+  const enabledFrames = useMemo(() => {
+    if (manual) {
+      return new Set(panel.frames as string[]);
+    }
+
+    if (fileView.frameMode === 'all') {
+      return new Set(frameIds.map((entry) => entry.id));
+    }
+
+    return new Set(frameIds.filter((entry) => entry.frameLevel === 0).map((entry) => entry.id));
+  }, [manual, panel.frames, fileView.frameMode, frameIds]);
+
+  const [pass, setPass] = useState<Pass>({ changes: NO_CHANGES, first: true, of: null });
+
+  useEffect(() => {
+    const snapshot = state.snapshot;
+    if (snapshot === null) {
+      return;
+    }
+
+    const history = historyRef.current;
+    if (history.seen === snapshot) {
+      return;
+    }
+
+    const previous = history.session === state.sessionId ? history.seen : null;
+    history.previous = previous;
+    history.seen = snapshot;
+    history.session = state.sessionId;
+
+    setPass({
+      changes: previous === null ? NO_CHANGES : changedNodes(previous, snapshot),
+      first: previous === null,
+      of: snapshot,
+    });
+  }, [state.snapshot, state.sessionId]);
+
+  const highlight = useMemo(() => {
+    const marks = new Map<string, ChangeKind>();
+
+    if (pass.of !== state.snapshot) {
+      return marks;
+    }
+
+    pass.changes.valued.forEach((id) => marks.set(id, 'valued'));
+    pass.changes.relinked.forEach((id) => {
+      marks.set(id, 'relinked');
+      (pass.changes.destinations[id] ?? []).forEach((other) => {
+        if (!marks.has(other)) {
+          marks.set(other, 'relinked');
+        }
+      });
+    });
+    pass.changes.created.forEach((id) => marks.set(id, 'created'));
+
+    return marks;
+  }, [pass, state.snapshot]);
+
+  const highlightEdges = useMemo(
+    () => (pass.of !== state.snapshot ? new Set<string>() : new Set(pass.changes.edges)),
+    [pass, state.snapshot],
+  );
 
   const model = useMemo(
     () =>
       state.snapshot === null
         ? EMPTY_MODEL
         : toGraph(state.snapshot, theme, {
-            nullTerminals: view.nullTerminals,
+            nullTerminals: fileView.nullTerminals,
             pinned: layout === 'hierarchical',
+            frames: enabledFrames,
+            fields: fileView.fields,
+            highlight,
+            highlightEdges,
           }),
-    [state.snapshot, theme, view.nullTerminals, layout],
+    [
+      state.snapshot,
+      theme,
+      fileView.nullTerminals,
+      fileView.fields,
+      layout,
+      enabledFrames,
+      highlight,
+      highlightEdges,
+    ],
   );
 
-  const rootCount = useMemo(
-    () => model.frames.reduce((total, frame) => total + frame.roots.length, 0),
+  const counts = useMemo(
+    () =>
+      model.frames.reduce(
+        (total, frame) => ({
+          shown: total.shown + (frame.enabled ? frame.roots.length : 0),
+          total: total.total + frame.roots.length,
+        }),
+        { shown: 0, total: 0 },
+      ),
     [model],
   );
 
@@ -86,39 +254,229 @@ const App: React.FC = () => {
     [index, selectedId],
   );
 
+  const updateFile = (patch: Partial<FileView>): void => {
+    const next = { ...fileView, ...patch };
+    const file = state.file;
+
+    setEdits({ file, view: next });
+
+    if (file === null) {
+      return;
+    }
+
+    updatePanel({ views: { ...panelRef.current.views, [file]: next } });
+    sendSaveView(file, next);
+  };
+
+  const setFrameMode = (frameMode: FrameMode): void => {
+    updatePanel({ frames: null });
+    updateFile({ frameMode });
+  };
+
+  const toggleFrame = (id: string): void => {
+    const known = frameIds.map((entry) => entry.id);
+    const current = known.filter((entry) => enabledFrames.has(entry));
+
+    updatePanel({
+      frames: current.includes(id)
+        ? current.filter((entry) => entry !== id)
+        : known.filter((entry) => entry === id || current.includes(entry)),
+    });
+  };
+
+  const setFieldChoice = (type: string, choice: FieldChoice | undefined): void => {
+    const fields = { ...fileView.fields };
+
+    if (choice === undefined) {
+      delete fields[type];
+    } else {
+      fields[type] = choice;
+    }
+
+    updateFile({ fields });
+  };
+
   const select = useCallback(
     (id: string | null, reveal = false) => {
       const nodes = nodesRef.current;
       const network = networkRef.current;
+      const drawn = id === null ? null : (cardOfRef.current.get(id) ?? id);
 
-      if (id !== null && (nodes === null || nodes.get(id) === null)) {
+      if (drawn !== null && (nodes === null || nodes.get(drawn) === null)) {
         return;
       }
 
       selectedRef.current = id;
       setSelectedId(id);
-      updateView({ selectedId: id });
+      updatePanel({ selectedId: id });
 
       if (network === null) {
         return;
       }
 
-      if (id === null) {
+      if (drawn === null) {
         network.unselectAll();
         return;
       }
 
-      network.selectNodes([id]);
+      network.selectNodes([drawn]);
 
       if (reveal) {
-        network.focus(id, {
-          scale: network.getScale(),
-          animation: { duration: 300, easingFunction: 'easeInOutQuad' },
-        });
+        revealRef.current(drawn);
       }
     },
-    [updateView],
+    [updatePanel],
   );
+
+  const halt = useCallback(() => {
+    if (glideRef.current !== null) {
+      window.cancelAnimationFrame(glideRef.current);
+      glideRef.current = null;
+    }
+  }, []);
+
+  const glide = useCallback(
+    (to: Viewport) => {
+      const network = networkRef.current;
+      if (network === null) {
+        return;
+      }
+
+      halt();
+
+      const at = network.getViewPosition();
+      const from: Viewport = { x: at.x, y: at.y, scale: network.getScale() };
+
+      if (settled(from, to)) {
+        return;
+      }
+
+      const started = performance.now();
+
+      const step = () => {
+        const progress = (performance.now() - started) / CAMERA_DURATION;
+        const now = interpolate(from, to, progress);
+
+        network.moveTo({ position: { x: now.x, y: now.y }, scale: now.scale, animation: false });
+        setScale(now.scale);
+
+        if (progress >= 1) {
+          glideRef.current = null;
+          rememberRef.current();
+          return;
+        }
+
+        glideRef.current = window.requestAnimationFrame(step);
+      };
+
+      glideRef.current = window.requestAnimationFrame(step);
+    },
+    [halt],
+  );
+
+  const frameOn = useCallback(
+    (ids: string[], floor: number, lazy: boolean): void => {
+      const network = networkRef.current;
+      const box = containerRef.current;
+
+      if (network === null || box === null || ids.length === 0) {
+        return;
+      }
+
+      const placed = network.getPositions(ids);
+      const boxes = boxesRef.current;
+      const seats = ids
+        .map((id) => {
+          const at = placed[id];
+
+          return at === undefined ? null : { id, at, box: boxes.get(id) ?? EMPTY_BOX };
+        })
+        .filter((seat): seat is { id: string; at: Seat; box: Box } => seat !== null);
+
+      if (seats.length === 0) {
+        return;
+      }
+
+      const extent = {
+        left: Math.min(...seats.map((seat) => seat.at.x - seat.box.width / 2)),
+        right: Math.max(...seats.map((seat) => seat.at.x + seat.box.width / 2)),
+        top: Math.min(...seats.map((seat) => seat.at.y - seat.box.height / 2)),
+        bottom: Math.max(...seats.map((seat) => seat.at.y + seat.box.height / 2)),
+      };
+
+      glide(
+        cameraPlan(
+          extent,
+          { width: box.clientWidth, height: box.clientHeight },
+          network.getScale(),
+          {
+            fill: FOCUS_FILL,
+            floor,
+            ceiling: FOCUS_MAX_SCALE,
+            share: FOCUS_MIN_SHARE,
+            lazy,
+          },
+        ),
+      );
+    },
+    [glide],
+  );
+
+  const revealNodes = useCallback(
+    (ids: string[]) => frameOn(ids, FOCUS_MIN_SCALE, true),
+    [frameOn],
+  );
+
+  const fitAll = useCallback(() => {
+    const nodes = nodesRef.current;
+    if (nodes === null) {
+      return;
+    }
+
+    frameOn(nodes.getIds() as string[], FIT_MIN_SCALE, false);
+  }, [frameOn]);
+
+  const zoomBy = useCallback(
+    (direction: number) => {
+      const network = networkRef.current;
+      if (network === null) {
+        return;
+      }
+
+      const at = network.getViewPosition();
+      glide({
+        x: at.x,
+        y: at.y,
+        scale: steppedScale(network.getScale(), direction, ZOOM_STEP, MIN_SCALE, MAX_SCALE),
+      });
+    },
+    [glide],
+  );
+
+  const zoomTo = useCallback(
+    (next: number) => {
+      const network = networkRef.current;
+      if (network === null) {
+        return;
+      }
+
+      const at = network.getViewPosition();
+      glide({ x: at.x, y: at.y, scale: Math.min(Math.max(next, MIN_SCALE), MAX_SCALE) });
+    },
+    [glide],
+  );
+
+  useEffect(() => {
+    const body = bodyRef.current;
+    if (body === null || typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new ResizeObserver((entries) => setBodyWidth(entries[0].contentRect.width));
+    observer.observe(body);
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (containerRef.current === null) {
@@ -140,6 +498,84 @@ const App: React.FC = () => {
     );
     networkRef.current = network;
 
+    const beginTrail = (ids: string[]): void => {
+      const placed = network.getPositions();
+      const anchors = new Map<string, Seat>();
+      const followers = new Map<string, Seat>();
+
+      ids.forEach((id) => {
+        const at = placed[id];
+        const attached = followersRef.current.get(id) ?? [];
+
+        if (at === undefined || attached.length === 0) {
+          return;
+        }
+
+        anchors.set(id, { x: at.x, y: at.y });
+        attached.forEach((balloon) => {
+          const seat = placed[balloon];
+          if (seat !== undefined) {
+            followers.set(balloon, { x: seat.x, y: seat.y });
+          }
+        });
+      });
+
+      trailRef.current = anchors.size === 0 ? null : { anchors, followers };
+    };
+
+    const trail = (): void => {
+      const moving = trailRef.current;
+      if (moving === null) {
+        return;
+      }
+
+      const placed = network.getPositions();
+
+      moving.anchors.forEach((start, id) => {
+        const at = placed[id];
+        if (at === undefined) {
+          return;
+        }
+
+        (followersRef.current.get(id) ?? []).forEach((balloon) => {
+          const from = moving.followers.get(balloon);
+          if (from !== undefined) {
+            network.moveNode(balloon, from.x + at.x - start.x, from.y + at.y - start.y);
+          }
+        });
+      });
+    };
+
+    const remember = (): void => {
+      if (saveRef.current !== null) {
+        return;
+      }
+
+      saveRef.current = window.requestAnimationFrame(() => {
+        saveRef.current = null;
+        const at = network.getViewPosition();
+        writePanelState({
+          ...panelRef.current,
+          camera: { scale: network.getScale(), x: at.x, y: at.y },
+        });
+      });
+    };
+
+    rememberRef.current = remember;
+
+    network.on('dragStart', (params: { nodes: string[] }) => beginTrail(params.nodes));
+    network.on('dragging', trail);
+    network.on('dragEnd', () => {
+      trail();
+      trailRef.current = null;
+      remember();
+    });
+
+    network.on('zoom', () => {
+      setScale(network.getScale());
+      remember();
+    });
+
     network.on('click', (params: { nodes: string[]; edges: string[] }) => {
       if (params.nodes.length > 0) {
         select(params.nodes[0]);
@@ -157,7 +593,80 @@ const App: React.FC = () => {
       nodesRef.current = null;
       edgesRef.current = null;
     };
-  }, [select]);
+  }, [select, panelRef]);
+
+  useEffect(() => {
+    followRef.current = follow;
+    releaseRef.current = () => updateFile({ follow: false });
+  });
+
+  useEffect(() => {
+    revealRef.current = (id: string) => {
+      const network = networkRef.current;
+      if (network === null) {
+        return;
+      }
+
+      const at = network.getPositions([id])[id];
+      if (at === undefined) {
+        return;
+      }
+
+      glide({ x: at.x, y: at.y, scale: network.getScale() });
+    };
+  }, [glide]);
+
+  useEffect(() => {
+    const box = containerRef.current;
+    if (box === null) {
+      return;
+    }
+
+    const release = (): void => {
+      if (followRef.current) {
+        followRef.current = false;
+        releaseRef.current();
+      }
+    };
+
+    const wheel = (): void => {
+      halt();
+      release();
+    };
+
+    const down = (event: PointerEvent): void => {
+      halt();
+
+      const from = { x: event.clientX, y: event.clientY };
+
+      const move = (at: PointerEvent): void => {
+        if (Math.hypot(at.clientX - from.x, at.clientY - from.y) < GESTURE_SLOP) {
+          return;
+        }
+
+        release();
+        done();
+      };
+
+      const done = (): void => {
+        window.removeEventListener('pointermove', move, { capture: true });
+        window.removeEventListener('pointerup', done, { capture: true });
+        window.removeEventListener('pointercancel', done, { capture: true });
+      };
+
+      window.addEventListener('pointermove', move, { capture: true });
+      window.addEventListener('pointerup', done, { capture: true });
+      window.addEventListener('pointercancel', done, { capture: true });
+    };
+
+    box.addEventListener('pointerdown', down, { capture: true });
+    box.addEventListener('wheel', wheel, { capture: true, passive: true });
+
+    return () => {
+      box.removeEventListener('pointerdown', down, { capture: true });
+      box.removeEventListener('wheel', wheel, { capture: true });
+    };
+  }, [halt]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -179,22 +688,26 @@ const App: React.FC = () => {
       return;
     }
 
-    const choice = view.layoutChoice;
-    const key = choice === 'auto' ? `auto:${state.sessionId ?? ''}` : `manual:${choice}`;
+    const choice = fileView.layoutChoice;
+    const applied = choice === 'auto' ? `auto:${state.sessionId ?? ''}` : `manual:${choice}`;
+    const scope = `${state.file ?? ''}|${applied}`;
+    const kind = layoutForChoice(choice, visibleSnapshot(snapshot, enabledFrames));
+    const last = layoutAppliedRef.current;
 
-    if (layoutAppliedRef.current === key) {
-      return;
+    if (last !== null && last.scope === scope) {
+      if (choice !== 'auto' || !promotes(last.kind, kind)) {
+        return;
+      }
     }
 
-    const kind = layoutForChoice(choice, snapshot);
-    layoutAppliedRef.current = key;
+    layoutAppliedRef.current = { scope, kind };
     setLayout(kind);
     network.setOptions(layoutOptions(kind));
-  }, [state.snapshot, state.sessionId, view.layoutChoice]);
+  }, [state.snapshot, state.sessionId, state.file, fileView.layoutChoice, enabledFrames]);
 
   useEffect(() => {
     networkRef.current?.redraw();
-  }, [columnWidth, view.columnOpen]);
+  }, [columnWidth, panel.columnOpen]);
 
   useEffect(() => {
     const column = columnRef.current;
@@ -203,9 +716,9 @@ const App: React.FC = () => {
       return;
     }
 
-    column.scrollTop = viewRef.current.columnScroll;
+    column.scrollTop = panelRef.current.columnScroll;
     scrollRestoredRef.current = true;
-  }, [model, view.columnOpen, viewRef]);
+  }, [model, panel.columnOpen, panelRef]);
 
   useEffect(() => {
     const nodes = nodesRef.current;
@@ -214,9 +727,43 @@ const App: React.FC = () => {
       return;
     }
 
+    followersRef.current = rootFollowers(model);
+    cardOfRef.current = new Map(
+      model.cards.flatMap((card) => card.roots.map((root) => [root, card.id] as const)),
+    );
+    boxesRef.current = new Map(
+      model.canvas.nodes.map((node) => [node.id, labelBox(node.label, node.kind)] as const),
+    );
+
+    if (layout === null && model.canvas.nodes.length > 0) {
+      return;
+    }
+
+    const placed = networkRef.current?.getPositions() ?? {};
+    const authoritative = layout === 'hierarchical';
+    const relayout = layoutRenderedRef.current !== layout;
+    layoutRenderedRef.current = layout;
+
+    const payload = model.canvas.nodes.map((node) => {
+      if (node.x === undefined || node.y === undefined) {
+        return node;
+      }
+
+      const at = placed[node.id];
+      if (at === undefined || relayout) {
+        return node;
+      }
+
+      if (!authoritative) {
+        return withoutSeat(node);
+      }
+
+      return Math.hypot(at.x - node.x, at.y - node.y) > DRIFT_TOLERANCE ? node : withoutSeat(node);
+    });
+
     remove(edges, model.canvas.edges);
     remove(nodes, model.canvas.nodes);
-    nodes.update(model.canvas.nodes as Node[]);
+    nodes.update(payload as Node[]);
     edges.update(model.canvas.edges as Edge[]);
 
     const selected = selectedRef.current;
@@ -224,14 +771,68 @@ const App: React.FC = () => {
       return;
     }
 
-    if (nodes.get(selected) === null) {
+    const drawn = cardOfRef.current.get(selected) ?? selected;
+
+    if (nodes.get(drawn) === null) {
       selectedRef.current = null;
       setSelectedId(null);
       return;
     }
 
-    networkRef.current?.selectNodes([selected]);
-  }, [model]);
+    networkRef.current?.selectNodes([drawn]);
+  }, [model, layout]);
+
+  const aim = useMemo(() => {
+    const snapshot = state.snapshot;
+
+    if (snapshot === null || pass.of !== snapshot || pass.first) {
+      return [];
+    }
+
+    const drawn = new Set(model.canvas.nodes.map((node) => node.id));
+
+    return focusTarget(snapshot, pass.changes, drawn);
+  }, [state.snapshot, pass, model]);
+
+  const aimRef = useRef<string[]>(aim);
+
+  useEffect(() => {
+    aimRef.current = aim;
+  });
+
+  useEffect(() => {
+    const network = networkRef.current;
+    const snapshot = state.snapshot;
+
+    if (
+      network === null ||
+      snapshot === null ||
+      pass.of !== snapshot ||
+      model.canvas.nodes.length === 0
+    ) {
+      return;
+    }
+
+    if (pass.first) {
+      const saved = restoredRef.current ? null : panelRef.current.camera;
+      restoredRef.current = true;
+
+      if (saved === null) {
+        fitAll();
+        return;
+      }
+
+      network.moveTo({ position: { x: saved.x, y: saved.y }, scale: saved.scale });
+      setScale(saved.scale);
+      return;
+    }
+
+    if (!follow || aim.length === 0) {
+      return;
+    }
+
+    revealNodes(aim);
+  }, [model, layout, follow, aim, revealNodes, fitAll, pass, state.snapshot, panelRef]);
 
   const startDrag = useCallback(
     (event: React.MouseEvent) => {
@@ -250,20 +851,20 @@ const App: React.FC = () => {
         window.removeEventListener('mousemove', onMove);
         window.removeEventListener('mouseup', onUp);
         setDragWidth(null);
-        updateView({ columnWidth: clamp(up.clientX) });
+        updatePanel({ columnWidth: clamp(up.clientX) });
       };
 
       window.addEventListener('mousemove', onMove);
       window.addEventListener('mouseup', onUp);
     },
-    [updateView],
+    [updatePanel],
   );
 
   const onColumnScroll = useCallback(
     (event: React.UIEvent<HTMLElement>) => {
-      writeViewState({ ...viewRef.current, columnScroll: event.currentTarget.scrollTop });
+      writePanelState({ ...panelRef.current, columnScroll: event.currentTarget.scrollTop });
     },
-    [viewRef],
+    [panelRef],
   );
 
   const meta = state.snapshot === null ? null : state.snapshot.meta;
@@ -274,8 +875,10 @@ const App: React.FC = () => {
 
   return (
     <div style={styles.shell}>
-      <div style={styles.header}>
-        <h3 style={styles.title}>DbgAlgo - Estrutura de Dados</h3>
+      <div style={narrow ? { ...styles.header, ...styles.headerCompact } : styles.header}>
+        <h3 style={narrow ? { ...styles.title, ...styles.titleCompact } : styles.title}>
+          DbgAlgo - Estrutura de Dados
+        </h3>
       </div>
 
       {state.error !== null && <div style={styles.errorBanner}>{state.error}</div>}
@@ -300,6 +903,7 @@ const App: React.FC = () => {
           </div>
           <button
             type="button"
+            className="dbga-icon"
             style={styles.alarmClose}
             title="Fechar o aviso"
             onClick={() => setDismissed(signature)}
@@ -310,24 +914,37 @@ const App: React.FC = () => {
       )}
 
       <div ref={bodyRef} style={styles.body}>
-        {view.columnOpen && (
+        {panel.columnOpen && (
           <>
             <aside
               ref={columnRef}
-              style={{ ...styles.column, width: `${columnWidth}px` }}
+              style={
+                narrow
+                  ? { ...styles.column, ...styles.columnFloating, width: `${columnWidth}px` }
+                  : { ...styles.column, width: `${columnWidth}px` }
+              }
               onScroll={onColumnScroll}
             >
               <h4 style={styles.columnTitle}>Variáveis por frame</h4>
               {model.frames.map((frame) => (
                 <section key={frame.id} style={styles.frame}>
-                  <div style={styles.frameTitle}>
-                    {frame.function} #{frame.frameLevel}
-                  </div>
+                  <button
+                    type="button"
+                    className="dbga-check"
+                    aria-pressed={frame.enabled}
+                    title="Mostrar as variáveis deste frame no grafo"
+                    onClick={() => toggleFrame(frame.id)}
+                  >
+                    <span>{frame.enabled ? '☑' : '☐'}</span>
+                    <span>
+                      {frame.function} #{frame.frameLevel}
+                    </span>
+                  </button>
                   {frame.roots.map((root) => (
                     <RootRow
                       key={root.id}
                       root={root}
-                      active={root.canvasId !== null && root.canvasId === selectedId}
+                      active={root.canvasId !== null && root.id === selectedId}
                       onSelect={select}
                     />
                   ))}
@@ -337,9 +954,12 @@ const App: React.FC = () => {
             <div
               role="separator"
               aria-orientation="vertical"
-              style={
-                dragWidth === null ? styles.divider : { ...styles.divider, ...styles.dividerOn }
-              }
+              style={{
+                ...(dragWidth === null
+                  ? styles.divider
+                  : { ...styles.divider, ...styles.dividerOn }),
+                ...(narrow ? { ...styles.dividerFloating, left: `${columnWidth}px` } : {}),
+              }}
               onMouseDown={startDrag}
             />
           </>
@@ -348,15 +968,31 @@ const App: React.FC = () => {
         <div style={styles.canvas}>
           <div ref={containerRef} style={styles.network} />
           <ColumnButton
-            open={view.columnOpen}
-            count={rootCount}
-            onToggle={(columnOpen) => updateView({ columnOpen })}
+            open={panel.columnOpen}
+            shown={counts.shown}
+            total={counts.total}
+            offset={narrow && panel.columnOpen ? columnWidth + 13 : 0}
+            onToggle={(columnOpen) => updatePanel({ columnOpen })}
           />
           <Toolbar
-            choice={view.layoutChoice}
-            onChoice={(layoutChoice) => updateView({ layoutChoice })}
-            nullTerminals={view.nullTerminals}
-            onNullTerminals={(nullTerminals) => updateView({ nullTerminals })}
+            choice={fileView.layoutChoice}
+            onChoice={(layoutChoice) => updateFile({ layoutChoice })}
+            nullTerminals={fileView.nullTerminals}
+            onNullTerminals={(nullTerminals) => updateFile({ nullTerminals })}
+            frameMode={fileView.frameMode}
+            manual={manual}
+            onFrameMode={setFrameMode}
+            follow={follow}
+            onFollow={(next) => updateFile({ follow: next })}
+            compact={narrow}
+          />
+          <ZoomControl
+            scale={scale}
+            onStep={zoomBy}
+            onReset={() => zoomTo(1)}
+            onFit={fitAll}
+            onFocus={() => revealNodes(aimRef.current)}
+            canFocus={aim.length > 0}
           />
           {state.phase === 'idle' && (
             <div style={styles.placeholder}>
@@ -370,6 +1006,8 @@ const App: React.FC = () => {
             <InspectorOverlay
               inspection={inspection}
               embedded={embedded}
+              fields={fileView.fields}
+              onFieldChoice={setFieldChoice}
               onAnnotate={sendAnnotation}
               onSelect={(canvasId) => select(canvasId, true)}
               onClose={() => select(null)}
@@ -380,13 +1018,49 @@ const App: React.FC = () => {
 
       <footer style={styles.footer}>
         <span>{meta === null ? '—' : meta.debugger}</span>
-        <span>{meta === null || meta.debuggerVersion === null ? '—' : meta.debuggerVersion}</span>
-        <span>framesScanned {meta === null ? '—' : meta.framesScanned}</span>
-        <span>framesSkipped {meta === null ? '—' : meta.framesSkipped}</span>
+        {!narrow && (
+          <span>{meta === null || meta.debuggerVersion === null ? '—' : meta.debuggerVersion}</span>
+        )}
+        {!narrow && <span>framesScanned {meta === null ? '—' : meta.framesScanned}</span>}
+        {!narrow && <span>framesSkipped {meta === null ? '—' : meta.framesSkipped}</span>}
+        <span>
+          frames {enabledFrames.size}/{frameIds.length}
+        </span>
+        {!narrow && <span>{state.file ?? 'arquivo desconhecido'}</span>}
+        {!embedded && !narrow && <span>sem gravação nesta aba</span>}
         {quiet > 0 && <span>anotações de outro programa {quiet}</span>}
+        {highlight.size > 0 && <ChangeLegend changes={highlight} theme={theme} />}
         <span style={styles.footerLayout}>layout {layout ?? '—'}</span>
       </footer>
     </div>
+  );
+};
+
+const CHANGE_NAMES: Record<ChangeKind, string> = {
+  created: 'criado',
+  relinked: 'religado',
+  valued: 'valor alterado',
+};
+
+const ChangeLegend: React.FC<{ changes: Map<string, ChangeKind>; theme: Theme }> = ({
+  changes,
+  theme,
+}) => {
+  const tally = new Map<ChangeKind, number>();
+
+  changes.forEach((kind) => tally.set(kind, (tally.get(kind) ?? 0) + 1));
+
+  return (
+    <>
+      {(['created', 'relinked', 'valued'] as ChangeKind[])
+        .filter((kind) => tally.has(kind))
+        .map((kind) => (
+          <span key={kind} style={styles.legend}>
+            <span style={{ ...styles.legendDot, backgroundColor: theme.change[kind] }} />
+            {CHANGE_NAMES[kind]} {tally.get(kind)}
+          </span>
+        ))}
+    </>
   );
 };
 
@@ -411,12 +1085,9 @@ const RootRow: React.FC<{
   return (
     <button
       type="button"
-      style={
-        active
-          ? { ...styles.root, ...styles.rootButton, ...styles.rootActive }
-          : { ...styles.root, ...styles.rootButton }
-      }
-      onClick={() => onSelect(root.canvasId, true)}
+      className="dbga-row"
+      aria-pressed={active}
+      onClick={() => onSelect(root.id, true)}
     >
       {body}
     </button>
@@ -439,25 +1110,55 @@ function rootCell(root: FrameRoot): string {
   return root.canvasId !== null ? '→' : '';
 }
 
-function useViewState(): [
-  ViewState,
-  (patch: Partial<ViewState>) => void,
-  React.MutableRefObject<ViewState>,
-] {
-  const [view, setView] = useState<ViewState>(() => readViewState());
-  const viewRef = useRef<ViewState>(view);
+interface Seat {
+  x: number;
+  y: number;
+}
 
-  const update = useCallback((patch: Partial<ViewState>) => {
-    setView((current) => {
+interface Trail {
+  anchors: Map<string, Seat>;
+  followers: Map<string, Seat>;
+}
+
+interface History {
+  seen: GraphSnapshot | null;
+  previous: GraphSnapshot | null;
+  session: string | null;
+}
+
+interface Pass {
+  changes: NodeChanges;
+  first: boolean;
+  of: GraphSnapshot | null;
+}
+
+function withoutSeat(node: CanvasNode): CanvasNode {
+  const copy = { ...node };
+  delete copy.x;
+  delete copy.y;
+
+  return copy;
+}
+
+function usePanelState(): [
+  PanelState,
+  (patch: Partial<PanelState>) => void,
+  React.MutableRefObject<PanelState>,
+] {
+  const [panel, setPanel] = useState<PanelState>(() => readPanelState());
+  const panelRef = useRef<PanelState>(panel);
+
+  const update = useCallback((patch: Partial<PanelState>) => {
+    setPanel((current) => {
       const next = { ...current, ...patch };
-      viewRef.current = next;
-      writeViewState(next);
+      panelRef.current = next;
+      writePanelState(next);
 
       return next;
     });
   }, []);
 
-  return [view, update, viewRef];
+  return [panel, update, panelRef];
 }
 
 function useTheme(): Theme {
@@ -516,6 +1217,8 @@ const styles: Record<string, React.CSSProperties> = {
     borderBottom: '1px solid var(--vscode-editorWidget-border, #333)',
   },
   title: { margin: 0, textAlign: 'center' },
+  headerCompact: { padding: '4px 8px' },
+  titleCompact: { fontSize: '12px', fontWeight: 600, opacity: 0.8 },
   errorBanner: {
     padding: '6px 10px',
     backgroundColor: 'var(--vscode-inputValidation-errorBackground, #5a1d1d)',
@@ -543,18 +1246,10 @@ const styles: Record<string, React.CSSProperties> = {
   },
   alarmRows: { flex: 1, minWidth: 0 },
   alarmRow: { display: 'flex', gap: '8px', alignItems: 'baseline' },
-  alarmClose: {
-    alignSelf: 'flex-start',
-    background: 'none',
-    border: 'none',
-    padding: '0 2px',
-    cursor: 'pointer',
-    font: 'inherit',
-    color: 'inherit',
-  },
+  alarmClose: { alignSelf: 'flex-start' },
   alarmScope: { opacity: 0.7, minWidth: '80px' },
   alarmReference: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
-  body: { flex: 1, display: 'flex', minHeight: 0 },
+  body: { flex: 1, display: 'flex', minHeight: 0, position: 'relative' },
   column: {
     flex: '0 0 auto',
     overflowY: 'auto',
@@ -570,9 +1265,19 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: 'var(--vscode-editorWidget-border, #333)',
   },
   dividerOn: { backgroundColor: 'var(--vscode-focusBorder, #007fd4)' },
+  columnFloating: {
+    position: 'absolute',
+    zIndex: 2,
+    top: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
+    borderRight: '1px solid var(--vscode-editorWidget-border, #333)',
+    boxShadow: '2px 0 8px rgba(0, 0, 0, 0.35)',
+  },
+  dividerFloating: { position: 'absolute', zIndex: 3, top: 0, bottom: 0 },
   columnTitle: { margin: '0 0 8px 0', fontSize: '12px', opacity: 0.7 },
   frame: { marginBottom: '10px' },
-  frameTitle: { opacity: 0.7, marginBottom: '2px' },
   root: {
     display: 'flex',
     gap: '6px',
@@ -580,18 +1285,6 @@ const styles: Record<string, React.CSSProperties> = {
     whiteSpace: 'nowrap',
     alignItems: 'baseline',
   },
-  rootButton: {
-    width: '100%',
-    background: 'none',
-    border: 'none',
-    borderRadius: '2px',
-    padding: '0 2px 0 8px',
-    cursor: 'pointer',
-    font: 'inherit',
-    color: 'inherit',
-    textAlign: 'left',
-  },
-  rootActive: { backgroundColor: 'var(--vscode-list-activeSelectionBackground, #04395e)' },
   rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
   rootType: { opacity: 0.55, overflow: 'hidden', textOverflow: 'ellipsis' },
   rootValue: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
@@ -623,8 +1316,14 @@ const styles: Record<string, React.CSSProperties> = {
     whiteSpace: 'nowrap',
     overflowX: 'auto',
   },
-  footerLabel: { opacity: 0.7 },
   footerLayout: { marginLeft: 'auto' },
+  legend: { display: 'inline-flex', alignItems: 'center', gap: '4px' },
+  legendDot: {
+    display: 'inline-block',
+    width: '8px',
+    height: '8px',
+    borderRadius: '2px',
+  },
 };
 
 export default App;

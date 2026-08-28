@@ -6,9 +6,12 @@ export interface NodePalette {
   text: string;
 }
 
+export type ChangeKind = 'created' | 'relinked' | 'valued';
+
 export interface Theme {
   nodes: Record<CanvasNodeKind, NodePalette>;
   edge: { color: string; rootColor: string; label: string; labelBackground: string };
+  change: Record<ChangeKind, string>;
   fontFace: string;
 }
 
@@ -59,6 +62,14 @@ const EDGE_SLOTS: Record<keyof Theme['edge'], Slot> = {
   labelBackground: { token: '--vscode-editor-background', fallback: '#1e1e1e' },
 };
 
+const CHANGE_SLOT: Slot = { token: '--vscode-editor-foreground', fallback: '#d4d4d4' };
+
+const CHANGE_SLOTS: Record<ChangeKind, Slot> = {
+  created: CHANGE_SLOT,
+  relinked: CHANGE_SLOT,
+  valued: CHANGE_SLOT,
+};
+
 const FONT_SLOT: Slot = { token: '--vscode-editor-font-family', fallback: 'monospace' };
 
 const KINDS = Object.keys(NODE_SLOTS) as CanvasNodeKind[];
@@ -87,6 +98,11 @@ export function resolveTheme(read: TokenReader): Theme {
       rootColor: pick(EDGE_SLOTS.rootColor),
       label: pick(EDGE_SLOTS.label),
       labelBackground: pick(EDGE_SLOTS.labelBackground),
+    },
+    change: {
+      created: pick(CHANGE_SLOTS.created),
+      relinked: pick(CHANGE_SLOTS.relinked),
+      valued: pick(CHANGE_SLOTS.valued),
     },
     fontFace: pick(FONT_SLOT),
   };

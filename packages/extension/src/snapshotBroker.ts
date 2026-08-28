@@ -10,15 +10,19 @@ export class SnapshotBroker implements vscode.Disposable {
   private readonly channels: SnapshotChannel[] = [];
   private lastSnapshot: GraphSnapshot | undefined;
   private lastSessionId: string | undefined;
+  private lastFile: string | null = null;
   private sessionEnded = false;
+
+  constructor(private readonly readView: (file: string | null) => unknown = () => null) {}
 
   public register(channel: SnapshotChannel): void {
     this.channels.push(channel);
   }
 
-  public publish(snapshot: GraphSnapshot, session: vscode.DebugSession): void {
+  public publish(snapshot: GraphSnapshot, session: vscode.DebugSession, file: string | null): void {
     this.lastSnapshot = snapshot;
     this.lastSessionId = session.id;
+    this.lastFile = file;
     this.sessionEnded = false;
 
     this.broadcast({
@@ -27,6 +31,7 @@ export class SnapshotBroker implements vscode.Disposable {
       sessionId: session.id,
       snapshot,
     });
+    this.broadcast(this.viewMessage());
   }
 
   public publishSessionEnd(session: vscode.DebugSession): void {
@@ -58,6 +63,7 @@ export class SnapshotBroker implements vscode.Disposable {
       sessionId: this.lastSessionId,
       snapshot: this.lastSnapshot,
     });
+    channel.post(this.viewMessage());
 
     if (this.sessionEnded) {
       channel.post({
@@ -73,7 +79,17 @@ export class SnapshotBroker implements vscode.Disposable {
     this.channels.length = 0;
     this.lastSnapshot = undefined;
     this.lastSessionId = undefined;
+    this.lastFile = null;
     this.sessionEnded = false;
+  }
+
+  private viewMessage(): ExtensionMessage {
+    return {
+      v: PROTOCOL_VERSION,
+      type: 'view',
+      file: this.lastFile,
+      state: this.readView(this.lastFile),
+    };
   }
 
   private broadcast(message: ExtensionMessage): void {

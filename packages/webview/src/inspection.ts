@@ -7,7 +7,16 @@ import type {
   Value,
 } from 'dbga-contract';
 import { formatValue } from './format';
-import { nodeCanvasId, parseCanvasId, rootCanvasId, rootKey, terminalCanvasId } from './graphModel';
+import {
+  cardCanvasId,
+  nodeCanvasId,
+  parseCanvasId,
+  recordAutoNames,
+  recordNames,
+  rootCanvasId,
+  rootKey,
+  terminalCanvasId,
+} from './graphModel';
 
 export interface Entry {
   label: string;
@@ -42,6 +51,9 @@ export interface NodeInspection {
   space: 'node';
   canvasId: string;
   title: string;
+  recordType: string | null;
+  labelNames: string[];
+  labelAuto: string[];
   address: string;
   entries: Entry[];
   fields: FieldRow[];
@@ -70,7 +82,22 @@ export interface RootInspection {
   nodeCanvasId: string | null;
 }
 
-export type Inspection = NodeInspection | TerminalInspection | RootInspection;
+export interface CardVariable {
+  canvasId: string;
+  name: string;
+  frame: string;
+  type: string;
+  status: Root['status'];
+}
+
+export interface CardInspection {
+  space: 'card';
+  canvasId: string;
+  nodeCanvasId: string;
+  variables: CardVariable[];
+}
+
+export type Inspection = NodeInspection | TerminalInspection | RootInspection | CardInspection;
 
 export interface InspectionIndex {
   nodes: Map<string, GraphNode>;
@@ -127,6 +154,10 @@ export function inspect(index: InspectionIndex, canvasId: string): Inspection | 
 
   if (parsed.space === 'terminal') {
     return inspectTerminal(index, parsed.address);
+  }
+
+  if (parsed.space === 'card') {
+    return inspectCard(index, parsed.address);
   }
 
   const root = index.roots.get(parsed.address);
@@ -202,6 +233,9 @@ function inspectNode(index: InspectionIndex, node: GraphNode): NodeInspection {
     space: 'node',
     canvasId: nodeCanvasId(node.id),
     title: nodeTitle(node),
+    recordType: node.kind === 'record' ? node.type : null,
+    labelNames: node.kind === 'record' ? recordNames(node) : [],
+    labelAuto: node.kind === 'record' ? recordAutoNames(node) : [],
     address: node.id,
     entries,
     fields,
@@ -291,6 +325,35 @@ function inspectTerminal(index: InspectionIndex, address: string): TerminalInspe
     originAddress: address,
     originType: origin === undefined ? '' : nodeTitle(origin),
     fields: edges.filter((edge) => edge.to === null).map((edge) => edge.field),
+  };
+}
+
+function inspectCard(index: InspectionIndex, node: string): CardInspection | null {
+  const variables: CardVariable[] = [];
+
+  index.roots.forEach((root) => {
+    if (root.node !== node) {
+      return;
+    }
+
+    variables.push({
+      canvasId: rootCanvasId(root),
+      name: root.name,
+      frame: `${root.function} #${root.frameLevel}`,
+      type: root.type,
+      status: root.status,
+    });
+  });
+
+  if (variables.length === 0) {
+    return null;
+  }
+
+  return {
+    space: 'card',
+    canvasId: cardCanvasId(node),
+    nodeCanvasId: nodeCanvasId(node),
+    variables,
   };
 }
 

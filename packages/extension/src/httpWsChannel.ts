@@ -166,6 +166,7 @@ export class HttpWsChannel implements SnapshotChannel {
           this.onReady(single(socket));
           return;
         case 'annotate':
+        case 'saveView':
           return;
       }
     });

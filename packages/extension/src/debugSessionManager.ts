@@ -21,7 +21,11 @@ export class DebugSessionManager implements vscode.Disposable {
   constructor(
     private readonly invoker: ExtractorInvoker,
     private readonly state: vscode.Memento,
-    private readonly onSnapshot: (snapshot: GraphSnapshot, session: vscode.DebugSession) => void,
+    private readonly onSnapshot: (
+      snapshot: GraphSnapshot,
+      session: vscode.DebugSession,
+      file: string | null,
+    ) => void,
     private readonly onError: (message: string, session: vscode.DebugSession) => void,
   ) {
     this.disposables.push(
@@ -99,14 +103,14 @@ export class DebugSessionManager implements vscode.Disposable {
     this.extractingSessions.add(session.id);
 
     try {
-      const snapshot = await this.invoker.invoke(session, type, {
+      const extraction = await this.invoker.invoke(session, type, {
         importModule: firstPauseThisSession,
         options: readExtractionOptions(),
         pid,
         threadId,
       });
       this.importedSessions.add(session.id);
-      this.onSnapshot(snapshot, session);
+      this.onSnapshot(extraction.snapshot, session, extraction.file);
     } catch (err) {
       if (err instanceof DebuggerPythonMissingError) {
         this.unusableSessions.add(session.id);
