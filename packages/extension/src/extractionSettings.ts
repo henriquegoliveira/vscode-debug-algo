@@ -3,6 +3,7 @@ import { ExtractionOptions } from './extractorInvoker';
 
 const SECTION = 'dbgAlgo';
 const DYNAMIC_ARRAYS = 'dynamicArrays';
+const VIEW = 'view';
 
 export function readExtractionOptions(): ExtractionOptions {
   const configuration = vscode.workspace.getConfiguration(SECTION);
@@ -42,4 +43,59 @@ export async function appendDynamicArray(annotation: string): Promise<void> {
     [...current, annotation],
     vscode.ConfigurationTarget.Workspace,
   );
+}
+
+export function readFileView(file: string | null): unknown {
+  if (file === null) {
+    return null;
+  }
+
+  return viewBucket()[file] ?? null;
+}
+
+const WRITE_DELAY = 400;
+
+const pending = new Map<string, unknown>();
+let timer: ReturnType<typeof setTimeout> | undefined;
+
+export function saveFileView(file: string, state: unknown): void {
+  pending.set(file, state);
+
+  if (timer !== undefined) {
+    clearTimeout(timer);
+  }
+
+  timer = setTimeout(() => {
+    timer = undefined;
+    void flushFileViews();
+  }, WRITE_DELAY);
+}
+
+export async function flushFileViews(): Promise<void> {
+  if (pending.size === 0) {
+    return;
+  }
+
+  const batch = Object.fromEntries(pending);
+  pending.clear();
+
+  try {
+    await vscode.workspace
+      .getConfiguration(SECTION)
+      .update(VIEW, { ...viewBucket(), ...batch }, vscode.ConfigurationTarget.Workspace);
+  } catch (error) {
+    void vscode.window.showErrorMessage(
+      `DbgAlgo não conseguiu guardar a configuração da visualização: ${String(error)}`,
+    );
+  }
+}
+
+function viewBucket(): Record<string, unknown> {
+  const stored = vscode.workspace.getConfiguration(SECTION).get<unknown>(VIEW);
+
+  if (typeof stored !== 'object' || stored === null || Array.isArray(stored)) {
+    return {};
+  }
+
+  return stored as Record<string, unknown>;
 }

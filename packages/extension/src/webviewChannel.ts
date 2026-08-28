@@ -9,13 +9,24 @@ export class WebviewChannel implements SnapshotChannel {
   constructor(
     private readonly panel: VisualizerPanel,
     onReady: (channel: SnapshotChannel) => void,
+    onAnnotate: (annotation: string) => void,
+    onSaveView: (file: string, state: unknown) => void,
   ) {
     this.subscription = panel.onDidReceiveMessage((message) => {
       if (!isWebviewMessage(message)) {
         return;
       }
-      if (message.type === 'ready') {
-        onReady(this);
+
+      switch (message.type) {
+        case 'ready':
+          onReady(this);
+          return;
+        case 'annotate':
+          onAnnotate(message.annotation);
+          return;
+        case 'saveView':
+          onSaveView(message.file, message.state);
+          return;
       }
     });
   }

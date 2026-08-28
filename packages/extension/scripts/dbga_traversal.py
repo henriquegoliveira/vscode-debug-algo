@@ -440,7 +440,22 @@ def visit(builder, frontier, adapter, address, type_info, depth, config, reason=
     if type_info is not None and type_info.category == dbga_adapter.ARRAY:
         _visit_array(builder, frontier, adapter, address, type_info, depth, config)
         return
+    if type_info is not None and type_info.category in dbga_adapter.SCALAR_CATEGORIES:
+        _visit_scalar(builder, adapter, address, type_info)
+        return
     builder.opaque_node(address, "notExpanded", None if type_info is None else type_info.name)
+
+
+def _visit_scalar(builder, adapter, address, type_info):
+    try:
+        value = _scalar_value(adapter, adapter.object_at(address, type_info), type_info)
+    except Exception:
+        value = None
+
+    if value is not None and value.get("t") == "opaque":
+        value = None
+
+    builder.opaque_node(address, "notExpanded", type_info.name, value=value)
 
 
 def _visit_record(builder, frontier, adapter, address, type_info, depth, config):

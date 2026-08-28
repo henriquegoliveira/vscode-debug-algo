@@ -4,7 +4,7 @@ import { DebugSessionManager } from './debugSessionManager';
 import { ExtractorInvoker } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
-import { appendDynamicArray } from './extractionSettings';
+import { appendDynamicArray, readFileView, saveFileView } from './extractionSettings';
 import { MISSING_BUNDLE_MESSAGE, VisualizerPanel } from './visualizerPanel';
 import { SnapshotBroker } from './snapshotBroker';
 import { WebviewChannel } from './webviewChannel';
@@ -30,13 +30,20 @@ export class ExtensionController {
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
     this.panel = new VisualizerPanel(context.extensionUri);
 
-    this.broker = new SnapshotBroker();
-    this.broker.register(new WebviewChannel(this.panel, (channel) => this.broker.replay(channel)));
+    this.broker = new SnapshotBroker(readFileView);
+    this.broker.register(
+      new WebviewChannel(
+        this.panel,
+        (channel) => this.broker.replay(channel),
+        (annotation) => void appendDynamicArray(annotation),
+        (file, state) => saveFileView(file, state),
+      ),
+    );
 
     this.sessionManager = new DebugSessionManager(
       this.invoker,
       context.globalState,
-      (snapshot, session) => this.broker.publish(snapshot, session),
+      (snapshot, session, file) => this.broker.publish(snapshot, session, file),
       (message, session) => this.broker.publishError(message, session),
     );
   }

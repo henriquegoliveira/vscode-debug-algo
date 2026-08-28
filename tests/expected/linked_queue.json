@@ -164,7 +164,12 @@
       "kind": "opaque",
       "id": "#8",
       "reason": "notExpanded",
-      "type": "int"
+      "type": "int",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
     },
     {
       "kind": "record",

@@ -156,6 +156,7 @@ export interface OpaqueNode {
     | 'depthLimit'
     | 'error';
   detail?: string | null;
+  value?: Value | null;
 }
 export interface GraphEdge {
   from: Address;

@@ -5,34 +5,86 @@ import {
   isExtensionMessage,
 } from 'dbga-contract';
 
-declare function acquireVsCodeApi(): { postMessage(message: unknown): void };
+declare function acquireVsCodeApi(): VsCodeApi;
+
+export interface VsCodeApi {
+  postMessage(message: unknown): void;
+  getState(): unknown;
+  setState(state: unknown): void;
+}
 
 const TOKEN_PARAMETER = 'token';
 
-export function connectSnapshotChannel(): void {
-  if (typeof acquireVsCodeApi === 'function') {
-    connectOverVsCode();
-    return;
+let acquired: VsCodeApi | undefined;
+
+export type SnapshotListener = (message: ExtensionMessage) => void;
+
+export function isEmbedded(): boolean {
+  return typeof acquireVsCodeApi === 'function';
+}
+
+export function hostApi(): VsCodeApi | undefined {
+  if (!isEmbedded()) {
+    return undefined;
   }
 
-  connectOverWebSocket();
+  if (acquired === undefined) {
+    acquired = acquireVsCodeApi();
+  }
+
+  return acquired;
 }
 
-function connectOverVsCode(): void {
-  const vscodeApi = acquireVsCodeApi();
+export function sendAnnotation(annotation: string): boolean {
+  const api = hostApi();
+  if (api === undefined) {
+    return false;
+  }
 
-  window.addEventListener('message', (event: MessageEvent<unknown>) => {
-    deliver(event.data);
-  });
+  const message: WebviewMessage = { v: PROTOCOL_VERSION, type: 'annotate', annotation };
+  api.postMessage(message);
 
-  vscodeApi.postMessage(ready());
+  return true;
 }
 
-function connectOverWebSocket(): void {
+export function sendSaveView(file: string, state: unknown): boolean {
+  const api = hostApi();
+  if (api === undefined) {
+    return false;
+  }
+
+  const message: WebviewMessage = { v: PROTOCOL_VERSION, type: 'saveView', file, state };
+  api.postMessage(message);
+
+  return true;
+}
+
+export function connectSnapshotChannel(onMessage: SnapshotListener): () => void {
+  if (isEmbedded()) {
+    return connectOverVsCode(onMessage);
+  }
+
+  return connectOverWebSocket(onMessage);
+}
+
+function connectOverVsCode(onMessage: SnapshotListener): () => void {
+  const api = hostApi() as VsCodeApi;
+
+  const listener = (event: MessageEvent<unknown>): void => {
+    deliver(event.data, onMessage);
+  };
+
+  window.addEventListener('message', listener);
+  api.postMessage(ready());
+
+  return () => window.removeEventListener('message', listener);
+}
+
+function connectOverWebSocket(onMessage: SnapshotListener): () => void {
   const socket = new WebSocket(webSocketUrl());
 
   socket.addEventListener('message', (event: MessageEvent<string>) => {
-    deliver(parse(event.data));
+    deliver(parse(event.data), onMessage);
   });
 
   socket.addEventListener('open', () => {
@@ -46,6 +98,8 @@ function connectOverWebSocket(): void {
   socket.addEventListener('error', () => {
     console.log('[DbgAlgo] falha na conexao com o servidor');
   });
+
+  return () => socket.close();
 }
 
 function webSocketUrl(): string {
@@ -67,27 +121,10 @@ function parse(payload: string): unknown {
   }
 }
 
-function deliver(payload: unknown): void {
+function deliver(payload: unknown, onMessage: SnapshotListener): void {
   if (!isExtensionMessage(payload)) {
     return;
   }
 
-  report(payload);
-}
-
-function report(message: ExtensionMessage): void {
-  if (message.type === 'snapshot') {
-    const { roots, nodes, edges } = message.snapshot;
-    console.log(
-      `[DbgAlgo] snapshot sessao=${message.sessionId} roots=${roots.length} nodes=${nodes.length} edges=${edges.length}`,
-    );
-    return;
-  }
-
-  if (message.type === 'error') {
-    console.log(`[DbgAlgo] error sessao=${message.sessionId}: ${message.message}`);
-    return;
-  }
-
-  console.log(`[DbgAlgo] sessionEnd sessao=${message.sessionId}`);
+  onMessage(payload);
 }

@@ -31,9 +31,32 @@ export interface ErrorMessage {
   id?: string;
 }
 
-export type WebviewMessage = ReadyMessage;
+export interface ViewMessage {
+  v: typeof PROTOCOL_VERSION;
+  type: 'view';
+  file: string | null;
+  state: unknown;
+  id?: string;
+}
 
-export type ExtensionMessage = SnapshotMessage | SessionEndMessage | ErrorMessage;
+export interface AnnotateMessage {
+  v: typeof PROTOCOL_VERSION;
+  type: 'annotate';
+  annotation: string;
+  id?: string;
+}
+
+export interface SaveViewMessage {
+  v: typeof PROTOCOL_VERSION;
+  type: 'saveView';
+  file: string;
+  state: unknown;
+  id?: string;
+}
+
+export type WebviewMessage = ReadyMessage | AnnotateMessage | SaveViewMessage;
+
+export type ExtensionMessage = SnapshotMessage | SessionEndMessage | ErrorMessage | ViewMessage;
 
 interface Envelope {
   v: unknown;
@@ -41,6 +64,9 @@ interface Envelope {
   sessionId?: unknown;
   snapshot?: unknown;
   message?: unknown;
+  annotation?: unknown;
+  file?: unknown;
+  state?: unknown;
   id?: unknown;
 }
 
@@ -50,7 +76,18 @@ export function isWebviewMessage(value: unknown): value is WebviewMessage {
     return false;
   }
 
-  return envelope.type === 'ready';
+  switch (envelope.type) {
+    case 'ready':
+      return true;
+    case 'annotate':
+      return typeof envelope.annotation === 'string' && envelope.annotation.length > 0;
+    case 'saveView':
+      return (
+        typeof envelope.file === 'string' && envelope.file.length > 0 && isObject(envelope.state)
+      );
+    default:
+      return false;
+  }
 }
 
 export function isExtensionMessage(value: unknown): value is ExtensionMessage {
@@ -68,6 +105,11 @@ export function isExtensionMessage(value: unknown): value is ExtensionMessage {
       return (
         (typeof envelope.sessionId === 'string' || envelope.sessionId === null) &&
         typeof envelope.message === 'string'
+      );
+    case 'view':
+      return (
+        (typeof envelope.file === 'string' || envelope.file === null) &&
+        (isObject(envelope.state) || envelope.state === null)
       );
     default:
       return false;

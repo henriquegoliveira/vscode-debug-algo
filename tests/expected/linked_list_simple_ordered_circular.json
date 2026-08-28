@@ -10,27 +10,26 @@
     "framesSkipped": 0,
     "observedTypes": [
       {
-        "type": "DoublyNode",
+        "type": "CircularNode",
         "pointerFields": [
-          "previous",
           "next"
         ],
         "scalarFields": [
           "value"
         ],
-        "count": 6,
-        "maxDegree": 2
+        "count": 5,
+        "maxDegree": 1
       }
     ],
     "errors": []
   },
   "roots": [
     {
-      "name": "list",
-      "function": "removal",
+      "name": "curr",
+      "function": "remove_node",
       "frameLevel": 0,
-      "origin": "parameter",
-      "type": "DoublyNode *",
+      "origin": "local",
+      "type": "CircularNode *",
       "category": "pointer",
       "address": "#0",
       "target": "#1",
@@ -39,47 +38,34 @@
       "status": "ok"
     },
     {
-      "name": "nextNode",
-      "function": "removal",
+      "name": "head_ref",
+      "function": "remove_node",
       "frameLevel": 0,
-      "origin": "local",
-      "type": "DoublyNode *",
+      "origin": "parameter",
+      "type": "CircularNode **",
       "category": "pointer",
       "address": "#2",
       "target": "#3",
-      "indirections": 1,
-      "node": null,
-      "status": "null"
-    },
-    {
-      "name": "nodeToRemove",
-      "function": "removal",
-      "frameLevel": 0,
-      "origin": "local",
-      "type": "DoublyNode *",
-      "category": "pointer",
-      "address": "#4",
-      "target": "#5",
-      "indirections": 1,
-      "node": "#5",
+      "indirections": 2,
+      "node": "#4",
       "status": "ok"
     },
     {
-      "name": "previousNode",
-      "function": "removal",
+      "name": "prev",
+      "function": "remove_node",
       "frameLevel": 0,
       "origin": "local",
-      "type": "DoublyNode *",
+      "type": "CircularNode *",
       "category": "pointer",
-      "address": "#6",
-      "target": "#3",
+      "address": "#5",
+      "target": "#6",
       "indirections": 1,
-      "node": null,
-      "status": "null"
+      "node": "#6",
+      "status": "ok"
     },
     {
-      "name": "valueToRemove",
-      "function": "removal",
+      "name": "value",
+      "function": "remove_node",
       "frameLevel": 0,
       "origin": "parameter",
       "type": "int",
@@ -96,16 +82,16 @@
       }
     },
     {
-      "name": "list",
+      "name": "head",
       "function": "main",
       "frameLevel": 1,
       "origin": "local",
-      "type": "DoublyNode *",
+      "type": "CircularNode *",
       "category": "pointer",
-      "address": "#8",
-      "target": "#1",
+      "address": "#3",
+      "target": "#4",
       "indirections": 1,
-      "node": "#1",
+      "node": "#4",
       "status": "ok"
     }
   ],
@@ -113,28 +99,9 @@
     {
       "kind": "record",
       "id": "#1",
-      "type": "DoublyNode",
+      "type": "CircularNode",
       "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "value",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 0,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#5",
-      "type": "DoublyNode",
-      "aggregate": "struct",
-      "sizeBytes": 24,
+      "sizeBytes": 16,
       "fields": [
         {
           "name": "value",
@@ -150,10 +117,10 @@
     },
     {
       "kind": "record",
-      "id": "#9",
-      "type": "DoublyNode",
+      "id": "#4",
+      "type": "CircularNode",
       "aggregate": "struct",
-      "sizeBytes": 24,
+      "sizeBytes": 16,
       "fields": [
         {
           "name": "value",
@@ -169,29 +136,10 @@
     },
     {
       "kind": "record",
-      "id": "#10",
-      "type": "DoublyNode",
+      "id": "#6",
+      "type": "CircularNode",
       "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "value",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 40,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#11",
-      "type": "DoublyNode",
-      "aggregate": "struct",
-      "sizeBytes": 24,
+      "sizeBytes": 16,
       "fields": [
         {
           "name": "value",
@@ -207,10 +155,29 @@
     },
     {
       "kind": "record",
-      "id": "#12",
-      "type": "DoublyNode",
+      "id": "#8",
+      "type": "CircularNode",
       "aggregate": "struct",
-      "sizeBytes": 24,
+      "sizeBytes": 16,
+      "fields": [
+        {
+          "name": "value",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#9",
+      "type": "CircularNode",
+      "aggregate": "struct",
+      "sizeBytes": 16,
       "fields": [
         {
           "name": "value",
@@ -229,74 +196,32 @@
     {
       "from": "#1",
       "field": "next",
-      "to": "#9",
-      "type": "DoublyNode *"
+      "to": "#8",
+      "type": "CircularNode *"
     },
     {
-      "from": "#1",
-      "field": "previous",
-      "to": null,
-      "type": "DoublyNode *"
-    },
-    {
-      "from": "#5",
+      "from": "#4",
       "field": "next",
-      "to": "#10",
-      "type": "DoublyNode *"
+      "to": "#6",
+      "type": "CircularNode *"
     },
     {
-      "from": "#5",
-      "field": "previous",
-      "to": "#11",
-      "type": "DoublyNode *"
-    },
-    {
-      "from": "#9",
+      "from": "#6",
       "field": "next",
-      "to": "#11",
-      "type": "DoublyNode *"
-    },
-    {
-      "from": "#9",
-      "field": "previous",
       "to": "#1",
-      "type": "DoublyNode *"
+      "type": "CircularNode *"
     },
     {
-      "from": "#10",
+      "from": "#8",
       "field": "next",
-      "to": "#12",
-      "type": "DoublyNode *"
-    },
-    {
-      "from": "#10",
-      "field": "previous",
-      "to": "#5",
-      "type": "DoublyNode *"
-    },
-    {
-      "from": "#11",
-      "field": "next",
-      "to": "#5",
-      "type": "DoublyNode *"
-    },
-    {
-      "from": "#11",
-      "field": "previous",
       "to": "#9",
-      "type": "DoublyNode *"
+      "type": "CircularNode *"
     },
     {
-      "from": "#12",
+      "from": "#9",
       "field": "next",
-      "to": null,
-      "type": "DoublyNode *"
-    },
-    {
-      "from": "#12",
-      "field": "previous",
-      "to": "#10",
-      "type": "DoublyNode *"
+      "to": "#4",
+      "type": "CircularNode *"
     }
   ]
 }

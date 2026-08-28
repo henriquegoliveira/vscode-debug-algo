@@ -18,6 +18,144 @@
         width: 100vw;
         height: 100vh;
       }
+      .dbga-row,
+      .dbga-chip,
+      .dbga-square,
+      .dbga-icon,
+      .dbga-zoom,
+      .dbga-check {
+        font: inherit;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      .dbga-row:focus,
+      .dbga-chip:focus,
+      .dbga-square:focus,
+      .dbga-icon:focus,
+      .dbga-zoom:focus,
+      .dbga-check:focus {
+        outline: none;
+      }
+      .dbga-row:focus-visible,
+      .dbga-chip:focus-visible,
+      .dbga-square:focus-visible,
+      .dbga-icon:focus-visible,
+      .dbga-zoom:focus-visible,
+      .dbga-check:focus-visible {
+        outline: 1px solid var(--vscode-focusBorder, #007fd4);
+        outline-offset: -1px;
+      }
+      .dbga-row {
+        display: flex;
+        gap: 6px;
+        align-items: baseline;
+        width: 100%;
+        padding: 0 2px 0 8px;
+        border: none;
+        background: none;
+        color: inherit;
+        text-align: left;
+        white-space: nowrap;
+      }
+      .dbga-row:hover {
+        background-color: var(--vscode-list-hoverBackground, #2a2d2e);
+      }
+      .dbga-row[aria-pressed='true'] {
+        background-color: var(--vscode-list-activeSelectionBackground, #04395e);
+        color: var(--vscode-list-activeSelectionForeground, #ffffff);
+      }
+      .dbga-row[aria-pressed='true'] > span {
+        color: inherit;
+        opacity: 1;
+      }
+      .dbga-chip {
+        padding: 2px 10px;
+        border: none;
+        background: var(--vscode-button-secondaryBackground, #3a3d41);
+        color: var(--vscode-button-secondaryForeground, #cccccc);
+        font-family: monospace;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+      }
+      .dbga-chip:hover {
+        background: var(--vscode-button-secondaryHoverBackground, #45494e);
+      }
+      .dbga-chip[aria-pressed='true'] {
+        background: var(--vscode-charts-green, #2ea043);
+        color: var(--vscode-editor-background, #101010);
+        font-weight: 700;
+      }
+      .dbga-square {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        color: var(--vscode-foreground, #cccccc);
+        font-family: monospace;
+      }
+      .dbga-square:hover {
+        background-color: var(--vscode-list-hoverBackground, #2a2d2e);
+      }
+      .dbga-square[aria-pressed='true'] {
+        background-color: var(--vscode-button-background, #0e639c);
+        border-color: var(--vscode-button-background, #0e639c);
+        color: var(--vscode-button-foreground, #ffffff);
+      }
+      .dbga-zoom {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 26px;
+        height: 24px;
+        padding: 0 4px;
+        border: none;
+        background: none;
+        color: var(--vscode-foreground, #cccccc);
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .dbga-zoom:hover:not(:disabled) {
+        background-color: var(--vscode-toolbar-hoverBackground, #3a3d41);
+      }
+      .dbga-zoom:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .dbga-zoom-label {
+        min-width: 46px;
+        letter-spacing: 0.5px;
+      }
+      .dbga-icon {
+        padding: 0 3px;
+        border: none;
+        background: none;
+        color: inherit;
+      }
+      .dbga-icon:hover {
+        background-color: var(--vscode-toolbar-hoverBackground, #3a3d41);
+      }
+      .dbga-check {
+        display: flex;
+        gap: 6px;
+        align-items: baseline;
+        width: 100%;
+        padding: 0 4px;
+        border: none;
+        background: none;
+        color: inherit;
+        text-align: left;
+      }
+      .dbga-check:hover {
+        background-color: var(--vscode-list-hoverBackground, #2a2d2e);
+      }
+      .dbga-check[aria-pressed='true'] {
+        color: var(--vscode-charts-green, #89d185);
+      }
+      .dbga-check:disabled,
+      .dbga-chip:disabled {
+        cursor: default;
+        opacity: 0.5;
+      }
     </style>
   </head>
   <body>

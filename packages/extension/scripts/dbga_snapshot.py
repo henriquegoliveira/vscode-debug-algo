@@ -204,12 +204,14 @@ class SnapshotBuilder(object):
         }
         return self._register(node)
 
-    def opaque_node(self, address, reason, type_name=None, detail=None):
+    def opaque_node(self, address, reason, type_name=None, detail=None, value=None):
         node = {"kind": "opaque", "id": to_address(address), "reason": reason}
         if type_name is not None:
             node["type"] = type_name
         if detail is not None:
             node["detail"] = detail
+        if value is not None:
+            node["value"] = value
         return self._register(node)
 
     def edge(self, source, name, target, type_name=None):

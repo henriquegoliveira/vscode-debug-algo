@@ -414,7 +414,11 @@
       "kind": "opaque",
       "id": "#6",
       "reason": "notExpanded",
-      "type": "double"
+      "type": "double",
+      "value": {
+        "t": "real",
+        "v": 0.25
+      }
     },
     {
       "kind": "array",
