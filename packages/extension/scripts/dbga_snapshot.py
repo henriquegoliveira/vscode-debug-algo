@@ -6,6 +6,9 @@ import traceback
 
 SCHEMA_VERSION = 2
 
+REPLACE_ATTEMPTS = 5
+REPLACE_BACKOFF_SECONDS = 0.01
+
 MASK64 = 0xFFFFFFFFFFFFFFFF
 
 JSON_SAFE_INT = 2**53
@@ -318,6 +321,17 @@ def minimal_snapshot(debugger_name, debugger_version, exception):
     }
 
 
+def _replace_with_retry(tmp_path, path):
+    for attempt in range(REPLACE_ATTEMPTS):
+        try:
+            os.replace(tmp_path, path)
+            return
+        except OSError:
+            if attempt == REPLACE_ATTEMPTS - 1:
+                raise
+            time.sleep(REPLACE_BACKOFF_SECONDS * (2**attempt))
+
+
 def write_atomic(path, snapshot):
     directory = os.path.dirname(path)
     fd, tmp_path = tempfile.mkstemp(dir=directory, prefix=".dbg-algo-snapshot-", suffix=".tmp")
@@ -325,7 +339,7 @@ def write_atomic(path, snapshot):
     try:
         with os.fdopen(fd, "w") as handle:
             json.dump(snapshot, handle, allow_nan=False)
-        os.replace(tmp_path, path)
+        _replace_with_retry(tmp_path, path)
     except Exception:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)

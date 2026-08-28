@@ -1,10 +1,13 @@
 import collections
+import sys
 import time
 
 import dbga_adapter
 import dbga_snapshot
 
-ZERO_PAGE = 0x1000
+WINDOWS = sys.platform.startswith(("win32", "cygwin", "msys"))
+
+ZERO_PAGE = 0x10000 if WINDOWS else 0x1000
 PAGE_SIZE = 0x1000
 MAX_OBJECT_SIZE = 1 << 20
 MAX_ANNOTATED_LENGTH = 1 << 20

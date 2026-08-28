@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
-import { readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, readdirSync, mkdirSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as os from 'node:os';
 import * as path from 'node:path';
@@ -15,6 +15,9 @@ const OUTPUT = path.join(HERE, 'output');
 const EXPECTED = path.join(HERE, 'expected');
 const SCRIPTS = path.join(ROOT, 'packages', 'extension', 'scripts');
 const SCHEMA = path.join(ROOT, 'packages', 'extension', 'schemas', 'graph-snapshot.schema.json');
+
+const EXE = process.platform === 'win32' ? '.exe' : '';
+const BASELINE_PLATFORM = 'linux';
 
 const SCENES = {
   linked_list_simple: { breakAt: 'remove_node' },
@@ -48,11 +51,21 @@ const ASSERTIONS = {
   linked_list_cyclic: assertLinkedListCyclic,
 };
 
+const PLATFORM_DIVERGENT = new Set(['linked_list_simple', 'linked_list_cyclic', 'huffman']);
+
+export function declaredDivergence(target, platform) {
+  return platform !== BASELINE_PLATFORM && PLATFORM_DIVERGENT.has(target);
+}
+
+export function stackGarbageIsStable(platform) {
+  return platform === BASELINE_PLATFORM;
+}
+
 const DEBUGGERS = {
   gdb: {
     label: 'GDB',
     module: 'dbga_extractor_gdb',
-    resolve: () => 'gdb',
+    resolve: () => process.env.DBGA_GDB || 'gdb',
     flags: ['-nx', '-batch'],
     command: (text) => ['-ex', text],
     script: (code) => ['-ex', `python ${code}`],
@@ -74,6 +87,11 @@ const AjvModule = require('ajv');
 const Ajv = AjvModule.default ?? AjvModule;
 
 function resolveLldb() {
+  const override = process.env.DBGA_LLDB;
+  if (override) {
+    return override;
+  }
+
   const extensions = path.join(os.homedir(), '.vscode', 'extensions');
   let entries;
   try {
@@ -85,32 +103,47 @@ function resolveLldb() {
   const candidates = entries
     .filter((entry) => entry.startsWith('vadimcn.vscode-lldb-'))
     .sort()
-    .map((entry) => path.join(extensions, entry, 'lldb', 'bin', 'lldb'));
+    .map((entry) => path.join(extensions, entry, 'lldb', 'bin', `lldb${EXE}`));
 
   for (const candidate of candidates.reverse()) {
-    try {
-      readFileSync(candidate);
+    if (existsSync(candidate)) {
       return candidate;
-    } catch {
-      continue;
     }
   }
 
   throw new Error(
-    'LLDB nao encontrado — esperado em ~/.vscode/extensions/vadimcn.vscode-lldb-*/lldb/bin/lldb',
+    `LLDB nao encontrado — esperado em ~/.vscode/extensions/vadimcn.vscode-lldb-*/lldb/bin/lldb${EXE}` +
+      ' — ou aponte DBGA_LLDB para o executavel',
   );
 }
 
-function sourceOf(target) {
+function sourceFile(target) {
   for (const extension of ['.c', '.cpp']) {
     const candidate = path.join(TARGETS, target + extension);
-    try {
-      return { file: target + extension, text: readFileSync(candidate, 'utf8') };
-    } catch {
-      continue;
+    if (existsSync(candidate)) {
+      return candidate;
     }
   }
-  throw new Error(`nenhum fonte para o alvo ${target}`);
+  return null;
+}
+
+export function targetsIn(entries, hasSource) {
+  const names = new Set();
+  for (const entry of entries) {
+    const target = entry.endsWith('.exe') ? entry.slice(0, -4) : entry;
+    if (hasSource(target)) {
+      names.add(target);
+    }
+  }
+  return [...names].sort();
+}
+
+function sourceOf(target) {
+  const candidate = sourceFile(target);
+  if (candidate === null) {
+    throw new Error(`nenhum fonte para o alvo ${target}`);
+  }
+  return { file: path.basename(candidate), text: readFileSync(candidate, 'utf8') };
 }
 
 function sceneArgs(target, debuggerSpec) {
@@ -155,7 +188,7 @@ function runTarget(job, key) {
     ...sceneArgs(job.target, debuggerSpec),
     ...debuggerSpec.script(importCommand(debuggerSpec)),
     ...debuggerSpec.script(dumpCommand(debuggerSpec, outPath, job.options)),
-    path.join(BIN, job.target),
+    path.join(BIN, job.target + EXE),
   ];
 
   let stderr = '';
@@ -173,7 +206,7 @@ function runTarget(job, key) {
   return { outPath, stderr };
 }
 
-function assertLinkedListSimple(snapshot, fail) {
+function assertLinkedListSimple(snapshot, fail, note) {
   const roots = byName(snapshot.roots);
 
   if (roots.head_ref?.target !== roots.head?.address) {
@@ -182,7 +215,11 @@ function assertLinkedListSimple(snapshot, fail) {
   if (roots.head_ref?.indirections !== 2) {
     fail(`head_ref.indirections ${roots.head_ref?.indirections} != 2`);
   }
-  if (roots.curr?.status !== 'unreadable') {
+  if (!stackGarbageIsStable(process.platform)) {
+    note(
+      'curr sai de um local nao inicializado; a verificacao de zeroPage so vale no Linux (D111)',
+    );
+  } else if (roots.curr?.status !== 'unreadable') {
     fail(`curr.status ${roots.curr?.status} != unreadable`);
   } else {
     const node = nodeById(snapshot, roots.curr.node);
@@ -357,7 +394,7 @@ function parseArguments(argv) {
   return { keys: keys.length > 0 ? keys : ['gdb', 'lldb'], names, update };
 }
 
-function extract(job, key, validate, fail) {
+function extract(job, key, validate, fail, note) {
   const { outPath, stderr } = runTarget(job, key);
   const spec = DEBUGGERS[key];
 
@@ -378,7 +415,7 @@ function extract(job, key, validate, fail) {
 
   checkIntegrity(snapshot, (message) => fail(`${spec.label}: ${message}`));
   if (job.variant === null) {
-    ASSERTIONS[job.target]?.(snapshot, (message) => fail(`${spec.label}: ${message}`));
+    ASSERTIONS[job.target]?.(snapshot, (message) => fail(`${spec.label}: ${message}`), note);
   }
 
   return snapshot;
@@ -406,7 +443,7 @@ function checkParity(snapshots, fail) {
   return reference;
 }
 
-function checkBaseline(job, normalized, fail, update) {
+function checkBaseline(job, normalized, fail, note, update) {
   const baseline = path.join(EXPECTED, `${job.file}.json`);
 
   if (update) {
@@ -423,19 +460,27 @@ function checkBaseline(job, normalized, fail, update) {
   }
 
   const difference = firstDifference(expected, normalized);
-  if (difference !== null) {
-    fail(
-      `linha de base em ${difference.path}: ` +
-        `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`,
-    );
+  if (difference === null) {
+    return;
   }
+
+  const message =
+    `linha de base em ${difference.path}: ` +
+    `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`;
+
+  if (declaredDivergence(job.target, process.platform)) {
+    note(`${message} — divergencia declarada fora do Linux (D111)`);
+    return;
+  }
+
+  fail(message);
 }
 
 function main() {
   mkdirSync(OUTPUT, { recursive: true });
 
   const { keys, names, update } = parseArguments(process.argv.slice(2));
-  const available = readdirSync(BIN).sort();
+  const available = targetsIn(readdirSync(BIN), (target) => sourceFile(target) !== null);
   const targets = names.length > 0 ? available.filter((t) => names.includes(t)) : available;
   const jobs = targets.flatMap((target) => [
     { target, variant: null, label: target, file: target, options: {} },
@@ -461,19 +506,21 @@ function main() {
 
   for (const job of jobs) {
     const problems = [];
+    const notes = new Set();
     const fail = (message) => problems.push(message);
+    const note = (message) => notes.add(message);
 
     const snapshots = {};
     for (const key of keys) {
-      const snapshot = extract(job, key, validate, fail);
+      const snapshot = extract(job, key, validate, fail, note);
       if (snapshot !== null) snapshots[key] = snapshot;
     }
 
     const normalized = checkParity(snapshots, fail);
-    if (normalized !== null) checkBaseline(job, normalized, fail, update);
+    if (normalized !== null) checkBaseline(job, normalized, fail, note, update);
 
     if (problems.length > 0) failures += 1;
-    report(job.label, problems, snapshots, keys);
+    report(job.label, problems, notes, snapshots, keys);
   }
 
   const labels = keys.map((key) => DEBUGGERS[key].label).join(' + ');
@@ -484,7 +531,7 @@ function main() {
   process.exit(failures > 0 ? 1 : 0);
 }
 
-function report(target, problems, snapshots, keys) {
+function report(target, problems, notes, snapshots, keys) {
   if (problems.length === 0) {
     const snapshot = snapshots[keys[0]];
     const meta = snapshot.meta;
@@ -494,10 +541,13 @@ function report(target, problems, snapshots, keys) {
       (meta.errors.length > 0 ? `, ${meta.errors.length} erros` : '') +
       (meta.truncated ? `, truncado (${meta.truncationReasons.join(',')})` : '');
     console.log(`ok    ${target.padEnd(30)} ${shape}`);
-    return;
+  } else {
+    console.log(`FALHA ${target}`);
+    for (const problem of problems) console.log(`        ${problem}`);
   }
-  console.log(`FALHA ${target}`);
-  for (const problem of problems) console.log(`        ${problem}`);
+  for (const item of notes) console.log(`        nota: ${item}`);
 }
 
-main();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main();
+}

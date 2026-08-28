@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import Ajv, { ValidateFunction } from 'ajv';
 import { GraphSnapshot } from 'dbga-contract';
 
-const READ_ATTEMPTS = 4;
+const READ_ATTEMPTS = process.platform === 'win32' ? 6 : 4;
 const FIRST_BACKOFF_MS = 10;
 
 export class SnapshotReader {

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { DebugSessionManager } from './debugSessionManager';
-import { ExtractorInvoker } from './extractorInvoker';
+import { ExtractorInvoker, sweepStaleTempFiles } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
 import { appendDynamicArray, readFileView, saveFileView } from './extractionSettings';
@@ -50,6 +50,8 @@ export class ExtensionController {
 
   public activate(): void {
     console.log('Extensão DbgAlgo ativada com sucesso!');
+
+    void sweepStaleTempFiles();
 
     this.context.subscriptions.push(this.sessionManager, this.panel, this.broker);
 

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as os from 'os';
+import { promises as fs } from 'fs';
 import { DebuggerType } from './debuggerType';
 import { SnapshotReader } from './snapshotReader';
 import { GraphSnapshot } from 'dbga-contract';
@@ -33,12 +34,22 @@ const PYTHON_MISSING_MESSAGE =
   'Use o CodeLLDB, que traz o próprio LLDB, ou um GDB com Python ' +
   '(no Windows, mingw-w64-x86_64-gdb pelo MSYS2).';
 
+const PROBE_ATTEMPTS = 4;
+const PROBE_BACKOFF_MS = 10;
+
+const PYTHON_PROBE_MESSAGE =
+  'DbgAlgo injetou Python no depurador e nada foi escrito em disco. As duas causas possíveis são ' +
+  'um depurador sem Python embutido e um caminho de arquivo que não sobreviveu ao console do ' +
+  'depurador. Confira se o GDB tem Python (gdb --configuration) e se a pasta temporária do sistema ' +
+  'é gravável.';
+
 export class DebuggerPythonMissingError extends Error {
   constructor(
     readonly debuggerType: DebuggerType,
     readonly cause: unknown,
+    message: string = PYTHON_MISSING_MESSAGE,
   ) {
-    super(PYTHON_MISSING_MESSAGE);
+    super(message);
     this.name = 'DebuggerPythonMissingError';
   }
 }
@@ -65,6 +76,8 @@ export class ExtractorInvoker {
     const snapshotPath = this.snapshotPathFor(options.pid);
 
     if (options.importModule) {
+      await this.probePython(session, type, frameId, options.pid);
+
       try {
         await this.sendEvaluate(session, type, this.importCommand(type), frameId);
       } catch (err) {
@@ -74,6 +87,8 @@ export class ExtractorInvoker {
         throw err;
       }
     }
+
+    await fs.rm(snapshotPath, { force: true });
 
     await this.sendEvaluate(
       session,
@@ -109,6 +124,50 @@ export class ExtractorInvoker {
     return path.join(os.tmpdir(), `dbg-algo-snapshot-${pid}.json`);
   }
 
+  private probePathFor(pid: number): string {
+    return path.join(os.tmpdir(), `dbg-algo-probe-${pid}.txt`);
+  }
+
+  private async probePython(
+    session: vscode.DebugSession,
+    type: DebuggerType,
+    frameId: number,
+    pid: number,
+  ): Promise<void> {
+    const probePath = this.probePathFor(pid);
+    await fs.rm(probePath, { force: true });
+
+    try {
+      await this.sendEvaluate(
+        session,
+        type,
+        `__import__("io").open(${JSON.stringify(probePath)}, "w").close()`,
+        frameId,
+      );
+    } catch (err) {
+      if (isPythonMissing(err)) {
+        throw new DebuggerPythonMissingError(type, err);
+      }
+      throw new DebuggerPythonMissingError(type, err, PYTHON_PROBE_MESSAGE);
+    }
+
+    let lastError: unknown;
+    for (let attempt = 0; attempt < PROBE_ATTEMPTS; attempt += 1) {
+      try {
+        await fs.access(probePath);
+        await fs.rm(probePath, { force: true });
+        return;
+      } catch (err) {
+        lastError = err;
+        if (attempt < PROBE_ATTEMPTS - 1) {
+          await new Promise((resolve) => setTimeout(resolve, PROBE_BACKOFF_MS * 2 ** attempt));
+        }
+      }
+    }
+
+    throw new DebuggerPythonMissingError(type, lastError, PYTHON_PROBE_MESSAGE);
+  }
+
   private scriptPathFor(type: DebuggerType): string {
     const filename = type === DebuggerType.GDB ? 'dbga_extractor_gdb.py' : 'dbga_extractor_lldb.py';
     return path.join(this.extensionPath, 'scripts', filename);
@@ -142,6 +201,23 @@ export class ExtractorInvoker {
       type === DebuggerType.GDB ? `-exec python ${pythonCode}` : `script ${pythonCode}`;
 
     return session.customRequest('evaluate', { expression, context: 'repl', frameId });
+  }
+}
+
+export async function sweepStaleTempFiles(): Promise<void> {
+  const directory = os.tmpdir();
+
+  let entries: string[];
+  try {
+    entries = await fs.readdir(directory);
+  } catch {
+    return;
+  }
+
+  for (const entry of entries) {
+    if (entry.startsWith('.dbg-algo-snapshot-') && entry.endsWith('.tmp')) {
+      await fs.rm(path.join(directory, entry), { force: true });
+    }
   }
 }
 

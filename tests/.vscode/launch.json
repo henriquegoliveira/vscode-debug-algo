@@ -5,12 +5,16 @@
       "name": "(GDB / cpptools)",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceRoot}/targets/bin/${fileBasenameNoExtension}",
+      "program": "${workspaceFolder}/targets/bin/${fileBasenameNoExtension}",
       "args": [],
       "cwd": "${workspaceFolder}/targets",
       "MIMode": "gdb",
       "preLaunchTask": "build: targets",
-      "stopAtEntry": false
+      "stopAtEntry": false,
+      "windows": {
+        "program": "${workspaceFolder}/targets/bin/${fileBasenameNoExtension}.exe",
+        "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe"
+      }
     },
     {
       "name": "(LLDB / CodeLLDB)",
@@ -19,7 +23,10 @@
       "program": "${workspaceFolder}/targets/bin/${fileBasenameNoExtension}",
       "args": [],
       "cwd": "${workspaceFolder}/targets",
-      "preLaunchTask": "build: targets"
+      "preLaunchTask": "build: targets",
+      "windows": {
+        "program": "${workspaceFolder}/targets/bin/${fileBasenameNoExtension}.exe"
+      }
     }
   ]
 }
