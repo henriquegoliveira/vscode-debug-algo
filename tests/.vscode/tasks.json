@@ -10,7 +10,11 @@
       "problemMatcher": ["$gcc"],
       "windows": {
         "command": "C:/msys64/usr/bin/bash.exe",
-        "args": ["-lc", "cd \"$(cygpath '${workspaceFolder}')/targets\" && make"]
+        "args": ["-lc", "cd \"$(cygpath '${workspaceFolder}')/targets\" && make"],
+        "options": {
+          "cwd": "${workspaceFolder}/targets",
+          "env": { "MSYSTEM": "UCRT64", "CHERE_INVOKING": "1" }
+        }
       }
     }
   ]
