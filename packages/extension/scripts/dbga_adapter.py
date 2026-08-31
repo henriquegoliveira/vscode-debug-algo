@@ -95,12 +95,25 @@ def _needs_space(previous, token):
     return _is_identifier(previous) and _is_identifier(token)
 
 
+_TYPE_SYNONYMS = {
+    "_Bool": ("bool",),
+    "__float128": ("long", "double"),
+}
+
+
+def _apply_type_synonyms(tokens):
+    expanded = []
+    for token in tokens:
+        expanded.extend(_TYPE_SYNONYMS.get(token, (token,)))
+    return expanded
+
+
 def canonical_type_name(name):
     if name is None:
         return None
 
     text = str(name)
-    tokens = _strip_keywords(_tokenize_type_name(text))
+    tokens = _apply_type_synonyms(_strip_keywords(_tokenize_type_name(text)))
     if not tokens:
         return text.strip()
 

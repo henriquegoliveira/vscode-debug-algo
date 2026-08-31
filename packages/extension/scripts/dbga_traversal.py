@@ -1,10 +1,13 @@
 import collections
+import sys
 import time
 
 import dbga_adapter
 import dbga_snapshot
 
-ZERO_PAGE = 0x1000
+WINDOWS = sys.platform.startswith(("win32", "cygwin", "msys"))
+
+ZERO_PAGE = 0x10000 if WINDOWS else 0x1000
 PAGE_SIZE = 0x1000
 MAX_OBJECT_SIZE = 1 << 20
 MAX_ANNOTATED_LENGTH = 1 << 20
@@ -121,13 +124,22 @@ def _bounded_int(candidate, fallback):
     return candidate
 
 
+def _frames_through_main(frames):
+    trimmed = []
+    for frame in frames:
+        trimmed.append(frame)
+        if frame.function == "main":
+            break
+    return trimmed
+
+
 def extract(adapter, config):
     builder = dbga_snapshot.SnapshotBuilder(
         adapter.debugger_name, adapter.debugger_version(), config
     )
     frontier = Frontier()
     deadline = time.monotonic() + config.time_budget_seconds
-    frames = adapter.frames()
+    frames = _frames_through_main(adapter.frames())
     annotations = _resolve_annotations(builder, frontier, adapter, frames, config)
 
     for frame in frames:

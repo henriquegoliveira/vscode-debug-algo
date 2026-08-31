@@ -16,6 +16,8 @@ export class DebugSessionManager implements vscode.Disposable {
 
   private readonly unusableSessions = new Set<string>();
 
+  private readonly reportedSessions = new Set<string>();
+
   private readonly disposables: vscode.Disposable[] = [];
 
   constructor(
@@ -38,6 +40,7 @@ export class DebugSessionManager implements vscode.Disposable {
         this.sessionPids.delete(session.id);
         this.extractingSessions.delete(session.id);
         this.unusableSessions.delete(session.id);
+        this.reportedSessions.delete(session.id);
         if (this.currentSession?.id === session.id) {
           this.currentSession = undefined;
         }
@@ -119,6 +122,17 @@ export class DebugSessionManager implements vscode.Disposable {
         return;
       }
       console.error(`[DbgAlgo] falha ao extrair/ler snapshot da sessao ${session.id}`, err);
+
+      const message =
+        'DbgAlgo não conseguiu extrair as estruturas nesta pausa: ' +
+        (err instanceof Error ? err.message : String(err));
+
+      this.onError(message, session);
+
+      if (!this.reportedSessions.has(session.id)) {
+        this.reportedSessions.add(session.id);
+        void vscode.window.showErrorMessage(message);
+      }
     } finally {
       this.extractingSessions.delete(session.id);
     }

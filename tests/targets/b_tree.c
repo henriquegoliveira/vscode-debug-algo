@@ -33,7 +33,9 @@ static void printByLevel(const BTreePage *ptPage, int level);
 
 int main(void) {
     BTreePage *ptRoot = NULL;
+    BTreePage *pt = NULL;
     int f = 0;
+    int g = 0;
 
     static const int keysToInsert[] = {50, 10, 70, 30, 90, 20, 60, 80, 40, 100,
                                        15, 25, 35, 45, 55, 65, 75, 85, 95, 105,
@@ -49,9 +51,6 @@ int main(void) {
     printInOrder(ptRoot);
     printf("\nEstrutura por nivel:\n");
     printByLevel(ptRoot, 0);
-
-    BTreePage *pt = NULL;
-    int g = 0;
 
     searchBTree(45, ptRoot, &pt, &f, &g);
     printf("Busca por 45: f=%d, posicao %d da pagina com %d chaves\n", f, g, pt->m);

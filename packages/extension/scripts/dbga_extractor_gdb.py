@@ -328,10 +328,6 @@ def dump_structs(out_path, options=None):
             GdbAdapter.debugger_name, None if version is None else str(version), error
         )
 
-    try:
-        dbga_snapshot.write_atomic(out_path, snapshot)
-    except Exception as error:
-        print("[dbga] falha ao escrever o snapshot em %s: %s" % (out_path, error))
-        return None
+    dbga_snapshot.write_atomic(out_path, snapshot)
 
     return out_path

@@ -15,7 +15,7 @@ static void print(QueueNode *front);
 int main(void) {
     QueueNode *front = NULL;
     QueueNode *rear = NULL;
-    int recoveredValue;
+    int recoveredValue = 0;
 
     enqueue(10, &front, &rear);
     enqueue(20, &front, &rear);

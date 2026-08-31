@@ -6,10 +6,16 @@
       "type": "shell",
       "command": "make",
       "args": [],
-      "options": {
-        "cwd": "${workspaceFolder}/targets"
-      },
-      "problemMatcher": ["$gcc"]
+      "options": { "cwd": "${workspaceFolder}/targets" },
+      "problemMatcher": ["$gcc"],
+      "windows": {
+        "command": "C:/msys64/usr/bin/bash.exe",
+        "args": ["-lc", "make"],
+        "options": {
+          "cwd": "${workspaceFolder}/targets",
+          "env": { "MSYSTEM": "UCRT64", "CHERE_INVOKING": "1" }
+        }
+      }
     }
   ]
 }

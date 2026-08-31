@@ -28,6 +28,7 @@ static int climbToRoot(RedBlackNode *pt);
 
 int main(void) {
     RedBlackNode *ptRoot = NULL;
+    RedBlackNode *deepest = NULL;
 
     int const keys[] = {50, 30, 70, 20, 40, 60, 80, 10, 25, 35, 45, 55, 65, 75, 85};
     int const total = (int) (sizeof(keys) / sizeof(keys[0]));
@@ -40,7 +41,7 @@ int main(void) {
     printInOrder(ptRoot);
     printf("\n");
 
-    RedBlackNode *deepest = search(45, ptRoot);
+    deepest = search(45, ptRoot);
 
     printf("Altura de 45 ate a raiz: %d\n", climbToRoot(deepest));
 
