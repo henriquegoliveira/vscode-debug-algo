@@ -51,10 +51,16 @@ const ASSERTIONS = {
   linked_list_cyclic: assertLinkedListCyclic,
 };
 
-const PLATFORM_DIVERGENT = new Set(['linked_list_simple', 'linked_list_cyclic', 'huffman']);
+const WINDOWS_DIVERGENCE = {
+  linked_list_simple: ['baseline'],
+  linked_list_cyclic: ['baseline'],
+  huffman: ['baseline', 'parity'],
+  class_reference: ['parity'],
+  garbage_pointer: ['parity'],
+};
 
-export function declaredDivergence(target, platform) {
-  return platform !== BASELINE_PLATFORM && PLATFORM_DIVERGENT.has(target);
+export function declaredDivergence(target, platform, kind) {
+  return platform !== BASELINE_PLATFORM && (WINDOWS_DIVERGENCE[target] ?? []).includes(kind);
 }
 
 export function stackGarbageIsStable(platform) {
@@ -486,7 +492,7 @@ function extract(job, key, validate, fail, note) {
   return snapshot;
 }
 
-function checkParity(snapshots, fail) {
+function checkParity(job, snapshots, fail, note) {
   const keys = Object.keys(snapshots);
   if (keys.length < 2) return null;
 
@@ -497,10 +503,14 @@ function checkParity(snapshots, fail) {
     const other = normalize(snapshots[key]);
     const difference = firstDifference(reference, other);
     if (difference !== null) {
-      fail(
+      const message =
         `paridade ${DEBUGGERS[first].label} x ${DEBUGGERS[key].label} em ${difference.path}: ` +
-          `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`,
-      );
+        `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`;
+      if (declaredDivergence(job.target, process.platform, 'parity')) {
+        note(`${message} — divergencia declarada fora do Linux (D130)`);
+      } else {
+        fail(message);
+      }
       return null;
     }
   }
@@ -533,7 +543,7 @@ function checkBaseline(job, normalized, fail, note, update) {
     `linha de base em ${difference.path}: ` +
     `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`;
 
-  if (declaredDivergence(job.target, process.platform)) {
+  if (declaredDivergence(job.target, process.platform, 'baseline')) {
     note(`${message} — divergencia declarada fora do Linux (D111)`);
     return;
   }
@@ -581,7 +591,7 @@ function main() {
       if (snapshot !== null) snapshots[key] = snapshot;
     }
 
-    const normalized = checkParity(snapshots, fail);
+    const normalized = checkParity(job, snapshots, fail, note);
     if (normalized !== null) checkBaseline(job, normalized, fail, note, update);
 
     if (problems.length > 0) failures += 1;
