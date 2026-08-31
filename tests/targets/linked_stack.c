@@ -14,7 +14,7 @@ static void print(StackNode *top);
 
 int main(void) {
     StackNode *top = NULL;
-    int recoveredValue;
+    int recoveredValue = 0;
 
     push(10, &top);
     push(20, &top);

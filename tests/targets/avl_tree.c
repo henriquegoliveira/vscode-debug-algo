@@ -31,6 +31,7 @@ static void printInOrder(const NodeTree *pt);
 
 int main(void) {
     NodeTree *ptRoot = startTree();
+    NodeTree *found = NULL;
     int h = 0;
 
     insertionTree(50, &ptRoot, &h);
@@ -47,7 +48,7 @@ int main(void) {
     printInOrder(ptRoot);
     printf("\nRaiz %d, balanco %d\n", ptRoot->key, ptRoot->balance);
 
-    NodeTree *found = ptRoot;
+    found = ptRoot;
 
     searchInTree(35, &found);
     printf("Busca por 35 chegou em %d\n", found->key);

@@ -207,12 +207,14 @@ static NodeTree *buildHuffmanTree(const int frequencyArray[]) {
         return combined;
     }
 
+    NodeTree *combined = NULL;
+
     while (n > 1) {
         NodeTree *left = minimumPriorityList(nodes, &n);
         NodeTree *right = minimumPriorityList(nodes, &n);
 
         // BREAKPOINT
-        NodeTree *combined = allocateNode(INTERNAL_NODE_SYMBOL, left->frequency + right->frequency);
+        combined = allocateNode(INTERNAL_NODE_SYMBOL, left->frequency + right->frequency);
 
         combined->left = left;
         combined->right = right;
@@ -332,10 +334,11 @@ static int compress(const char *inputFile, const char *outputFile) {
     int frequencyArray[ALPHABET_SIZE] = {0};
     char *codes[ALPHABET_SIZE] = {NULL};
     char buffer[CODE_BUFFER_SIZE] = {0};
+    NodeTree *huffmanTree = NULL;
 
     countFrequency(in, frequencyArray);
 
-    NodeTree *huffmanTree = buildHuffmanTree(frequencyArray);
+    huffmanTree = buildHuffmanTree(frequencyArray);
 
     if (huffmanTree == NULL) {
         fclose(in);
