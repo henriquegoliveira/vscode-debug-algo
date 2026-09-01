@@ -179,5 +179,19 @@
       "to": "#1",
       "type": "Node *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "remove_node",
+      "file": "linked_list_cyclic.c",
+      "line": 68
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "linked_list_cyclic.c",
+      "line": 26
+    }
   ]
 }

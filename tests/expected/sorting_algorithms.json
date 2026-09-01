@@ -13,13 +13,52 @@
   },
   "roots": [
     {
+      "name": "sourceList",
+      "function": "sorting_algorithms.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "int[64]",
+      "category": "aggregate",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": "#0",
+      "status": "ok"
+    },
+    {
+      "name": "temporaryList",
+      "function": "sorting_algorithms.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "int[64]",
+      "category": "aggregate",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "workList",
+      "function": "sorting_algorithms.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "int[64]",
+      "category": "aggregate",
+      "address": "#2",
+      "target": null,
+      "indirections": 0,
+      "node": "#2",
+      "status": "ok"
+    },
+    {
       "name": "end1",
       "function": "intercalateMerge",
       "frameLevel": 0,
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#0",
+      "address": "#3",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -37,7 +76,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#1",
+      "address": "#4",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -55,7 +94,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#2",
+      "address": "#5",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -73,7 +112,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#3",
+      "address": "#6",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -91,7 +130,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#4",
+      "address": "#7",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -109,7 +148,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#5",
+      "address": "#8",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -127,10 +166,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#6",
-      "target": "#7",
+      "address": "#9",
+      "target": "#1",
       "indirections": 1,
-      "node": "#7",
+      "node": "#1",
       "status": "ok"
     },
     {
@@ -140,10 +179,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#8",
-      "target": "#9",
+      "address": "#10",
+      "target": "#2",
       "indirections": 1,
-      "node": "#9",
+      "node": "#2",
       "status": "ok"
     },
     {
@@ -153,7 +192,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#10",
+      "address": "#11",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -171,7 +210,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#11",
+      "address": "#12",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -189,7 +228,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#12",
+      "address": "#13",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -207,10 +246,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#13",
-      "target": "#7",
+      "address": "#14",
+      "target": "#1",
       "indirections": 1,
-      "node": "#7",
+      "node": "#1",
       "status": "ok"
     },
     {
@@ -220,7 +259,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#14",
+      "address": "#15",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -238,10 +277,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#15",
-      "target": "#9",
+      "address": "#16",
+      "target": "#2",
       "indirections": 1,
-      "node": "#9",
+      "node": "#2",
       "status": "ok"
     },
     {
@@ -251,7 +290,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#16",
+      "address": "#17",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -266,24 +305,6 @@
       "name": "right",
       "function": "mergeSort",
       "frameLevel": 1,
-      "origin": "parameter",
-      "type": "long",
-      "category": "scalar",
-      "address": "#17",
-      "target": null,
-      "indirections": 0,
-      "node": null,
-      "status": "ok",
-      "value": {
-        "t": "int",
-        "v": 9,
-        "signed": true
-      }
-    },
-    {
-      "name": "lSize",
-      "function": "mergeSort",
-      "frameLevel": 2,
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
@@ -294,6 +315,24 @@
       "status": "ok",
       "value": {
         "t": "int",
+        "v": 9,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#19",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
         "v": 64,
         "signed": true
       }
@@ -305,10 +344,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#19",
-      "target": "#7",
+      "address": "#20",
+      "target": "#1",
       "indirections": 1,
-      "node": "#7",
+      "node": "#1",
       "status": "ok"
     },
     {
@@ -318,7 +357,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#20",
+      "address": "#21",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -336,10 +375,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#21",
-      "target": "#9",
+      "address": "#22",
+      "target": "#2",
       "indirections": 1,
-      "node": "#9",
+      "node": "#2",
       "status": "ok"
     },
     {
@@ -349,7 +388,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#22",
+      "address": "#23",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -367,7 +406,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#23",
+      "address": "#24",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -385,7 +424,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#24",
+      "address": "#25",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -403,10 +442,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#25",
-      "target": "#7",
+      "address": "#26",
+      "target": "#1",
       "indirections": 1,
-      "node": "#7",
+      "node": "#1",
       "status": "ok"
     },
     {
@@ -416,7 +455,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#26",
+      "address": "#27",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -434,10 +473,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#27",
-      "target": "#9",
+      "address": "#28",
+      "target": "#2",
       "indirections": 1,
-      "node": "#9",
+      "node": "#2",
       "status": "ok"
     },
     {
@@ -447,7 +486,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#28",
+      "address": "#29",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -465,7 +504,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#29",
+      "address": "#30",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -483,7 +522,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#30",
+      "address": "#31",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -501,10 +540,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#31",
-      "target": "#7",
+      "address": "#32",
+      "target": "#1",
       "indirections": 1,
-      "node": "#7",
+      "node": "#1",
       "status": "ok"
     },
     {
@@ -514,7 +553,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#32",
+      "address": "#33",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -532,10 +571,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#33",
-      "target": "#9",
+      "address": "#34",
+      "target": "#2",
       "indirections": 1,
-      "node": "#9",
+      "node": "#2",
       "status": "ok"
     },
     {
@@ -545,7 +584,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#34",
+      "address": "#35",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -563,7 +602,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#35",
+      "address": "#36",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -581,7 +620,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#36",
+      "address": "#37",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -599,10 +638,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#37",
-      "target": "#7",
+      "address": "#38",
+      "target": "#1",
       "indirections": 1,
-      "node": "#7",
+      "node": "#1",
       "status": "ok"
     },
     {
@@ -612,7 +651,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#38",
+      "address": "#39",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -630,10 +669,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#39",
-      "target": "#9",
+      "address": "#40",
+      "target": "#2",
       "indirections": 1,
-      "node": "#9",
+      "node": "#2",
       "status": "ok"
     },
     {
@@ -643,7 +682,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#40",
+      "address": "#41",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -658,24 +697,6 @@
       "name": "right",
       "function": "mergeSort",
       "frameLevel": 5,
-      "origin": "parameter",
-      "type": "long",
-      "category": "scalar",
-      "address": "#41",
-      "target": null,
-      "indirections": 0,
-      "node": null,
-      "status": "ok",
-      "value": {
-        "t": "int",
-        "v": 31,
-        "signed": true
-      }
-    },
-    {
-      "name": "lSize",
-      "function": "mergeSort",
-      "frameLevel": 6,
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
@@ -686,6 +707,24 @@
       "status": "ok",
       "value": {
         "t": "int",
+        "v": 31,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "mergeSort",
+      "frameLevel": 6,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#43",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
         "v": 64,
         "signed": true
       }
@@ -697,10 +736,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#43",
-      "target": "#7",
+      "address": "#44",
+      "target": "#1",
       "indirections": 1,
-      "node": "#7",
+      "node": "#1",
       "status": "ok"
     },
     {
@@ -710,7 +749,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#44",
+      "address": "#45",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -728,10 +767,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#45",
-      "target": "#9",
+      "address": "#46",
+      "target": "#2",
       "indirections": 1,
-      "node": "#9",
+      "node": "#2",
       "status": "ok"
     },
     {
@@ -741,7 +780,7 @@
       "origin": "local",
       "type": "long",
       "category": "scalar",
-      "address": "#46",
+      "address": "#47",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -759,7 +798,7 @@
       "origin": "parameter",
       "type": "long",
       "category": "scalar",
-      "address": "#47",
+      "address": "#48",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -777,7 +816,7 @@
       "origin": "local",
       "type": "int",
       "category": "scalar",
-      "address": "#48",
+      "address": "#49",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -795,7 +834,7 @@
       "origin": "local",
       "type": "int",
       "category": "scalar",
-      "address": "#49",
+      "address": "#50",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -813,39 +852,1013 @@
       "origin": "local",
       "type": "char *[8]",
       "category": "aggregate",
-      "address": "#50",
+      "address": "#51",
       "target": null,
       "indirections": 0,
-      "node": "#50",
+      "node": "#51",
       "status": "ok"
     }
   ],
   "nodes": [
     {
-      "kind": "opaque",
-      "id": "#7",
-      "reason": "notExpanded",
-      "type": "int",
-      "value": {
-        "t": "int",
-        "v": -47,
-        "signed": true
-      }
-    },
-    {
-      "kind": "opaque",
-      "id": "#9",
-      "reason": "notExpanded",
-      "type": "int",
-      "value": {
-        "t": "int",
-        "v": -47,
-        "signed": true
-      }
+      "kind": "array",
+      "id": "#0",
+      "type": "int[64]",
+      "elementType": "int",
+      "length": 64,
+      "cells": [
+        {
+          "t": "int",
+          "v": 817,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 214,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 963,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 105,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 542,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 378,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 691,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": -47,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 250,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 884,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 133,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 706,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 429,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 91,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 577,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 312,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 998,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 65,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 740,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 186,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 453,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 829,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 27,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 601,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 358,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 972,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 148,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 715,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 490,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 236,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 863,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 12,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 679,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 401,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 926,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 173,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 548,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 284,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 795,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 39,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 622,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 947,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 210,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 767,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 334,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 508,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 881,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 156,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 73,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 640,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 415,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 989,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 261,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 736,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 482,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 118,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 855,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 297,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 704,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 526,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 369,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 943,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 82,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 611,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
     },
     {
       "kind": "array",
-      "id": "#50",
+      "id": "#1",
+      "type": "int[64]",
+      "elementType": "int",
+      "length": 64,
+      "cells": [
+        {
+          "t": "int",
+          "v": -47,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 105,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 214,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 378,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 542,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 691,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 817,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 963,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "array",
+      "id": "#2",
+      "type": "int[64]",
+      "elementType": "int",
+      "length": 64,
+      "cells": [
+        {
+          "t": "int",
+          "v": -47,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 105,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 214,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 378,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 542,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 691,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 817,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 963,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 250,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 884,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 133,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 706,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 429,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 91,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 577,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 312,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 998,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 65,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 740,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 186,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 453,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 829,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 27,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 601,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 358,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 972,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 148,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 715,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 490,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 236,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 863,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 12,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 679,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 401,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 926,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 173,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 548,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 284,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 795,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 39,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 622,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 947,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 210,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 767,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 334,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 508,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 881,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 156,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 73,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 640,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 415,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 989,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 261,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 736,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 482,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 118,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 855,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 297,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 704,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 526,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 369,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 943,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 82,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 611,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "array",
+      "id": "#51",
       "type": "char *[8]",
       "elementType": "char *",
       "length": 8,
@@ -896,5 +1909,55 @@
       "origin": "static"
     }
   ],
-  "edges": []
+  "edges": [],
+  "frames": [
+    {
+      "level": 0,
+      "function": "intercalateMerge",
+      "file": "sorting_algorithms.c",
+      "line": 178
+    },
+    {
+      "level": 1,
+      "function": "mergeSort",
+      "file": "sorting_algorithms.c",
+      "line": 208
+    },
+    {
+      "level": 2,
+      "function": "mergeSort",
+      "file": "sorting_algorithms.c",
+      "line": 206
+    },
+    {
+      "level": 3,
+      "function": "mergeSort",
+      "file": "sorting_algorithms.c",
+      "line": 206
+    },
+    {
+      "level": 4,
+      "function": "mergeSort",
+      "file": "sorting_algorithms.c",
+      "line": 207
+    },
+    {
+      "level": 5,
+      "function": "mergeSort",
+      "file": "sorting_algorithms.c",
+      "line": 206
+    },
+    {
+      "level": 6,
+      "function": "mergeSort",
+      "file": "sorting_algorithms.c",
+      "line": 206
+    },
+    {
+      "level": 7,
+      "function": "main",
+      "file": "sorting_algorithms.c",
+      "line": 69
+    }
+  ]
 }

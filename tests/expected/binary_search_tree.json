@@ -466,5 +466,25 @@
       "to": null,
       "type": "TreeNode *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "searchForParent",
+      "file": "binary_search_tree.c",
+      "line": 123
+    },
+    {
+      "level": 1,
+      "function": "removal",
+      "file": "binary_search_tree.c",
+      "line": 256
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "binary_search_tree.c",
+      "line": 48
+    }
   ]
 }

@@ -235,5 +235,19 @@
       "to": "#6",
       "type": "QueueNode *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "dequeue",
+      "file": "linked_queue.c",
+      "line": 76
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "linked_queue.c",
+      "line": 28
+    }
   ]
 }

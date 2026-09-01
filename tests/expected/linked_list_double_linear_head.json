@@ -298,5 +298,19 @@
       "to": "#9",
       "type": "DoublyNode *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "remove_node",
+      "file": "linked_list_double_linear_head.c",
+      "line": 99
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "linked_list_double_linear_head.c",
+      "line": 31
+    }
   ]
 }

@@ -87,6 +87,7 @@ class Config(object):
         self.max_depth = 64
         self.max_frames = 32
         self.max_vars_per_frame = 128
+        self.max_globals = 128
         self.max_cells = 64
         self.max_fields = 64
         self.max_text = 200
@@ -104,6 +105,7 @@ class Config(object):
         if isinstance(limits, dict):
             config.max_nodes = _bounded_int(limits.get("maxNodes"), config.max_nodes)
             config.max_edges = _bounded_int(limits.get("maxEdges"), config.max_edges)
+            config.max_cells = _bounded_int(limits.get("maxCells"), config.max_cells)
 
         root_filter = data.get("rootFilter")
         if isinstance(root_filter, list) and len(root_filter) > 0:
@@ -133,6 +135,15 @@ def _frames_through_main(frames):
     return trimmed
 
 
+def _file_scope_globals(adapter, config):
+    try:
+        found = list(adapter.globals())
+    except Exception:
+        return []
+    found.sort(key=lambda pair: pair[0].name)
+    return found[: config.max_globals]
+
+
 def extract(adapter, config):
     builder = dbga_snapshot.SnapshotBuilder(
         adapter.debugger_name, adapter.debugger_version(), config
@@ -151,6 +162,7 @@ def extract(adapter, config):
             continue
 
         builder.frame_scanned()
+        builder.frame(frame.level, frame.function, frame.file, frame.line)
 
         try:
             variables = adapter.variables(frame)
@@ -168,6 +180,15 @@ def extract(adapter, config):
                 classify_root(builder, frontier, adapter, frame, var, config)
             except Exception as error:
                 builder.error("root", var.name, error)
+
+    for var, source in _file_scope_globals(adapter, config):
+        if config.root_filter is not None and var.name not in config.root_filter:
+            continue
+        shim = dbga_adapter.FrameInfo(-1, source, True, None, source, 0)
+        try:
+            classify_root(builder, frontier, adapter, shim, var, config)
+        except Exception as error:
+            builder.error("root", var.name, error)
 
     while len(frontier) > 0:
         if time.monotonic() > deadline:

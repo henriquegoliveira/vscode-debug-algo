@@ -3,7 +3,7 @@
   "$id": "https://dbg-algo/schemas/graph-snapshot.schema.json",
   "title": "GraphSnapshot",
   "type": "object",
-  "required": ["meta", "roots", "nodes", "edges"],
+  "required": ["meta", "roots", "nodes", "edges", "frames"],
   "additionalProperties": false,
   "properties": {
     "meta": { "$ref": "#/definitions/Meta" },
@@ -18,6 +18,10 @@
     "edges": {
       "type": "array",
       "items": { "$ref": "#/definitions/GraphEdge" }
+    },
+    "frames": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/Frame" }
     }
   },
   "definitions": {
@@ -407,7 +411,7 @@
         "frameLevel": {
           "type": "integer"
         },
-        "origin": { "enum": ["local", "parameter"] },
+        "origin": { "enum": ["local", "parameter", "global"] },
         "type": { "type": "string" },
         "category": { "enum": ["pointer", "reference", "aggregate", "scalar"] },
         "address": {
@@ -428,6 +432,18 @@
         "status": {
           "enum": ["ok", "null", "unreadable", "optimizedOut", "deepIndirection", "notFollowed"]
         }
+      }
+    },
+
+    "Frame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "function", "file", "line"],
+      "properties": {
+        "level": { "type": "integer" },
+        "function": { "type": "string" },
+        "file": { "type": "string" },
+        "line": { "type": "integer" }
       }
     }
   }

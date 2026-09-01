@@ -9,6 +9,7 @@ import { GraphSnapshot } from 'dbga-contract';
 export interface ExtractionLimits {
   maxNodes?: number;
   maxEdges?: number;
+  maxCells?: number;
 }
 
 export interface ExtractionOptions {

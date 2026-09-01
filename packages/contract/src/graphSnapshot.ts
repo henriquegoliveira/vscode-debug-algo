@@ -16,6 +16,7 @@ export interface GraphSnapshot {
   roots: Root[];
   nodes: GraphNode[];
   edges: GraphEdge[];
+  frames: Frame[];
 }
 export interface Meta {
   version: 2;
@@ -53,7 +54,7 @@ export interface Root {
   name: string;
   function: string;
   frameLevel: number;
-  origin: 'local' | 'parameter';
+  origin: 'local' | 'parameter' | 'global';
   type: string;
   category: 'pointer' | 'reference' | 'aggregate' | 'scalar';
   address: AddressOrNull;
@@ -163,4 +164,10 @@ export interface GraphEdge {
   field: string;
   to: AddressOrNull;
   type?: string;
+}
+export interface Frame {
+  level: number;
+  function: string;
+  file: string;
+  line: number;
 }

@@ -20,6 +20,7 @@ SCALAR_CATEGORIES = (INT, REAL, BOOL, CHAR, ENUM)
 
 LOCAL = "local"
 PARAMETER = "parameter"
+GLOBAL = "global"
 
 _UNRESOLVED = object()
 
@@ -279,13 +280,15 @@ def parse_annotation(text):
 
 
 class FrameInfo(object):
-    __slots__ = ("level", "function", "user_code", "handle")
+    __slots__ = ("level", "function", "user_code", "handle", "file", "line")
 
-    def __init__(self, level, function, user_code, handle):
+    def __init__(self, level, function, user_code, handle, file=None, line=0):
         self.level = level
         self.function = function
         self.user_code = user_code
         self.handle = handle
+        self.file = file
+        self.line = line
 
 
 class VarInfo(object):
@@ -362,6 +365,9 @@ class Adapter(object):
         raise NotImplementedError
 
     def variables(self, frame):
+        raise NotImplementedError
+
+    def globals(self):
         raise NotImplementedError
 
     def type_of(self, ref):

@@ -67,14 +67,32 @@
   },
   "roots": [
     {
+      "name": "sampleText",
+      "function": "huffman.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "unsigned char[43]",
+      "category": "aggregate",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": "#0",
+      "status": "ok",
+      "value": {
+        "t": "text",
+        "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+        "truncated": false
+      }
+    },
+    {
       "name": "combined",
       "function": "buildHuffmanTree",
       "frameLevel": 0,
       "origin": "local",
       "type": "NodeTree *",
       "category": "pointer",
-      "address": "#0",
-      "target": "#1",
+      "address": "#1",
+      "target": "#2",
       "indirections": 1,
       "node": null,
       "status": "null"
@@ -86,10 +104,10 @@
       "origin": "parameter",
       "type": "int *",
       "category": "pointer",
-      "address": "#2",
-      "target": "#3",
+      "address": "#3",
+      "target": "#4",
       "indirections": 1,
-      "node": "#3",
+      "node": "#4",
       "status": "ok"
     },
     {
@@ -99,10 +117,10 @@
       "origin": "local",
       "type": "NodeTree *",
       "category": "pointer",
-      "address": "#4",
-      "target": "#5",
+      "address": "#5",
+      "target": "#6",
       "indirections": 1,
-      "node": "#5",
+      "node": "#6",
       "status": "ok"
     },
     {
@@ -112,7 +130,7 @@
       "origin": "local",
       "type": "int",
       "category": "scalar",
-      "address": "#6",
+      "address": "#7",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -130,10 +148,10 @@
       "origin": "local",
       "type": "NodeTree *[256]",
       "category": "aggregate",
-      "address": "#7",
+      "address": "#8",
       "target": null,
       "indirections": 0,
-      "node": "#7",
+      "node": "#8",
       "status": "ok"
     },
     {
@@ -143,10 +161,10 @@
       "origin": "local",
       "type": "NodeTree *",
       "category": "pointer",
-      "address": "#8",
-      "target": "#9",
+      "address": "#9",
+      "target": "#10",
       "indirections": 1,
-      "node": "#9",
+      "node": "#10",
       "status": "ok"
     },
     {
@@ -156,7 +174,7 @@
       "origin": "local",
       "type": "unsigned char",
       "category": "scalar",
-      "address": "#10",
+      "address": "#11",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -174,10 +192,10 @@
       "origin": "local",
       "type": "char[257]",
       "category": "aggregate",
-      "address": "#11",
+      "address": "#12",
       "target": null,
       "indirections": 0,
-      "node": "#11",
+      "node": "#12",
       "status": "ok",
       "value": {
         "t": "text",
@@ -192,7 +210,7 @@
       "origin": "local",
       "type": "unsigned char",
       "category": "scalar",
-      "address": "#12",
+      "address": "#13",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -210,10 +228,10 @@
       "origin": "local",
       "type": "char *[256]",
       "category": "aggregate",
-      "address": "#13",
+      "address": "#14",
       "target": null,
       "indirections": 0,
-      "node": "#13",
+      "node": "#14",
       "status": "ok"
     },
     {
@@ -223,10 +241,10 @@
       "origin": "local",
       "type": "int[256]",
       "category": "aggregate",
-      "address": "#3",
+      "address": "#4",
       "target": null,
       "indirections": 0,
-      "node": "#3",
+      "node": "#4",
       "status": "ok"
     },
     {
@@ -236,8 +254,8 @@
       "origin": "local",
       "type": "NodeTree *",
       "category": "pointer",
-      "address": "#14",
-      "target": "#1",
+      "address": "#15",
+      "target": "#2",
       "indirections": 1,
       "node": null,
       "status": "null"
@@ -249,10 +267,10 @@
       "origin": "local",
       "type": "_IO_FILE *",
       "category": "pointer",
-      "address": "#15",
-      "target": "#16",
+      "address": "#16",
+      "target": "#17",
       "indirections": 1,
-      "node": "#16",
+      "node": "#17",
       "status": "ok"
     },
     {
@@ -262,8 +280,8 @@
       "origin": "parameter",
       "type": "char *",
       "category": "pointer",
-      "address": "#17",
-      "target": "#18",
+      "address": "#18",
+      "target": "#19",
       "indirections": 1,
       "node": null,
       "status": "notFollowed",
@@ -280,10 +298,10 @@
       "origin": "local",
       "type": "_IO_FILE *",
       "category": "pointer",
-      "address": "#19",
-      "target": "#20",
+      "address": "#20",
+      "target": "#21",
       "indirections": 1,
-      "node": "#20",
+      "node": "#21",
       "status": "ok"
     },
     {
@@ -293,8 +311,8 @@
       "origin": "parameter",
       "type": "char *",
       "category": "pointer",
-      "address": "#21",
-      "target": "#22",
+      "address": "#22",
+      "target": "#23",
       "indirections": 1,
       "node": null,
       "status": "notFollowed",
@@ -311,7 +329,7 @@
       "origin": "local",
       "type": "unsigned int",
       "category": "scalar",
-      "address": "#23",
+      "address": "#24",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -329,7 +347,7 @@
       "origin": "parameter",
       "type": "int",
       "category": "scalar",
-      "address": "#24",
+      "address": "#25",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -347,8 +365,8 @@
       "origin": "parameter",
       "type": "char **",
       "category": "pointer",
-      "address": "#25",
-      "target": "#26",
+      "address": "#26",
+      "target": "#27",
       "indirections": 2,
       "node": null,
       "status": "notFollowed"
@@ -360,8 +378,8 @@
       "origin": "local",
       "type": "char *",
       "category": "pointer",
-      "address": "#27",
-      "target": "#22",
+      "address": "#28",
+      "target": "#23",
       "indirections": 1,
       "node": null,
       "status": "notFollowed",
@@ -378,8 +396,8 @@
       "origin": "local",
       "type": "char *",
       "category": "pointer",
-      "address": "#28",
-      "target": "#18",
+      "address": "#29",
+      "target": "#19",
       "indirections": 1,
       "node": null,
       "status": "notFollowed",
@@ -396,10 +414,10 @@
       "origin": "local",
       "type": "char[300]",
       "category": "aggregate",
-      "address": "#29",
+      "address": "#30",
       "target": null,
       "indirections": 0,
-      "node": "#29",
+      "node": "#30",
       "status": "ok",
       "value": {
         "t": "text",
@@ -414,8 +432,8 @@
       "origin": "local",
       "type": "char *",
       "category": "pointer",
-      "address": "#30",
-      "target": "#31",
+      "address": "#31",
+      "target": "#32",
       "indirections": 1,
       "node": null,
       "status": "notFollowed",
@@ -432,10 +450,10 @@
       "origin": "local",
       "type": "_IO_FILE *",
       "category": "pointer",
-      "address": "#32",
-      "target": "#16",
+      "address": "#33",
+      "target": "#17",
       "indirections": 1,
-      "node": "#16",
+      "node": "#17",
       "status": "ok"
     },
     {
@@ -445,7 +463,7 @@
       "origin": "local",
       "type": "int",
       "category": "scalar",
-      "address": "#33",
+      "address": "#34",
       "target": null,
       "indirections": 0,
       "node": null,
@@ -460,7 +478,234 @@
   "nodes": [
     {
       "kind": "array",
-      "id": "#3",
+      "id": "#0",
+      "type": "unsigned char[43]",
+      "elementType": "unsigned char",
+      "length": 43,
+      "cells": [
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 69,
+          "text": "E"
+        },
+        {
+          "t": "char",
+          "v": 65,
+          "text": "A"
+        },
+        {
+          "t": "char",
+          "v": 65,
+          "text": "A"
+        },
+        {
+          "t": "char",
+          "v": 65,
+          "text": "A"
+        },
+        {
+          "t": "char",
+          "v": 65,
+          "text": "A"
+        },
+        {
+          "t": "char",
+          "v": 70,
+          "text": "F"
+        },
+        {
+          "t": "char",
+          "v": 70,
+          "text": "F"
+        },
+        {
+          "t": "char",
+          "v": 72,
+          "text": "H"
+        },
+        {
+          "t": "char",
+          "v": 72,
+          "text": "H"
+        },
+        {
+          "t": "char",
+          "v": 72,
+          "text": "H"
+        },
+        {
+          "t": "char",
+          "v": 72,
+          "text": "H"
+        },
+        {
+          "t": "char",
+          "v": 72,
+          "text": "H"
+        },
+        {
+          "t": "char",
+          "v": 67,
+          "text": "C"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 77,
+          "text": "M"
+        },
+        {
+          "t": "char",
+          "v": 77,
+          "text": "M"
+        },
+        {
+          "t": "char",
+          "v": 65,
+          "text": "A"
+        },
+        {
+          "t": "char",
+          "v": 76,
+          "text": "L"
+        },
+        {
+          "t": "char",
+          "v": 76,
+          "text": "L"
+        },
+        {
+          "t": "char",
+          "v": 76,
+          "text": "L"
+        },
+        {
+          "t": "char",
+          "v": 67,
+          "text": "C"
+        },
+        {
+          "t": "char",
+          "v": 68,
+          "text": "D"
+        },
+        {
+          "t": "char",
+          "v": 68,
+          "text": "D"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 66,
+          "text": "B"
+        },
+        {
+          "t": "char",
+          "v": 67,
+          "text": "C"
+        },
+        {
+          "t": "char",
+          "v": 67,
+          "text": "C"
+        },
+        {
+          "t": "char",
+          "v": 10,
+          "text": "\\x0a"
+        },
+        {
+          "t": "char",
+          "v": 255,
+          "text": "\\xff"
+        },
+        {
+          "t": "char",
+          "v": 255,
+          "text": "\\xff"
+        },
+        {
+          "t": "char",
+          "v": 0,
+          "text": "\\x00"
+        },
+        {
+          "t": "char",
+          "v": 127,
+          "text": "\\x7f"
+        },
+        {
+          "t": "char",
+          "v": 128,
+          "text": "\\x80"
+        },
+        {
+          "t": "char",
+          "v": 255,
+          "text": "\\xff"
+        },
+        {
+          "t": "char",
+          "v": 10,
+          "text": "\\x0a"
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "array",
+      "id": "#4",
       "type": "int[256]",
       "elementType": "int",
       "length": 256,
@@ -792,7 +1037,7 @@
     },
     {
       "kind": "record",
-      "id": "#5",
+      "id": "#6",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -820,7 +1065,7 @@
     },
     {
       "kind": "array",
-      "id": "#7",
+      "id": "#8",
       "type": "NodeTree *[256]",
       "elementType": "NodeTree *",
       "length": 256,
@@ -831,7 +1076,7 @@
     },
     {
       "kind": "record",
-      "id": "#9",
+      "id": "#10",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -859,7 +1104,7 @@
     },
     {
       "kind": "array",
-      "id": "#11",
+      "id": "#12",
       "type": "char[257]",
       "elementType": "char",
       "length": 257,
@@ -1191,7 +1436,7 @@
     },
     {
       "kind": "array",
-      "id": "#13",
+      "id": "#14",
       "type": "char *[256]",
       "elementType": "char *",
       "length": 256,
@@ -1459,7 +1704,7 @@
     },
     {
       "kind": "record",
-      "id": "#16",
+      "id": "#17",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -1733,7 +1978,7 @@
     },
     {
       "kind": "record",
-      "id": "#20",
+      "id": "#21",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -1999,7 +2244,7 @@
     },
     {
       "kind": "array",
-      "id": "#29",
+      "id": "#30",
       "type": "char[300]",
       "elementType": "char",
       "length": 300,
@@ -2331,7 +2576,7 @@
     },
     {
       "kind": "record",
-      "id": "#34",
+      "id": "#35",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2359,7 +2604,7 @@
     },
     {
       "kind": "record",
-      "id": "#35",
+      "id": "#36",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2387,7 +2632,7 @@
     },
     {
       "kind": "record",
-      "id": "#36",
+      "id": "#37",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2415,7 +2660,7 @@
     },
     {
       "kind": "record",
-      "id": "#37",
+      "id": "#38",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2443,7 +2688,7 @@
     },
     {
       "kind": "record",
-      "id": "#38",
+      "id": "#39",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2471,7 +2716,7 @@
     },
     {
       "kind": "record",
-      "id": "#39",
+      "id": "#40",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2499,7 +2744,7 @@
     },
     {
       "kind": "record",
-      "id": "#40",
+      "id": "#41",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2527,7 +2772,7 @@
     },
     {
       "kind": "record",
-      "id": "#41",
+      "id": "#42",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2555,7 +2800,7 @@
     },
     {
       "kind": "record",
-      "id": "#42",
+      "id": "#43",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2583,7 +2828,7 @@
     },
     {
       "kind": "record",
-      "id": "#43",
+      "id": "#44",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2611,7 +2856,7 @@
     },
     {
       "kind": "record",
-      "id": "#44",
+      "id": "#45",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2639,7 +2884,7 @@
     },
     {
       "kind": "record",
-      "id": "#45",
+      "id": "#46",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2667,7 +2912,7 @@
     },
     {
       "kind": "record",
-      "id": "#46",
+      "id": "#47",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -2933,45 +3178,45 @@
     },
     {
       "kind": "opaque",
-      "id": "#47",
+      "id": "#48",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#48",
+      "id": "#49",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#49",
+      "id": "#50",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "opaque",
-      "id": "#50",
+      "id": "#51",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#51",
+      "id": "#52",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#52",
+      "id": "#53",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "record",
-      "id": "#53",
+      "id": "#54",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -3237,26 +3482,26 @@
     },
     {
       "kind": "opaque",
-      "id": "#54",
+      "id": "#55",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#55",
+      "id": "#56",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#56",
+      "id": "#57",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "record",
-      "id": "#57",
+      "id": "#58",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -3522,38 +3767,38 @@
     },
     {
       "kind": "opaque",
-      "id": "#58",
+      "id": "#59",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#59",
+      "id": "#60",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#60",
+      "id": "#61",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "opaque",
-      "id": "#61",
+      "id": "#62",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#62",
+      "id": "#63",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#63",
+      "id": "#64",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
@@ -3561,796 +3806,816 @@
   ],
   "edges": [
     {
-      "from": "#5",
+      "from": "#6",
       "field": "left",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#5",
+      "from": "#6",
       "field": "right",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[0]",
-      "to": "#34",
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#7",
-      "field": "[10]",
       "to": "#35",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
-      "field": "[11]",
+      "from": "#8",
+      "field": "[10]",
       "to": "#36",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
+      "field": "[11]",
+      "to": "#37",
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#8",
       "field": "[12]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[13]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[14]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[15]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[16]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[17]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[18]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[19]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[1]",
-      "to": "#37",
+      "to": "#38",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[20]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[21]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[22]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[23]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[24]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[25]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[26]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[27]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[28]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[29]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[2]",
-      "to": "#38",
+      "to": "#39",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[30]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[31]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[32]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[33]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[34]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[35]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[36]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[37]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[38]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[39]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[3]",
-      "to": "#39",
+      "to": "#40",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[40]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[41]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[42]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[43]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[44]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[45]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[46]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[47]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[48]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[49]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[4]",
-      "to": "#40",
+      "to": "#41",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[50]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[51]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[52]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[53]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[54]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[55]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[56]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[57]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[58]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[59]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[5]",
-      "to": "#41",
+      "to": "#42",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[60]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[61]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[62]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[63]",
       "to": null,
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
+      "from": "#8",
       "field": "[6]",
-      "to": "#42",
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#7",
-      "field": "[7]",
       "to": "#43",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
-      "field": "[8]",
+      "from": "#8",
+      "field": "[7]",
       "to": "#44",
       "type": "NodeTree *"
     },
     {
-      "from": "#7",
-      "field": "[9]",
+      "from": "#8",
+      "field": "[8]",
       "to": "#45",
       "type": "NodeTree *"
     },
     {
-      "from": "#9",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#9",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#16",
-      "field": "_chain",
+      "from": "#8",
+      "field": "[9]",
       "to": "#46",
-      "type": "_IO_FILE *"
+      "type": "NodeTree *"
     },
     {
-      "from": "#16",
-      "field": "_codecvt",
+      "from": "#10",
+      "field": "left",
       "to": null,
-      "type": "_IO_codecvt *"
+      "type": "NodeTree *"
     },
     {
-      "from": "#16",
-      "field": "_freeres_buf",
+      "from": "#10",
+      "field": "right",
       "to": null,
-      "type": "void *"
+      "type": "NodeTree *"
     },
     {
-      "from": "#16",
-      "field": "_freeres_list",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#16",
-      "field": "_lock",
+      "from": "#17",
+      "field": "_chain",
       "to": "#47",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#17",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#17",
+      "field": "_freeres_buf",
+      "to": null,
       "type": "void *"
     },
     {
-      "from": "#16",
-      "field": "_markers",
+      "from": "#17",
+      "field": "_freeres_list",
       "to": null,
-      "type": "_IO_marker *"
+      "type": "_IO_FILE *"
     },
     {
-      "from": "#16",
-      "field": "_prevchain",
+      "from": "#17",
+      "field": "_lock",
       "to": "#48",
-      "type": "_IO_FILE **"
+      "type": "void *"
     },
     {
-      "from": "#16",
-      "field": "_wide_data",
+      "from": "#17",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#17",
+      "field": "_prevchain",
       "to": "#49",
-      "type": "_IO_wide_data *"
+      "type": "_IO_FILE **"
     },
     {
-      "from": "#20",
-      "field": "_chain",
-      "to": "#16",
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#20",
-      "field": "_codecvt",
-      "to": null,
-      "type": "_IO_codecvt *"
-    },
-    {
-      "from": "#20",
-      "field": "_freeres_buf",
-      "to": null,
-      "type": "void *"
-    },
-    {
-      "from": "#20",
-      "field": "_freeres_list",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#20",
-      "field": "_lock",
+      "from": "#17",
+      "field": "_wide_data",
       "to": "#50",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#21",
+      "field": "_chain",
+      "to": "#17",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#21",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#21",
+      "field": "_freeres_buf",
+      "to": null,
       "type": "void *"
     },
     {
-      "from": "#20",
-      "field": "_markers",
+      "from": "#21",
+      "field": "_freeres_list",
       "to": null,
-      "type": "_IO_marker *"
+      "type": "_IO_FILE *"
     },
     {
-      "from": "#20",
-      "field": "_prevchain",
+      "from": "#21",
+      "field": "_lock",
       "to": "#51",
-      "type": "_IO_FILE **"
+      "type": "void *"
     },
     {
-      "from": "#20",
-      "field": "_wide_data",
+      "from": "#21",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#21",
+      "field": "_prevchain",
       "to": "#52",
-      "type": "_IO_wide_data *"
+      "type": "_IO_FILE **"
     },
     {
-      "from": "#34",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#34",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#35",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#35",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#36",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#36",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#37",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#37",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#38",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#38",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#39",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#39",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#40",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#40",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#41",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#41",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#42",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#42",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#43",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#43",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#44",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#44",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#45",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#45",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#46",
-      "field": "_chain",
+      "from": "#21",
+      "field": "_wide_data",
       "to": "#53",
-      "type": "_IO_FILE *"
+      "type": "_IO_wide_data *"
     },
     {
-      "from": "#46",
-      "field": "_codecvt",
+      "from": "#35",
+      "field": "left",
       "to": null,
-      "type": "_IO_codecvt *"
+      "type": "NodeTree *"
     },
     {
-      "from": "#46",
-      "field": "_freeres_buf",
+      "from": "#35",
+      "field": "right",
       "to": null,
-      "type": "void *"
+      "type": "NodeTree *"
     },
     {
-      "from": "#46",
-      "field": "_freeres_list",
+      "from": "#36",
+      "field": "left",
       "to": null,
-      "type": "_IO_FILE *"
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#36",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#37",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#37",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#38",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#38",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#39",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#39",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#40",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#40",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#41",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#41",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#42",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#42",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#43",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#43",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#44",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#44",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#45",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#45",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
     },
     {
       "from": "#46",
-      "field": "_lock",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#46",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#47",
+      "field": "_chain",
       "to": "#54",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#47",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#47",
+      "field": "_freeres_buf",
+      "to": null,
       "type": "void *"
     },
     {
-      "from": "#46",
-      "field": "_markers",
+      "from": "#47",
+      "field": "_freeres_list",
       "to": null,
-      "type": "_IO_marker *"
+      "type": "_IO_FILE *"
     },
     {
-      "from": "#46",
-      "field": "_prevchain",
+      "from": "#47",
+      "field": "_lock",
       "to": "#55",
-      "type": "_IO_FILE **"
+      "type": "void *"
     },
     {
-      "from": "#46",
-      "field": "_wide_data",
+      "from": "#47",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#47",
+      "field": "_prevchain",
       "to": "#56",
-      "type": "_IO_wide_data *"
+      "type": "_IO_FILE **"
     },
     {
-      "from": "#53",
-      "field": "_chain",
+      "from": "#47",
+      "field": "_wide_data",
       "to": "#57",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#54",
+      "field": "_chain",
+      "to": "#58",
       "type": "_IO_FILE *"
     },
     {
-      "from": "#53",
+      "from": "#54",
       "field": "_codecvt",
       "to": null,
       "type": "_IO_codecvt *"
     },
     {
-      "from": "#53",
+      "from": "#54",
       "field": "_freeres_buf",
       "to": null,
       "type": "void *"
     },
     {
-      "from": "#53",
+      "from": "#54",
       "field": "_freeres_list",
       "to": null,
       "type": "_IO_FILE *"
     },
     {
-      "from": "#53",
+      "from": "#54",
       "field": "_lock",
-      "to": "#58",
+      "to": "#59",
       "type": "void *"
     },
     {
-      "from": "#53",
+      "from": "#54",
       "field": "_markers",
       "to": null,
       "type": "_IO_marker *"
     },
     {
-      "from": "#53",
+      "from": "#54",
       "field": "_prevchain",
-      "to": "#59",
+      "to": "#60",
       "type": "_IO_FILE **"
     },
     {
-      "from": "#53",
+      "from": "#54",
       "field": "_wide_data",
-      "to": "#60",
+      "to": "#61",
       "type": "_IO_wide_data *"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_chain",
       "to": null,
       "type": "_IO_FILE *"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_codecvt",
       "to": null,
       "type": "_IO_codecvt *"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_freeres_buf",
       "to": null,
       "type": "void *"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_freeres_list",
       "to": null,
       "type": "_IO_FILE *"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_lock",
-      "to": "#61",
+      "to": "#62",
       "type": "void *"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_markers",
       "to": null,
       "type": "_IO_marker *"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_prevchain",
-      "to": "#62",
+      "to": "#63",
       "type": "_IO_FILE **"
     },
     {
-      "from": "#57",
+      "from": "#58",
       "field": "_wide_data",
-      "to": "#63",
+      "to": "#64",
       "type": "_IO_wide_data *"
+    }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "buildHuffmanTree",
+      "file": "huffman.c",
+      "line": 217
+    },
+    {
+      "level": 1,
+      "function": "compress",
+      "file": "huffman.c",
+      "line": 341
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "huffman.c",
+      "line": 82
     }
   ]
 }

@@ -86,6 +86,7 @@ class SnapshotBuilder(object):
         self._visited = set()
         self._errors = []
         self._truncation_reasons = []
+        self._frames = []
         self._frames_scanned = 0
         self._frames_skipped = 0
 
@@ -109,6 +110,16 @@ class SnapshotBuilder(object):
 
     def frame_skipped(self):
         self._frames_skipped += 1
+
+    def frame(self, level, function, file, line):
+        self._frames.append(
+            {
+                "level": int(level),
+                "function": function if function is not None else "",
+                "file": file if file is not None else "",
+                "line": int(line or 0),
+            }
+        )
 
     def truncate(self, reason):
         if reason not in self._truncation_reasons:
@@ -292,6 +303,7 @@ class SnapshotBuilder(object):
             "roots": self._roots,
             "nodes": self._nodes,
             "edges": self._edges,
+            "frames": self._frames,
         }
 
 
@@ -318,6 +330,7 @@ def minimal_snapshot(debugger_name, debugger_version, exception):
         "roots": [],
         "nodes": [],
         "edges": [],
+        "frames": [],
     }
 
 
