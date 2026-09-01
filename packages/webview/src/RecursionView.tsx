@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { type FrameCard, callStackModel } from './callStackModel';
-import type { FrameRoot, Pass } from './graphModel';
+import { type FrameRoot, type Pass, rootCell } from './graphModel';
 import { MAX_SCALE, MIN_SCALE } from './persistence';
 import type { ScreenState } from './state';
 import {
@@ -354,9 +354,7 @@ const RootLine: React.FC<{
     type="button"
     className="dbga-row"
     aria-pressed={active}
-    style={
-      root.origin === 'parameter' ? { ...styles.rootLine, ...styles.parameter } : styles.rootLine
-    }
+    style={root.origin === 'parameter' ? styles.parameter : undefined}
     onClick={() => onSelect(root.id, true)}
   >
     <span style={styles.rootName}>{root.name}</span>
@@ -373,18 +371,6 @@ const Connector: React.FC<{ label: string }> = ({ label }) => (
     <span style={styles.connectorLine} />
   </div>
 );
-
-function rootCell(root: FrameRoot): string {
-  if (root.status !== 'ok') {
-    return root.status;
-  }
-
-  if (root.value !== '') {
-    return root.value;
-  }
-
-  return root.category === 'pointer' || root.category === 'reference' ? '→' : '';
-}
 
 function toTranslate(target: Viewport, box: Box): Viewport {
   return {
@@ -430,19 +416,6 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
   },
   cardEmpty: { opacity: 0.55, padding: '2px 0' },
-  rootLine: {
-    display: 'flex',
-    width: '100%',
-    gap: '8px',
-    alignItems: 'baseline',
-    background: 'none',
-    border: 'none',
-    padding: '1px 0',
-    cursor: 'pointer',
-    font: 'inherit',
-    textAlign: 'left',
-    color: 'inherit',
-  },
   parameter: { fontStyle: 'italic' },
   rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
   rootValue: {

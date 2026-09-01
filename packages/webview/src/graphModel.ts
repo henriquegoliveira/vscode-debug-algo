@@ -84,12 +84,25 @@ export interface CanvasEdge {
 export interface FrameRoot {
   id: string;
   canvasId: string | null;
+  target: string | null;
   name: string;
   type: string;
   origin: Root['origin'];
   category: Root['category'];
   status: Root['status'];
   value: string;
+}
+
+export function rootCell(root: FrameRoot): string {
+  if (root.status !== 'ok') {
+    return root.status;
+  }
+
+  if (root.value !== '') {
+    return root.value;
+  }
+
+  return root.target ?? '';
 }
 
 export interface FrameGroup {
@@ -661,6 +674,7 @@ export function toGraph(
     const frameRoot: FrameRoot = {
       id,
       canvasId: card === undefined ? null : card.id,
+      target: root.target,
       name: root.name,
       type: root.type,
       origin: root.origin,

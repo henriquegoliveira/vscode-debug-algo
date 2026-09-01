@@ -12,6 +12,7 @@ import {
   Pass,
   changeHighlight,
   focusTarget,
+  rootCell,
   rootFollowers,
   visibleSnapshot,
 } from './graphModel';
@@ -94,7 +95,6 @@ interface GraphViewProps {
   bodyWidth: number | null;
   pass: Pass;
   selectedId: string | null;
-  selectedRef: React.MutableRefObject<string | null>;
   onSelect: (id: string | null, reveal?: boolean) => void;
   onSelectInvalid: () => void;
   revealRequestRef: React.MutableRefObject<string | null>;
@@ -118,7 +118,6 @@ const GraphView: React.FC<GraphViewProps> = ({
   bodyWidth,
   pass,
   selectedId,
-  selectedRef,
   onSelect,
   onSelectInvalid,
   revealRequestRef,
@@ -531,32 +530,6 @@ const GraphView: React.FC<GraphViewProps> = ({
 
   useEffect(() => {
     const network = networkRef.current;
-    const nodes = nodesRef.current;
-    if (network === null) {
-      return;
-    }
-
-    const drawn = selectedId === null ? null : (cardOfRef.current.get(selectedId) ?? selectedId);
-
-    if (drawn === null) {
-      network.unselectAll();
-      return;
-    }
-
-    if (nodes === null || nodes.get(drawn) === null) {
-      onSelectInvalid();
-      return;
-    }
-
-    network.selectNodes([drawn]);
-
-    if (revealRequestRef.current === selectedId) {
-      revealRef.current(drawn);
-    }
-  }, [selectedId, onSelectInvalid, revealRequestRef]);
-
-  useEffect(() => {
-    const network = networkRef.current;
     const snapshot = state.snapshot;
 
     if (network === null || snapshot === null || snapshot.nodes.length === 0) {
@@ -648,20 +621,29 @@ const GraphView: React.FC<GraphViewProps> = ({
     nodes.update(payload as Node[]);
     edges.update(model.canvas.edges as Edge[]);
 
-    const selected = selectedRef.current;
-    if (selected === null) {
+    const network = networkRef.current;
+    if (network === null) {
       return;
     }
 
-    const drawn = cardOfRef.current.get(selected) ?? selected;
+    if (selectedId === null) {
+      network.unselectAll();
+      return;
+    }
+
+    const drawn = cardOfRef.current.get(selectedId) ?? selectedId;
 
     if (nodes.get(drawn) === null) {
       onSelectInvalid();
       return;
     }
 
-    networkRef.current?.selectNodes([drawn]);
-  }, [model, layout, selectedRef, onSelectInvalid]);
+    network.selectNodes([drawn]);
+
+    if (revealRequestRef.current === selectedId) {
+      revealRef.current(drawn);
+    }
+  }, [model, layout, selectedId, onSelectInvalid, revealRequestRef]);
 
   const aim = useMemo(() => {
     const snapshot = state.snapshot;
@@ -865,18 +847,6 @@ const RootRow: React.FC<{
     </button>
   );
 };
-
-function rootCell(root: FrameRoot): string {
-  if (root.status !== 'ok') {
-    return root.status;
-  }
-
-  if (root.value !== '') {
-    return root.value;
-  }
-
-  return root.canvasId !== null ? '→' : '';
-}
 
 function withoutSeat(node: CanvasNode): CanvasNode {
   const copy = { ...node };

@@ -5,7 +5,7 @@ const STORAGE_KEY = 'dbga.viewState';
 
 const CHOICES: LayoutChoice[] = ['auto', 'physics', 'hierarchical'];
 const MODES: FrameMode[] = ['current', 'all'];
-const VIEW_MODES: ViewMode[] = ['graph', 'recursion'];
+export const VIEW_MODES: ViewMode[] = ['graph', 'recursion'];
 
 export const MIN_COLUMN_WIDTH = 180;
 export const MAX_COLUMN_WIDTH = 640;

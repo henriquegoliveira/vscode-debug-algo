@@ -1,6 +1,6 @@
 import type { GraphSnapshot, Root } from 'dbga-contract';
 import { formatValue } from './format';
-import { type FrameRoot, rootCanvasId, rootKey } from './graphModel';
+import { type FrameRoot, nodeCanvasId, rootCanvasId, rootKey } from './graphModel';
 
 export interface FrameCard {
   level: number;
@@ -75,7 +75,8 @@ export function callStackModel(
 function toFrameRoot(root: Root): FrameRoot {
   return {
     id: rootCanvasId(root),
-    canvasId: null,
+    canvasId: root.node === null ? null : nodeCanvasId(root.node),
+    target: root.target,
     name: root.name,
     type: root.type,
     origin: root.origin,

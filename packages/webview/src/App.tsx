@@ -1,8 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ExtractionError, GraphSnapshot } from 'dbga-contract';
-import { NO_CHANGES, Pass, changeHighlight, changedNodes, frameKey } from './graphModel';
+import {
+  NO_CHANGES,
+  Pass,
+  changeHighlight,
+  changedNodes,
+  frameKey,
+  parseCanvasId,
+} from './graphModel';
 import { buildIndex, inspect } from './inspection';
-import type { LayoutKind } from './layout';
+import { type LayoutKind, resolveLayout } from './layout';
 import { ChangeKind, FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './theme';
 import { useSnapshotChannel } from './state';
 import { isEmbedded, sendAnnotation, sendSaveView } from './channel';
@@ -11,6 +18,7 @@ import {
   FileView,
   FrameMode,
   PanelState,
+  VIEW_MODES,
   ViewMode,
   coerceFile,
   readPanelState,
@@ -29,7 +37,6 @@ const App: React.FC = () => {
   const [panel, updatePanel, panelRef] = usePanelState();
 
   const bodyRef = useRef<HTMLDivElement>(null);
-  const selectedRef = useRef<string | null>(panel.selectedId);
   const historyRef = useRef<History>({ seen: null, previous: null, session: null });
   const revealRequestRef = useRef<string | null>(null);
 
@@ -38,6 +45,10 @@ const App: React.FC = () => {
   const [dismissed, setDismissed] = useState<string | null>(null);
   const [edits, setEdits] = useState<{ file: string | null; view: FileView } | null>(null);
   const [bodyWidth, setBodyWidth] = useState<number | null>(null);
+  const [sessionDefault, setSessionDefault] = useState<{
+    session: string | null;
+    viewMode: ViewMode;
+  }>({ session: null, viewMode: 'graph' });
 
   const embedded = isEmbedded();
   const narrow = bodyWidth !== null && bodyWidth < NARROW_WIDTH;
@@ -45,7 +56,13 @@ const App: React.FC = () => {
   const incoming = useMemo(() => coerceFile(state.fileView), [state.fileView]);
   const cached = state.file === null ? undefined : panel.views[state.file];
   const stored = state.fileView === null ? (cached ?? incoming) : incoming;
-  const fileView = edits !== null && edits.file === state.file ? edits.view : stored;
+  const storedView = edits !== null && edits.file === state.file ? edits.view : stored;
+
+  const untouched = edits === null || edits.file !== state.file;
+  const fileView =
+    untouched && !hasExplicitViewMode(state.fileView) && sessionDefault.session === state.sessionId
+      ? { ...storedView, viewMode: sessionDefault.viewMode }
+      : storedView;
   const viewMode = fileView.viewMode;
 
   const frameIds = useMemo(
@@ -96,6 +113,17 @@ const App: React.FC = () => {
     history.previous = previous;
     history.seen = snapshot;
     history.session = state.sessionId;
+
+    if (previous === null) {
+      setSessionDefault((current) =>
+        current.session === state.sessionId
+          ? current
+          : {
+              session: state.sessionId,
+              viewMode: resolveLayout(snapshot) === 'default' ? 'recursion' : 'graph',
+            },
+      );
+    }
 
     setPass({
       changes: previous === null ? NO_CHANGES : changedNodes(previous, snapshot),
@@ -161,18 +189,33 @@ const App: React.FC = () => {
 
   const setViewMode = (mode: ViewMode): void => updateFile({ viewMode: mode });
 
+  const viewModeRef = useRef(viewMode);
+  const updateFileRef = useRef(updateFile);
+
+  useEffect(() => {
+    viewModeRef.current = viewMode;
+    updateFileRef.current = updateFile;
+  });
+
   const select = useCallback(
     (id: string | null, reveal = false) => {
       revealRequestRef.current = reveal ? id : null;
-      selectedRef.current = id;
       setSelectedId(id);
       updatePanel({ selectedId: id });
+
+      if (id === null || viewModeRef.current !== 'recursion') {
+        return;
+      }
+
+      const parsed = parseCanvasId(id);
+      if (parsed !== null && (parsed.space === 'node' || parsed.space === 'card')) {
+        updateFileRef.current({ viewMode: 'graph' });
+      }
     },
     [updatePanel],
   );
 
   const clearStaleSelection = useCallback(() => {
-    selectedRef.current = null;
     setSelectedId(null);
   }, []);
 
@@ -299,7 +342,6 @@ const App: React.FC = () => {
             bodyWidth={bodyWidth}
             pass={pass}
             selectedId={selectedId}
-            selectedRef={selectedRef}
             onSelect={select}
             onSelectInvalid={clearStaleSelection}
             revealRequestRef={revealRequestRef}
@@ -369,6 +411,14 @@ const ChangeLegend: React.FC<{ changes: Map<string, ChangeKind>; theme: Theme }>
 
 function isQuiet(error: ExtractionError): boolean {
   return error.scope === 'annotation' && error.message === 'annotationUnresolved';
+}
+
+function hasExplicitViewMode(raw: unknown): boolean {
+  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) {
+    return false;
+  }
+
+  return VIEW_MODES.includes((raw as Record<string, unknown>).viewMode as ViewMode);
 }
 
 interface History {
