@@ -1,4 +1,4 @@
-import type { GraphNode, GraphSnapshot, InlineArray, Root } from 'dbga-contract';
+import type { Frame, GraphNode, GraphSnapshot, InlineArray, Root } from 'dbga-contract';
 import type { TreePosition } from './treeLayout';
 import type { FieldChoice } from './persistence';
 import { formatValue } from './format';
@@ -109,6 +109,7 @@ export interface CardGroup {
 export interface GraphModel {
   canvas: { nodes: CanvasNode[]; edges: CanvasEdge[] };
   frames: FrameGroup[];
+  globals: FrameRoot[];
   cards: CardGroup[];
 }
 
@@ -136,6 +137,13 @@ export const NO_CHANGES: NodeChanges = {
   destinations: {},
   edges: [],
 };
+
+export interface Pass {
+  changes: NodeChanges;
+  first: boolean;
+  of: GraphSnapshot | null;
+  previous: GraphSnapshot | null;
+}
 
 export const DEFAULT_OPTIONS: GraphOptions = { nullTerminals: false, pinned: false };
 
@@ -171,8 +179,12 @@ export function cardCanvasId(node: string): string {
   return `${CARD_PREFIX}${node}`;
 }
 
+export function frameKey(fn: string, level: number): string {
+  return `${fn}#${level}`;
+}
+
 export function frameGroupKey(root: Root): string {
-  return `${root.function}#${root.frameLevel}`;
+  return frameKey(root.function, root.frameLevel);
 }
 
 export function parseCanvasId(id: string): { space: CanvasSpace; address: string } | null {
@@ -237,7 +249,9 @@ export function reachableNodes(snapshot: GraphSnapshot, frames: Set<string>): Se
   const targets = (chosen?: Set<string>): string[] =>
     snapshot.roots
       .filter(
-        (root) => root.node !== null && (chosen === undefined || chosen.has(frameGroupKey(root))),
+        (root) =>
+          root.node !== null &&
+          (chosen === undefined || root.origin === 'global' || chosen.has(frameGroupKey(root))),
       )
       .map((root) => root.node as string);
 
@@ -389,6 +403,27 @@ export function changedNodes(previous: GraphSnapshot, next: GraphSnapshot): Node
     .map((node) => node.id);
 
   return { created, relinked: [...relinked], valued, destinations, edges: [...touched] };
+}
+
+export function changeHighlight(pass: Pass, of: GraphSnapshot | null): Map<string, ChangeKind> {
+  const marks = new Map<string, ChangeKind>();
+
+  if (pass.of !== of) {
+    return marks;
+  }
+
+  pass.changes.valued.forEach((id) => marks.set(id, 'valued'));
+  pass.changes.relinked.forEach((id) => {
+    marks.set(id, 'relinked');
+    (pass.changes.destinations[id] ?? []).forEach((other) => {
+      if (!marks.has(other)) {
+        marks.set(other, 'relinked');
+      }
+    });
+  });
+  pass.changes.created.forEach((id) => marks.set(id, 'created'));
+
+  return marks;
 }
 
 export function focusTarget(
@@ -547,7 +582,9 @@ export function toGraph(
   const drawable = (root: Root): boolean =>
     root.node !== null &&
     shown.has(root.node) &&
-    (options.frames === undefined || options.frames.has(frameGroupKey(root)));
+    (root.origin === 'global' ||
+      options.frames === undefined ||
+      options.frames.has(frameGroupKey(root)));
 
   const cards: CardGroup[] = [];
   const cardIndex = new Map<string, CardGroup>();
@@ -602,29 +639,26 @@ export function toGraph(
     });
   });
 
-  const frames: FrameGroup[] = [];
-  const frameIndex = new Map<string, FrameGroup>();
+  const frameGroup = (frame: Frame): FrameGroup => {
+    const key = frameKey(frame.function, frame.level);
+
+    return {
+      id: key,
+      function: frame.function,
+      frameLevel: frame.level,
+      enabled: options.frames === undefined || options.frames.has(key),
+      roots: [],
+    };
+  };
+
+  const frames: FrameGroup[] = snapshot.frames.map(frameGroup);
+  const frameIndex = new Map(frames.map((group) => [group.id, group]));
+  const globals: FrameRoot[] = [];
 
   snapshot.roots.forEach((root) => {
     const id = rootCanvasId(root);
-    const key = frameGroupKey(root);
-    const enabled = options.frames === undefined || options.frames.has(key);
     const card = drawable(root) ? cardIndex.get(root.node as string) : undefined;
-
-    let group = frameIndex.get(key);
-    if (group === undefined) {
-      group = {
-        id: key,
-        function: root.function,
-        frameLevel: root.frameLevel,
-        enabled,
-        roots: [],
-      };
-      frameIndex.set(key, group);
-      frames.push(group);
-    }
-
-    group.roots.push({
+    const frameRoot: FrameRoot = {
       id,
       canvasId: card === undefined ? null : card.id,
       name: root.name,
@@ -633,12 +667,28 @@ export function toGraph(
       category: root.category,
       status: root.status,
       value: formatValue(root.value),
-    });
+    };
+
+    if (root.origin === 'global') {
+      globals.push(frameRoot);
+      return;
+    }
+
+    const key = frameGroupKey(root);
+    let group = frameIndex.get(key);
+
+    if (group === undefined) {
+      group = frameGroup({ level: root.frameLevel, function: root.function, file: '', line: 0 });
+      frameIndex.set(key, group);
+      frames.push(group);
+    }
+
+    group.roots.push(frameRoot);
   });
 
   frames.sort((a, b) => a.frameLevel - b.frameLevel);
 
-  return { canvas: { nodes, edges }, frames, cards };
+  return { canvas: { nodes, edges }, frames, globals, cards };
 }
 
 export function rootFollowers(model: GraphModel): Map<string, string[]> {
