@@ -512,5 +512,25 @@
       "to": null,
       "type": "RedBlackNode *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "fixInsertion",
+      "file": "red_black_tree.c",
+      "line": 174
+    },
+    {
+      "level": 1,
+      "function": "insertion",
+      "file": "red_black_tree.c",
+      "line": 239
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "red_black_tree.c",
+      "line": 37
+    }
   ]
 }

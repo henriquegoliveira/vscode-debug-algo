@@ -491,5 +491,25 @@
       "to": null,
       "type": "Rectangle *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "inspect",
+      "file": "class_reference.cpp",
+      "line": 122
+    },
+    {
+      "level": 1,
+      "function": "traverse",
+      "file": "class_reference.cpp",
+      "line": 111
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "class_reference.cpp",
+      "line": 50
+    }
   ]
 }

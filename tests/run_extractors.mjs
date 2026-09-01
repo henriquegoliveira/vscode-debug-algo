@@ -281,7 +281,7 @@ function assertLinkedListSimple(snapshot, fail, note) {
     fail(`head_ref.indirections ${roots.head_ref?.indirections} != 2`);
   }
   if (!stackGarbageIsStable(process.platform)) {
-    note('curr e prev saem de locais nao inicializados; a cena so e estavel no Linux (D111)');
+    note('curr e prev saem de locais nao inicializados; a cena so e estavel no Linux');
     return;
   }
 
@@ -304,7 +304,7 @@ function assertLinkedListSimple(snapshot, fail, note) {
 
 function assertLinkedListCyclic(snapshot, fail, note) {
   if (!stackGarbageIsStable(process.platform)) {
-    note('curr e prev saem de locais nao inicializados; a cena so e estavel no Linux (D111)');
+    note('curr e prev saem de locais nao inicializados; a cena so e estavel no Linux');
     return;
   }
 
@@ -346,6 +346,16 @@ function checkIntegrity(snapshot, fail) {
   }
   for (const error of snapshot.meta.errors) {
     if (error.message === 'addressCollision') fail(`addressCollision em ${error.reference}`);
+  }
+
+  if (snapshot.frames.length !== snapshot.meta.framesScanned) {
+    fail(`frames ${snapshot.frames.length} != framesScanned ${snapshot.meta.framesScanned}`);
+  }
+  const frameKeys = new Set(snapshot.frames.map((frame) => `${frame.function}#${frame.level}`));
+  for (const root of snapshot.roots) {
+    if (root.frameLevel >= 0 && !frameKeys.has(`${root.function}#${root.frameLevel}`)) {
+      fail(`raiz ${root.name} em ${root.function}#${root.frameLevel} sem frame`);
+    }
   }
 
   checkArrays(snapshot, fail);
@@ -507,7 +517,7 @@ function checkParity(job, snapshots, fail, note) {
         `paridade ${DEBUGGERS[first].label} x ${DEBUGGERS[key].label} em ${difference.path}: ` +
         `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`;
       if (declaredDivergence(job.target, process.platform, 'parity')) {
-        note(`${message} — divergencia declarada fora do Linux (D130)`);
+        note(`${message} — divergencia declarada fora do Linux`);
       } else {
         fail(message);
       }
@@ -544,7 +554,7 @@ function checkBaseline(job, normalized, fail, note, update) {
     `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`;
 
   if (declaredDivergence(job.target, process.platform, 'baseline')) {
-    note(`${message} — divergencia declarada fora do Linux (D111)`);
+    note(`${message} — divergencia declarada fora do Linux`);
     return;
   }
 

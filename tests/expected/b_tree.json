@@ -1888,5 +1888,25 @@
       "to": null,
       "type": "BTreePage *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "splitPage",
+      "file": "b_tree.c",
+      "line": 168
+    },
+    {
+      "level": 1,
+      "function": "insertionBTree",
+      "file": "b_tree.c",
+      "line": 297
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "b_tree.c",
+      "line": 45
+    }
   ]
 }

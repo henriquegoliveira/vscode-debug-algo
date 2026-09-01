@@ -21,10 +21,16 @@ export function readExtractionOptions(): ExtractionOptions {
 
   const maxNodes = configuration.get<number>('limits.maxNodes');
   const maxEdges = configuration.get<number>('limits.maxEdges');
-  if (typeof maxNodes === 'number' || typeof maxEdges === 'number') {
+  const maxCells = configuration.get<number>('limits.maxCells');
+  if (
+    typeof maxNodes === 'number' ||
+    typeof maxEdges === 'number' ||
+    typeof maxCells === 'number'
+  ) {
     options.limits = {};
     if (typeof maxNodes === 'number') options.limits.maxNodes = maxNodes;
     if (typeof maxEdges === 'number') options.limits.maxEdges = maxEdges;
+    if (typeof maxCells === 'number') options.limits.maxCells = maxCells;
   }
 
   return options;

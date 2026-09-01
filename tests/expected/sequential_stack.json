@@ -251,5 +251,25 @@
       ]
     }
   ],
-  "edges": []
+  "edges": [],
+  "frames": [
+    {
+      "level": 0,
+      "function": "pop",
+      "file": "sequential_stack.c",
+      "line": 77
+    },
+    {
+      "level": 1,
+      "function": "drain",
+      "file": "sequential_stack.c",
+      "line": 84
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "sequential_stack.c",
+      "line": 31
+    }
+  ]
 }

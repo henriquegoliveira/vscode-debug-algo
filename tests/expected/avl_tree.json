@@ -458,5 +458,31 @@
       "to": null,
       "type": "s_node_tree *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "rightRotationInsert",
+      "file": "avl_tree.c",
+      "line": 127
+    },
+    {
+      "level": 1,
+      "function": "insertionTree",
+      "file": "avl_tree.c",
+      "line": 218
+    },
+    {
+      "level": 2,
+      "function": "insertionTree",
+      "file": "avl_tree.c",
+      "line": 206
+    },
+    {
+      "level": 3,
+      "function": "main",
+      "file": "avl_tree.c",
+      "line": 41
+    }
   ]
 }

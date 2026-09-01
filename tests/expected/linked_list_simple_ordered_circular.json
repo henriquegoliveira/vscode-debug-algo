@@ -223,5 +223,19 @@
       "to": "#4",
       "type": "CircularNode *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "remove_node",
+      "file": "linked_list_simple_ordered_circular.c",
+      "line": 110
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "linked_list_simple_ordered_circular.c",
+      "line": 29
+    }
   ]
 }

@@ -310,5 +310,19 @@
       "to": null,
       "type": "Item *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "summarize",
+      "file": "array_of_structs.c",
+      "line": 68
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "array_of_structs.c",
+      "line": 31
+    }
   ]
 }

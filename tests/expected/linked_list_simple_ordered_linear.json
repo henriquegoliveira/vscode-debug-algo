@@ -223,5 +223,19 @@
       "to": null,
       "type": "Node *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "remove_node",
+      "file": "linked_list_simple_ordered_linear.c",
+      "line": 91
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "linked_list_simple_ordered_linear.c",
+      "line": 28
+    }
   ]
 }

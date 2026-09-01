@@ -179,5 +179,19 @@
       "to": null,
       "type": "Node *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "remove_node",
+      "file": "linked_list_simple.c",
+      "line": 58
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "linked_list_simple.c",
+      "line": 26
+    }
   ]
 }

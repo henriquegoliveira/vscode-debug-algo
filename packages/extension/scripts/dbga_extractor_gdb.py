@@ -1,3 +1,5 @@
+import os
+
 import gdb
 
 import dbga_adapter
@@ -17,6 +19,7 @@ class GdbAdapter(dbga_adapter.Adapter):
     def __init__(self):
         self._inferior = gdb.selected_inferior()
         self._enums = {}
+        self._user_symtabs = {}
         try:
             self._progspace = gdb.current_progspace().filename
         except Exception:
@@ -33,18 +36,26 @@ class GdbAdapter(dbga_adapter.Adapter):
 
     def frames(self):
         collected = []
+        self._user_symtabs = {}
         try:
             frame = gdb.newest_frame()
         except gdb.error:
             return collected
 
         while frame is not None and frame.is_valid():
+            sal = self._safe_sal(frame)
+            user = self._sal_is_user_code(sal)
+            file_name, line = self._sal_location(sal)
+            if user and sal is not None and sal.symtab is not None:
+                self._user_symtabs.setdefault(sal.symtab.filename, sal.symtab)
             collected.append(
                 dbga_adapter.FrameInfo(
                     frame.level(),
                     frame.name() or "??",
-                    self._is_user_code(frame),
+                    user,
                     frame,
+                    file_name,
+                    line,
                 )
             )
             try:
@@ -54,17 +65,71 @@ class GdbAdapter(dbga_adapter.Adapter):
 
         return collected
 
-    def _is_user_code(self, frame):
-        if self._progspace is None:
-            return False
+    def _safe_sal(self, frame):
         try:
-            sal = frame.find_sal()
+            return frame.find_sal()
         except gdb.error:
-            return False
-        if sal is None or sal.symtab is None:
+            return None
+
+    def _sal_is_user_code(self, sal):
+        if self._progspace is None or sal is None or sal.symtab is None:
             return False
         objfile = sal.symtab.objfile
         return objfile is not None and objfile.filename == self._progspace
+
+    def _sal_location(self, sal):
+        if sal is None or sal.symtab is None:
+            return None, 0
+        return os.path.basename(sal.symtab.filename), int(sal.line or 0)
+
+    def globals(self):
+        symtabs = list(self._user_symtabs.values())
+        seen = set()
+        collected = []
+
+        for symtab in symtabs:
+            source = os.path.basename(symtab.filename)
+            for block in self._file_blocks(symtab):
+                for symbol in block:
+                    if not symbol.is_variable or symbol.name in seen:
+                        continue
+                    sym_symtab = _attribute(symbol, "symtab")
+                    if sym_symtab is not None and sym_symtab.filename != symtab.filename:
+                        continue
+                    if _attribute(symbol, "addr_class") != gdb.SYMBOL_LOC_STATIC:
+                        continue
+                    if _is_const_scalar(_attribute(symbol, "type")):
+                        continue
+                    try:
+                        value = symbol.value()
+                        valid = not value.is_optimized_out
+                    except gdb.error:
+                        continue
+                    seen.add(symbol.name)
+                    collected.append(
+                        (
+                            dbga_adapter.VarInfo(
+                                symbol.name, dbga_adapter.GLOBAL, value, valid
+                            ),
+                            source,
+                        )
+                    )
+
+        return collected
+
+    def _file_blocks(self, symtab):
+        blocks = []
+        for accessor in ("static_block", "global_block"):
+            method = getattr(symtab, accessor, None)
+            if method is None:
+                continue
+            try:
+                block = method()
+            except gdb.error:
+                continue
+            if block is not None:
+                blocks.append(block)
+        return blocks
 
     def variables(self, frame):
         handle = frame.handle
@@ -286,6 +351,30 @@ class GdbAdapter(dbga_adapter.Adapter):
             return gdb.parse_and_eval(expression)
         except (gdb.error, ValueError):
             return None
+
+
+_SCALAR_TYPE_CODES = (
+    gdb.TYPE_CODE_INT,
+    gdb.TYPE_CODE_FLT,
+    gdb.TYPE_CODE_ENUM,
+    gdb.TYPE_CODE_BOOL,
+    gdb.TYPE_CODE_CHAR,
+)
+
+
+def _is_const_scalar(gdb_type):
+    if gdb_type is None:
+        return False
+    try:
+        stripped = gdb_type.strip_typedefs()
+    except gdb.error:
+        return False
+    if stripped.code not in _SCALAR_TYPE_CODES:
+        return False
+    try:
+        return str(stripped) != str(stripped.unqualified())
+    except Exception:
+        return "const" in str(stripped).split()
 
 
 def _declared_name(gdb_type):

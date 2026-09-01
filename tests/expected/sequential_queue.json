@@ -231,5 +231,25 @@
       }
     }
   ],
-  "edges": []
+  "edges": [],
+  "frames": [
+    {
+      "level": 0,
+      "function": "dequeue",
+      "file": "sequential_queue.c",
+      "line": 87
+    },
+    {
+      "level": 1,
+      "function": "serve",
+      "file": "sequential_queue.c",
+      "line": 94
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "sequential_queue.c",
+      "line": 33
+    }
+  ]
 }

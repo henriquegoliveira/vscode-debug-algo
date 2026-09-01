@@ -542,5 +542,25 @@
       "to": "#23",
       "type": "int *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "summarize",
+      "file": "dynamic_array.c",
+      "line": 113
+    },
+    {
+      "level": 1,
+      "function": "report",
+      "file": "dynamic_array.c",
+      "line": 101
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "dynamic_array.c",
+      "line": 36
+    }
   ]
 }
