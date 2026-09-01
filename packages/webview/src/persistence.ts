@@ -5,11 +5,14 @@ const STORAGE_KEY = 'dbga.viewState';
 
 const CHOICES: LayoutChoice[] = ['auto', 'physics', 'hierarchical'];
 const MODES: FrameMode[] = ['current', 'all'];
+const VIEW_MODES: ViewMode[] = ['graph', 'recursion'];
 
 export const MIN_COLUMN_WIDTH = 180;
 export const MAX_COLUMN_WIDTH = 640;
 
 export type FrameMode = 'current' | 'all';
+
+export type ViewMode = 'graph' | 'recursion';
 
 export type FieldChoice = 'all' | 'none' | string[];
 
@@ -25,6 +28,7 @@ export interface FileView {
   frameMode: FrameMode;
   follow: boolean;
   fields: Record<string, FieldChoice>;
+  viewMode: ViewMode;
 }
 
 export interface PanelState {
@@ -43,6 +47,7 @@ export const DEFAULT_FILE_VIEW: FileView = {
   frameMode: 'current',
   follow: false,
   fields: {},
+  viewMode: 'graph',
 };
 
 export const DEFAULT_PANEL_STATE: PanelState = {
@@ -152,6 +157,9 @@ export function coerceFile(stored: unknown): FileView {
       : DEFAULT_FILE_VIEW.frameMode,
     follow: typeof raw.follow === 'boolean' ? raw.follow : DEFAULT_FILE_VIEW.follow,
     fields: coerceFields(raw.fields),
+    viewMode: VIEW_MODES.includes(raw.viewMode as ViewMode)
+      ? (raw.viewMode as ViewMode)
+      : DEFAULT_FILE_VIEW.viewMode,
   };
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { LayoutChoice } from './layout';
-import type { FrameMode } from './persistence';
+import type { FrameMode, ViewMode } from './persistence';
 
 export const ZOOM_STEP = 1.25;
 
@@ -10,7 +10,9 @@ const CHOICES: { value: LayoutChoice; label: string }[] = [
   { value: 'hierarchical', label: 'Em árvore' },
 ];
 
-const FUTURE = ['Recursão', 'Ordenação'];
+const RECURSION_VALUE = 'recursion';
+
+const FUTURE = ['Ordenação'];
 
 export const ColumnButton: React.FC<{
   open: boolean;
@@ -85,6 +87,8 @@ const Toolbar: React.FC<{
   onFrameMode: (mode: FrameMode) => void;
   follow: boolean;
   onFollow: (enabled: boolean) => void;
+  viewMode: ViewMode;
+  onViewMode: (mode: ViewMode) => void;
   compact: boolean;
 }> = ({
   choice,
@@ -96,20 +100,33 @@ const Toolbar: React.FC<{
   onFrameMode,
   follow,
   onFollow,
+  viewMode,
+  onViewMode,
   compact,
 }) => (
   <div style={compact ? { ...styles.bar, ...styles.barCompact } : styles.bar}>
     <select
       style={styles.select}
-      value={choice}
+      value={viewMode === 'recursion' ? RECURSION_VALUE : choice}
       title="Como desenhar a estrutura"
-      onChange={(event) => onChoice(event.target.value as LayoutChoice)}
+      onChange={(event) => {
+        const value = event.target.value;
+
+        if (value === RECURSION_VALUE) {
+          onViewMode('recursion');
+          return;
+        }
+
+        onViewMode('graph');
+        onChoice(value as LayoutChoice);
+      }}
     >
       {CHOICES.map((entry) => (
         <option key={entry.value} value={entry.value}>
           {entry.label}
         </option>
       ))}
+      <option value={RECURSION_VALUE}>Recursão</option>
       {FUTURE.map((label) => (
         <option key={label} value={label} disabled title="Ainda não disponível">
           {label}
@@ -117,45 +134,49 @@ const Toolbar: React.FC<{
       ))}
     </select>
 
-    <button
-      type="button"
-      className="dbga-chip"
-      aria-pressed={!manual && frameMode === 'current'}
-      title="Mostrar só as variáveis do frame onde a execução parou"
-      onClick={() => onFrameMode('current')}
-    >
-      atual
-    </button>
+    {viewMode === 'graph' && (
+      <>
+        <button
+          type="button"
+          className="dbga-chip"
+          aria-pressed={!manual && frameMode === 'current'}
+          title="Mostrar só as variáveis do frame onde a execução parou"
+          onClick={() => onFrameMode('current')}
+        >
+          atual
+        </button>
 
-    <button
-      type="button"
-      className="dbga-chip"
-      aria-pressed={!manual && frameMode === 'all'}
-      title="Mostrar as variáveis de todos os frames"
-      onClick={() => onFrameMode('all')}
-    >
-      todos
-    </button>
+        <button
+          type="button"
+          className="dbga-chip"
+          aria-pressed={!manual && frameMode === 'all'}
+          title="Mostrar as variáveis de todos os frames"
+          onClick={() => onFrameMode('all')}
+        >
+          todos
+        </button>
 
-    <button
-      type="button"
-      className="dbga-chip"
-      aria-pressed={nullTerminals}
-      title="Desenhar os ponteiros nulos como terminais no grafo"
-      onClick={() => onNullTerminals(!nullTerminals)}
-    >
-      NULL
-    </button>
+        <button
+          type="button"
+          className="dbga-chip"
+          aria-pressed={nullTerminals}
+          title="Desenhar os ponteiros nulos como terminais no grafo"
+          onClick={() => onNullTerminals(!nullTerminals)}
+        >
+          NULL
+        </button>
 
-    <button
-      type="button"
-      className="dbga-chip"
-      aria-pressed={follow}
-      title="Trazer o canvas para o frame onde a execução parou a cada pausa"
-      onClick={() => onFollow(!follow)}
-    >
-      seguir
-    </button>
+        <button
+          type="button"
+          className="dbga-chip"
+          aria-pressed={follow}
+          title="Trazer o canvas para o frame onde a execução parou a cada pausa"
+          onClick={() => onFollow(!follow)}
+        >
+          seguir
+        </button>
+      </>
+    )}
   </div>
 );
 
