@@ -6,6 +6,9 @@ import traceback
 
 SCHEMA_VERSION = 2
 
+REPLACE_ATTEMPTS = 5
+REPLACE_BACKOFF_SECONDS = 0.01
+
 MASK64 = 0xFFFFFFFFFFFFFFFF
 
 JSON_SAFE_INT = 2**53
@@ -83,6 +86,7 @@ class SnapshotBuilder(object):
         self._visited = set()
         self._errors = []
         self._truncation_reasons = []
+        self._frames = []
         self._frames_scanned = 0
         self._frames_skipped = 0
 
@@ -106,6 +110,16 @@ class SnapshotBuilder(object):
 
     def frame_skipped(self):
         self._frames_skipped += 1
+
+    def frame(self, level, function, file, line):
+        self._frames.append(
+            {
+                "level": int(level),
+                "function": function if function is not None else "",
+                "file": file if file is not None else "",
+                "line": int(line or 0),
+            }
+        )
 
     def truncate(self, reason):
         if reason not in self._truncation_reasons:
@@ -289,6 +303,7 @@ class SnapshotBuilder(object):
             "roots": self._roots,
             "nodes": self._nodes,
             "edges": self._edges,
+            "frames": self._frames,
         }
 
 
@@ -315,7 +330,19 @@ def minimal_snapshot(debugger_name, debugger_version, exception):
         "roots": [],
         "nodes": [],
         "edges": [],
+        "frames": [],
     }
+
+
+def _replace_with_retry(tmp_path, path):
+    for attempt in range(REPLACE_ATTEMPTS):
+        try:
+            os.replace(tmp_path, path)
+            return
+        except OSError:
+            if attempt == REPLACE_ATTEMPTS - 1:
+                raise
+            time.sleep(REPLACE_BACKOFF_SECONDS * (2**attempt))
 
 
 def write_atomic(path, snapshot):
@@ -325,7 +352,7 @@ def write_atomic(path, snapshot):
     try:
         with os.fdopen(fd, "w") as handle:
             json.dump(snapshot, handle, allow_nan=False)
-        os.replace(tmp_path, path)
+        _replace_with_retry(tmp_path, path)
     except Exception:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)

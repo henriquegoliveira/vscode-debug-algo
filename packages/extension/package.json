@@ -62,6 +62,16 @@
           "minimum": 1,
           "default": 6000
         },
+        "dbgAlgo.limits.maxCells": {
+          "type": "number",
+          "minimum": 1,
+          "default": 64
+        },
+        "dbgAlgo.limits.historyDepth": {
+          "type": "number",
+          "minimum": 1,
+          "default": 20
+        },
         "dbgAlgo.view": {
           "type": "object",
           "scope": "resource",

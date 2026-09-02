@@ -1045,5 +1045,25 @@
       "to": "#33",
       "type": "void *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "inspect",
+      "file": "scalar_values.cpp",
+      "line": 121
+    },
+    {
+      "level": 1,
+      "function": "report",
+      "file": "scalar_values.cpp",
+      "line": 81
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "scalar_values.cpp",
+      "line": 50
+    }
   ]
 }

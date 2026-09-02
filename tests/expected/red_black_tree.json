@@ -198,7 +198,7 @@
       "function": "main",
       "frameLevel": 2,
       "origin": "local",
-      "type": "int[15]",
+      "type": "int[9]",
       "category": "aggregate",
       "address": "#18",
       "target": null,
@@ -233,7 +233,7 @@
       "status": "ok",
       "value": {
         "t": "int",
-        "v": 15,
+        "v": 9,
         "signed": true
       }
     }
@@ -354,9 +354,9 @@
     {
       "kind": "array",
       "id": "#18",
-      "type": "int[15]",
+      "type": "int[9]",
       "elementType": "int",
-      "length": 15,
+      "length": 9,
       "cells": [
         {
           "t": "int",
@@ -400,37 +400,7 @@
         },
         {
           "t": "int",
-          "v": 25,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 35,
-          "signed": true
-        },
-        {
-          "t": "int",
           "v": 45,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 55,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 65,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 75,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 85,
           "signed": true
         }
       ],
@@ -511,6 +481,26 @@
       "field": "right",
       "to": null,
       "type": "RedBlackNode *"
+    }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "fixInsertion",
+      "file": "red_black_tree.c",
+      "line": 174
+    },
+    {
+      "level": 1,
+      "function": "insertion",
+      "file": "red_black_tree.c",
+      "line": 239
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "red_black_tree.c",
+      "line": 37
     }
   ]
 }

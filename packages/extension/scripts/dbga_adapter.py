@@ -20,6 +20,7 @@ SCALAR_CATEGORIES = (INT, REAL, BOOL, CHAR, ENUM)
 
 LOCAL = "local"
 PARAMETER = "parameter"
+GLOBAL = "global"
 
 _UNRESOLVED = object()
 
@@ -95,12 +96,25 @@ def _needs_space(previous, token):
     return _is_identifier(previous) and _is_identifier(token)
 
 
+_TYPE_SYNONYMS = {
+    "_Bool": ("bool",),
+    "__float128": ("long", "double"),
+}
+
+
+def _apply_type_synonyms(tokens):
+    expanded = []
+    for token in tokens:
+        expanded.extend(_TYPE_SYNONYMS.get(token, (token,)))
+    return expanded
+
+
 def canonical_type_name(name):
     if name is None:
         return None
 
     text = str(name)
-    tokens = _strip_keywords(_tokenize_type_name(text))
+    tokens = _apply_type_synonyms(_strip_keywords(_tokenize_type_name(text)))
     if not tokens:
         return text.strip()
 
@@ -266,13 +280,15 @@ def parse_annotation(text):
 
 
 class FrameInfo(object):
-    __slots__ = ("level", "function", "user_code", "handle")
+    __slots__ = ("level", "function", "user_code", "handle", "file", "line")
 
-    def __init__(self, level, function, user_code, handle):
+    def __init__(self, level, function, user_code, handle, file=None, line=0):
         self.level = level
         self.function = function
         self.user_code = user_code
         self.handle = handle
+        self.file = file
+        self.line = line
 
 
 class VarInfo(object):
@@ -349,6 +365,9 @@ class Adapter(object):
         raise NotImplementedError
 
     def variables(self, frame):
+        raise NotImplementedError
+
+    def globals(self):
         raise NotImplementedError
 
     def type_of(self, ref):

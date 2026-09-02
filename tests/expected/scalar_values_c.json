@@ -1009,5 +1009,25 @@
       "to": "#35",
       "type": "void *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "inspect",
+      "file": "scalar_values_c.c",
+      "line": 120
+    },
+    {
+      "level": 1,
+      "function": "report",
+      "file": "scalar_values_c.c",
+      "line": 82
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "scalar_values_c.c",
+      "line": 51
+    }
   ]
 }

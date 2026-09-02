@@ -75,6 +75,7 @@ class LldbAdapter(dbga_adapter.Adapter):
         self._target = self._debugger.GetSelectedTarget()
         self._process = self._target.GetProcess()
         self._executable = None
+        self._user_cu_names = set()
         self._records = {}
         self._enums = {}
 
@@ -97,6 +98,7 @@ class LldbAdapter(dbga_adapter.Adapter):
 
     def frames(self):
         collected = []
+        self._user_cu_names = set()
 
         thread = self._process.GetSelectedThread()
         if not thread.IsValid():
@@ -108,12 +110,18 @@ class LldbAdapter(dbga_adapter.Adapter):
             frame = thread.GetFrameAtIndex(level)
             if not frame.IsValid():
                 break
+            user = self._is_user_code(frame)
+            file_name, line = _frame_location(frame)
+            if user and file_name is not None:
+                self._user_cu_names.add(file_name)
             collected.append(
                 dbga_adapter.FrameInfo(
                     level,
                     _function_name(frame),
-                    self._is_user_code(frame),
+                    user,
                     frame,
+                    file_name,
+                    line,
                 )
             )
 
@@ -125,6 +133,41 @@ class LldbAdapter(dbga_adapter.Adapter):
         if not frame.GetLineEntry().IsValid():
             return False
         return frame.GetModule().GetFileSpec().GetFilename() == self._executable
+
+    def globals(self):
+        cu_names = self._user_cu_names
+        if not cu_names:
+            return []
+
+        try:
+            found = self._target.FindGlobalVariables(".*", 1 << 20, lldb.eMatchTypeRegex)
+        except Exception:
+            return []
+
+        seen = set()
+        collected = []
+        for value in found:
+            name = value.GetName()
+            if not name:
+                continue
+            if name.startswith("::"):
+                name = name[2:]
+            if name in seen:
+                continue
+            source = _declaration_file(value)
+            if source is None or source not in cu_names:
+                continue
+            if value.GetLoadAddress() == lldb.LLDB_INVALID_ADDRESS:
+                continue
+            if _is_const_scalar(value.GetType()):
+                continue
+            seen.add(name)
+            valid = bool(value.IsValid()) and bool(value.GetError().Success())
+            collected.append(
+                (dbga_adapter.VarInfo(name, dbga_adapter.GLOBAL, value, valid), source)
+            )
+
+        return collected
 
     def variables(self, frame):
         handle = frame.handle
@@ -393,6 +436,44 @@ def _function_name(frame):
     return name or "??"
 
 
+_SCALAR_TYPE_FLAG = getattr(lldb, "eTypeIsScalar", 0)
+
+
+def _is_const_scalar(sb_type):
+    canonical = sb_type.GetCanonicalType()
+    if _SCALAR_TYPE_FLAG:
+        is_scalar = bool(canonical.GetTypeFlags() & _SCALAR_TYPE_FLAG)
+    else:
+        is_scalar = canonical.GetTypeClass() in (
+            lldb.eTypeClassBuiltin,
+            lldb.eTypeClassEnumeration,
+        )
+    if not is_scalar:
+        return False
+
+    name = canonical.GetName() or ""
+    return "const" in name.replace("*", " ").replace("&", " ").split()
+
+
+def _frame_location(frame):
+    entry = frame.GetLineEntry()
+    if not entry.IsValid():
+        return None, 0
+    spec = entry.GetFileSpec()
+    name = spec.GetFilename() if spec.IsValid() else None
+    return name, int(entry.GetLine() or 0)
+
+
+def _declaration_file(value):
+    declaration = value.GetDeclaration()
+    if not declaration.IsValid():
+        return None
+    spec = declaration.GetFileSpec()
+    if not spec.IsValid():
+        return None
+    return spec.GetFilename()
+
+
 def _block_values(frame_handle):
     collected = []
 
@@ -459,11 +540,7 @@ def dump_structs(out_path, options=None):
             LldbAdapter.debugger_name, _fallback_version(), error
         )
 
-    try:
-        dbga_snapshot.write_atomic(out_path, snapshot)
-    except Exception as error:
-        print("[dbga] falha ao escrever o snapshot em %s: %s" % (out_path, error))
-        return None
+    dbga_snapshot.write_atomic(out_path, snapshot)
 
     return out_path
 

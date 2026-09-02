@@ -13,6 +13,15 @@ export interface SnapshotMessage {
   type: 'snapshot';
   sessionId: string;
   snapshot: GraphSnapshot;
+  depth: number;
+  id?: string;
+}
+
+export interface HistoryMessage {
+  v: typeof PROTOCOL_VERSION;
+  type: 'history';
+  sessionId: string;
+  entries: GraphSnapshot[];
   id?: string;
 }
 
@@ -56,13 +65,16 @@ export interface SaveViewMessage {
 
 export type WebviewMessage = ReadyMessage | AnnotateMessage | SaveViewMessage;
 
-export type ExtensionMessage = SnapshotMessage | SessionEndMessage | ErrorMessage | ViewMessage;
+export type ExtensionMessage =
+  SnapshotMessage | HistoryMessage | SessionEndMessage | ErrorMessage | ViewMessage;
 
 interface Envelope {
   v: unknown;
   type: unknown;
   sessionId?: unknown;
   snapshot?: unknown;
+  entries?: unknown;
+  depth?: unknown;
   message?: unknown;
   annotation?: unknown;
   file?: unknown;
@@ -98,7 +110,17 @@ export function isExtensionMessage(value: unknown): value is ExtensionMessage {
 
   switch (envelope.type) {
     case 'snapshot':
-      return typeof envelope.sessionId === 'string' && isObject(envelope.snapshot);
+      return (
+        typeof envelope.sessionId === 'string' &&
+        isObject(envelope.snapshot) &&
+        typeof envelope.depth === 'number'
+      );
+    case 'history':
+      return (
+        typeof envelope.sessionId === 'string' &&
+        Array.isArray(envelope.entries) &&
+        envelope.entries.every((entry) => isObject(entry))
+      );
     case 'sessionEnd':
       return typeof envelope.sessionId === 'string';
     case 'error':

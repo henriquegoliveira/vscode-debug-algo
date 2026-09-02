@@ -1,14 +1,19 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
-import { DebugSessionManager } from './debugSessionManager';
-import { ExtractorInvoker } from './extractorInvoker';
-import { SnapshotReader } from './snapshotReader';
-import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
-import { appendDynamicArray, readFileView, saveFileView } from './extractionSettings';
-import { MISSING_BUNDLE_MESSAGE, VisualizerPanel } from './visualizerPanel';
-import { SnapshotBroker } from './snapshotBroker';
-import { WebviewChannel } from './webviewChannel';
-import { HttpWsChannel, MissingBundleError } from './httpWsChannel';
+import { DebugSessionManager } from './debug/debugSessionManager';
+import { ExtractorInvoker, sweepStaleTempFiles } from './debug/extractorInvoker';
+import { SnapshotReader } from './debug/snapshotReader';
+import { warnIfNoSupportedDebugSession } from './debug/debuggerAvailability';
+import {
+  appendDynamicArray,
+  readFileView,
+  readHistoryDepth,
+  saveFileView,
+} from './debug/extractionSettings';
+import { MISSING_BUNDLE_MESSAGE, VisualizerPanel } from './channels/visualizerPanel';
+import { SnapshotBroker } from './channels/snapshotBroker';
+import { WebviewChannel } from './channels/webviewChannel';
+import { HttpWsChannel, MissingBundleError } from './channels/httpWsChannel';
 
 const SERVER_FAILED_MESSAGE =
   'DbgAlgo não conseguiu abrir o servidor local da Visualização. Tente de novo; se continuar ' +
@@ -30,7 +35,7 @@ export class ExtensionController {
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
     this.panel = new VisualizerPanel(context.extensionUri);
 
-    this.broker = new SnapshotBroker(readFileView);
+    this.broker = new SnapshotBroker(readFileView, readHistoryDepth);
     this.broker.register(
       new WebviewChannel(
         this.panel,
@@ -50,6 +55,8 @@ export class ExtensionController {
 
   public activate(): void {
     console.log('Extensão DbgAlgo ativada com sucesso!');
+
+    void sweepStaleTempFiles();
 
     this.context.subscriptions.push(this.sessionManager, this.panel, this.broker);
 

@@ -396,5 +396,25 @@
       "to": null,
       "type": "Payload *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "inspect",
+      "file": "garbage_pointer.cpp",
+      "line": 79
+    },
+    {
+      "level": 1,
+      "function": "probe",
+      "file": "garbage_pointer.cpp",
+      "line": 57
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "garbage_pointer.cpp",
+      "line": 35
+    }
   ]
 }

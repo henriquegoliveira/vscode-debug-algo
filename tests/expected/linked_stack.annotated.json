@@ -226,5 +226,19 @@
       "to": null,
       "type": "StackNode *"
     }
+  ],
+  "frames": [
+    {
+      "level": 0,
+      "function": "pop",
+      "file": "linked_stack.c",
+      "line": 71
+    },
+    {
+      "level": 1,
+      "function": "main",
+      "file": "linked_stack.c",
+      "line": 27
+    }
   ]
 }
