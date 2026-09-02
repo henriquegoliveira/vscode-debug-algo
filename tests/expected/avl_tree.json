@@ -464,19 +464,19 @@
       "level": 0,
       "function": "rightRotationInsert",
       "file": "avl_tree.c",
-      "line": 127
+      "line": 124
     },
     {
       "level": 1,
       "function": "insertionTree",
       "file": "avl_tree.c",
-      "line": 218
+      "line": 215
     },
     {
       "level": 2,
       "function": "insertionTree",
       "file": "avl_tree.c",
-      "line": 206
+      "line": 203
     },
     {
       "level": 3,

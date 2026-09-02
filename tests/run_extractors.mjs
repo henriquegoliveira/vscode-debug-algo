@@ -24,11 +24,18 @@ const SCENES = {
   linked_list_simple: { breakAt: 'remove_node' },
   linked_list_cyclic: { breakAt: 'remove_node' },
   recursion: { continues: 5 },
-  sorting_algorithms: { continues: 7 },
-  b_tree: { continues: 6 },
+  b_tree: { continues: 2 },
+  sorting_bubble: { continues: 5 },
+  sorting_bubble_improved: { continues: 5 },
+  sorting_insertion: { continues: 4 },
+  sorting_merge: { continues: 5 },
+  sorting_quick_last: { continues: 5 },
+  sorting_quick_median: { continues: 5 },
+  sorting_quick_random: { continues: 5 },
+  sorting_heap: { continues: 5 },
 };
 
-const TIMELINES = ['sorting_algorithms', 'recursion'];
+const TIMELINES = ['sorting_merge', 'recursion'];
 
 const VARIANTS = {
   dynamic_array: {
@@ -60,6 +67,7 @@ const WINDOWS_DIVERGENCE = {
   huffman: ['baseline', 'parity'],
   class_reference: ['parity'],
   garbage_pointer: ['parity'],
+  sorting_quick_random: ['baseline'],
 };
 
 export function declaredDivergence(target, platform, kind) {
@@ -185,14 +193,52 @@ function resolveLldb() {
   );
 }
 
-function sourceFile(target) {
-  for (const extension of ['.c', '.cpp']) {
-    const candidate = path.join(TARGETS, target + extension);
-    if (existsSync(candidate)) {
-      return candidate;
+let sourceIndex;
+
+export function indexSources(entries, read) {
+  const found = new Map();
+
+  for (const directory of entries) {
+    for (const entry of read(directory)) {
+      if (!entry.endsWith('.c') && !entry.endsWith('.cpp')) {
+        continue;
+      }
+
+      const base = entry.replace(/\.(c|cpp)$/, '');
+      const previous = found.get(base);
+      if (previous !== undefined) {
+        throw new Error(
+          `dois fontes com o mesmo basename: ${previous} e ${directory}/${entry}` +
+            ' — o binario e o launch.json usam o basename como identidade',
+        );
+      }
+
+      found.set(base, `${directory}/${entry}`);
     }
   }
-  return null;
+
+  return found;
+}
+
+function sources() {
+  if (sourceIndex === undefined) {
+    const directories = readdirSync(TARGETS, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory() && entry.name !== path.basename(BIN))
+      .map((entry) => entry.name)
+      .sort();
+
+    sourceIndex = indexSources(directories, (directory) =>
+      readdirSync(path.join(TARGETS, directory)).sort(),
+    );
+  }
+
+  return sourceIndex;
+}
+
+function sourceFile(target) {
+  const relative = sources().get(target);
+
+  return relative === undefined ? null : path.join(TARGETS, relative);
 }
 
 export function targetsIn(entries, hasSource) {

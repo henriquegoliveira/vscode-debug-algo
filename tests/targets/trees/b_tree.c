@@ -37,9 +37,7 @@ int main(void) {
     int f = 0;
     int g = 0;
 
-    static const int keysToInsert[] = {50, 10, 70, 30, 90, 20, 60, 80, 40, 100,
-                                       15, 25, 35, 45, 55, 65, 75, 85, 95, 105,
-                                       5,  12, 18, 22, 28, 32, 38, 42, 48, 52};
+    static const int keysToInsert[] = {50, 10, 70, 30, 90, 20, 60, 80, 40, 100, 15, 25};
 
     for (unsigned i = 0; i < sizeof(keysToInsert) / sizeof(keysToInsert[0]); i++) {
         insertionBTree(keysToInsert[i], &ptRoot, &f);

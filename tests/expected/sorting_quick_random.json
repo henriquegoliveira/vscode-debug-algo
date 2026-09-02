@@ -1,0 +1,691 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 5,
+    "framesSkipped": 0,
+    "observedTypes": [],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "sourceList",
+      "function": "sorting_quick_random.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "int[16]",
+      "category": "aggregate",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": "#0",
+      "status": "ok"
+    },
+    {
+      "name": "workList",
+      "function": "sorting_quick_random.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "int[16]",
+      "category": "aggregate",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "array",
+      "function": "swapValues",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#2",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "i",
+      "function": "swapValues",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#3",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "j",
+      "function": "swapValues",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#4",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 13,
+        "signed": true
+      }
+    },
+    {
+      "name": "tmp",
+      "function": "swapValues",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 214,
+        "signed": true
+      }
+    },
+    {
+      "name": "end",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#6",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 14,
+        "signed": true
+      }
+    },
+    {
+      "name": "i",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#7",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "init",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#8",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "j",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#9",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 13,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#10",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 16,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#11",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "pivot",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#12",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 133,
+        "signed": true
+      }
+    },
+    {
+      "name": "end",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#13",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 15,
+        "signed": true
+      }
+    },
+    {
+      "name": "i",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#14",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 15,
+        "signed": true
+      }
+    },
+    {
+      "name": "init",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#15",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 1,
+        "signed": true
+      }
+    },
+    {
+      "name": "j",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#16",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 14,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#17",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 16,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 2,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#18",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "pivot",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 2,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#19",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 963,
+        "signed": true
+      }
+    },
+    {
+      "name": "end",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#20",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 15,
+        "signed": true
+      }
+    },
+    {
+      "name": "i",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 3,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#21",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "init",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#22",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 0,
+        "signed": true
+      }
+    },
+    {
+      "name": "j",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 3,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#23",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": -1,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#24",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 16,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 3,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#25",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "pivot",
+      "function": "quickSortRandomPivot",
+      "frameLevel": 3,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#26",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": -47,
+        "signed": true
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "array",
+      "id": "#0",
+      "type": "int[16]",
+      "elementType": "int",
+      "length": 16,
+      "cells": [
+        {
+          "t": "int",
+          "v": 817,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 214,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 963,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 105,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 542,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 378,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 691,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": -47,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 250,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 884,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 133,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 706,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 429,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 91,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 577,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 312,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "array",
+      "id": "#1",
+      "type": "int[16]",
+      "elementType": "int",
+      "length": 16,
+      "cells": [
+        {
+          "t": "int",
+          "v": -47,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 214,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 817,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 105,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 542,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 378,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 691,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 312,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 250,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 884,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 577,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 706,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 429,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 91,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 133,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 963,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    }
+  ],
+  "edges": [],
+  "frames": [
+    {
+      "level": 0,
+      "function": "swapValues",
+      "file": "sorting_quick_random.c",
+      "line": 32
+    },
+    {
+      "level": 1,
+      "function": "quickSortRandomPivot",
+      "file": "sorting_quick_random.c",
+      "line": 62
+    },
+    {
+      "level": 2,
+      "function": "quickSortRandomPivot",
+      "file": "sorting_quick_random.c",
+      "line": 68
+    },
+    {
+      "level": 3,
+      "function": "quickSortRandomPivot",
+      "file": "sorting_quick_random.c",
+      "line": 69
+    },
+    {
+      "level": 4,
+      "function": "main",
+      "file": "sorting_quick_random.c",
+      "line": 75
+    }
+  ]
+}

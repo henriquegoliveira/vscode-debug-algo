@@ -1,0 +1,425 @@
+{
+  "meta": {
+    "version": 2,
+    "debugger": "",
+    "debuggerVersion": "",
+    "generatedAt": 0,
+    "truncated": false,
+    "truncationReasons": [],
+    "framesScanned": 3,
+    "framesSkipped": 0,
+    "observedTypes": [],
+    "errors": []
+  },
+  "roots": [
+    {
+      "name": "sourceList",
+      "function": "sorting_insertion.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "int[16]",
+      "category": "aggregate",
+      "address": "#0",
+      "target": null,
+      "indirections": 0,
+      "node": "#0",
+      "status": "ok"
+    },
+    {
+      "name": "workList",
+      "function": "sorting_insertion.c",
+      "frameLevel": -1,
+      "origin": "global",
+      "type": "int[16]",
+      "category": "aggregate",
+      "address": "#1",
+      "target": null,
+      "indirections": 0,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "from",
+      "function": "shiftGreater",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#2",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 4,
+        "signed": true
+      }
+    },
+    {
+      "name": "hole",
+      "function": "shiftGreater",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "long *",
+      "category": "pointer",
+      "address": "#3",
+      "target": "#4",
+      "indirections": 1,
+      "node": "#4",
+      "status": "ok"
+    },
+    {
+      "name": "j",
+      "function": "shiftGreater",
+      "frameLevel": 0,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#5",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 4,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "shiftGreater",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#6",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "value",
+      "function": "shiftGreater",
+      "frameLevel": 0,
+      "origin": "parameter",
+      "type": "int",
+      "category": "scalar",
+      "address": "#7",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 378,
+        "signed": true
+      }
+    },
+    {
+      "name": "hole",
+      "function": "insertionSort",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#4",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 4,
+        "signed": true
+      }
+    },
+    {
+      "name": "i",
+      "function": "insertionSort",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "long",
+      "category": "scalar",
+      "address": "#8",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 5,
+        "signed": true
+      }
+    },
+    {
+      "name": "lSize",
+      "function": "insertionSort",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "long",
+      "category": "scalar",
+      "address": "#9",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 16,
+        "signed": true
+      }
+    },
+    {
+      "name": "list",
+      "function": "insertionSort",
+      "frameLevel": 1,
+      "origin": "parameter",
+      "type": "int *",
+      "category": "pointer",
+      "address": "#10",
+      "target": "#1",
+      "indirections": 1,
+      "node": "#1",
+      "status": "ok"
+    },
+    {
+      "name": "value",
+      "function": "insertionSort",
+      "frameLevel": 1,
+      "origin": "local",
+      "type": "int",
+      "category": "scalar",
+      "address": "#11",
+      "target": null,
+      "indirections": 0,
+      "node": null,
+      "status": "ok",
+      "value": {
+        "t": "int",
+        "v": 378,
+        "signed": true
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "kind": "array",
+      "id": "#0",
+      "type": "int[16]",
+      "elementType": "int",
+      "length": 16,
+      "cells": [
+        {
+          "t": "int",
+          "v": 817,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 214,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 963,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 105,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 542,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 378,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 691,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": -47,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 250,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 884,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 133,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 706,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 429,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 91,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 577,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 312,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "array",
+      "id": "#1",
+      "type": "int[16]",
+      "elementType": "int",
+      "length": 16,
+      "cells": [
+        {
+          "t": "int",
+          "v": 105,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 214,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 542,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 817,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 963,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 378,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 691,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": -47,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 250,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 884,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 133,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 706,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 429,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 91,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 577,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 312,
+          "signed": true
+        }
+      ],
+      "cellsArePointers": false,
+      "truncated": false,
+      "origin": "static"
+    },
+    {
+      "kind": "opaque",
+      "id": "#4",
+      "reason": "notExpanded",
+      "type": "long",
+      "value": {
+        "t": "int",
+        "v": 4,
+        "signed": true
+      }
+    }
+  ],
+  "edges": [],
+  "frames": [
+    {
+      "level": 0,
+      "function": "shiftGreater",
+      "file": "sorting_insertion.c",
+      "line": 32
+    },
+    {
+      "level": 1,
+      "function": "insertionSort",
+      "file": "sorting_insertion.c",
+      "line": 45
+    },
+    {
+      "level": 2,
+      "function": "main",
+      "file": "sorting_insertion.c",
+      "line": 52
+    }
+  ]
+}

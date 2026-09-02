@@ -11,9 +11,14 @@ else
 EXE =
 endif
 
-C_SOURCES = $(wildcard *.c)
-CXX_SOURCES = $(wildcard *.cpp)
-TARGETS = $(patsubst %.c,$(BIN_DIR)/%$(EXE),$(C_SOURCES)) $(patsubst %.cpp,$(BIN_DIR)/%$(EXE),$(CXX_SOURCES))
+C_SOURCES = $(wildcard */*.c)
+CXX_SOURCES = $(wildcard */*.cpp)
+SOURCE_DIRS = $(sort $(dir $(C_SOURCES)) $(dir $(CXX_SOURCES)))
+BASENAMES = $(basename $(notdir $(C_SOURCES) $(CXX_SOURCES)))
+TARGETS = $(addprefix $(BIN_DIR)/,$(addsuffix $(EXE),$(BASENAMES)))
+
+vpath %.c $(SOURCE_DIRS)
+vpath %.cpp $(SOURCE_DIRS)
 
 .PHONY: all clean
 

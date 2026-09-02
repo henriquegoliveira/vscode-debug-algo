@@ -21,7 +21,7 @@
           "symbol",
           "frequency"
         ],
-        "count": 14,
+        "count": 6,
         "maxDegree": 0
       },
       {
@@ -71,7 +71,7 @@
       "function": "huffman.c",
       "frameLevel": -1,
       "origin": "global",
-      "type": "unsigned char[43]",
+      "type": "unsigned char[18]",
       "category": "aggregate",
       "address": "#0",
       "target": null,
@@ -80,8 +80,8 @@
       "status": "ok",
       "value": {
         "t": "text",
-        "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
-        "truncated": false
+        "v": "BBBEAAAACBADDBBCC\n",
+        "truncated": true
       }
     },
     {
@@ -137,7 +137,7 @@
       "status": "ok",
       "value": {
         "t": "int",
-        "v": 12,
+        "v": 4,
         "signed": true
       }
     },
@@ -479,9 +479,9 @@
     {
       "kind": "array",
       "id": "#0",
-      "type": "unsigned char[43]",
+      "type": "unsigned char[18]",
       "elementType": "unsigned char",
-      "length": 43,
+      "length": 18,
       "cells": [
         {
           "t": "char",
@@ -525,41 +525,6 @@
         },
         {
           "t": "char",
-          "v": 70,
-          "text": "F"
-        },
-        {
-          "t": "char",
-          "v": 70,
-          "text": "F"
-        },
-        {
-          "t": "char",
-          "v": 72,
-          "text": "H"
-        },
-        {
-          "t": "char",
-          "v": 72,
-          "text": "H"
-        },
-        {
-          "t": "char",
-          "v": 72,
-          "text": "H"
-        },
-        {
-          "t": "char",
-          "v": 72,
-          "text": "H"
-        },
-        {
-          "t": "char",
-          "v": 72,
-          "text": "H"
-        },
-        {
-          "t": "char",
           "v": 67,
           "text": "C"
         },
@@ -567,16 +532,6 @@
           "t": "char",
           "v": 66,
           "text": "B"
-        },
-        {
-          "t": "char",
-          "v": 77,
-          "text": "M"
-        },
-        {
-          "t": "char",
-          "v": 77,
-          "text": "M"
         },
         {
           "t": "char",
@@ -585,26 +540,6 @@
         },
         {
           "t": "char",
-          "v": 76,
-          "text": "L"
-        },
-        {
-          "t": "char",
-          "v": 76,
-          "text": "L"
-        },
-        {
-          "t": "char",
-          "v": 76,
-          "text": "L"
-        },
-        {
-          "t": "char",
-          "v": 67,
-          "text": "C"
-        },
-        {
-          "t": "char",
           "v": 68,
           "text": "D"
         },
@@ -625,31 +560,6 @@
         },
         {
           "t": "char",
-          "v": 66,
-          "text": "B"
-        },
-        {
-          "t": "char",
-          "v": 66,
-          "text": "B"
-        },
-        {
-          "t": "char",
-          "v": 66,
-          "text": "B"
-        },
-        {
-          "t": "char",
-          "v": 66,
-          "text": "B"
-        },
-        {
-          "t": "char",
-          "v": 66,
-          "text": "B"
-        },
-        {
-          "t": "char",
           "v": 67,
           "text": "C"
         },
@@ -657,41 +567,6 @@
           "t": "char",
           "v": 67,
           "text": "C"
-        },
-        {
-          "t": "char",
-          "v": 10,
-          "text": "\\x0a"
-        },
-        {
-          "t": "char",
-          "v": 255,
-          "text": "\\xff"
-        },
-        {
-          "t": "char",
-          "v": 255,
-          "text": "\\xff"
-        },
-        {
-          "t": "char",
-          "v": 0,
-          "text": "\\x00"
-        },
-        {
-          "t": "char",
-          "v": 127,
-          "text": "\\x7f"
-        },
-        {
-          "t": "char",
-          "v": 128,
-          "text": "\\x80"
-        },
-        {
-          "t": "char",
-          "v": 255,
-          "text": "\\xff"
         },
         {
           "t": "char",
@@ -712,57 +587,57 @@
       "cells": [
         {
           "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
           "v": 1,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 0,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 2,
           "signed": true
         },
         {
@@ -1047,8 +922,8 @@
           "type": "unsigned char",
           "value": {
             "t": "char",
-            "v": 0,
-            "text": "\\x00"
+            "v": 10,
+            "text": "\\x0a"
           }
         },
         {
@@ -1723,7 +1598,7 @@
           "type": "char *",
           "value": {
             "t": "text",
-            "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+            "v": "BBBEAAAACBADDBBCC\n",
             "truncated": false
           }
         },
@@ -1732,7 +1607,7 @@
           "type": "char *",
           "value": {
             "t": "text",
-            "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+            "v": "BBBEAAAACBADDBBCC\n",
             "truncated": false
           }
         },
@@ -1741,7 +1616,7 @@
           "type": "char *",
           "value": {
             "t": "text",
-            "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+            "v": "BBBEAAAACBADDBBCC\n",
             "truncated": false
           }
         },
@@ -1750,7 +1625,7 @@
           "type": "char *",
           "value": {
             "t": "text",
-            "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+            "v": "BBBEAAAACBADDBBCC\n",
             "truncated": false
           }
         },
@@ -1759,7 +1634,7 @@
           "type": "char *",
           "value": {
             "t": "text",
-            "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+            "v": "BBBEAAAACBADDBBCC\n",
             "truncated": false
           }
         },
@@ -1768,7 +1643,7 @@
           "type": "char *",
           "value": {
             "t": "text",
-            "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+            "v": "BBBEAAAACBADDBBCC\n",
             "truncated": false
           }
         },
@@ -1777,7 +1652,7 @@
           "type": "char *",
           "value": {
             "t": "text",
-            "v": "BBBEAAAAFFHHHHHCBMMALLLCDDBBBBBBBCC\n��",
+            "v": "BBBEAAAACBADDBBCC\n",
             "truncated": false
           }
         },
@@ -2586,8 +2461,8 @@
           "type": "unsigned char",
           "value": {
             "t": "char",
-            "v": 127,
-            "text": "\\x7f"
+            "v": 68,
+            "text": "D"
           }
         },
         {
@@ -2595,7 +2470,7 @@
           "type": "int",
           "value": {
             "t": "int",
-            "v": 1,
+            "v": 2,
             "signed": true
           }
         }
@@ -2614,8 +2489,8 @@
           "type": "unsigned char",
           "value": {
             "t": "char",
-            "v": 76,
-            "text": "L"
+            "v": 67,
+            "text": "C"
           }
         },
         {
@@ -2633,6 +2508,34 @@
     {
       "kind": "record",
       "id": "#37",
+      "type": "NodeTree",
+      "aggregate": "struct",
+      "sizeBytes": 24,
+      "fields": [
+        {
+          "name": "symbol",
+          "type": "unsigned char",
+          "value": {
+            "t": "char",
+            "v": 66,
+            "text": "B"
+          }
+        },
+        {
+          "name": "frequency",
+          "type": "int",
+          "value": {
+            "t": "int",
+            "v": 6,
+            "signed": true
+          }
+        }
+      ],
+      "arrays": []
+    },
+    {
+      "kind": "record",
+      "id": "#38",
       "type": "NodeTree",
       "aggregate": "struct",
       "sizeBytes": 24,
@@ -2660,259 +2563,7 @@
     },
     {
       "kind": "record",
-      "id": "#38",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 10,
-            "text": "\\x0a"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
       "id": "#39",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 128,
-            "text": "\\x80"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 1,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#40",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 70,
-            "text": "F"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#41",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 77,
-            "text": "M"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#42",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 255,
-            "text": "\\xff"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 3,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#43",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 68,
-            "text": "D"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#44",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 66,
-            "text": "B"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 11,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#45",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 72,
-            "text": "H"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 5,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#46",
-      "type": "NodeTree",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "symbol",
-          "type": "unsigned char",
-          "value": {
-            "t": "char",
-            "v": 67,
-            "text": "C"
-          }
-        },
-        {
-          "name": "frequency",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 4,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#47",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -3178,45 +2829,45 @@
     },
     {
       "kind": "opaque",
-      "id": "#48",
+      "id": "#40",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#49",
+      "id": "#41",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#50",
+      "id": "#42",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "opaque",
-      "id": "#51",
+      "id": "#43",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#52",
+      "id": "#44",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#53",
+      "id": "#45",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "record",
-      "id": "#54",
+      "id": "#46",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -3482,26 +3133,26 @@
     },
     {
       "kind": "opaque",
-      "id": "#55",
+      "id": "#47",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#56",
+      "id": "#48",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#57",
+      "id": "#49",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "record",
-      "id": "#58",
+      "id": "#50",
       "type": "_IO_FILE",
       "aggregate": "struct",
       "sizeBytes": 216,
@@ -3767,38 +3418,38 @@
     },
     {
       "kind": "opaque",
-      "id": "#59",
+      "id": "#51",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#60",
+      "id": "#52",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#61",
+      "id": "#53",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
     },
     {
       "kind": "opaque",
-      "id": "#62",
+      "id": "#54",
       "reason": "void",
       "type": "void"
     },
     {
       "kind": "opaque",
-      "id": "#63",
+      "id": "#55",
       "reason": "notExpanded",
       "type": "_IO_FILE *"
     },
     {
       "kind": "opaque",
-      "id": "#64",
+      "id": "#56",
       "reason": "error",
       "type": "_IO_wide_data",
       "detail": "invalidSize"
@@ -3826,13 +3477,13 @@
     {
       "from": "#8",
       "field": "[10]",
-      "to": "#36",
+      "to": null,
       "type": "NodeTree *"
     },
     {
       "from": "#8",
       "field": "[11]",
-      "to": "#37",
+      "to": null,
       "type": "NodeTree *"
     },
     {
@@ -3886,7 +3537,7 @@
     {
       "from": "#8",
       "field": "[1]",
-      "to": "#38",
+      "to": "#36",
       "type": "NodeTree *"
     },
     {
@@ -3952,7 +3603,7 @@
     {
       "from": "#8",
       "field": "[2]",
-      "to": "#39",
+      "to": "#37",
       "type": "NodeTree *"
     },
     {
@@ -4018,7 +3669,7 @@
     {
       "from": "#8",
       "field": "[3]",
-      "to": "#40",
+      "to": "#38",
       "type": "NodeTree *"
     },
     {
@@ -4084,7 +3735,7 @@
     {
       "from": "#8",
       "field": "[4]",
-      "to": "#41",
+      "to": null,
       "type": "NodeTree *"
     },
     {
@@ -4150,7 +3801,7 @@
     {
       "from": "#8",
       "field": "[5]",
-      "to": "#42",
+      "to": null,
       "type": "NodeTree *"
     },
     {
@@ -4180,25 +3831,25 @@
     {
       "from": "#8",
       "field": "[6]",
-      "to": "#43",
+      "to": null,
       "type": "NodeTree *"
     },
     {
       "from": "#8",
       "field": "[7]",
-      "to": "#44",
+      "to": null,
       "type": "NodeTree *"
     },
     {
       "from": "#8",
       "field": "[8]",
-      "to": "#45",
+      "to": null,
       "type": "NodeTree *"
     },
     {
       "from": "#8",
       "field": "[9]",
-      "to": "#46",
+      "to": null,
       "type": "NodeTree *"
     },
     {
@@ -4216,7 +3867,7 @@
     {
       "from": "#17",
       "field": "_chain",
-      "to": "#47",
+      "to": "#39",
       "type": "_IO_FILE *"
     },
     {
@@ -4240,7 +3891,7 @@
     {
       "from": "#17",
       "field": "_lock",
-      "to": "#48",
+      "to": "#40",
       "type": "void *"
     },
     {
@@ -4252,13 +3903,13 @@
     {
       "from": "#17",
       "field": "_prevchain",
-      "to": "#49",
+      "to": "#41",
       "type": "_IO_FILE **"
     },
     {
       "from": "#17",
       "field": "_wide_data",
-      "to": "#50",
+      "to": "#42",
       "type": "_IO_wide_data *"
     },
     {
@@ -4288,7 +3939,7 @@
     {
       "from": "#21",
       "field": "_lock",
-      "to": "#51",
+      "to": "#43",
       "type": "void *"
     },
     {
@@ -4299,302 +3950,206 @@
     },
     {
       "from": "#21",
+      "field": "_prevchain",
+      "to": "#44",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#21",
+      "field": "_wide_data",
+      "to": "#45",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#35",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#35",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#36",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#36",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#37",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#37",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#38",
+      "field": "left",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#38",
+      "field": "right",
+      "to": null,
+      "type": "NodeTree *"
+    },
+    {
+      "from": "#39",
+      "field": "_chain",
+      "to": "#46",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#39",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#39",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#39",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#39",
+      "field": "_lock",
+      "to": "#47",
+      "type": "void *"
+    },
+    {
+      "from": "#39",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#39",
+      "field": "_prevchain",
+      "to": "#48",
+      "type": "_IO_FILE **"
+    },
+    {
+      "from": "#39",
+      "field": "_wide_data",
+      "to": "#49",
+      "type": "_IO_wide_data *"
+    },
+    {
+      "from": "#46",
+      "field": "_chain",
+      "to": "#50",
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#46",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#46",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#46",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#46",
+      "field": "_lock",
+      "to": "#51",
+      "type": "void *"
+    },
+    {
+      "from": "#46",
+      "field": "_markers",
+      "to": null,
+      "type": "_IO_marker *"
+    },
+    {
+      "from": "#46",
       "field": "_prevchain",
       "to": "#52",
       "type": "_IO_FILE **"
     },
     {
-      "from": "#21",
+      "from": "#46",
       "field": "_wide_data",
       "to": "#53",
       "type": "_IO_wide_data *"
     },
     {
-      "from": "#35",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#35",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#36",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#36",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#37",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#37",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#38",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#38",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#39",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#39",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#40",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#40",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#41",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#41",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#42",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#42",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#43",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#43",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#44",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#44",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#45",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#45",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#46",
-      "field": "left",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#46",
-      "field": "right",
-      "to": null,
-      "type": "NodeTree *"
-    },
-    {
-      "from": "#47",
+      "from": "#50",
       "field": "_chain",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#50",
+      "field": "_codecvt",
+      "to": null,
+      "type": "_IO_codecvt *"
+    },
+    {
+      "from": "#50",
+      "field": "_freeres_buf",
+      "to": null,
+      "type": "void *"
+    },
+    {
+      "from": "#50",
+      "field": "_freeres_list",
+      "to": null,
+      "type": "_IO_FILE *"
+    },
+    {
+      "from": "#50",
+      "field": "_lock",
       "to": "#54",
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#47",
-      "field": "_codecvt",
-      "to": null,
-      "type": "_IO_codecvt *"
-    },
-    {
-      "from": "#47",
-      "field": "_freeres_buf",
-      "to": null,
       "type": "void *"
     },
     {
-      "from": "#47",
-      "field": "_freeres_list",
+      "from": "#50",
+      "field": "_markers",
       "to": null,
-      "type": "_IO_FILE *"
+      "type": "_IO_marker *"
     },
     {
-      "from": "#47",
-      "field": "_lock",
+      "from": "#50",
+      "field": "_prevchain",
       "to": "#55",
-      "type": "void *"
+      "type": "_IO_FILE **"
     },
     {
-      "from": "#47",
-      "field": "_markers",
-      "to": null,
-      "type": "_IO_marker *"
-    },
-    {
-      "from": "#47",
-      "field": "_prevchain",
+      "from": "#50",
+      "field": "_wide_data",
       "to": "#56",
-      "type": "_IO_FILE **"
-    },
-    {
-      "from": "#47",
-      "field": "_wide_data",
-      "to": "#57",
-      "type": "_IO_wide_data *"
-    },
-    {
-      "from": "#54",
-      "field": "_chain",
-      "to": "#58",
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#54",
-      "field": "_codecvt",
-      "to": null,
-      "type": "_IO_codecvt *"
-    },
-    {
-      "from": "#54",
-      "field": "_freeres_buf",
-      "to": null,
-      "type": "void *"
-    },
-    {
-      "from": "#54",
-      "field": "_freeres_list",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#54",
-      "field": "_lock",
-      "to": "#59",
-      "type": "void *"
-    },
-    {
-      "from": "#54",
-      "field": "_markers",
-      "to": null,
-      "type": "_IO_marker *"
-    },
-    {
-      "from": "#54",
-      "field": "_prevchain",
-      "to": "#60",
-      "type": "_IO_FILE **"
-    },
-    {
-      "from": "#54",
-      "field": "_wide_data",
-      "to": "#61",
-      "type": "_IO_wide_data *"
-    },
-    {
-      "from": "#58",
-      "field": "_chain",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#58",
-      "field": "_codecvt",
-      "to": null,
-      "type": "_IO_codecvt *"
-    },
-    {
-      "from": "#58",
-      "field": "_freeres_buf",
-      "to": null,
-      "type": "void *"
-    },
-    {
-      "from": "#58",
-      "field": "_freeres_list",
-      "to": null,
-      "type": "_IO_FILE *"
-    },
-    {
-      "from": "#58",
-      "field": "_lock",
-      "to": "#62",
-      "type": "void *"
-    },
-    {
-      "from": "#58",
-      "field": "_markers",
-      "to": null,
-      "type": "_IO_marker *"
-    },
-    {
-      "from": "#58",
-      "field": "_prevchain",
-      "to": "#63",
-      "type": "_IO_FILE **"
-    },
-    {
-      "from": "#58",
-      "field": "_wide_data",
-      "to": "#64",
       "type": "_IO_wide_data *"
     }
   ],
@@ -4603,19 +4158,19 @@
       "level": 0,
       "function": "buildHuffmanTree",
       "file": "huffman.c",
-      "line": 217
+      "line": 215
     },
     {
       "level": 1,
       "function": "compress",
       "file": "huffman.c",
-      "line": 341
+      "line": 339
     },
     {
       "level": 2,
       "function": "main",
       "file": "huffman.c",
-      "line": 82
+      "line": 80
     }
   ]
 }

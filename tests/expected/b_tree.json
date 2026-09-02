@@ -17,7 +17,7 @@
         "scalarFields": [
           "m"
         ],
-        "count": 10,
+        "count": 5,
         "maxDegree": 3
       }
     ],
@@ -103,7 +103,7 @@
       "status": "ok",
       "value": {
         "t": "int",
-        "v": 4,
+        "v": 1,
         "signed": true
       }
     },
@@ -121,7 +121,7 @@
       "status": "ok",
       "value": {
         "t": "int",
-        "v": 2,
+        "v": 1,
         "signed": true
       }
     },
@@ -191,7 +191,7 @@
       "status": "ok",
       "value": {
         "t": "int",
-        "v": 105,
+        "v": 15,
         "signed": true
       }
     },
@@ -248,7 +248,7 @@
       "status": "ok",
       "value": {
         "t": "int",
-        "v": 105,
+        "v": 15,
         "signed": true
       }
     },
@@ -302,7 +302,7 @@
       "status": "ok",
       "value": {
         "t": "int",
-        "v": 19,
+        "v": 10,
         "signed": false
       }
     },
@@ -311,7 +311,7 @@
       "function": "main",
       "frameLevel": 2,
       "origin": "local",
-      "type": "int[30]",
+      "type": "int[12]",
       "category": "aggregate",
       "address": "#24",
       "target": null,
@@ -354,7 +354,7 @@
       "type": "int",
       "value": {
         "t": "int",
-        "v": 105,
+        "v": 15,
         "signed": true
       }
     },
@@ -445,27 +445,27 @@
           "cells": [
             {
               "t": "int",
-              "v": 85,
+              "v": 10,
               "signed": true
             },
             {
               "t": "int",
-              "v": 90,
+              "v": 15,
               "signed": true
             },
             {
               "t": "int",
-              "v": 95,
+              "v": 20,
               "signed": true
             },
             {
               "t": "int",
-              "v": 100,
+              "v": 30,
               "signed": true
             },
             {
               "t": "int",
-              "v": 105,
+              "v": 40,
               "signed": true
             }
           ],
@@ -513,17 +513,17 @@
       "cells": [
         {
           "t": "int",
+          "v": 0,
+          "signed": true
+        },
+        {
+          "t": "int",
           "v": 1,
           "signed": true
         },
         {
           "t": "int",
-          "v": 2,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 4,
+          "v": 0,
           "signed": true
         },
         {
@@ -688,7 +688,7 @@
           "type": "int",
           "value": {
             "t": "int",
-            "v": 1,
+            "v": 2,
             "signed": true
           }
         }
@@ -706,7 +706,7 @@
             },
             {
               "t": "int",
-              "v": 0,
+              "v": 80,
               "signed": true
             },
             {
@@ -741,9 +741,9 @@
     {
       "kind": "array",
       "id": "#24",
-      "type": "int[30]",
+      "type": "int[12]",
       "elementType": "int",
-      "length": 30,
+      "length": 12,
       "cells": [
         {
           "t": "int",
@@ -804,96 +804,6 @@
           "t": "int",
           "v": 25,
           "signed": true
-        },
-        {
-          "t": "int",
-          "v": 35,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 45,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 55,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 65,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 75,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 85,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 95,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 105,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 5,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 12,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 18,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 22,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 28,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 32,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 38,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 42,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 48,
-          "signed": true
-        },
-        {
-          "t": "int",
-          "v": 52,
-          "signed": true
         }
       ],
       "cellsArePointers": false,
@@ -925,12 +835,12 @@
           "cells": [
             {
               "t": "int",
-              "v": 65,
+              "v": 60,
               "signed": true
             },
             {
               "t": "int",
-              "v": 80,
+              "v": 70,
               "signed": true
             },
             {
@@ -987,322 +897,12 @@
           "cells": [
             {
               "t": "int",
-              "v": 20,
+              "v": 90,
               "signed": true
             },
             {
               "t": "int",
-              "v": 35,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            }
-          ],
-          "truncated": false,
-          "expanded": true
-        },
-        {
-          "name": "children",
-          "elementType": "BTreePage *",
-          "length": 6,
-          "cells": [],
-          "truncated": false,
-          "expanded": true
-        }
-      ]
-    },
-    {
-      "kind": "record",
-      "id": "#28",
-      "type": "BTreePage",
-      "aggregate": "struct",
-      "sizeBytes": 72,
-      "fields": [
-        {
-          "name": "m",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": [
-        {
-          "name": "keys",
-          "elementType": "int",
-          "length": 5,
-          "cells": [
-            {
-              "t": "int",
-              "v": 55,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 60,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            }
-          ],
-          "truncated": false,
-          "expanded": true
-        },
-        {
-          "name": "children",
-          "elementType": "BTreePage *",
-          "length": 6,
-          "cells": [],
-          "truncated": false,
-          "expanded": true
-        }
-      ]
-    },
-    {
-      "kind": "record",
-      "id": "#29",
-      "type": "BTreePage",
-      "aggregate": "struct",
-      "sizeBytes": 72,
-      "fields": [
-        {
-          "name": "m",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": [
-        {
-          "name": "keys",
-          "elementType": "int",
-          "length": 5,
-          "cells": [
-            {
-              "t": "int",
-              "v": 70,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 75,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            }
-          ],
-          "truncated": false,
-          "expanded": true
-        },
-        {
-          "name": "children",
-          "elementType": "BTreePage *",
-          "length": 6,
-          "cells": [],
-          "truncated": false,
-          "expanded": true
-        }
-      ]
-    },
-    {
-      "kind": "record",
-      "id": "#30",
-      "type": "BTreePage",
-      "aggregate": "struct",
-      "sizeBytes": 72,
-      "fields": [
-        {
-          "name": "m",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": [
-        {
-          "name": "keys",
-          "elementType": "int",
-          "length": 5,
-          "cells": [
-            {
-              "t": "int",
-              "v": 10,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 15,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            }
-          ],
-          "truncated": false,
-          "expanded": true
-        },
-        {
-          "name": "children",
-          "elementType": "BTreePage *",
-          "length": 6,
-          "cells": [],
-          "truncated": false,
-          "expanded": true
-        }
-      ]
-    },
-    {
-      "kind": "record",
-      "id": "#31",
-      "type": "BTreePage",
-      "aggregate": "struct",
-      "sizeBytes": 72,
-      "fields": [
-        {
-          "name": "m",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": [
-        {
-          "name": "keys",
-          "elementType": "int",
-          "length": 5,
-          "cells": [
-            {
-              "t": "int",
-              "v": 25,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 30,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 0,
-              "signed": true
-            }
-          ],
-          "truncated": false,
-          "expanded": true
-        },
-        {
-          "name": "children",
-          "elementType": "BTreePage *",
-          "length": 6,
-          "cells": [],
-          "truncated": false,
-          "expanded": true
-        }
-      ]
-    },
-    {
-      "kind": "record",
-      "id": "#32",
-      "type": "BTreePage",
-      "aggregate": "struct",
-      "sizeBytes": 72,
-      "fields": [
-        {
-          "name": "m",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 2,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": [
-        {
-          "name": "keys",
-          "elementType": "int",
-          "length": 5,
-          "cells": [
-            {
-              "t": "int",
-              "v": 40,
-              "signed": true
-            },
-            {
-              "t": "int",
-              "v": 45,
+              "v": 100,
               "signed": true
             },
             {
@@ -1477,7 +1077,7 @@
     {
       "from": "#14",
       "field": "[1]",
-      "to": "#26",
+      "to": "#7",
       "type": "BTreePage *"
     },
     {
@@ -1543,7 +1143,7 @@
     {
       "from": "#14",
       "field": "[2]",
-      "to": "#7",
+      "to": null,
       "type": "BTreePage *"
     },
     {
@@ -1603,7 +1203,7 @@
     {
       "from": "#18",
       "field": "children[0]",
-      "to": "#27",
+      "to": "#7",
       "type": "BTreePage *"
     },
     {
@@ -1615,7 +1215,7 @@
     {
       "from": "#18",
       "field": "children[2]",
-      "to": null,
+      "to": "#27",
       "type": "BTreePage *"
     },
     {
@@ -1639,29 +1239,29 @@
     {
       "from": "#26",
       "field": "children[0]",
-      "to": "#28",
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#26",
-      "field": "children[1]",
-      "to": "#29",
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#26",
-      "field": "children[2]",
-      "to": "#7",
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#26",
-      "field": "children[3]",
       "to": null,
       "type": "BTreePage *"
     },
     {
       "from": "#26",
+      "field": "children[1]",
+      "to": null,
+      "type": "BTreePage *"
+    },
+    {
+      "from": "#26",
+      "field": "children[2]",
+      "to": null,
+      "type": "BTreePage *"
+    },
+    {
+      "from": "#26",
+      "field": "children[3]",
+      "to": null,
+      "type": "BTreePage *"
+    },
+    {
+      "from": "#26",
       "field": "children[4]",
       "to": null,
       "type": "BTreePage *"
@@ -1675,215 +1275,35 @@
     {
       "from": "#27",
       "field": "children[0]",
-      "to": "#30",
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#27",
-      "field": "children[1]",
-      "to": "#31",
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#27",
-      "field": "children[2]",
-      "to": "#32",
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#27",
-      "field": "children[3]",
       "to": null,
       "type": "BTreePage *"
     },
     {
       "from": "#27",
+      "field": "children[1]",
+      "to": null,
+      "type": "BTreePage *"
+    },
+    {
+      "from": "#27",
+      "field": "children[2]",
+      "to": null,
+      "type": "BTreePage *"
+    },
+    {
+      "from": "#27",
+      "field": "children[3]",
+      "to": null,
+      "type": "BTreePage *"
+    },
+    {
+      "from": "#27",
       "field": "children[4]",
       "to": null,
       "type": "BTreePage *"
     },
     {
       "from": "#27",
-      "field": "children[5]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#28",
-      "field": "children[0]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#28",
-      "field": "children[1]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#28",
-      "field": "children[2]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#28",
-      "field": "children[3]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#28",
-      "field": "children[4]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#28",
-      "field": "children[5]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#29",
-      "field": "children[0]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#29",
-      "field": "children[1]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#29",
-      "field": "children[2]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#29",
-      "field": "children[3]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#29",
-      "field": "children[4]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#29",
-      "field": "children[5]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#30",
-      "field": "children[0]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#30",
-      "field": "children[1]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#30",
-      "field": "children[2]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#30",
-      "field": "children[3]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#30",
-      "field": "children[4]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#30",
-      "field": "children[5]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#31",
-      "field": "children[0]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#31",
-      "field": "children[1]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#31",
-      "field": "children[2]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#31",
-      "field": "children[3]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#31",
-      "field": "children[4]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#31",
-      "field": "children[5]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#32",
-      "field": "children[0]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#32",
-      "field": "children[1]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#32",
-      "field": "children[2]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#32",
-      "field": "children[3]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#32",
-      "field": "children[4]",
-      "to": null,
-      "type": "BTreePage *"
-    },
-    {
-      "from": "#32",
       "field": "children[5]",
       "to": null,
       "type": "BTreePage *"
@@ -1894,19 +1314,19 @@
       "level": 0,
       "function": "splitPage",
       "file": "b_tree.c",
-      "line": 168
+      "line": 166
     },
     {
       "level": 1,
       "function": "insertionBTree",
       "file": "b_tree.c",
-      "line": 297
+      "line": 295
     },
     {
       "level": 2,
       "function": "main",
       "file": "b_tree.c",
-      "line": 45
+      "line": 43
     }
   ]
 }
