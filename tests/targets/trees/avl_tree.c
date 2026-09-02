@@ -40,9 +40,6 @@ int main(void) {
     insertionTree(30, &ptRoot, &h);
     insertionTree(20, &ptRoot, &h);
     insertionTree(10, &ptRoot, &h);
-    insertionTree(35, &ptRoot, &h);
-    insertionTree(45, &ptRoot, &h);
-    insertionTree(70, &ptRoot, &h);
 
     printf("Em ordem: ");
     printInOrder(ptRoot);

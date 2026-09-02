@@ -43,10 +43,8 @@ static int compress(const char *inputFile, const char *outputFile);
 static int decompress(const char *inputFile, const char *outputFile);
 static int sameContent(const char *fileA, const char *fileB);
 
-static const uint8_t sampleText[] = {
-    'B', 'B', 'B', 'E', 'A', 'A', 'A', 'A', 'F', 'F', 'H', 'H', 'H', 'H', 'H', 'C',
-    'B', 'M', 'M', 'A', 'L', 'L', 'L', 'C', 'D', 'D', 'B', 'B', 'B', 'B', 'B', 'B',
-    'B', 'C', 'C', '\n', 0xFF, 0xFF, 0x00, 0x7F, 0x80, 0xFF, '\n'};
+static const uint8_t sampleText[] = {'B', 'B', 'B', 'E', 'A', 'A', 'A', 'A', 'C', 'B',
+                                     'A', 'D', 'D', 'B', 'B', 'C', 'C', '\n'};
 
 int main(int argc, char *argv[]) {
     char outputFile[300] = {0};

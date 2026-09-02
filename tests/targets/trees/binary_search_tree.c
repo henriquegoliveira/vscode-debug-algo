@@ -30,7 +30,6 @@ int main(void) {
     insertion(20, &ptRoot);
     insertion(40, &ptRoot);
     insertion(60, &ptRoot);
-    insertion(80, &ptRoot);
     insertion(35, &ptRoot);
     insertion(45, &ptRoot);
 

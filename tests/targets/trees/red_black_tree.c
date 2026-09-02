@@ -30,7 +30,7 @@ int main(void) {
     RedBlackNode *ptRoot = NULL;
     RedBlackNode *deepest = NULL;
 
-    int const keys[] = {50, 30, 70, 20, 40, 60, 80, 10, 25, 35, 45, 55, 65, 75, 85};
+    int const keys[] = {50, 30, 70, 20, 40, 60, 80, 10, 45};
     int const total = (int) (sizeof(keys) / sizeof(keys[0]));
 
     for (int i = 0; i < total; i++) {

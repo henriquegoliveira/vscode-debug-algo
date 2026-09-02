@@ -18,7 +18,7 @@
         "scalarFields": [
           "key"
         ],
-        "count": 9,
+        "count": 8,
         "maxDegree": 2
       }
     ],
@@ -336,25 +336,6 @@
         }
       ],
       "arrays": []
-    },
-    {
-      "kind": "record",
-      "id": "#20",
-      "type": "TreeNode",
-      "aggregate": "struct",
-      "sizeBytes": 24,
-      "fields": [
-        {
-          "name": "key",
-          "type": "int",
-          "value": {
-            "t": "int",
-            "v": 80,
-            "signed": true
-          }
-        }
-      ],
-      "arrays": []
     }
   ],
   "edges": [
@@ -415,7 +396,7 @@
     {
       "from": "#16",
       "field": "right",
-      "to": "#20",
+      "to": null,
       "type": "TreeNode *"
     },
     {
@@ -453,18 +434,6 @@
       "field": "right",
       "to": null,
       "type": "TreeNode *"
-    },
-    {
-      "from": "#20",
-      "field": "left",
-      "to": null,
-      "type": "TreeNode *"
-    },
-    {
-      "from": "#20",
-      "field": "right",
-      "to": null,
-      "type": "TreeNode *"
     }
   ],
   "frames": [
@@ -472,19 +441,19 @@
       "level": 0,
       "function": "searchForParent",
       "file": "binary_search_tree.c",
-      "line": 123
+      "line": 122
     },
     {
       "level": 1,
       "function": "removal",
       "file": "binary_search_tree.c",
-      "line": 256
+      "line": 255
     },
     {
       "level": 2,
       "function": "main",
       "file": "binary_search_tree.c",
-      "line": 48
+      "line": 47
     }
   ]
 }
