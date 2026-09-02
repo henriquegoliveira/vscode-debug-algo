@@ -1,25 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Edge, Network, Node, Options } from 'vis-network';
-import { DataSet } from 'vis-data';
-import {
-  toGraph,
-  ARROW_SCALE,
-  CanvasEdge,
-  CanvasNode,
-  DRIFT_TOLERANCE,
-  FrameRoot,
-  GraphModel,
-  Pass,
-  changeHighlight,
-  focusTarget,
-  rootCell,
-  rootFollowers,
-  visibleSnapshot,
-} from '../model/graph';
 import { type Box, labelBox } from '../geometry/boxes';
-import { LayoutKind, layoutForChoice, layoutOptions, promotes } from '../model/layout';
-import { Theme } from '../ui/theme';
-import type { ScreenState } from '../session/state';
+import {
+  CAMERA_DURATION,
+  Viewport,
+  cameraPlan,
+  interpolate,
+  settled,
+  steppedScale,
+} from '../geometry/camera';
+import { changeHighlight, focusTarget } from '../model/graph/changes';
+import { rootFollowers, toGraph } from '../model/graph/toGraph';
+import { DRIFT_TOLERANCE, GraphModel, Pass } from '../model/graph/types';
+import { visibleSnapshot } from '../model/graph/visibility';
+import { LayoutKind, layoutForChoice, promotes } from '../model/layoutRule';
 import {
   FileView,
   MAX_COLUMN_WIDTH,
@@ -29,15 +21,17 @@ import {
   PanelState,
   writePanelState,
 } from '../session/persistence';
-import {
-  CAMERA_DURATION,
-  Viewport,
-  cameraPlan,
-  interpolate,
-  settled,
-  steppedScale,
-} from '../geometry/camera';
+import type { ScreenState } from '../session/state';
 import { ColumnButton, ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
+import { RootRow } from '../ui/graph/RootRow';
+import { Theme } from '../ui/theme';
+import { styles } from '../ui/graph/GraphView.styles';
+import { remove } from './dataSet';
+import { NETWORK_OPTIONS, layoutOptions } from './networkOptions';
+import { type Seat, type Trail, withoutSeat } from './seats';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { DataSet } from 'vis-data';
+import { Edge, Network, Node } from 'vis-network';
 
 const EMPTY_MODEL: GraphModel = {
   canvas: { nodes: [], edges: [] },
@@ -49,38 +43,16 @@ const EMPTY_MODEL: GraphModel = {
 const EMPTY_BOX: Box = { width: 0, height: 0 };
 
 const FOCUS_FILL = 0.9;
+
 const FOCUS_MIN_SHARE = 0.25;
+
 const FOCUS_MIN_SCALE = 0.3;
+
 const FOCUS_MAX_SCALE = 1;
+
 const FIT_MIN_SCALE = 0.05;
+
 const GESTURE_SLOP = 4;
-
-const NETWORK_OPTIONS: Options = {
-  interaction: {
-    hover: false,
-    tooltipDelay: 0,
-  },
-  nodes: {
-    borderWidth: 1,
-    margin: { top: 8, right: 10, bottom: 8, left: 10 },
-  },
-  edges: {
-    font: { align: 'horizontal' },
-    arrows: { to: { scaleFactor: ARROW_SCALE } },
-    width: 1,
-    selectionWidth: 1,
-  },
-};
-
-interface Seat {
-  x: number;
-  y: number;
-}
-
-interface Trail {
-  anchors: Map<string, Seat>;
-  followers: Map<string, Seat>;
-}
 
 interface GraphViewProps {
   state: ScreenState;
@@ -816,99 +788,6 @@ const GraphView: React.FC<GraphViewProps> = ({
       </div>
     </>
   );
-};
-
-const RootRow: React.FC<{
-  root: FrameRoot;
-  active: boolean;
-  onSelect: (id: string | null, reveal?: boolean) => void;
-}> = ({ root, active, onSelect }) => {
-  const cell = rootCell(root);
-  const body = (
-    <>
-      <span style={styles.rootName}>{root.name}</span>
-      <span style={styles.rootType}>{root.type}</span>
-      <span style={root.status === 'ok' ? styles.rootValue : styles.rootStatus}>{cell}</span>
-    </>
-  );
-
-  if (root.canvasId === null) {
-    return <div style={styles.root}>{body}</div>;
-  }
-
-  return (
-    <button
-      type="button"
-      className="dbga-row"
-      aria-pressed={active}
-      onClick={() => onSelect(root.id, true)}
-    >
-      {body}
-    </button>
-  );
-};
-
-function withoutSeat(node: CanvasNode): CanvasNode {
-  const copy = { ...node };
-  delete copy.x;
-  delete copy.y;
-
-  return copy;
-}
-
-function remove<T extends Node | Edge>(
-  dataSet: DataSet<T>,
-  next: (CanvasNode | CanvasEdge)[],
-): void {
-  const keep = new Set(next.map((item) => item.id));
-  const stale = (dataSet.getIds() as string[]).filter((id) => !keep.has(id));
-
-  if (stale.length > 0) {
-    dataSet.remove(stale);
-  }
-}
-
-const styles: Record<string, React.CSSProperties> = {
-  column: {
-    flex: '0 0 auto',
-    overflowY: 'auto',
-    padding: '8px 10px',
-    boxSizing: 'border-box',
-    fontFamily: 'monospace',
-    fontSize: '12px',
-  },
-  divider: {
-    flex: '0 0 auto',
-    width: '5px',
-    cursor: 'col-resize',
-    backgroundColor: 'var(--vscode-editorWidget-border, #333)',
-  },
-  columnFloating: {
-    position: 'absolute',
-    zIndex: 2,
-    top: 0,
-    bottom: 0,
-    left: 0,
-    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    borderRight: '1px solid var(--vscode-editorWidget-border, #333)',
-    boxShadow: '2px 0 8px rgba(0, 0, 0, 0.35)',
-  },
-  dividerFloating: { position: 'absolute', zIndex: 3, top: 0, bottom: 0 },
-  columnTitle: { margin: '0 0 8px 0', fontSize: '12px', opacity: 0.7 },
-  frame: { marginBottom: '10px' },
-  root: {
-    display: 'flex',
-    gap: '6px',
-    paddingLeft: '8px',
-    whiteSpace: 'nowrap',
-    alignItems: 'baseline',
-  },
-  rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
-  rootType: { opacity: 0.55, overflow: 'hidden', textOverflow: 'ellipsis' },
-  rootValue: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
-  rootStatus: { marginLeft: 'auto', color: 'var(--vscode-charts-orange, #ce9178)' },
-  canvas: { flex: 1, position: 'relative', minWidth: 0 },
-  network: { position: 'absolute', inset: 0, outline: 'none' },
 };
 
 export default GraphView;

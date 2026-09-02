@@ -1,7 +1,7 @@
 import type { ArrayNode, GraphSnapshot, Root, Value } from 'dbga-contract';
 import { textSize } from '../geometry/boxes';
 import { formatValue, valueKey } from './format';
-import { frameGroupKey, nodeCanvasId, rootCanvasId } from './graph';
+import { frameGroupKey, nodeCanvasId, rootCanvasId } from './graph/ids';
 
 export const CELL_GAP = 4;
 export const CELL_PADDING = 12;

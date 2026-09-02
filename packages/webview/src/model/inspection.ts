@@ -11,12 +11,11 @@ import {
   cardCanvasId,
   nodeCanvasId,
   parseCanvasId,
-  recordAutoNames,
-  recordNames,
   rootCanvasId,
   rootKey,
   terminalCanvasId,
-} from './graph';
+} from './graph/ids';
+import { recordAutoNames, recordNames } from './graph/labels';
 
 export interface Entry {
   label: string;

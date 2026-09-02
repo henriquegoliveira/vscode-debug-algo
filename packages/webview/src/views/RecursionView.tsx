@@ -1,26 +1,37 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { type FrameCard, callStackModel } from '../model/callStack';
-import { type FrameRoot, type Pass, rootCell } from '../model/graph';
-import { MAX_SCALE, MIN_SCALE } from '../session/persistence';
-import type { ScreenState } from '../session/state';
 import {
-  CAMERA_DURATION,
   type Viewport,
+  CAMERA_DURATION,
   cameraPlan,
   interpolate,
   settled,
   steppedScale,
   toTranslate,
 } from '../geometry/camera';
+import { callStackModel } from '../model/callStack';
+import type { Pass } from '../model/graph/types';
+import { MAX_SCALE, MIN_SCALE } from '../session/persistence';
+import type { ScreenState } from '../session/state';
 import { ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
+import { Connector } from '../ui/recursion/Connector';
+import { FrameCardView } from '../ui/recursion/FrameCardView';
+import { GlobalsCardView } from '../ui/recursion/GlobalsCardView';
+import { styles } from '../ui/recursion/RecursionView.styles';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const FIT_FILL = 0.9;
+
 const FIT_MIN_SHARE = 0.05;
+
 const FIT_MIN_SCALE = 0.05;
+
 const FIT_MAX_SCALE = 1;
+
 const FOCUS_FILL = 0.9;
+
 const FOCUS_MIN_SHARE = 0.25;
+
 const FOCUS_MIN_SCALE = 0.3;
+
 const FOCUS_MAX_SCALE = 1;
 
 interface RecursionViewProps {
@@ -293,143 +304,6 @@ const RecursionView: React.FC<RecursionViewProps> = ({
       {children}
     </div>
   );
-};
-
-const FrameCardView: React.FC<{
-  frame: FrameCard;
-  selectedId: string | null;
-  onSelect: (id: string | null, reveal?: boolean) => void;
-  cardRef: (el: HTMLDivElement | null) => void;
-}> = ({ frame, selectedId, onSelect, cardRef }) => (
-  <div
-    ref={cardRef}
-    style={frame.isCurrent ? { ...styles.card, ...styles.cardCurrent } : styles.card}
-  >
-    <div style={styles.cardHeader}>
-      {frame.function} #{frame.level}
-    </div>
-    {frame.roots.map((root) => (
-      <RootLine
-        key={root.id}
-        root={root}
-        changed={frame.changedRoots.has(root.id)}
-        active={root.id === selectedId}
-        onSelect={onSelect}
-      />
-    ))}
-    {frame.roots.length === 0 && <div style={styles.cardEmpty}>sem variáveis</div>}
-  </div>
-);
-
-const GlobalsCardView: React.FC<{
-  roots: FrameRoot[];
-  selectedId: string | null;
-  onSelect: (id: string | null, reveal?: boolean) => void;
-}> = ({ roots, selectedId, onSelect }) => (
-  <div style={styles.card}>
-    <div style={styles.cardHeader}>Globais do arquivo</div>
-    {roots.map((root) => (
-      <RootLine
-        key={root.id}
-        root={root}
-        changed={false}
-        active={root.id === selectedId}
-        onSelect={onSelect}
-      />
-    ))}
-  </div>
-);
-
-const RootLine: React.FC<{
-  root: FrameRoot;
-  changed: boolean;
-  active: boolean;
-  onSelect: (id: string | null, reveal?: boolean) => void;
-}> = ({ root, changed, active, onSelect }) => (
-  <button
-    type="button"
-    className="dbga-row"
-    aria-pressed={active}
-    style={root.origin === 'parameter' ? styles.parameter : undefined}
-    onClick={() => onSelect(root.id, true)}
-  >
-    <span style={styles.rootName}>{root.name}</span>
-    <span style={changed ? { ...styles.rootValue, ...styles.rootChanged } : styles.rootValue}>
-      {rootCell(root)}
-    </span>
-  </button>
-);
-
-const Connector: React.FC<{ label: string }> = ({ label }) => (
-  <div style={styles.connector}>
-    <span style={styles.connectorLine} />
-    <span style={styles.connectorLabel}>{label}</span>
-    <span style={styles.connectorLine} />
-  </div>
-);
-
-const styles: Record<string, React.CSSProperties> = {
-  viewport: {
-    flex: 1,
-    position: 'relative',
-    minWidth: 0,
-    overflow: 'hidden',
-    touchAction: 'none',
-    cursor: 'grab',
-  },
-  stack: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    transformOrigin: '0 0',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: 'max-content',
-    fontFamily: 'var(--vscode-editor-font-family, monospace)',
-    fontSize: '12px',
-  },
-  card: {
-    minWidth: '220px',
-    padding: '8px 10px',
-    borderRadius: '4px',
-    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    border: '1px solid var(--vscode-editorWidget-border, #454545)',
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)',
-  },
-  cardCurrent: { borderColor: 'var(--vscode-focusBorder, #007fd4)', borderWidth: '2px' },
-  cardHeader: {
-    fontWeight: 600,
-    marginBottom: '6px',
-    color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
-  },
-  cardEmpty: { opacity: 0.55, padding: '2px 0' },
-  parameter: { fontStyle: 'italic' },
-  rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
-  rootValue: {
-    marginLeft: 'auto',
-    color: 'var(--vscode-charts-green, #b5cea8)',
-    wordBreak: 'break-all',
-  },
-  rootChanged: {
-    color: 'var(--vscode-editor-foreground, #d4d4d4)',
-    fontWeight: 700,
-  },
-  connector: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '2px',
-    padding: '4px 0',
-    opacity: 0.6,
-    fontSize: '10px',
-  },
-  connectorLine: {
-    width: '1px',
-    height: '10px',
-    backgroundColor: 'var(--vscode-charts-lines, #9a9a9a)',
-  },
-  connectorLabel: { whiteSpace: 'nowrap' },
 };
 
 export default RecursionView;
