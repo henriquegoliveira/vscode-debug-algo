@@ -1,35 +1,30 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { ExtractionError, GraphSnapshot } from 'dbga-contract';
-import {
-  NO_CHANGES,
-  Pass,
-  changeHighlight,
-  changedNodes,
-  frameKey,
-  parseCanvasId,
-} from './graphModel';
-import { buildIndex, inspect } from './inspection';
-import { type LayoutKind, resolveLayout } from './layout';
-import { ChangeKind, FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './theme';
-import { useSnapshotChannel } from './state';
-import { isEmbedded, sendAnnotation, sendSaveView } from './channel';
+import { styles } from './App.styles';
+import { changeHighlight, changedNodes } from './model/graph/changes';
+import { frameKey, parseCanvasId } from './model/graph/ids';
+import { NO_CHANGES, Pass } from './model/graph/types';
+import { buildIndex, inspect } from './model/inspection';
+import { type LayoutKind, resolveLayout } from './model/layoutRule';
+import { isEmbedded, sendAnnotation, sendSaveView } from './session/channel';
 import {
   FieldChoice,
   FileView,
   FrameMode,
-  PanelState,
   VIEW_MODES,
   ViewMode,
   coerceFile,
-  readPanelState,
-  writePanelState,
-} from './persistence';
-import InspectorOverlay from './InspectorOverlay';
-import Timeline from './Timeline';
-import Toolbar from './Toolbar';
-import GraphView from './GraphView';
-import RecursionView from './RecursionView';
-import SortingView from './SortingView';
+} from './session/persistence';
+import { useSnapshotChannel } from './session/state';
+import { usePanelState } from './session/usePanelState';
+import { ChangeLegend } from './ui/ChangeLegend';
+import Timeline from './ui/Timeline';
+import Toolbar from './ui/Toolbar';
+import InspectorOverlay from './ui/inspector/InspectorOverlay';
+import { useTheme } from './ui/useTheme';
+import GraphView from './views/GraphView';
+import RecursionView from './views/RecursionView';
+import SortingView from './views/SortingView';
+import type { ExtractionError, GraphSnapshot } from 'dbga-contract';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const NARROW_WIDTH = 620;
 
@@ -388,34 +383,6 @@ const App: React.FC = () => {
   );
 };
 
-const CHANGE_NAMES: Record<ChangeKind, string> = {
-  created: 'criado',
-  relinked: 'religado',
-  valued: 'valor alterado',
-};
-
-const ChangeLegend: React.FC<{ changes: Map<string, ChangeKind>; theme: Theme }> = ({
-  changes,
-  theme,
-}) => {
-  const tally = new Map<ChangeKind, number>();
-
-  changes.forEach((kind) => tally.set(kind, (tally.get(kind) ?? 0) + 1));
-
-  return (
-    <>
-      {(['created', 'relinked', 'valued'] as ChangeKind[])
-        .filter((kind) => tally.has(kind))
-        .map((kind) => (
-          <span key={kind} style={styles.legend}>
-            <span style={{ ...styles.legendDot, backgroundColor: theme.change[kind] }} />
-            {CHANGE_NAMES[kind]} {tally.get(kind)}
-          </span>
-        ))}
-    </>
-  );
-};
-
 function isQuiet(error: ExtractionError): boolean {
   return error.scope === 'annotation' && error.message === 'annotationUnresolved';
 }
@@ -427,142 +394,5 @@ function hasExplicitViewMode(raw: unknown): boolean {
 
   return VIEW_MODES.includes((raw as Record<string, unknown>).viewMode as ViewMode);
 }
-
-function usePanelState(): [
-  PanelState,
-  (patch: Partial<PanelState>) => void,
-  React.MutableRefObject<PanelState>,
-] {
-  const [panel, setPanel] = useState<PanelState>(() => readPanelState());
-  const panelRef = useRef<PanelState>(panel);
-
-  const update = useCallback((patch: Partial<PanelState>) => {
-    setPanel((current) => {
-      const next = { ...current, ...patch };
-      panelRef.current = next;
-      writePanelState(next);
-
-      return next;
-    });
-  }, []);
-
-  return [panel, update, panelRef];
-}
-
-function useTheme(): Theme {
-  const [theme, setTheme] = useState<Theme>(() =>
-    typeof document === 'undefined' ? FALLBACK_THEME : resolveTheme(documentTokenReader()),
-  );
-
-  useEffect(() => {
-    let pending = 0;
-
-    const refresh = () => {
-      pending = 0;
-      const next = resolveTheme(documentTokenReader());
-      setTheme((current) => (JSON.stringify(current) === JSON.stringify(next) ? current : next));
-    };
-
-    const schedule = () => {
-      if (pending === 0) {
-        pending = window.requestAnimationFrame(refresh);
-      }
-    };
-
-    const observer = new MutationObserver(schedule);
-    observer.observe(document.documentElement, { attributes: true });
-    observer.observe(document.body, { attributes: true });
-    observer.observe(document.head, { childList: true, subtree: true, characterData: true });
-
-    return () => {
-      observer.disconnect();
-      if (pending !== 0) {
-        window.cancelAnimationFrame(pending);
-      }
-    };
-  }, []);
-
-  return theme;
-}
-
-const styles: Record<string, React.CSSProperties> = {
-  shell: { display: 'flex', flexDirection: 'column', height: '100%' },
-  header: {
-    padding: '10px',
-    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    borderBottom: '1px solid var(--vscode-editorWidget-border, #333)',
-  },
-  title: { margin: 0, textAlign: 'center' },
-  headerCompact: { padding: '4px 8px' },
-  titleCompact: { fontSize: '12px', fontWeight: 600, opacity: 0.8 },
-  errorBanner: {
-    padding: '6px 10px',
-    backgroundColor: 'var(--vscode-inputValidation-errorBackground, #5a1d1d)',
-    borderBottom: '1px solid var(--vscode-inputValidation-errorBorder, #be1100)',
-    fontFamily: 'monospace',
-    fontSize: '12px',
-  },
-  endedBanner: {
-    padding: '6px 10px',
-    backgroundColor: 'var(--vscode-editorWidget-background, #2d2d2d)',
-    borderBottom: '1px solid var(--vscode-editorWidget-border, #333)',
-    fontSize: '12px',
-  },
-  alarmBanner: {
-    display: 'flex',
-    gap: '8px',
-    alignItems: 'flex-start',
-    padding: '6px 10px',
-    backgroundColor: 'var(--vscode-inputValidation-warningBackground, #4d3b16)',
-    borderBottom: '1px solid var(--vscode-inputValidation-warningBorder, #b89500)',
-    fontFamily: 'monospace',
-    fontSize: '12px',
-    maxHeight: '25vh',
-    overflowY: 'auto',
-  },
-  alarmRows: { flex: 1, minWidth: 0 },
-  alarmRow: { display: 'flex', gap: '8px', alignItems: 'baseline' },
-  alarmClose: { alignSelf: 'flex-start' },
-  alarmScope: { opacity: 0.7, minWidth: '80px' },
-  alarmReference: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
-  body: { flex: 1, display: 'flex', minHeight: 0, position: 'relative' },
-  bodyReviewing: {
-    outline: '2px solid var(--vscode-inputValidation-warningBorder, #b89500)',
-    outlineOffset: '-2px',
-  },
-  placeholder: {
-    position: 'absolute',
-    inset: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: '4px',
-    padding: '0 24px',
-    textAlign: 'center',
-  },
-  placeholderLead: { margin: 0, opacity: 0.75 },
-  placeholderHint: { margin: 0, opacity: 0.5, fontSize: '12px' },
-  footer: {
-    display: 'flex',
-    gap: '12px',
-    padding: '3px 10px',
-    borderTop: '1px solid var(--vscode-editorWidget-border, #333)',
-    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
-    fontFamily: 'monospace',
-    fontSize: '11px',
-    whiteSpace: 'nowrap',
-    overflowX: 'auto',
-  },
-  footerLayout: { marginLeft: 'auto' },
-  legend: { display: 'inline-flex', alignItems: 'center', gap: '4px' },
-  legendDot: {
-    display: 'inline-block',
-    width: '8px',
-    height: '8px',
-    borderRadius: '2px',
-  },
-};
 
 export default App;

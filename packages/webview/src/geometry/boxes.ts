@@ -1,4 +1,4 @@
-import type { CanvasNodeKind } from './theme';
+import type { CanvasNodeKind } from '../ui/theme';
 
 export const FONT_SIZE = 14;
 export const CHAR_ADVANCE = 8.4;

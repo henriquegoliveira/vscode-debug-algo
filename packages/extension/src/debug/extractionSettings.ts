@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ExtractionOptions } from './extractorInvoker';
-import { DEFAULT_HISTORY_DEPTH } from './snapshotBroker';
+import { DEFAULT_HISTORY_DEPTH } from '../channels/snapshotBroker';
 
 const SECTION = 'dbgAlgo';
 const DYNAMIC_ARRAYS = 'dynamicArrays';

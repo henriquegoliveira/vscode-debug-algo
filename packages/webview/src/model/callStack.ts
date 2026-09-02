@@ -1,6 +1,7 @@
 import type { GraphSnapshot, Root } from 'dbga-contract';
 import { formatValue, valueKey } from './format';
-import { type FrameRoot, nodeCanvasId, rootCanvasId, rootKey } from './graphModel';
+import type { FrameRoot } from './graph/types';
+import { nodeCanvasId, rootCanvasId, rootKey } from './graph/ids';
 
 export interface FrameCard {
   level: number;

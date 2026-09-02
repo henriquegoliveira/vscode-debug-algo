@@ -1,12 +1,5 @@
-import type { Options } from 'vis-network';
 import type { GraphSnapshot } from 'dbga-contract';
-import { backFields, baseField } from './treeLayout';
-
-export { backFields, baseField };
-
-export const PHYSICS_SPRING_LENGTH = 140;
-export const PHYSICS_AVOID_OVERLAP = 0.3;
-export const PHYSICS_GRAVITY = -8000;
+import { backFields, baseField } from '../geometry/treeLayout';
 
 export type LayoutKind = 'hierarchical' | 'physics' | 'default';
 
@@ -140,42 +133,4 @@ export function hasCycle(snapshot: GraphSnapshot): boolean {
   }
 
   return false;
-}
-
-export function layoutOptions(kind: LayoutKind): Options {
-  if (kind === 'hierarchical') {
-    return {
-      layout: { hierarchical: { enabled: false } },
-      physics: {
-        enabled: true,
-        solver: 'barnesHut',
-        barnesHut: { springLength: 110, avoidOverlap: 0.4 },
-      },
-      edges: {
-        smooth: { enabled: true, type: 'cubicBezier', forceDirection: 'vertical', roundness: 0.55 },
-      },
-    };
-  }
-
-  if (kind === 'physics') {
-    return {
-      layout: { hierarchical: { enabled: false } },
-      physics: {
-        enabled: true,
-        solver: 'barnesHut',
-        barnesHut: {
-          springLength: PHYSICS_SPRING_LENGTH,
-          avoidOverlap: PHYSICS_AVOID_OVERLAP,
-          gravitationalConstant: PHYSICS_GRAVITY,
-        },
-      },
-      edges: { smooth: false },
-    };
-  }
-
-  return {
-    layout: { hierarchical: { enabled: false } },
-    physics: { enabled: true, solver: 'barnesHut' },
-    edges: { smooth: false },
-  };
 }

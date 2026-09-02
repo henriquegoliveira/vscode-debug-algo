@@ -1,0 +1,65 @@
+import type { CSSProperties } from 'react';
+
+export const styles: Record<string, CSSProperties> = {
+  viewport: {
+    flex: 1,
+    position: 'relative',
+    minWidth: 0,
+    overflow: 'hidden',
+    touchAction: 'none',
+    cursor: 'grab',
+  },
+  stack: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    transformOrigin: '0 0',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: 'max-content',
+    fontFamily: 'var(--vscode-editor-font-family, monospace)',
+    fontSize: '12px',
+  },
+  card: {
+    minWidth: '220px',
+    padding: '8px 10px',
+    borderRadius: '4px',
+    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
+    border: '1px solid var(--vscode-editorWidget-border, #454545)',
+    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)',
+  },
+  cardCurrent: { borderColor: 'var(--vscode-focusBorder, #007fd4)', borderWidth: '2px' },
+  cardHeader: {
+    fontWeight: 600,
+    marginBottom: '6px',
+    color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
+  },
+  cardEmpty: { opacity: 0.55, padding: '2px 0' },
+  parameter: { fontStyle: 'italic' },
+  rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
+  rootValue: {
+    marginLeft: 'auto',
+    color: 'var(--vscode-charts-green, #b5cea8)',
+    wordBreak: 'break-all',
+  },
+  rootChanged: {
+    color: 'var(--vscode-editor-foreground, #d4d4d4)',
+    fontWeight: 700,
+  },
+  connector: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: '2px',
+    padding: '4px 0',
+    opacity: 0.6,
+    fontSize: '10px',
+  },
+  connectorLine: {
+    width: '1px',
+    height: '10px',
+    backgroundColor: 'var(--vscode-charts-lines, #9a9a9a)',
+  },
+  connectorLabel: { whiteSpace: 'nowrap' },
+};
