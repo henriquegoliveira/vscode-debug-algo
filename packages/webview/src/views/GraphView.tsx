@@ -15,11 +15,11 @@ import {
   rootCell,
   rootFollowers,
   visibleSnapshot,
-} from './graphModel';
-import { type Box, labelBox } from './boxes';
-import { LayoutKind, layoutForChoice, layoutOptions, promotes } from './layout';
-import { Theme } from './theme';
-import type { ScreenState } from './state';
+} from '../model/graph';
+import { type Box, labelBox } from '../geometry/boxes';
+import { LayoutKind, layoutForChoice, layoutOptions, promotes } from '../model/layout';
+import { Theme } from '../ui/theme';
+import type { ScreenState } from '../session/state';
 import {
   FileView,
   MAX_COLUMN_WIDTH,
@@ -28,7 +28,7 @@ import {
   MIN_SCALE,
   PanelState,
   writePanelState,
-} from './persistence';
+} from '../session/persistence';
 import {
   CAMERA_DURATION,
   Viewport,
@@ -36,8 +36,8 @@ import {
   interpolate,
   settled,
   steppedScale,
-} from './camera';
-import { ColumnButton, ZOOM_STEP, ZoomControl } from './Toolbar';
+} from '../geometry/camera';
+import { ColumnButton, ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
 
 const EMPTY_MODEL: GraphModel = {
   canvas: { nodes: [], edges: [] },

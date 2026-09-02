@@ -1,6 +1,6 @@
 import React from 'react';
-import type { LayoutChoice } from './layout';
-import type { FrameMode, ViewMode } from './persistence';
+import type { LayoutChoice } from '../model/layout';
+import type { FrameMode, ViewMode } from '../session/persistence';
 
 export const ZOOM_STEP = 1.25;
 

@@ -16,7 +16,7 @@ import {
   rootCanvasId,
   rootKey,
   terminalCanvasId,
-} from './graphModel';
+} from './graph';
 
 export interface Entry {
   label: string;

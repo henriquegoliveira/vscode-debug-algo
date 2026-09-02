@@ -1,5 +1,5 @@
 import { hostApi, isEmbedded } from './channel';
-import type { LayoutChoice } from './layout';
+import type { LayoutChoice } from '../model/layout';
 
 const STORAGE_KEY = 'dbga.viewState';
 

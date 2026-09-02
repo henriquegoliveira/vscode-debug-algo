@@ -7,12 +7,12 @@ import {
   changedNodes,
   frameKey,
   parseCanvasId,
-} from './graphModel';
-import { buildIndex, inspect } from './inspection';
-import { type LayoutKind, resolveLayout } from './layout';
-import { ChangeKind, FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './theme';
-import { useSnapshotChannel } from './state';
-import { isEmbedded, sendAnnotation, sendSaveView } from './channel';
+} from './model/graph';
+import { buildIndex, inspect } from './model/inspection';
+import { type LayoutKind, resolveLayout } from './model/layout';
+import { ChangeKind, FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './ui/theme';
+import { useSnapshotChannel } from './session/state';
+import { isEmbedded, sendAnnotation, sendSaveView } from './session/channel';
 import {
   FieldChoice,
   FileView,
@@ -23,13 +23,13 @@ import {
   coerceFile,
   readPanelState,
   writePanelState,
-} from './persistence';
-import InspectorOverlay from './InspectorOverlay';
-import Timeline from './Timeline';
-import Toolbar from './Toolbar';
-import GraphView from './GraphView';
-import RecursionView from './RecursionView';
-import SortingView from './SortingView';
+} from './session/persistence';
+import InspectorOverlay from './ui/InspectorOverlay';
+import Timeline from './ui/Timeline';
+import Toolbar from './ui/Toolbar';
+import GraphView from './views/GraphView';
+import RecursionView from './views/RecursionView';
+import SortingView from './views/SortingView';
 
 const NARROW_WIDTH = 620;
 

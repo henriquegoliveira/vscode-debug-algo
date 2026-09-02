@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Pass } from './graphModel';
+import type { Pass } from '../model/graph';
 import {
   type ArrayTrack,
   type Marker,
   defaultTracks,
   markersByIndex,
   sortingModel,
-} from './sortingModel';
-import { MAX_SCALE, MIN_SCALE, type Camera, type PanelState } from './persistence';
-import type { ScreenState } from './state';
+} from '../model/sorting';
+import { MAX_SCALE, MIN_SCALE, type Camera, type PanelState } from '../session/persistence';
+import type { ScreenState } from '../session/state';
 import {
   CAMERA_DURATION,
   type Viewport,
@@ -17,8 +17,8 @@ import {
   settled,
   steppedScale,
   toTranslate,
-} from './camera';
-import { ZOOM_STEP, ZoomControl } from './Toolbar';
+} from '../geometry/camera';
+import { ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
 
 const FIT_FILL = 0.9;
 const FIT_MIN_SHARE = 0.05;

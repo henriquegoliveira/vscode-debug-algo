@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { FieldChoice } from './persistence';
+import type { FieldChoice } from '../session/persistence';
 import type {
   ArrayView,
   Entry,
@@ -8,7 +8,7 @@ import type {
   CardInspection,
   RootInspection,
   TerminalInspection,
-} from './inspection';
+} from '../model/inspection';
 
 interface Props {
   inspection: Inspection;

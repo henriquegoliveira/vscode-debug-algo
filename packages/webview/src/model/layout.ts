@@ -1,6 +1,6 @@
 import type { Options } from 'vis-network';
 import type { GraphSnapshot } from 'dbga-contract';
-import { backFields, baseField } from './treeLayout';
+import { backFields, baseField } from '../geometry/treeLayout';
 
 export { backFields, baseField };
 

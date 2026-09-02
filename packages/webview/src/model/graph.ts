@@ -1,10 +1,15 @@
 import type { Frame, GraphNode, GraphSnapshot, InlineArray, Root } from 'dbga-contract';
-import type { TreePosition } from './treeLayout';
-import type { FieldChoice } from './persistence';
+import type { TreePosition } from '../geometry/treeLayout';
+import type { FieldChoice } from '../session/persistence';
 import { formatValue } from './format';
-import { CanvasNodeKind, ChangeKind, FALLBACK_THEME, Theme } from './theme';
-import { LEVEL_SEPARATION, structuralForest, structuralLevels, treePositions } from './treeLayout';
-import { type Box, type Placed, labelBox, separation } from './boxes';
+import { CanvasNodeKind, ChangeKind, FALLBACK_THEME, Theme } from '../ui/theme';
+import {
+  LEVEL_SEPARATION,
+  structuralForest,
+  structuralLevels,
+  treePositions,
+} from '../geometry/treeLayout';
+import { type Box, type Placed, labelBox, separation } from '../geometry/boxes';
 
 const NODE_PREFIX = 'n:';
 const TERMINAL_PREFIX = 't:';

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { type FrameCard, callStackModel } from './callStackModel';
-import { type FrameRoot, type Pass, rootCell } from './graphModel';
-import { MAX_SCALE, MIN_SCALE } from './persistence';
-import type { ScreenState } from './state';
+import { type FrameCard, callStackModel } from '../model/callStack';
+import { type FrameRoot, type Pass, rootCell } from '../model/graph';
+import { MAX_SCALE, MIN_SCALE } from '../session/persistence';
+import type { ScreenState } from '../session/state';
 import {
   CAMERA_DURATION,
   type Viewport,
@@ -11,8 +11,8 @@ import {
   settled,
   steppedScale,
   toTranslate,
-} from './camera';
-import { ZOOM_STEP, ZoomControl } from './Toolbar';
+} from '../geometry/camera';
+import { ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
 
 const FIT_FILL = 0.9;
 const FIT_MIN_SHARE = 0.05;
