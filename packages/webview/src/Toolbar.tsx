@@ -10,9 +10,10 @@ const CHOICES: { value: LayoutChoice; label: string }[] = [
   { value: 'hierarchical', label: 'Em árvore' },
 ];
 
-const RECURSION_VALUE = 'recursion';
-
-const FUTURE = ['Ordenação'];
+const MODES: { value: ViewMode; label: string }[] = [
+  { value: 'recursion', label: 'Recursão' },
+  { value: 'sorting', label: 'Ordenação' },
+];
 
 export const ColumnButton: React.FC<{
   open: boolean;
@@ -107,13 +108,14 @@ const Toolbar: React.FC<{
   <div style={compact ? { ...styles.bar, ...styles.barCompact } : styles.bar}>
     <select
       style={styles.select}
-      value={viewMode === 'recursion' ? RECURSION_VALUE : choice}
+      value={viewMode === 'graph' ? choice : viewMode}
       title="Como desenhar a estrutura"
       onChange={(event) => {
         const value = event.target.value;
+        const mode = MODES.find((entry) => entry.value === value);
 
-        if (value === RECURSION_VALUE) {
-          onViewMode('recursion');
+        if (mode !== undefined) {
+          onViewMode(mode.value);
           return;
         }
 
@@ -126,21 +128,20 @@ const Toolbar: React.FC<{
           {entry.label}
         </option>
       ))}
-      <option value={RECURSION_VALUE}>Recursão</option>
-      {FUTURE.map((label) => (
-        <option key={label} value={label} disabled title="Ainda não disponível">
-          {label}
+      {MODES.map((entry) => (
+        <option key={entry.value} value={entry.value}>
+          {entry.label}
         </option>
       ))}
     </select>
 
-    {viewMode === 'graph' && (
+    {viewMode !== 'recursion' && (
       <>
         <button
           type="button"
           className="dbga-chip"
           aria-pressed={!manual && frameMode === 'current'}
-          title="Mostrar só as variáveis do frame onde a execução parou"
+          title="Mostrar só o que vem do frame onde a execução parou"
           onClick={() => onFrameMode('current')}
         >
           atual
@@ -150,12 +151,16 @@ const Toolbar: React.FC<{
           type="button"
           className="dbga-chip"
           aria-pressed={!manual && frameMode === 'all'}
-          title="Mostrar as variáveis de todos os frames"
+          title="Mostrar o que vem de todos os frames"
           onClick={() => onFrameMode('all')}
         >
           todos
         </button>
+      </>
+    )}
 
+    {viewMode === 'graph' && (
+      <>
         <button
           type="button"
           className="dbga-chip"

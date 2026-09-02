@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import * as os from 'node:os';
 import * as path from 'node:path';
 
-import { normalize, firstDifference } from './normalize.mjs';
+import { normalize, normalizeSequence, firstDifference } from './normalize.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
@@ -13,6 +13,7 @@ const TARGETS = path.join(HERE, 'targets');
 const BIN = path.join(TARGETS, 'bin');
 const OUTPUT = path.join(HERE, 'output');
 const EXPECTED = path.join(HERE, 'expected');
+const TIMELINES_EXPECTED = path.join(EXPECTED, 'timelines');
 const SCRIPTS = path.join(ROOT, 'packages', 'extension', 'scripts');
 const SCHEMA = path.join(ROOT, 'packages', 'extension', 'schemas', 'graph-snapshot.schema.json');
 
@@ -26,6 +27,8 @@ const SCENES = {
   sorting_algorithms: { continues: 7 },
   b_tree: { continues: 6 },
 };
+
+const TIMELINES = ['sorting_algorithms', 'recursion'];
 
 const VARIANTS = {
   dynamic_array: {
@@ -211,7 +214,11 @@ function sourceOf(target) {
   return { file: path.basename(candidate), text: readFileSync(candidate, 'utf8') };
 }
 
-function sceneArgs(target, debuggerSpec) {
+function pauseCount(target) {
+  return (SCENES[target]?.continues ?? 0) + 1;
+}
+
+function sceneArgs(target, debuggerSpec, dumps, options) {
   const scene = SCENES[target] ?? {};
   const args = [];
 
@@ -226,10 +233,24 @@ function sceneArgs(target, debuggerSpec) {
     args.push(...debuggerSpec.command(debuggerSpec.breakpoint(`${file}:${line}`)));
   }
 
-  args.push(...debuggerSpec.command('run'));
-  for (let i = 0; i < (scene.continues ?? 0); i += 1) {
-    args.push(...debuggerSpec.command('continue'));
+  if (dumps === null) {
+    args.push(...debuggerSpec.command('run'));
+    for (let i = 0; i < (scene.continues ?? 0); i += 1) {
+      args.push(...debuggerSpec.command('continue'));
+    }
+
+    return args;
   }
+
+  args.push(...debuggerSpec.script(importCommand(debuggerSpec)));
+  args.push(...debuggerSpec.command('run'));
+
+  dumps.forEach((outPath, position) => {
+    if (position > 0) {
+      args.push(...debuggerSpec.command('continue'));
+    }
+    args.push(...debuggerSpec.script(dumpCommand(debuggerSpec, outPath, options)));
+  });
 
   return args;
 }
@@ -245,16 +266,25 @@ function dumpCommand(debuggerSpec, outPath, options) {
 
 function runTarget(job, key) {
   const debuggerSpec = DEBUGGERS[key];
-  const outPath = path.join(OUTPUT, `${job.file}.${key}.json`);
-  rmSync(outPath, { force: true });
+  const single = job.count === 1;
+  const outPaths = Array.from({ length: job.count }, (unused, position) =>
+    path.join(OUTPUT, single ? `${job.file}.${key}.json` : `${job.file}.${position}.${key}.json`),
+  );
+  outPaths.forEach((outPath) => rmSync(outPath, { force: true }));
 
-  const args = [
-    ...debuggerSpec.flags,
-    ...sceneArgs(job.target, debuggerSpec),
-    ...debuggerSpec.script(importCommand(debuggerSpec)),
-    ...debuggerSpec.script(dumpCommand(debuggerSpec, outPath, job.options)),
-    path.join(BIN, job.target + EXE),
-  ];
+  const args = single
+    ? [
+        ...debuggerSpec.flags,
+        ...sceneArgs(job.target, debuggerSpec, null, job.options),
+        ...debuggerSpec.script(importCommand(debuggerSpec)),
+        ...debuggerSpec.script(dumpCommand(debuggerSpec, outPaths[0], job.options)),
+        path.join(BIN, job.target + EXE),
+      ]
+    : [
+        ...debuggerSpec.flags,
+        ...sceneArgs(job.target, debuggerSpec, outPaths, job.options),
+        path.join(BIN, job.target + EXE),
+      ];
 
   let stderr = '';
   try {
@@ -268,7 +298,7 @@ function runTarget(job, key) {
     stderr = String(error.stderr ?? error.message);
   }
 
-  return { outPath, stderr };
+  return { outPaths, stderr };
 }
 
 function assertLinkedListSimple(snapshot, fail, note) {
@@ -476,30 +506,37 @@ function parseArguments(argv) {
 }
 
 function extract(job, key, validate, fail, note) {
-  const { outPath, stderr } = runTarget(job, key);
+  const { outPaths, stderr } = runTarget(job, key);
   const spec = DEBUGGERS[key];
+  const snapshots = [];
 
-  let snapshot;
-  try {
-    snapshot = JSON.parse(readFileSync(outPath, 'utf8'));
-  } catch {
-    const tail = stderr ? ` — ${key}: ${stderr.trim().split('\n').pop()}` : '';
-    fail(`${spec.label}: nenhum snapshot escrito${tail}`);
-    return null;
-  }
+  for (const [position, outPath] of outPaths.entries()) {
+    const where = job.count === 1 ? '' : ` pausa ${position}`;
 
-  if (!validate(snapshot)) {
-    for (const error of validate.errors.slice(0, 6)) {
-      fail(`${spec.label}: ajv ${error.instancePath || '/'} ${error.message}`);
+    let snapshot;
+    try {
+      snapshot = JSON.parse(readFileSync(outPath, 'utf8'));
+    } catch {
+      const tail = stderr ? ` — ${key}: ${stderr.trim().split('\n').pop()}` : '';
+      fail(`${spec.label}: nenhum snapshot escrito${where}${tail}`);
+      return null;
     }
+
+    if (!validate(snapshot)) {
+      for (const error of validate.errors.slice(0, 6)) {
+        fail(`${spec.label}: ajv${where} ${error.instancePath || '/'} ${error.message}`);
+      }
+    }
+
+    checkIntegrity(snapshot, (message) => fail(`${spec.label}:${where} ${message}`));
+    if (job.variant === null) {
+      ASSERTIONS[job.target]?.(snapshot, (message) => fail(`${spec.label}: ${message}`), note);
+    }
+
+    snapshots.push(snapshot);
   }
 
-  checkIntegrity(snapshot, (message) => fail(`${spec.label}: ${message}`));
-  if (job.variant === null) {
-    ASSERTIONS[job.target]?.(snapshot, (message) => fail(`${spec.label}: ${message}`), note);
-  }
-
-  return snapshot;
+  return snapshots;
 }
 
 function checkParity(job, snapshots, fail, note) {
@@ -507,10 +544,10 @@ function checkParity(job, snapshots, fail, note) {
   if (keys.length < 2) return null;
 
   const [first, ...rest] = keys;
-  const reference = normalize(snapshots[first]);
+  const reference = normalizeAll(snapshots[first]);
 
   for (const key of rest) {
-    const other = normalize(snapshots[key]);
+    const other = normalizeAll(snapshots[key]);
     const difference = firstDifference(reference, other);
     if (difference !== null) {
       const message =
@@ -528,11 +565,15 @@ function checkParity(job, snapshots, fail, note) {
   return reference;
 }
 
+function normalizeAll(snapshots) {
+  return snapshots.length === 1 ? normalize(snapshots[0]) : normalizeSequence(snapshots);
+}
+
 function checkBaseline(job, normalized, fail, note, update) {
-  const baseline = path.join(EXPECTED, `${job.file}.json`);
+  const baseline = job.baseline;
 
   if (update) {
-    mkdirSync(EXPECTED, { recursive: true });
+    mkdirSync(path.dirname(baseline), { recursive: true });
     writeFileSync(baseline, `${JSON.stringify(normalized, null, 2)}\n`);
     return;
   }
@@ -568,14 +609,37 @@ function main() {
   const available = targetsIn(readdirSync(BIN), (target) => sourceFile(target) !== null);
   const targets = names.length > 0 ? available.filter((t) => names.includes(t)) : available;
   const jobs = targets.flatMap((target) => [
-    { target, variant: null, label: target, file: target, options: {} },
+    {
+      target,
+      variant: null,
+      label: target,
+      file: target,
+      options: {},
+      count: 1,
+      baseline: path.join(EXPECTED, `${target}.json`),
+    },
     ...Object.entries(VARIANTS[target] ?? {}).map(([variant, options]) => ({
       target,
       variant,
       label: `${target}#${variant}`,
       file: `${target}.${variant}`,
       options,
+      count: 1,
+      baseline: path.join(EXPECTED, `${target}.${variant}.json`),
     })),
+    ...(TIMELINES.includes(target)
+      ? [
+          {
+            target,
+            variant: 'timeline',
+            label: `${target}#timeline`,
+            file: `${target}.timeline`,
+            options: {},
+            count: pauseCount(target),
+            baseline: path.join(TIMELINES_EXPECTED, `${target}.json`),
+          },
+        ]
+      : []),
   ]);
 
   if (targets.length === 0) {
@@ -597,8 +661,8 @@ function main() {
 
     const snapshots = {};
     for (const key of keys) {
-      const snapshot = extract(job, key, validate, fail, note);
-      if (snapshot !== null) snapshots[key] = snapshot;
+      const list = extract(job, key, validate, fail, note);
+      if (list !== null) snapshots[key] = list;
     }
 
     const normalized = checkParity(job, snapshots, fail, note);
@@ -618,9 +682,11 @@ function main() {
 
 function report(target, problems, notes, snapshots, keys) {
   if (problems.length === 0) {
-    const snapshot = snapshots[keys[0]];
+    const list = snapshots[keys[0]];
+    const snapshot = list[list.length - 1];
     const meta = snapshot.meta;
     const shape =
+      (list.length > 1 ? `${list.length} pausas, ` : '') +
       `${snapshot.roots.length} raizes, ${snapshot.nodes.length} nos, ${snapshot.edges.length} arestas` +
       `, ${meta.framesScanned} frames` +
       (meta.errors.length > 0 ? `, ${meta.errors.length} erros` : '') +

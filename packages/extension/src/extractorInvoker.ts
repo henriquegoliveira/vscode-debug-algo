@@ -35,6 +35,8 @@ const PYTHON_MISSING_MESSAGE =
   'Use o CodeLLDB, que traz o próprio LLDB, ou um GDB com Python ' +
   '(no Windows, mingw-w64-x86_64-gdb pelo MSYS2).';
 
+const FRAME_LEVELS = 20;
+
 const PROBE_ATTEMPTS = 4;
 const PROBE_BACKOFF_MS = 10;
 
@@ -72,10 +74,32 @@ export class ExtractorInvoker {
     type: DebuggerType,
     options: InvokeOptions,
   ): Promise<Extraction> {
-    const frame = await this.resolveFrame(session, options.threadId);
-    const frameId = frame.id;
     const snapshotPath = this.snapshotPathFor(options.pid);
+    let frame = await this.resolveFrame(session, options.threadId);
 
+    try {
+      await this.inject(session, type, options, frame.id, snapshotPath);
+    } catch (err) {
+      if (err instanceof DebuggerPythonMissingError) {
+        throw err;
+      }
+
+      frame = await this.resolveFrame(session, options.threadId);
+      await this.inject(session, type, options, frame.id, snapshotPath);
+    }
+
+    const snapshot = await this.reader.read(snapshotPath);
+
+    return { snapshot, file: relativeSource(frame) ?? snapshot.frames[0]?.file ?? null };
+  }
+
+  private async inject(
+    session: vscode.DebugSession,
+    type: DebuggerType,
+    options: InvokeOptions,
+    frameId: number,
+    snapshotPath: string,
+  ): Promise<void> {
     if (options.importModule) {
       await this.probePython(session, type, frameId, options.pid);
 
@@ -97,8 +121,6 @@ export class ExtractorInvoker {
       this.dumpCommand(type, snapshotPath, options.options),
       frameId,
     );
-
-    return { snapshot: await this.reader.read(snapshotPath), file: relativeSource(frame) };
   }
 
   private async resolveFrame(
@@ -108,17 +130,23 @@ export class ExtractorInvoker {
     const response = await session.customRequest('stackTrace', {
       threadId,
       startFrame: 0,
-      levels: 1,
+      levels: FRAME_LEVELS,
     });
 
-    const frame = response?.stackFrames?.[0];
+    const frames = response?.stackFrames;
+    const frame = frames?.[0];
     if (frame === undefined) {
       throw new Error(
         `nao consegui resolver o frame da thread ${threadId}: stackTrace voltou sem frames`,
       );
     }
 
-    return { id: frame.id, path: frame.source?.path };
+    const sourced = frames.find(
+      (entry: { source?: { path?: string } }) =>
+        typeof entry.source?.path === 'string' && entry.source.path.length > 0,
+    );
+
+    return { id: frame.id, path: sourced?.source?.path };
   }
 
   private snapshotPathFor(pid: number): string {

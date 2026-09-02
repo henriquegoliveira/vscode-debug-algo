@@ -87,3 +87,11 @@ export function steppedScale(
 
   return Math.min(Math.max(current * factor, floor), ceiling);
 }
+
+export function toTranslate(target: Viewport, frame: Frame): Viewport {
+  return {
+    x: frame.width / 2 - target.x * target.scale,
+    y: frame.height / 2 - target.y * target.scale,
+    scale: target.scale,
+  };
+}

@@ -14,6 +14,8 @@ export class DebugSessionManager implements vscode.Disposable {
 
   private readonly extractingSessions = new Set<string>();
 
+  private readonly pendingPauses = new Map<string, { type: DebuggerType; threadId: number }>();
+
   private readonly unusableSessions = new Set<string>();
 
   private readonly reportedSessions = new Set<string>();
@@ -39,6 +41,7 @@ export class DebugSessionManager implements vscode.Disposable {
         this.importedSessions.delete(session.id);
         this.sessionPids.delete(session.id);
         this.extractingSessions.delete(session.id);
+        this.pendingPauses.delete(session.id);
         this.unusableSessions.delete(session.id);
         this.reportedSessions.delete(session.id);
         if (this.currentSession?.id === session.id) {
@@ -78,6 +81,7 @@ export class DebugSessionManager implements vscode.Disposable {
     session: vscode.DebugSession,
     type: DebuggerType,
     threadId: number,
+    opportunistic = false,
   ): Promise<void> {
     const pid = this.sessionPids.get(session.id);
     if (pid == undefined) {
@@ -92,9 +96,7 @@ export class DebugSessionManager implements vscode.Disposable {
     }
 
     if (this.extractingSessions.has(session.id)) {
-      console.warn(
-        `[DbgAlgo] sessao ${session.id} parou de novo com uma extracao em voo; descartando esta pausa`,
-      );
+      this.pendingPauses.set(session.id, { type, threadId });
       return;
     }
 
@@ -123,6 +125,10 @@ export class DebugSessionManager implements vscode.Disposable {
       }
       console.error(`[DbgAlgo] falha ao extrair/ler snapshot da sessao ${session.id}`, err);
 
+      if (opportunistic) {
+        return;
+      }
+
       const message =
         'DbgAlgo não conseguiu extrair as estruturas nesta pausa: ' +
         (err instanceof Error ? err.message : String(err));
@@ -135,6 +141,12 @@ export class DebugSessionManager implements vscode.Disposable {
       }
     } finally {
       this.extractingSessions.delete(session.id);
+
+      const pending = this.pendingPauses.get(session.id);
+      if (pending !== undefined) {
+        this.pendingPauses.delete(session.id);
+        void this.onSessionStopped(session, pending.type, pending.threadId, true);
+      }
     }
   }
 

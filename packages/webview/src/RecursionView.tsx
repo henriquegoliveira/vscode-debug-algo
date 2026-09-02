@@ -10,6 +10,7 @@ import {
   interpolate,
   settled,
   steppedScale,
+  toTranslate,
 } from './camera';
 import { ZOOM_STEP, ZoomControl } from './Toolbar';
 
@@ -21,11 +22,6 @@ const FOCUS_FILL = 0.9;
 const FOCUS_MIN_SHARE = 0.25;
 const FOCUS_MIN_SCALE = 0.3;
 const FOCUS_MAX_SCALE = 1;
-
-interface Box {
-  width: number;
-  height: number;
-}
 
 interface RecursionViewProps {
   state: ScreenState;
@@ -371,14 +367,6 @@ const Connector: React.FC<{ label: string }> = ({ label }) => (
     <span style={styles.connectorLine} />
   </div>
 );
-
-function toTranslate(target: Viewport, box: Box): Viewport {
-  return {
-    x: box.width / 2 - target.x * target.scale,
-    y: box.height / 2 - target.y * target.scale,
-    scale: target.scale,
-  };
-}
 
 const styles: Record<string, React.CSSProperties> = {
   viewport: {

@@ -1,5 +1,5 @@
 import type { GraphSnapshot, Root } from 'dbga-contract';
-import { formatValue } from './format';
+import { formatValue, valueKey } from './format';
 import { type FrameRoot, nodeCanvasId, rootCanvasId, rootKey } from './graphModel';
 
 export interface FrameCard {
@@ -87,5 +87,5 @@ function toFrameRoot(root: Root): FrameRoot {
 }
 
 function rootFingerprint(root: Root): string {
-  return JSON.stringify([root.status, root.value ?? null]);
+  return `${root.status}|${valueKey(root.value)}`;
 }
