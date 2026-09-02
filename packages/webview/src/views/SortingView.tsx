@@ -1,6 +1,14 @@
 import {
   type Viewport,
   CAMERA_DURATION,
+  FIT_FILL,
+  FIT_MAX_SCALE,
+  FIT_MIN_SCALE,
+  FIT_MIN_SHARE,
+  FOCUS_FILL,
+  FOCUS_MAX_SCALE,
+  FOCUS_MIN_SCALE,
+  FOCUS_MIN_SHARE,
   cameraPlan,
   interpolate,
   settled,
@@ -15,22 +23,6 @@ import { ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
 import { TrackView } from '../ui/sorting/TrackView';
 import { styles } from '../ui/sorting/SortingView.styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-const FIT_FILL = 0.9;
-
-const FIT_MIN_SHARE = 0.05;
-
-const FIT_MIN_SCALE = 0.05;
-
-const FIT_MAX_SCALE = 1;
-
-const FOCUS_FILL = 0.9;
-
-const FOCUS_MIN_SHARE = 0.25;
-
-const FOCUS_MIN_SCALE = 0.3;
-
-const FOCUS_MAX_SCALE = 1;
 
 interface SortingViewProps {
   state: ScreenState;

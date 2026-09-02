@@ -1,6 +1,11 @@
 import { type Box, labelBox } from '../geometry/boxes';
 import {
   CAMERA_DURATION,
+  FIT_MIN_SCALE,
+  FOCUS_FILL,
+  FOCUS_MAX_SCALE,
+  FOCUS_MIN_SCALE,
+  FOCUS_MIN_SHARE,
   Viewport,
   cameraPlan,
   interpolate,
@@ -41,16 +46,6 @@ const EMPTY_MODEL: GraphModel = {
 };
 
 const EMPTY_BOX: Box = { width: 0, height: 0 };
-
-const FOCUS_FILL = 0.9;
-
-const FOCUS_MIN_SHARE = 0.25;
-
-const FOCUS_MIN_SCALE = 0.3;
-
-const FOCUS_MAX_SCALE = 1;
-
-const FIT_MIN_SCALE = 0.05;
 
 const GESTURE_SLOP = 4;
 
