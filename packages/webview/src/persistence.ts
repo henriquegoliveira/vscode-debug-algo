@@ -5,14 +5,14 @@ const STORAGE_KEY = 'dbga.viewState';
 
 const CHOICES: LayoutChoice[] = ['auto', 'physics', 'hierarchical'];
 const MODES: FrameMode[] = ['current', 'all'];
-export const VIEW_MODES: ViewMode[] = ['graph', 'recursion'];
+export const VIEW_MODES: ViewMode[] = ['graph', 'recursion', 'sorting'];
 
 export const MIN_COLUMN_WIDTH = 180;
 export const MAX_COLUMN_WIDTH = 640;
 
 export type FrameMode = 'current' | 'all';
 
-export type ViewMode = 'graph' | 'recursion';
+export type ViewMode = 'graph' | 'recursion' | 'sorting';
 
 export type FieldChoice = 'all' | 'none' | string[];
 
@@ -37,7 +37,10 @@ export interface PanelState {
   columnWidth: number;
   columnOpen: boolean;
   frames: string[] | null;
+  tracks: string[] | null;
+  hiddenMarkers: string[] | null;
   camera: Camera | null;
+  cameras: Record<string, Camera | null>;
   views: Record<string, FileView>;
 }
 
@@ -56,7 +59,10 @@ export const DEFAULT_PANEL_STATE: PanelState = {
   columnWidth: 260,
   columnOpen: false,
   frames: null,
+  tracks: null,
+  hiddenMarkers: null,
   camera: null,
+  cameras: {},
   views: {},
 };
 
@@ -103,7 +109,10 @@ export function coercePanel(stored: unknown): PanelState {
     columnOpen:
       typeof raw.columnOpen === 'boolean' ? raw.columnOpen : DEFAULT_PANEL_STATE.columnOpen,
     frames: stringList(raw.frames),
+    tracks: stringList(raw.tracks),
+    hiddenMarkers: stringList(raw.hiddenMarkers),
     camera: coerceCamera(raw.camera),
+    cameras: coerceCameras(raw.cameras),
     views: coerceViews(raw.views),
   };
 }
@@ -124,6 +133,23 @@ export function coerceCamera(stored: unknown): Camera | null {
     x: x as number,
     y: y as number,
   };
+}
+
+export function coerceCameras(stored: unknown): Record<string, Camera | null> {
+  const raw = asRecord(stored);
+  if (raw === null) {
+    return {};
+  }
+
+  const cameras: Record<string, Camera | null> = {};
+  VIEW_MODES.forEach((mode) => {
+    const camera = coerceCamera(raw[mode]);
+    if (camera !== null) {
+      cameras[mode] = camera;
+    }
+  });
+
+  return cameras;
 }
 
 export function coerceViews(stored: unknown): Record<string, FileView> {

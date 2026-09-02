@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ExtractionOptions } from './extractorInvoker';
+import { DEFAULT_HISTORY_DEPTH } from './snapshotBroker';
 
 const SECTION = 'dbgAlgo';
 const DYNAMIC_ARRAYS = 'dynamicArrays';
@@ -49,6 +50,11 @@ export async function appendDynamicArray(annotation: string): Promise<void> {
     [...current, annotation],
     vscode.ConfigurationTarget.Workspace,
   );
+}
+
+export function readHistoryDepth(): number {
+  const depth = vscode.workspace.getConfiguration(SECTION).get<number>('limits.historyDepth');
+  return typeof depth === 'number' ? depth : DEFAULT_HISTORY_DEPTH;
 }
 
 export function readFileView(file: string | null): unknown {

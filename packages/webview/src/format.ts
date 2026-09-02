@@ -29,6 +29,29 @@ export function formatValue(value: Value | null | undefined): string {
   }
 }
 
+export function valueKey(value: Value | null | undefined): string {
+  if (value === null || value === undefined) {
+    return '';
+  }
+
+  switch (value.t) {
+    case 'int':
+      return `int:${value.v}:${value.signed}`;
+    case 'real':
+      return `real:${value.v}:${value.special ?? ''}`;
+    case 'bool':
+      return `bool:${value.v}`;
+    case 'char':
+      return `char:${value.v}`;
+    case 'enum':
+      return `enum:${value.v}`;
+    case 'text':
+      return `text:${value.truncated}:${value.v}`;
+    case 'opaque':
+      return `opaque:${value.reason}:${value.address ?? ''}:${value.detail ?? ''}`;
+  }
+}
+
 function escapeControls(text: string): string {
   let escaped = '';
 

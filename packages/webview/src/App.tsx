@@ -25,9 +25,11 @@ import {
   writePanelState,
 } from './persistence';
 import InspectorOverlay from './InspectorOverlay';
+import Timeline from './Timeline';
 import Toolbar from './Toolbar';
 import GraphView from './GraphView';
 import RecursionView from './RecursionView';
+import SortingView from './SortingView';
 
 const NARROW_WIDTH = 620;
 
@@ -37,7 +39,6 @@ const App: React.FC = () => {
   const [panel, updatePanel, panelRef] = usePanelState();
 
   const bodyRef = useRef<HTMLDivElement>(null);
-  const historyRef = useRef<History>({ seen: null, previous: null, session: null });
   const revealRequestRef = useRef<string | null>(null);
 
   const [selectedId, setSelectedId] = useState<string | null>(panel.selectedId);
@@ -45,13 +46,22 @@ const App: React.FC = () => {
   const [dismissed, setDismissed] = useState<string | null>(null);
   const [edits, setEdits] = useState<{ file: string | null; view: FileView } | null>(null);
   const [bodyWidth, setBodyWidth] = useState<number | null>(null);
-  const [sessionDefault, setSessionDefault] = useState<{
-    session: string | null;
-    viewMode: ViewMode;
-  }>({ session: null, viewMode: 'graph' });
+  const [pinned, setPinned] = useState<GraphSnapshot | null>(null);
 
   const embedded = isEmbedded();
   const narrow = bodyWidth !== null && bodyWidth < NARROW_WIDTH;
+
+  const pinnedAt = pinned === null ? -1 : state.history.indexOf(pinned);
+  const following = pinnedAt < 0;
+  const cursor = following ? state.history.length - 1 : pinnedAt;
+  const active = state.history[cursor] ?? state.snapshot;
+  const view = active === state.snapshot ? state : { ...state, snapshot: active };
+
+  const opening = state.history[0] ?? null;
+  const sessionDefault = useMemo<ViewMode | null>(
+    () => (opening === null ? null : resolveLayout(opening) === 'default' ? 'recursion' : 'graph'),
+    [opening],
+  );
 
   const incoming = useMemo(() => coerceFile(state.fileView), [state.fileView]);
   const cached = state.file === null ? undefined : panel.views[state.file];
@@ -60,18 +70,18 @@ const App: React.FC = () => {
 
   const untouched = edits === null || edits.file !== state.file;
   const fileView =
-    untouched && !hasExplicitViewMode(state.fileView) && sessionDefault.session === state.sessionId
-      ? { ...storedView, viewMode: sessionDefault.viewMode }
+    untouched && !hasExplicitViewMode(state.fileView) && sessionDefault !== null
+      ? { ...storedView, viewMode: sessionDefault }
       : storedView;
   const viewMode = fileView.viewMode;
 
   const frameIds = useMemo(
     () =>
-      (state.snapshot?.frames ?? []).map((frame) => ({
+      (active?.frames ?? []).map((frame) => ({
         id: frameKey(frame.function, frame.level),
         frameLevel: frame.level,
       })),
-    [state.snapshot],
+    [active],
   );
 
   const manual = useMemo(
@@ -91,54 +101,24 @@ const App: React.FC = () => {
     return new Set(frameIds.filter((entry) => entry.frameLevel === 0).map((entry) => entry.id));
   }, [manual, panel.frames, fileView.frameMode, frameIds]);
 
-  const [pass, setPass] = useState<Pass>({
-    changes: NO_CHANGES,
-    first: true,
-    of: null,
-    previous: null,
-  });
+  const before = cursor > 0 ? (state.history[cursor - 1] ?? null) : null;
 
-  useEffect(() => {
-    const snapshot = state.snapshot;
-    if (snapshot === null) {
-      return;
+  const pass = useMemo<Pass>(() => {
+    if (active === null) {
+      return { changes: NO_CHANGES, first: true, of: null, previous: null };
     }
 
-    const history = historyRef.current;
-    if (history.seen === snapshot) {
-      return;
-    }
+    return {
+      changes: before === null ? NO_CHANGES : changedNodes(before, active),
+      first: before === null,
+      of: active,
+      previous: before,
+    };
+  }, [before, active]);
 
-    const previous = history.session === state.sessionId ? history.seen : null;
-    history.previous = previous;
-    history.seen = snapshot;
-    history.session = state.sessionId;
+  const highlight = useMemo(() => changeHighlight(pass, active), [pass, active]);
 
-    if (previous === null) {
-      setSessionDefault((current) =>
-        current.session === state.sessionId
-          ? current
-          : {
-              session: state.sessionId,
-              viewMode: resolveLayout(snapshot) === 'default' ? 'recursion' : 'graph',
-            },
-      );
-    }
-
-    setPass({
-      changes: previous === null ? NO_CHANGES : changedNodes(previous, snapshot),
-      first: previous === null,
-      of: snapshot,
-      previous,
-    });
-  }, [state.snapshot, state.sessionId]);
-
-  const highlight = useMemo(() => changeHighlight(pass, state.snapshot), [pass, state.snapshot]);
-
-  const index = useMemo(
-    () => (state.snapshot === null ? null : buildIndex(state.snapshot)),
-    [state.snapshot],
-  );
+  const index = useMemo(() => (active === null ? null : buildIndex(active)), [active]);
 
   const inspection = useMemo(
     () => (index === null || selectedId === null ? null : inspect(index, selectedId)),
@@ -243,7 +223,7 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [select]);
 
-  const meta = state.snapshot === null ? null : state.snapshot.meta;
+  const meta = active === null ? null : active.meta;
   const loud = meta === null ? [] : meta.errors.filter((error) => !isQuiet(error));
   const quiet = meta === null ? 0 : meta.errors.length - loud.length;
   const signature = meta === null ? '' : JSON.stringify([meta.truncationReasons, loud]);
@@ -265,6 +245,16 @@ const App: React.FC = () => {
         onViewMode={setViewMode}
         compact={narrow}
       />
+      {state.history.length > 1 && (
+        <Timeline
+          count={state.history.length}
+          index={cursor}
+          following={following}
+          snapshot={active}
+          onIndex={(next) => setPinned(state.history[next] ?? null)}
+          onLive={() => setPinned(null)}
+        />
+      )}
       {state.phase === 'idle' && (
         <div style={styles.placeholder}>
           <p style={styles.placeholderLead}>
@@ -327,10 +317,13 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <div ref={bodyRef} style={styles.body}>
-        {viewMode === 'graph' ? (
+      <div
+        ref={bodyRef}
+        style={following ? styles.body : { ...styles.body, ...styles.bodyReviewing }}
+      >
+        {viewMode === 'graph' && (
           <GraphView
-            state={state}
+            state={view}
             theme={theme}
             fileView={fileView}
             updateFile={updateFile}
@@ -352,10 +345,24 @@ const App: React.FC = () => {
           >
             {overlay}
           </GraphView>
-        ) : (
-          <RecursionView state={state} pass={pass} selectedId={selectedId} onSelect={select}>
+        )}
+        {viewMode === 'recursion' && (
+          <RecursionView state={view} pass={pass} selectedId={selectedId} onSelect={select}>
             {overlay}
           </RecursionView>
+        )}
+        {viewMode === 'sorting' && (
+          <SortingView
+            state={view}
+            pass={pass}
+            panel={panel}
+            updatePanel={updatePanel}
+            enabledFrames={enabledFrames}
+            selectedId={selectedId}
+            onSelect={select}
+          >
+            {overlay}
+          </SortingView>
         )}
       </div>
 
@@ -419,12 +426,6 @@ function hasExplicitViewMode(raw: unknown): boolean {
   }
 
   return VIEW_MODES.includes((raw as Record<string, unknown>).viewMode as ViewMode);
-}
-
-interface History {
-  seen: GraphSnapshot | null;
-  previous: GraphSnapshot | null;
-  session: string | null;
 }
 
 function usePanelState(): [
@@ -525,6 +526,10 @@ const styles: Record<string, React.CSSProperties> = {
   alarmScope: { opacity: 0.7, minWidth: '80px' },
   alarmReference: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
   body: { flex: 1, display: 'flex', minHeight: 0, position: 'relative' },
+  bodyReviewing: {
+    outline: '2px solid var(--vscode-inputValidation-warningBorder, #b89500)',
+    outlineOffset: '-2px',
+  },
   placeholder: {
     position: 'absolute',
     inset: 0,

@@ -4,7 +4,12 @@ import { DebugSessionManager } from './debugSessionManager';
 import { ExtractorInvoker, sweepStaleTempFiles } from './extractorInvoker';
 import { SnapshotReader } from './snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debuggerAvailability';
-import { appendDynamicArray, readFileView, saveFileView } from './extractionSettings';
+import {
+  appendDynamicArray,
+  readFileView,
+  readHistoryDepth,
+  saveFileView,
+} from './extractionSettings';
 import { MISSING_BUNDLE_MESSAGE, VisualizerPanel } from './visualizerPanel';
 import { SnapshotBroker } from './snapshotBroker';
 import { WebviewChannel } from './webviewChannel';
@@ -30,7 +35,7 @@ export class ExtensionController {
     this.invoker = new ExtractorInvoker(this.context.extensionPath, this.reader);
     this.panel = new VisualizerPanel(context.extensionUri);
 
-    this.broker = new SnapshotBroker(readFileView);
+    this.broker = new SnapshotBroker(readFileView, readHistoryDepth);
     this.broker.register(
       new WebviewChannel(
         this.panel,
