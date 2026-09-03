@@ -156,6 +156,35 @@
         cursor: default;
         opacity: 0.5;
       }
+      .dbga-box {
+        position: relative;
+        flex: 0 0 auto;
+        align-self: center;
+        box-sizing: border-box;
+        width: 13px;
+        height: 13px;
+        border: 1px solid #8a8a8a;
+        border-radius: 2px;
+        background: transparent;
+      }
+      .dbga-check[aria-pressed='true'] .dbga-box {
+        border-color: #2ea043;
+        background: #2ea043;
+      }
+      .dbga-check[aria-pressed='true'] .dbga-box::after {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 1px;
+        width: 3px;
+        height: 6px;
+        border: solid #ffffff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .dbga-icon-close:hover {
+        background-color: rgba(241, 76, 76, 0.2);
+      }
     </style>
   </head>
   <body>

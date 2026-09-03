@@ -7,8 +7,12 @@ const VIEW_TYPE = 'dbgAlgoWebview';
 const PANEL_TITLE = 'DbgAlgo Visualizer';
 
 const MEDIA_DIRECTORY = 'media';
+const ASSETS_DIRECTORY = 'assets';
 const HTML_FILE = 'index.html';
 const BUNDLE_FILE = 'bundle.js';
+const ICON_SET = 'tree';
+const ICON_LIGHT_FILE = `icon-${ICON_SET}-light.svg`;
+const ICON_DARK_FILE = `icon-${ICON_SET}-dark.svg`;
 
 const CSP_PLACEHOLDER = '%CSP%';
 const NONCE_PLACEHOLDER = '%NONCE%';
@@ -26,9 +30,11 @@ export class VisualizerPanel implements vscode.Disposable {
   private readonly messageEmitter = new vscode.EventEmitter<unknown>();
   public readonly onDidReceiveMessage: vscode.Event<unknown> = this.messageEmitter.event;
   private readonly mediaRoot: vscode.Uri;
+  private readonly assetsRoot: vscode.Uri;
 
   constructor(extensionUri: vscode.Uri) {
     this.mediaRoot = vscode.Uri.joinPath(extensionUri, MEDIA_DIRECTORY);
+    this.assetsRoot = vscode.Uri.joinPath(extensionUri, ASSETS_DIRECTORY);
   }
 
   public show(): void {
@@ -49,6 +55,11 @@ export class VisualizerPanel implements vscode.Disposable {
       localResourceRoots: [this.mediaRoot],
     });
     this.panel = panel;
+
+    panel.iconPath = {
+      light: vscode.Uri.joinPath(this.assetsRoot, ICON_LIGHT_FILE),
+      dark: vscode.Uri.joinPath(this.assetsRoot, ICON_DARK_FILE),
+    };
 
     this.panelDisposables.push(
       panel.onDidDispose(() => this.clearPanel()),

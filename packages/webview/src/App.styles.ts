@@ -37,7 +37,7 @@ export const styles: Record<string, CSSProperties> = {
   },
   alarmRows: { flex: 1, minWidth: 0 },
   alarmRow: { display: 'flex', gap: '8px', alignItems: 'baseline' },
-  alarmClose: { alignSelf: 'flex-start' },
+  alarmClose: { alignSelf: 'flex-start', color: '#f14c4c', fontWeight: 700 },
   alarmScope: { opacity: 0.7, minWidth: '80px' },
   alarmReference: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
   body: { flex: 1, display: 'flex', minHeight: 0, position: 'relative' },

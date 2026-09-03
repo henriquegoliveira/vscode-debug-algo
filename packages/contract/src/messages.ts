@@ -131,7 +131,7 @@ export function isExtensionMessage(value: unknown): value is ExtensionMessage {
     case 'view':
       return (
         (typeof envelope.file === 'string' || envelope.file === null) &&
-        (isObject(envelope.state) || envelope.state === null)
+        (isObject(envelope.state) || envelope.state === null || envelope.state === undefined)
       );
     default:
       return false;

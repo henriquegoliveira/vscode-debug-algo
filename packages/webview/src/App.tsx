@@ -2,8 +2,8 @@ import { styles } from './App.styles';
 import { changeHighlight, changedNodes } from './model/graph/changes';
 import { frameKey, parseCanvasId } from './model/graph/ids';
 import { NO_CHANGES, Pass } from './model/graph/types';
-import { buildIndex, inspect } from './model/inspection';
-import { type LayoutKind, resolveLayout } from './model/layoutRule';
+import { annotationTargets, buildIndex, inspect } from './model/inspection';
+import { type LayoutChoice, type LayoutKind, resolveLayout } from './model/layoutRule';
 import { isEmbedded, sendAnnotation, sendSaveView } from './session/channel';
 import {
   FieldChoice,
@@ -40,6 +40,7 @@ const App: React.FC = () => {
   const [layout, setLayout] = useState<LayoutKind | null>(null);
   const [dismissed, setDismissed] = useState<string | null>(null);
   const [edits, setEdits] = useState<{ file: string | null; view: FileView } | null>(null);
+  const editsRef = useRef(edits);
   const [bodyWidth, setBodyWidth] = useState<number | null>(null);
   const [pinned, setPinned] = useState<GraphSnapshot | null>(null);
 
@@ -116,22 +117,34 @@ const App: React.FC = () => {
   const index = useMemo(() => (active === null ? null : buildIndex(active)), [active]);
 
   const inspection = useMemo(
-    () => (index === null || selectedId === null ? null : inspect(index, selectedId)),
-    [index, selectedId],
+    () =>
+      index === null || selectedId === null ? null : inspect(index, selectedId, enabledFrames),
+    [index, selectedId, enabledFrames],
+  );
+
+  const annotations = useMemo(
+    () =>
+      index === null || selectedId === null
+        ? []
+        : annotationTargets(index, selectedId, enabledFrames),
+    [index, selectedId, enabledFrames],
   );
 
   const updateFile = (patch: Partial<FileView>): void => {
-    const next = { ...fileView, ...patch };
     const file = state.file;
+    const pending = editsRef.current;
+    const base = pending !== null && pending.file === file ? pending.view : fileView;
+    const entry = { file, view: { ...base, ...patch } };
 
-    setEdits({ file, view: next });
+    editsRef.current = entry;
+    setEdits(entry);
 
     if (file === null) {
       return;
     }
 
-    updatePanel({ views: { ...panelRef.current.views, [file]: next } });
-    sendSaveView(file, next);
+    updatePanel({ views: { ...panelRef.current.views, [file]: entry.view } });
+    sendSaveView(file, entry.view);
   };
 
   const setFrameMode = (frameMode: FrameMode): void => {
@@ -164,10 +177,14 @@ const App: React.FC = () => {
 
   const setViewMode = (mode: ViewMode): void => updateFile({ viewMode: mode });
 
+  const setGraphChoice = (layoutChoice: LayoutChoice): void =>
+    updateFile({ viewMode: 'graph', layoutChoice });
+
   const viewModeRef = useRef(viewMode);
   const updateFileRef = useRef(updateFile);
 
   useEffect(() => {
+    editsRef.current = edits;
     viewModeRef.current = viewMode;
     updateFileRef.current = updateFile;
   });
@@ -228,7 +245,7 @@ const App: React.FC = () => {
     <>
       <Toolbar
         choice={fileView.layoutChoice}
-        onChoice={(layoutChoice) => updateFile({ layoutChoice })}
+        onGraphChoice={setGraphChoice}
         nullTerminals={fileView.nullTerminals}
         onNullTerminals={(nullTerminals) => updateFile({ nullTerminals })}
         frameMode={fileView.frameMode}
@@ -261,6 +278,7 @@ const App: React.FC = () => {
       {inspection !== null && (
         <InspectorOverlay
           inspection={inspection}
+          annotations={annotations}
           embedded={embedded}
           fields={fileView.fields}
           onFieldChoice={setFieldChoice}
@@ -302,7 +320,7 @@ const App: React.FC = () => {
           </div>
           <button
             type="button"
-            className="dbga-icon"
+            className="dbga-icon dbga-icon-close"
             style={styles.alarmClose}
             title="Fechar o aviso"
             onClick={() => setDismissed(signature)}
@@ -371,7 +389,7 @@ const App: React.FC = () => {
         <span>
           frames {enabledFrames.size}/{frameIds.length}
         </span>
-        {!narrow && <span>{state.file ?? 'arquivo desconhecido'}</span>}
+        {!narrow && <span>{state.file ?? active?.frames[0]?.file ?? 'arquivo desconhecido'}</span>}
         {!embedded && !narrow && <span>sem gravação nesta aba</span>}
         {quiet > 0 && <span>anotações de outro programa {quiet}</span>}
         {highlight.size > 0 && <ChangeLegend changes={highlight} theme={theme} />}

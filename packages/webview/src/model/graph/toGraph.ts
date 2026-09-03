@@ -3,7 +3,7 @@ import { type Box, type Placed, labelBox } from '../../geometry/boxes';
 import { orbitSeat, wedgeAngles } from '../../geometry/orbit';
 import {
   type TreePosition,
-  LEVEL_SEPARATION,
+  byField,
   structuralLevels,
   treePositions,
 } from '../../geometry/treeLayout';
@@ -35,7 +35,7 @@ import {
   RECIPROCAL_ROUNDNESS,
 } from './types';
 import { reciprocalPairs, visibleSnapshot } from './visibility';
-import type { Frame, GraphNode, GraphSnapshot, Root } from 'dbga-contract';
+import type { Frame, GraphEdge, GraphNode, GraphSnapshot, Root } from 'dbga-contract';
 
 export function toGraph(
   snapshot: GraphSnapshot,
@@ -71,10 +71,12 @@ export function toGraph(
     sizes.set(node.id, labelBox(label, kind));
   });
 
-  const levels = structuralLevels(view);
-  const seats = treePositions(view, sizes);
+  const laid = options.nullTerminals ? withTerminals(view, nullFieldsByOrigin, sizes) : view;
+
+  const levels = structuralLevels(laid);
+  const seats = treePositions(laid, sizes);
   const reciprocal = reciprocalPairs(view);
-  const wedges = wedgeAngles(view, seats);
+  const wedges = wedgeAngles(laid, seats);
   const occupied: Placed[] = [...seats.entries()].map(([id, at]) => ({
     ...at,
     box: sizes.get(id) ?? { width: 0, height: 0 },
@@ -109,32 +111,15 @@ export function toGraph(
 
   if (options.nullTerminals) {
     nullFieldsByOrigin.forEach((fields, from) => {
-      const origin = levels.get(from);
-      const seat = seats.get(from);
-
-      if (seat !== undefined) {
-        occupied.push({
-          x: seat.x,
-          y: seat.y + LEVEL_SEPARATION,
-          box: labelBox(NULL_MARK, 'null'),
-        });
-      }
+      const id = terminalCanvasId(from);
 
       nodes.push(
-        styled(
-          terminalCanvasId(from),
-          'null',
-          NULL_MARK,
-          theme,
-          origin === undefined ? undefined : origin + 1,
-          seat === undefined ? undefined : { x: seat.x, y: seat.y + LEVEL_SEPARATION },
-          options.pinned,
-        ),
+        styled(id, 'null', NULL_MARK, theme, levels.get(id), seats.get(id), options.pinned),
       );
       edges.push({
         id: `${EDGE_PREFIX}${from}:${NULL_FIELD}`,
         from: nodeCanvasId(from),
-        to: terminalCanvasId(from),
+        to: id,
         label: baseNames(fields).join(', '),
         arrows: 'to',
         dashes: true,
@@ -255,6 +240,29 @@ export function toGraph(
   frames.sort((a, b) => a.frameLevel - b.frameLevel);
 
   return { canvas: { nodes, edges }, frames, globals, cards };
+}
+
+function withTerminals(
+  view: GraphSnapshot,
+  nullFieldsByOrigin: Map<string, string[]>,
+  sizes: Map<string, Box>,
+): GraphSnapshot {
+  const extraNodes: GraphNode[] = [];
+  const extraEdges: GraphEdge[] = [];
+
+  nullFieldsByOrigin.forEach((fields, from) => {
+    const id = terminalCanvasId(from);
+
+    extraNodes.push({ kind: 'opaque', id, reason: 'notExpanded' });
+    extraEdges.push({ from, field: `${[...fields].sort(byField)[0]}${NULL_FIELD}`, to: id });
+    sizes.set(id, labelBox(NULL_MARK, 'null'));
+  });
+
+  return {
+    ...view,
+    nodes: [...view.nodes, ...extraNodes],
+    edges: [...view.edges, ...extraEdges],
+  };
 }
 
 export function rootFollowers(model: GraphModel): Map<string, string[]> {
