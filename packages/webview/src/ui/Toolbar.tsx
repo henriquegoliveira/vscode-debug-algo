@@ -81,7 +81,7 @@ export const ZoomControl: React.FC<{
 
 const Toolbar: React.FC<{
   choice: LayoutChoice;
-  onChoice: (choice: LayoutChoice) => void;
+  onGraphChoice: (choice: LayoutChoice) => void;
   nullTerminals: boolean;
   onNullTerminals: (enabled: boolean) => void;
   frameMode: FrameMode;
@@ -94,7 +94,7 @@ const Toolbar: React.FC<{
   compact: boolean;
 }> = ({
   choice,
-  onChoice,
+  onGraphChoice,
   nullTerminals,
   onNullTerminals,
   frameMode,
@@ -120,8 +120,7 @@ const Toolbar: React.FC<{
           return;
         }
 
-        onViewMode('graph');
-        onChoice(value as LayoutChoice);
+        onGraphChoice(value as LayoutChoice);
       }}
     >
       {CHOICES.map((entry) => (

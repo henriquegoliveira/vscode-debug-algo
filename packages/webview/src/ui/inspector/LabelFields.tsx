@@ -70,7 +70,7 @@ export const LabelFields: React.FC<{
           aria-pressed={shown(name)}
           onClick={() => toggle(name)}
         >
-          <span style={styles.rowIndex}>{shown(name) ? '\u2611' : '\u2610'}</span>
+          <span className="dbga-box" />
           <span style={styles.rowName}>{name}</span>
         </button>
       ))}

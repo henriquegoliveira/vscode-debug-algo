@@ -37,8 +37,9 @@ export class SnapshotBroker implements vscode.Disposable {
     }
 
     const depth = this.remember(snapshot);
+    const restarted = this.lastSessionId !== session.id;
     this.lastSessionId = session.id;
-    this.lastFile = file;
+    this.lastFile = file ?? (restarted ? null : this.lastFile);
     this.sessionEnded = false;
 
     this.broadcast({

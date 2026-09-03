@@ -1,5 +1,5 @@
 import { styles } from './InspectorOverlay.styles';
-import { AnnotateSection, annotationPrefill } from './AnnotateSection';
+import { AnnotateSection } from './AnnotateSection';
 import { CardBody } from './CardBody';
 import { LabelFields } from './LabelFields';
 import { NodeBody, heading } from './NodeBody';
@@ -10,6 +10,7 @@ import React from 'react';
 
 const InspectorOverlay: React.FC<Props> = ({
   inspection,
+  annotations,
   embedded,
   fields,
   onFieldChoice,
@@ -22,7 +23,7 @@ const InspectorOverlay: React.FC<Props> = ({
       <span style={styles.title}>{heading(inspection)}</span>
       <button
         type="button"
-        className="dbga-icon"
+        className="dbga-icon dbga-icon-close"
         style={styles.close}
         title="Fechar (Esc)"
         onClick={onClose}
@@ -48,12 +49,14 @@ const InspectorOverlay: React.FC<Props> = ({
     {inspection.space === 'root' && <RootBody inspection={inspection} onSelect={onSelect} />}
     {inspection.space === 'card' && <CardBody inspection={inspection} onSelect={onSelect} />}
 
-    <AnnotateSection
-      key={annotationPrefill(inspection)}
-      prefill={annotationPrefill(inspection)}
-      embedded={embedded}
-      onAnnotate={onAnnotate}
-    />
+    {annotations.length > 0 && (
+      <AnnotateSection
+        key={inspection.canvasId}
+        targets={annotations}
+        embedded={embedded}
+        onAnnotate={onAnnotate}
+      />
+    )}
   </aside>
 );
 

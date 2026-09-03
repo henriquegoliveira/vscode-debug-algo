@@ -9,6 +9,7 @@ import type {
 import { formatValue } from './format';
 import {
   cardCanvasId,
+  frameGroupKey,
   nodeCanvasId,
   parseCanvasId,
   rootCanvasId,
@@ -98,6 +99,11 @@ export interface CardInspection {
 
 export type Inspection = NodeInspection | TerminalInspection | RootInspection | CardInspection;
 
+export interface AnnotationTarget {
+  label: string;
+  path: string;
+}
+
 export interface InspectionIndex {
   nodes: Map<string, GraphNode>;
   roots: Map<string, Root>;
@@ -139,7 +145,15 @@ export function buildIndex(snapshot: GraphSnapshot): InspectionIndex {
   return { nodes, roots, edgesFrom, nodeErrors };
 }
 
-export function inspect(index: InspectionIndex, canvasId: string): Inspection | null {
+export function inScope(root: Root, frames: Set<string> | undefined): boolean {
+  return root.origin === 'global' || frames === undefined || frames.has(frameGroupKey(root));
+}
+
+export function inspect(
+  index: InspectionIndex,
+  canvasId: string,
+  frames?: Set<string>,
+): Inspection | null {
   const parsed = parseCanvasId(canvasId);
   if (parsed === null) {
     return null;
@@ -156,12 +170,122 @@ export function inspect(index: InspectionIndex, canvasId: string): Inspection | 
   }
 
   if (parsed.space === 'card') {
-    return inspectCard(index, parsed.address);
+    return inspectCard(index, parsed.address, frames);
   }
 
   const root = index.roots.get(parsed.address);
 
   return root === undefined ? null : inspectRoot(root);
+}
+
+export function annotationTargets(
+  index: InspectionIndex,
+  canvasId: string,
+  frames?: Set<string>,
+): AnnotationTarget[] {
+  const parsed = parseCanvasId(canvasId);
+  if (parsed === null) {
+    return [];
+  }
+
+  if (parsed.space === 'root') {
+    const root = index.roots.get(parsed.address);
+    const target = root === undefined ? null : rootTarget(index, root, frames);
+
+    return target === null ? [] : [target];
+  }
+
+  if (parsed.space === 'card') {
+    return cardRoots(index, parsed.address, frames)
+      .map((root) => rootTarget(index, root, frames))
+      .filter((target): target is AnnotationTarget => target !== null);
+  }
+
+  if (parsed.space !== 'node') {
+    return [];
+  }
+
+  const node = index.nodes.get(parsed.address);
+  if (node === undefined || node.kind !== 'record') {
+    return [];
+  }
+
+  const holder = reachingRoot(index, node.id, frames);
+  if (holder === null) {
+    return [];
+  }
+
+  const reach = holder.indirections === 0 ? '.' : '->';
+  const base = annotationPath(index, holder, frames);
+
+  return (index.edgesFrom.get(node.id) ?? [])
+    .filter((edge) => !edge.field.includes('[') && unexpanded(index, edge.to))
+    .map((edge) => ({
+      label: `${holder.name}${reach}${edge.field}`,
+      path: `${base}${reach}${edge.field}`,
+    }));
+}
+
+function rootTarget(
+  index: InspectionIndex,
+  root: Root,
+  frames: Set<string> | undefined,
+): AnnotationTarget | null {
+  if (root.category !== 'pointer') {
+    return null;
+  }
+
+  if (!unexpanded(index, root.node) && !(root.node === null && root.status === 'notFollowed')) {
+    return null;
+  }
+
+  return { label: root.name, path: annotationPath(index, root, frames) };
+}
+
+function unexpanded(index: InspectionIndex, address: string | null): boolean {
+  if (address === null) {
+    return false;
+  }
+
+  const node = index.nodes.get(address);
+
+  return node !== undefined && node.kind === 'opaque' && node.reason === 'notExpanded';
+}
+
+function reachingRoot(
+  index: InspectionIndex,
+  node: string,
+  frames: Set<string> | undefined,
+): Root | null {
+  let nearest: Root | null = null;
+
+  index.roots.forEach((root) => {
+    if (root.node !== node || !inScope(root, frames) || root.indirections > 1) {
+      return;
+    }
+
+    if (nearest === null || root.frameLevel < nearest.frameLevel) {
+      nearest = root;
+    }
+  });
+
+  return nearest;
+}
+
+function annotationPath(
+  index: InspectionIndex,
+  root: Root,
+  frames: Set<string> | undefined,
+): string {
+  let shared = 0;
+
+  index.roots.forEach((other) => {
+    if (other.name === root.name && inScope(other, frames)) {
+      shared += 1;
+    }
+  });
+
+  return shared > 1 ? `${root.function}:${root.name}` : root.name;
 }
 
 function inspectNode(index: InspectionIndex, node: GraphNode): NodeInspection {
@@ -327,32 +451,44 @@ function inspectTerminal(index: InspectionIndex, address: string): TerminalInspe
   };
 }
 
-function inspectCard(index: InspectionIndex, node: string): CardInspection | null {
-  const variables: CardVariable[] = [];
+function cardRoots(index: InspectionIndex, node: string, frames: Set<string> | undefined): Root[] {
+  const held: Root[] = [];
 
   index.roots.forEach((root) => {
-    if (root.node !== node) {
-      return;
+    if (root.node === node && inScope(root, frames)) {
+      held.push(root);
     }
-
-    variables.push({
-      canvasId: rootCanvasId(root),
-      name: root.name,
-      frame: `${root.function} #${root.frameLevel}`,
-      type: root.type,
-      status: root.status,
-    });
   });
 
-  if (variables.length === 0) {
+  return held;
+}
+
+function inspectCard(
+  index: InspectionIndex,
+  node: string,
+  frames: Set<string> | undefined,
+): Inspection | null {
+  const held = cardRoots(index, node, frames);
+
+  if (held.length === 0) {
     return null;
+  }
+
+  if (held.length === 1) {
+    return inspectRoot(held[0]);
   }
 
   return {
     space: 'card',
     canvasId: cardCanvasId(node),
     nodeCanvasId: nodeCanvasId(node),
-    variables,
+    variables: held.map((root) => ({
+      canvasId: rootCanvasId(root),
+      name: root.name,
+      frame: `${root.function} #${root.frameLevel}`,
+      type: root.type,
+      status: root.status,
+    })),
   };
 }
 
