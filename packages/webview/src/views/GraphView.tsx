@@ -14,7 +14,7 @@ import {
 } from '../geometry/camera';
 import { changeHighlight, focusTarget } from '../model/graph/changes';
 import { rootFollowers, toGraph } from '../model/graph/toGraph';
-import { DRIFT_TOLERANCE, GraphModel, Pass } from '../model/graph/types';
+import { GraphModel, Pass } from '../model/graph/types';
 import { visibleSnapshot } from '../model/graph/visibility';
 import { LayoutKind, layoutForChoice, promotes } from '../model/layoutRule';
 import {
@@ -33,7 +33,7 @@ import { Theme } from '../ui/theme';
 import { styles } from '../ui/graph/GraphView.styles';
 import { remove } from './dataSet';
 import { NETWORK_OPTIONS, layoutOptions } from './networkOptions';
-import { type Seat, type Trail, withoutSeat } from './seats';
+import { type Seat, type Trail, seatPayload } from './seats';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DataSet } from 'vis-data';
 import { Edge, Network, Node } from 'vis-network';
@@ -562,26 +562,10 @@ const GraphView: React.FC<GraphViewProps> = ({
     }
 
     const placed = networkRef.current?.getPositions() ?? {};
-    const authoritative = layout === 'hierarchical';
     const relayout = layoutRenderedRef.current !== layout;
     layoutRenderedRef.current = layout;
 
-    const payload = model.canvas.nodes.map((node) => {
-      if (node.x === undefined || node.y === undefined) {
-        return node;
-      }
-
-      const at = placed[node.id];
-      if (at === undefined || relayout) {
-        return node;
-      }
-
-      if (!authoritative) {
-        return withoutSeat(node);
-      }
-
-      return Math.hypot(at.x - node.x, at.y - node.y) > DRIFT_TOLERANCE ? node : withoutSeat(node);
-    });
+    const payload = seatPayload(model.canvas.nodes, placed, layout === 'hierarchical', relayout);
 
     remove(edges, model.canvas.edges);
     remove(nodes, model.canvas.nodes);
@@ -720,7 +704,7 @@ const GraphView: React.FC<GraphViewProps> = ({
                   title="Mostrar as variáveis deste frame no grafo"
                   onClick={() => toggleFrame(frame.id)}
                 >
-                  <span>{frame.enabled ? '☑' : '☐'}</span>
+                  <span className="dbga-box" />
                   <span>
                     {frame.function} #{frame.frameLevel}
                   </span>

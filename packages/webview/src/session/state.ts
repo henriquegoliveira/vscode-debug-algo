@@ -53,7 +53,7 @@ export function reduce(state: ScreenState, message: ExtensionMessage): ScreenSta
       };
     }
     case 'view':
-      return { ...state, file: message.file, fileView: message.state };
+      return { ...state, file: message.file, fileView: message.state ?? null };
     case 'sessionEnd':
       return { ...state, phase: 'ended' };
     case 'error':
