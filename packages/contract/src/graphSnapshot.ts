@@ -29,6 +29,8 @@ export interface Meta {
     | 'edgeLimit'
     | 'depthLimit'
     | 'frameLimit'
+    | 'varLimit'
+    | 'globalLimit'
     | 'cellLimit'
     | 'fieldLimit'
     | 'timeBudget'
