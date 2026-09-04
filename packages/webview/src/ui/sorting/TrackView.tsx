@@ -68,7 +68,7 @@ export const TrackView: React.FC<{
             <button
               key={marker.id}
               type="button"
-              className="dbga-chip"
+              className="dbga-marker"
               aria-pressed={marker.id === selectedId}
               style={{
                 ...styles.marker,

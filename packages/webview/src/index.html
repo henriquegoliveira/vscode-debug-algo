@@ -6,12 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DbgAlgo</title>
     <style>
+      :root {
+        --dbga-text-title: 14px;
+        --dbga-text-body: 12px;
+        --dbga-text-meta: 11px;
+        --dbga-text-micro: 10px;
+        --dbga-text-note: 9px;
+        --dbga-radius-panel: 6px;
+        --dbga-radius-control: 4px;
+        --dbga-radius-pill: 999px;
+        --dbga-shadow-panel: 0 4px 12px rgba(0, 0, 0, 0.32);
+      }
       body {
         margin: 0;
         padding: 0;
         background-color: var(--vscode-editor-background, #1e1e1e);
         color: var(--vscode-editor-foreground, #cccccc);
         font-family: var(--vscode-font-family, sans-serif);
+        font-size: var(--dbga-text-body);
         overflow: hidden;
       }
       #root {
@@ -20,16 +32,18 @@
       }
       .dbga-row,
       .dbga-chip,
+      .dbga-marker,
       .dbga-square,
       .dbga-icon,
       .dbga-zoom,
       .dbga-check {
         font: inherit;
         cursor: pointer;
-        border-radius: 3px;
+        border-radius: var(--dbga-radius-control);
       }
       .dbga-row:focus,
       .dbga-chip:focus,
+      .dbga-marker:focus,
       .dbga-square:focus,
       .dbga-icon:focus,
       .dbga-zoom:focus,
@@ -38,6 +52,7 @@
       }
       .dbga-row:focus-visible,
       .dbga-chip:focus-visible,
+      .dbga-marker:focus-visible,
       .dbga-square:focus-visible,
       .dbga-icon:focus-visible,
       .dbga-zoom:focus-visible,
@@ -50,7 +65,7 @@
         gap: 6px;
         align-items: baseline;
         width: 100%;
-        padding: 0 2px 0 8px;
+        padding: 1px 4px 1px 8px;
         border: none;
         background: none;
         color: inherit;
@@ -61,37 +76,79 @@
         background-color: var(--vscode-list-hoverBackground, #2a2d2e);
       }
       .dbga-row[aria-pressed='true'] {
-        background-color: var(--vscode-list-activeSelectionBackground, #04395e);
-        color: var(--vscode-list-activeSelectionForeground, #ffffff);
-      }
-      .dbga-row[aria-pressed='true'] > span {
-        color: inherit;
-        opacity: 1;
+        background-color: var(--vscode-list-inactiveSelectionBackground, #37373d);
+        box-shadow: inset 2px 0 0 var(--vscode-focusBorder, #007fd4);
       }
       .dbga-chip {
-        padding: 2px 10px;
+        padding: 2px 9px;
         border: none;
         background: var(--vscode-button-secondaryBackground, #3a3d41);
         color: var(--vscode-button-secondaryForeground, #cccccc);
-        font-family: monospace;
-        font-size: 12px;
-        letter-spacing: 0.5px;
+        font-family: var(--vscode-font-family, sans-serif);
+        font-size: var(--dbga-text-meta);
+        letter-spacing: 0.2px;
       }
-      .dbga-chip:hover {
+      .dbga-chip:hover:not(:disabled):not([aria-pressed='true']) {
         background: var(--vscode-button-secondaryHoverBackground, #45494e);
       }
       .dbga-chip[aria-pressed='true'] {
-        background: var(--vscode-charts-green, #2ea043);
-        color: var(--vscode-editor-background, #101010);
-        font-weight: 700;
+        background: var(--vscode-button-background, #0e639c);
+        color: var(--vscode-button-foreground, #ffffff);
+        font-weight: 600;
+      }
+      .dbga-chip[aria-pressed='true']:hover:not(:disabled) {
+        background: var(--vscode-button-hoverBackground, #1177bb);
+      }
+      .dbga-segment {
+        display: flex;
+        gap: 2px;
+        padding: 2px;
+        box-sizing: border-box;
+        border: 1px solid var(--vscode-editorWidget-border, #333);
+        border-radius: var(--dbga-radius-control);
+        background: var(--vscode-editor-background, #1e1e1e);
+      }
+      .dbga-segment .dbga-chip {
+        background: none;
+        border-radius: 3px;
+      }
+      .dbga-segment .dbga-chip:hover:not(:disabled):not([aria-pressed='true']) {
+        background: var(--vscode-toolbar-hoverBackground, #3a3d41);
+      }
+      .dbga-segment .dbga-chip[aria-pressed='true'] {
+        background: var(--vscode-button-background, #0e639c);
+      }
+      .dbga-marker {
+        padding: 0 3px;
+        box-sizing: border-box;
+        border: 1px solid var(--vscode-charts-blue, #569cd6);
+        border-radius: 3px;
+        background: var(--vscode-editorWidget-background, #252526);
+        color: var(--vscode-charts-blue, #569cd6);
+        font-family: var(--vscode-editor-font-family, monospace);
+      }
+      .dbga-marker:hover {
+        background: var(--vscode-list-hoverBackground, #2a2d2e);
+      }
+      .dbga-marker[aria-pressed='true'] {
+        border-color: var(--vscode-focusBorder, #007fd4);
+        box-shadow: 0 0 0 1px var(--vscode-focusBorder, #007fd4);
+      }
+      .dbga-sep {
+        flex: 0 0 auto;
+        align-self: center;
+        width: 1px;
+        height: 16px;
+        background: var(--vscode-editorWidget-border, #333);
       }
       .dbga-square {
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 0;
+        padding: 0 5px;
         color: var(--vscode-foreground, #cccccc);
-        font-family: monospace;
+        font-family: var(--vscode-editor-font-family, monospace);
+        font-size: var(--dbga-text-meta);
       }
       .dbga-square:hover {
         background-color: var(--vscode-list-hoverBackground, #2a2d2e);
@@ -105,14 +162,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        min-width: 26px;
+        min-width: 24px;
         height: 24px;
         padding: 0 4px;
         border: none;
         background: none;
         color: var(--vscode-foreground, #cccccc);
-        font-family: monospace;
-        font-size: 12px;
+        font-family: var(--vscode-editor-font-family, monospace);
+        font-size: var(--dbga-text-meta);
       }
       .dbga-zoom:hover:not(:disabled) {
         background-color: var(--vscode-toolbar-hoverBackground, #3a3d41);
@@ -122,11 +179,11 @@
         cursor: default;
       }
       .dbga-zoom-label {
-        min-width: 46px;
-        letter-spacing: 0.5px;
+        min-width: 44px;
+        letter-spacing: 0.2px;
       }
       .dbga-icon {
-        padding: 0 3px;
+        padding: 0 4px;
         border: none;
         background: none;
         color: inherit;

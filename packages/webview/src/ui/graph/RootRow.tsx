@@ -13,7 +13,7 @@ export const RootRow: React.FC<{
     <>
       <span style={styles.rootName}>{root.name}</span>
       <span style={styles.rootType}>{root.type}</span>
-      <span style={root.status === 'ok' ? styles.rootValue : styles.rootStatus}>{cell}</span>
+      <span style={cellStyle(root)}>{cell}</span>
     </>
   );
 
@@ -32,3 +32,11 @@ export const RootRow: React.FC<{
     </button>
   );
 };
+
+function cellStyle(root: FrameRoot): React.CSSProperties {
+  if (root.status !== 'ok') {
+    return styles.rootStatus;
+  }
+
+  return root.value === '' ? styles.rootAddress : styles.rootValue;
+}

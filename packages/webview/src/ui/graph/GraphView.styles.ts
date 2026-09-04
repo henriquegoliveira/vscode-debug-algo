@@ -1,13 +1,14 @@
+import { SECTION_TITLE } from '../chrome';
 import type { CSSProperties } from 'react';
 
 export const styles: Record<string, CSSProperties> = {
   column: {
     flex: '0 0 auto',
     overflowY: 'auto',
-    padding: '8px 10px',
+    padding: '10px',
     boxSizing: 'border-box',
-    fontFamily: 'monospace',
-    fontSize: '12px',
+    fontFamily: 'var(--vscode-editor-font-family, monospace)',
+    fontSize: 'var(--dbga-text-body)',
   },
   divider: {
     flex: '0 0 auto',
@@ -23,21 +24,33 @@ export const styles: Record<string, CSSProperties> = {
     left: 0,
     backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
     borderRight: '1px solid var(--vscode-editorWidget-border, #333)',
-    boxShadow: '2px 0 8px rgba(0, 0, 0, 0.35)',
+    boxShadow: 'var(--dbga-shadow-panel)',
   },
   dividerFloating: { position: 'absolute', zIndex: 3, top: 0, bottom: 0 },
-  columnTitle: { margin: '0 0 8px 0', fontSize: '12px', opacity: 0.7 },
-  frame: { marginBottom: '10px' },
+  columnTitle: { ...SECTION_TITLE, margin: '0 0 10px 0' },
+  frame: { marginBottom: '12px' },
+  frameLevel: { color: 'var(--vscode-descriptionForeground, #a0a0a0)', fontWeight: 400 },
+  roots: {
+    marginLeft: '6px',
+    paddingLeft: '2px',
+    borderLeft: '1px solid var(--vscode-editorWidget-border, #333)',
+  },
   root: {
     display: 'flex',
     gap: '6px',
-    paddingLeft: '8px',
+    padding: '1px 4px 1px 8px',
     whiteSpace: 'nowrap',
     alignItems: 'baseline',
   },
   rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
-  rootType: { opacity: 0.55, overflow: 'hidden', textOverflow: 'ellipsis' },
+  rootType: {
+    color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
+    opacity: 0.8,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   rootValue: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
+  rootAddress: { marginLeft: 'auto', color: 'var(--vscode-charts-yellow, #dcdcaa)' },
   rootStatus: { marginLeft: 'auto', color: 'var(--vscode-charts-orange, #ce9178)' },
   canvas: { flex: 1, position: 'relative', minWidth: 0 },
   network: { position: 'absolute', inset: 0, outline: 'none' },

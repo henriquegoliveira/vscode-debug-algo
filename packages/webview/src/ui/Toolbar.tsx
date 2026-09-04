@@ -62,6 +62,7 @@ export const ZoomControl: React.FC<{
     <button type="button" className="dbga-zoom" title="Aproximar" onClick={() => onStep(1)}>
       +
     </button>
+    <span className="dbga-sep" />
     <button type="button" className="dbga-zoom" title="Enquadrar o grafo inteiro" onClick={onFit}>
       &#9974;
     </button>
@@ -137,30 +138,36 @@ const Toolbar: React.FC<{
 
     {viewMode !== 'recursion' && (
       <>
-        <button
-          type="button"
-          className="dbga-chip"
-          aria-pressed={!manual && frameMode === 'current'}
-          title="Mostrar só o que vem do frame onde a execução parou"
-          onClick={() => onFrameMode('current')}
-        >
-          atual
-        </button>
+        <span className="dbga-sep" />
 
-        <button
-          type="button"
-          className="dbga-chip"
-          aria-pressed={!manual && frameMode === 'all'}
-          title="Mostrar o que vem de todos os frames"
-          onClick={() => onFrameMode('all')}
-        >
-          todos
-        </button>
+        <div className="dbga-segment" role="group" aria-label="Frames no grafo">
+          <button
+            type="button"
+            className="dbga-chip"
+            aria-pressed={!manual && frameMode === 'current'}
+            title="Mostrar só o que vem do frame onde a execução parou"
+            onClick={() => onFrameMode('current')}
+          >
+            atual
+          </button>
+
+          <button
+            type="button"
+            className="dbga-chip"
+            aria-pressed={!manual && frameMode === 'all'}
+            title="Mostrar o que vem de todos os frames"
+            onClick={() => onFrameMode('all')}
+          >
+            todos
+          </button>
+        </div>
       </>
     )}
 
     {viewMode === 'graph' && (
       <>
+        <span className="dbga-sep" />
+
         <button
           type="button"
           className="dbga-chip"

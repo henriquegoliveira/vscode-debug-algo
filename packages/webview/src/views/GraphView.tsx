@@ -705,31 +705,37 @@ const GraphView: React.FC<GraphViewProps> = ({
                   onClick={() => toggleFrame(frame.id)}
                 >
                   <span className="dbga-box" />
-                  <span>
-                    {frame.function} #{frame.frameLevel}
+                  <span>{frame.function}</span>
+                  <span style={styles.frameLevel}>
+                    #{frame.frameLevel}
+                    {frame.frameLevel === 0 ? ' (atual)' : ''}
                   </span>
                 </button>
-                {frame.roots.map((root) => (
-                  <RootRow
-                    key={root.id}
-                    root={root}
-                    active={root.canvasId !== null && root.id === selectedId}
-                    onSelect={onSelect}
-                  />
-                ))}
+                <div style={styles.roots}>
+                  {frame.roots.map((root) => (
+                    <RootRow
+                      key={root.id}
+                      root={root}
+                      active={root.canvasId !== null && root.id === selectedId}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </div>
               </section>
             ))}
             {model.globals.length > 0 && (
               <section style={styles.frame}>
                 <h5 style={styles.columnTitle}>Globais do arquivo</h5>
-                {model.globals.map((root) => (
-                  <RootRow
-                    key={root.id}
-                    root={root}
-                    active={root.canvasId !== null && root.id === selectedId}
-                    onSelect={onSelect}
-                  />
-                ))}
+                <div style={styles.roots}>
+                  {model.globals.map((root) => (
+                    <RootRow
+                      key={root.id}
+                      root={root}
+                      active={root.canvasId !== null && root.id === selectedId}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </div>
               </section>
             )}
           </aside>

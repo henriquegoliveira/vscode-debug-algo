@@ -1,3 +1,4 @@
+import { PANEL } from './chrome';
 import React from 'react';
 import type { GraphSnapshot } from 'dbga-contract';
 
@@ -19,6 +20,7 @@ const Timeline: React.FC<TimelineProps> = ({
   onLive,
 }) => {
   const behind = count - 1 - index;
+  const site = siteOf(snapshot);
 
   return (
     <div style={following ? styles.bar : { ...styles.bar, ...styles.barReviewing }}>
@@ -59,7 +61,14 @@ const Timeline: React.FC<TimelineProps> = ({
         {index + 1}/{count}
       </span>
 
-      <span style={styles.site}>{siteOf(snapshot)}</span>
+      {site !== '' && (
+        <>
+          <span className="dbga-sep" />
+          <span style={styles.site}>{site}</span>
+        </>
+      )}
+
+      <span className="dbga-sep" />
 
       <button
         type="button"
@@ -89,7 +98,7 @@ function siteOf(snapshot: GraphSnapshot | null): string {
 
 const styles: Record<string, React.CSSProperties> = {
   bar: {
-    position: 'absolute',
+    ...PANEL,
     zIndex: 3,
     top: '8px',
     left: '50%',
@@ -99,18 +108,18 @@ const styles: Record<string, React.CSSProperties> = {
     gap: '6px',
     padding: '4px 6px',
     maxWidth: 'calc(100% - 360px)',
-    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    border: '1px solid var(--vscode-editorWidget-border, #333)',
-    borderRadius: '4px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
-    fontFamily: 'var(--vscode-font-family, sans-serif)',
-    fontSize: '12px',
   },
   range: { width: '140px', accentColor: 'var(--vscode-focusBorder, #007fd4)' },
-  label: { fontFamily: 'monospace', opacity: 0.85, whiteSpace: 'nowrap' },
+  label: {
+    fontFamily: 'var(--vscode-editor-font-family, monospace)',
+    fontSize: 'var(--dbga-text-meta)',
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+    whiteSpace: 'nowrap',
+  },
   site: {
-    fontFamily: 'monospace',
-    opacity: 0.6,
+    fontFamily: 'var(--vscode-editor-font-family, monospace)',
+    fontSize: 'var(--dbga-text-meta)',
+    color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -119,12 +128,13 @@ const styles: Record<string, React.CSSProperties> = {
   barReviewing: {
     borderColor: 'var(--vscode-inputValidation-warningBorder, #b89500)',
     boxShadow:
-      '0 2px 8px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--vscode-inputValidation-warningBorder, #b89500)',
+      'var(--dbga-shadow-panel), 0 0 0 1px var(--vscode-inputValidation-warningBorder, #b89500)',
   },
   reviewing: {
     padding: '1px 6px',
-    borderRadius: '3px',
-    fontWeight: 700,
+    borderRadius: 'var(--dbga-radius-control)',
+    fontSize: 'var(--dbga-text-meta)',
+    fontWeight: 600,
     whiteSpace: 'nowrap',
     backgroundColor: 'var(--vscode-inputValidation-warningBackground, #4d3b16)',
     color: 'var(--vscode-inputValidation-warningBorder, #b89500)',
