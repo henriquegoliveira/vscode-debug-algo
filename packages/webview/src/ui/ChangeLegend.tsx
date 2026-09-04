@@ -1,4 +1,4 @@
-import { styles } from './ChangeLegend.styles';
+import { legendMark, styles } from './ChangeLegend.styles';
 import { ChangeKind, Theme } from './theme';
 import React from 'react';
 
@@ -22,7 +22,7 @@ export const ChangeLegend: React.FC<{ changes: Map<string, ChangeKind>; theme: T
         .filter((kind) => tally.has(kind))
         .map((kind) => (
           <span key={kind} style={styles.legend}>
-            <span style={{ ...styles.legendDot, backgroundColor: theme.change[kind] }} />
+            <span style={legendMark(kind, theme.change[kind])} />
             {CHANGE_NAMES[kind]} {tally.get(kind)}
           </span>
         ))}
