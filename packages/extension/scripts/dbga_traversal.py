@@ -62,13 +62,16 @@ def _frames_through_main(frames):
     return trimmed
 
 
-def _file_scope_globals(adapter, config):
+def _file_scope_globals(builder, adapter, config):
     try:
         found = list(adapter.globals())
     except Exception:
         return []
     found.sort(key=lambda pair: pair[0].name)
-    return found[: config.max_globals]
+    if len(found) > config.max_globals:
+        builder.truncate("globalLimit")
+        found = found[: config.max_globals]
+    return found
 
 
 def extract(adapter, config):
@@ -98,6 +101,7 @@ def extract(adapter, config):
             continue
 
         if len(variables) > config.max_vars_per_frame:
+            builder.truncate("varLimit")
             variables = variables[: config.max_vars_per_frame]
 
         for var in variables:
@@ -108,7 +112,7 @@ def extract(adapter, config):
             except Exception as error:
                 builder.error("root", var.name, error)
 
-    for var, source in _file_scope_globals(adapter, config):
+    for var, source in _file_scope_globals(builder, adapter, config):
         if config.root_filter is not None and var.name not in config.root_filter:
             continue
         shim = dbga_adapter.FrameInfo(-1, source, True, None, source, 0)

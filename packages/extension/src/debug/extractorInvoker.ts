@@ -40,6 +40,8 @@ const FRAME_LEVELS = 20;
 const PROBE_ATTEMPTS = 4;
 const PROBE_BACKOFF_MS = 10;
 
+const STALE_AFTER_MS = 6 * 60 * 60 * 1000;
+
 const PYTHON_PROBE_MESSAGE =
   'DbgAlgo injetou Python no depurador e nada foi escrito em disco. As duas causas possíveis são ' +
   'um depurador sem Python embutido e um caminho de arquivo que não sobreviveu ao console do ' +
@@ -243,11 +245,36 @@ export async function sweepStaleTempFiles(): Promise<void> {
     return;
   }
 
+  const cutoff = Date.now() - STALE_AFTER_MS;
+
   for (const entry of entries) {
+    const full = path.join(directory, entry);
+
     if (entry.startsWith('.dbg-algo-snapshot-') && entry.endsWith('.tmp')) {
-      await fs.rm(path.join(directory, entry), { force: true });
+      await fs.rm(full, { force: true });
+      continue;
+    }
+
+    if (!isSessionArtifact(entry)) {
+      continue;
+    }
+
+    try {
+      const stats = await fs.stat(full);
+      if (stats.mtimeMs < cutoff) {
+        await fs.rm(full, { force: true });
+      }
+    } catch {
+      continue;
     }
   }
+}
+
+function isSessionArtifact(entry: string): boolean {
+  return (
+    (entry.startsWith('dbg-algo-snapshot-') && entry.endsWith('.json')) ||
+    (entry.startsWith('dbg-algo-probe-') && entry.endsWith('.txt'))
+  );
 }
 
 function isPythonMissing(err: unknown): boolean {

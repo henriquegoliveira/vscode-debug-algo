@@ -73,6 +73,8 @@
               "edgeLimit",
               "depthLimit",
               "frameLimit",
+              "varLimit",
+              "globalLimit",
               "cellLimit",
               "fieldLimit",
               "timeBudget"
