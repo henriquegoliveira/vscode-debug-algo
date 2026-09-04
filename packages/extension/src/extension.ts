@@ -6,6 +6,7 @@ import { SnapshotReader } from './debug/snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debug/debuggerAvailability';
 import {
   appendDynamicArray,
+  flushFileViews,
   readFileView,
   readHistoryDepth,
   saveFileView,
@@ -68,7 +69,9 @@ export class ExtensionController {
     );
   }
 
-  public deactivate(): void {}
+  public deactivate(): void {
+    void flushFileViews();
+  }
 
   private async annotateArrayCommand(): Promise<void> {
     const editor = vscode.window.activeTextEditor;
