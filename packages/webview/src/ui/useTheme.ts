@@ -1,17 +1,21 @@
 import { FALLBACK_THEME, Theme, documentTokenReader, resolveTheme } from './theme';
+import { canvasMeasurer } from './textAdvances';
 import { useEffect, useState } from 'react';
 
 export function useTheme(): Theme {
   const [theme, setTheme] = useState<Theme>(() =>
-    typeof document === 'undefined' ? FALLBACK_THEME : resolveTheme(documentTokenReader()),
+    typeof document === 'undefined'
+      ? FALLBACK_THEME
+      : resolveTheme(documentTokenReader(), canvasMeasurer()),
   );
 
   useEffect(() => {
+    const measure = canvasMeasurer();
     let pending = 0;
 
     const refresh = () => {
       pending = 0;
-      const next = resolveTheme(documentTokenReader());
+      const next = resolveTheme(documentTokenReader(), measure);
       setTheme((current) => (JSON.stringify(current) === JSON.stringify(next) ? current : next));
     };
 
