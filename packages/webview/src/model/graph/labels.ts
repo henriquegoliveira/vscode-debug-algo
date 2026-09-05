@@ -1,3 +1,4 @@
+import type { CardLine, NodeCard } from '../../geometry/nodeMetrics';
 import type { FieldChoice } from '../../session/persistence';
 import { CanvasNodeKind } from '../../ui/theme';
 import { formatValue } from '../format';
@@ -24,11 +25,9 @@ const ARRAY_CELLS = 'cells';
 
 export const NULL_MARK = 'NULL';
 
-export function recordEntries(node: Extract<GraphNode, { kind: 'record' }>): string[] {
-  return [
-    ...node.fields.map((field) => `${field.name} = ${formatValue(field.value)}`),
-    ...node.arrays.map(arrayEntry),
-  ];
+interface Entry {
+  name: string;
+  value: string;
 }
 
 export function recordNames(node: Extract<GraphNode, { kind: 'record' }>): string[] {
@@ -59,7 +58,7 @@ export function baseNames(fields: string[]): string[] {
   return seen;
 }
 
-export function cardLabel(roots: Root[]): string {
+export function rootsCard(roots: Root[]): NodeCard {
   const names: string[] = [];
 
   roots.forEach((root) => {
@@ -68,81 +67,128 @@ export function cardLabel(roots: Root[]): string {
     }
   });
 
-  return names.join('\n');
+  return {
+    lines: names.map((name) => ({ tier: 'name', ink: 'accent', left: name })),
+    address: null,
+  };
+}
+
+export function terminalCard(): NodeCard {
+  return { lines: [{ tier: 'field', ink: 'muted', left: NULL_MARK }], address: null };
 }
 
 export function describeNode(
   node: GraphNode,
   options: GraphOptions,
-): { kind: CanvasNodeKind; label: string } {
+): { kind: CanvasNodeKind; card: NodeCard } {
   const kind = node.kind === 'record' ? 'record' : node.kind === 'array' ? 'array' : 'opaque';
-  const label =
+  const card =
     node.kind === 'record'
-      ? recordLabel(node, options.fields?.[node.type])
+      ? recordCard(node, options.fields?.[node.type])
       : node.kind === 'array'
-        ? arrayLabel(node)
-        : opaqueLabel(node);
+        ? arrayCard(node)
+        : opaqueCard(node);
 
-  return { kind, label };
+  return { kind, card };
 }
 
-function recordLabel(
+function recordCard(
   node: Extract<GraphNode, { kind: 'record' }>,
   choice: FieldChoice | undefined,
-): string {
-  const entries = recordEntries(node);
+): NodeCard {
+  const entries = recordPairs(node);
+  const shown = chosenEntries(node, entries, choice);
 
+  return card(node.type, shown.map(entryLine), entries.length - shown.length, node.id);
+}
+
+function chosenEntries(
+  node: Extract<GraphNode, { kind: 'record' }>,
+  entries: Entry[],
+  choice: FieldChoice | undefined,
+): Entry[] {
   if (choice === undefined) {
-    const shown = node.fields
-      .slice(0, MAX_LABEL_ENTRIES)
-      .map((field) => `${field.name} = ${formatValue(field.value)}`);
-
-    return join(node.type, shown, entries.length - shown.length);
+    return entries.slice(0, Math.min(node.fields.length, MAX_LABEL_ENTRIES));
   }
 
   if (choice === 'none') {
-    return join(node.type, [], entries.length);
+    return [];
   }
 
-  const names = recordNames(node);
-  const keep = choice === 'all' ? names : names.filter((name) => choice.includes(name));
-  const shown = entries.filter((entry, position) => keep.includes(names[position]));
+  if (choice === 'all') {
+    return entries;
+  }
 
-  return join(node.type, shown, entries.length - shown.length);
+  return entries.filter((entry) => choice.includes(entry.name));
 }
 
-function arrayEntry(array: InlineArray): string {
+function recordPairs(node: Extract<GraphNode, { kind: 'record' }>): Entry[] {
+  return [
+    ...node.fields.map((field) => ({ name: field.name, value: formatValue(field.value) })),
+    ...node.arrays.map(arrayEntry),
+  ];
+}
+
+function entryLine(entry: Entry): CardLine {
+  return {
+    tier: 'field',
+    ink: 'muted',
+    left: entry.name,
+    right: entry.value,
+    rightInk: 'value',
+  };
+}
+
+function arrayEntry(array: InlineArray): Entry {
   if (array.cells.length === 0) {
-    return `${array.name}[${array.length}]`;
+    return { name: array.name, value: `[${array.length}]` };
   }
 
   const shown = array.cells.slice(0, MAX_CELL_PREVIEW).map(formatValue);
   const hidden = array.cells.length - shown.length;
   const tail = hidden > 0 ? [`+${hidden}`] : [];
 
-  return `${array.name} = ${[...shown, ...tail].join(', ')}`;
+  return { name: array.name, value: [...shown, ...tail].join(', ') };
 }
 
-function arrayLabel(node: Extract<GraphNode, { kind: 'array' }>): string {
+function arrayCard(node: Extract<GraphNode, { kind: 'array' }>): NodeCard {
   if (node.cellsArePointers) {
-    return join(node.type, [], 0);
+    return card(node.type, [], 0, node.id);
   }
 
   const shown = node.cells.slice(0, MAX_CELL_PREVIEW).map(formatValue);
+  const line: CardLine = { tier: 'field', ink: 'value', left: shown.join(', ') };
 
-  return join(node.type, [shown.join(', ')], node.cells.length - shown.length);
+  return card(node.type, [line], node.cells.length - shown.length, node.id);
 }
 
-function opaqueLabel(node: Extract<GraphNode, { kind: 'opaque' }>): string {
-  const declared = node.type ?? null;
-  const detail =
-    node.value === null || node.value === undefined ? `<${node.reason}>` : formatValue(node.value);
+function opaqueCard(node: Extract<GraphNode, { kind: 'opaque' }>): NodeCard {
+  if (node.value === null || node.value === undefined) {
+    const line: CardLine = { tier: 'field', ink: 'muted', left: `<${node.reason}>` };
 
-  return declared === null ? detail : [declared, detail].join('\n');
+    return card(node.type ?? null, [line], 0, node.id);
+  }
+
+  const value = formatValue(node.value);
+
+  if (node.type === null || node.type === undefined) {
+    return card(null, [{ tier: 'field', ink: 'value', left: value }], 0, node.id);
+  }
+
+  return {
+    lines: [{ tier: 'type', ink: 'accent', left: node.type, right: value, rightInk: 'value' }],
+    address: node.id,
+  };
 }
 
-function join(head: string, shown: string[], hidden: number): string {
-  const tail = hidden > 0 ? [`+${hidden}`] : [];
+function card(
+  type: string | null,
+  lines: CardLine[],
+  hidden: number,
+  address: string,
+): NodeCard {
+  const head: CardLine[] = type === null ? [] : [{ tier: 'type', ink: 'accent', left: type }];
+  const tail: CardLine[] = hidden > 0 ? [{ tier: 'note', ink: 'muted', left: `+${hidden}` }] : [];
 
-  return [head, ...shown, ...tail].join('\n');
+  return { lines: [...head, ...lines, ...tail], address };
 }

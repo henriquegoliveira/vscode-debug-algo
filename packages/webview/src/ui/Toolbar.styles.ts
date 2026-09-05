@@ -1,25 +1,19 @@
-import { PANEL } from './chrome';
+import { DOCK, PANEL } from './chrome';
 import type { CSSProperties } from 'react';
 
 export const styles: Record<string, CSSProperties> = {
   bar: {
-    ...PANEL,
+    ...DOCK,
     zIndex: 5,
-    bottom: '8px',
     left: '8px',
-    display: 'flex',
     flexWrap: 'wrap',
     gap: '6px',
-    alignItems: 'center',
-    padding: '5px',
+    padding: '3px 5px',
   },
   barCompact: { maxWidth: 'calc(100% - 148px)' },
   zoom: {
-    ...PANEL,
-    bottom: '8px',
+    ...DOCK,
     right: '8px',
-    display: 'flex',
-    alignItems: 'center',
     gap: '2px',
     padding: '3px',
   },

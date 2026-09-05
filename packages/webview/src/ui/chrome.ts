@@ -11,6 +11,15 @@ export const PANEL: CSSProperties = {
   fontSize: 'var(--dbga-text-body)',
 };
 
+export const DOCK: CSSProperties = {
+  ...PANEL,
+  bottom: '8px',
+  minHeight: '32px',
+  boxSizing: 'border-box',
+  display: 'flex',
+  alignItems: 'center',
+};
+
 export const HEADER_CAPSULE: CSSProperties = {
   display: 'flex',
   alignItems: 'center',

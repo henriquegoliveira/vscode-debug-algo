@@ -1,8 +1,8 @@
-export const EDGE_WIDTH = 1;
+export const EDGE_WIDTH = 2;
 
 export const HIGHLIGHT_WIDTH = 3;
 
-export const ARROW_SCALE = 0.45;
+export const ARROW_SCALE = 0.7;
 
 export const ARROW_BASE = 15;
 

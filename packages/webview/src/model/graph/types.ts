@@ -1,5 +1,6 @@
+import type { NodeCard, NodeMetrics } from '../../geometry/nodeMetrics';
 import type { FieldChoice } from '../../session/persistence';
-import { CanvasNodeKind, ChangeKind } from '../../ui/theme';
+import { CanvasNodeKind, ChangeKind, NodePalette } from '../../ui/theme';
 import type { GraphSnapshot, Root } from 'dbga-contract';
 
 export const RECIPROCAL_ROUNDNESS = 0.25;
@@ -14,7 +15,6 @@ export type CanvasSmooth =
 export interface CanvasNode {
   id: string;
   kind: CanvasNodeKind;
-  label: string;
   shape: string;
   level?: number;
   x?: number;
@@ -22,9 +22,11 @@ export interface CanvasNode {
   fixed: boolean;
   physics: boolean;
   borderWidth: number;
-  color: { background: string; border: string };
-  shadow?: { enabled: boolean; color: string; size: number; x: number; y: number };
-  font: { color: string; face: string };
+  card: NodeCard;
+  metrics: NodeMetrics;
+  metricsSelected: NodeMetrics;
+  palette: NodePalette;
+  change?: ChangeKind;
 }
 
 export interface CanvasEdge {
