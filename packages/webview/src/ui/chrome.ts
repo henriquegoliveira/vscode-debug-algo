@@ -11,6 +11,21 @@ export const PANEL: CSSProperties = {
   fontSize: 'var(--dbga-text-body)',
 };
 
+export const HEADER_CAPSULE: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '6px',
+  height: '28px',
+  minWidth: 0,
+  padding: '0 8px',
+  boxSizing: 'border-box',
+  border: '1px solid var(--vscode-editorWidget-border, #333)',
+  borderRadius: 'var(--dbga-radius-control)',
+  backgroundColor: 'var(--vscode-editor-background, #1e1e1e)',
+  fontSize: 'var(--dbga-text-body)',
+  whiteSpace: 'nowrap',
+};
+
 export const PANEL_HEAD: CSSProperties = {
   display: 'flex',
   alignItems: 'center',

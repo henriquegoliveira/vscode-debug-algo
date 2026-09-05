@@ -29,6 +29,8 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 const NARROW_WIDTH = 620;
 
+const WIDE_WIDTH = 900;
+
 const PHASE_COLOR: Record<ScreenPhase, string> = {
   idle: 'var(--vscode-descriptionForeground, #a0a0a0)',
   live: 'var(--vscode-charts-green, #89d185)',
@@ -53,6 +55,7 @@ const App: React.FC = () => {
 
   const embedded = isEmbedded();
   const narrow = bodyWidth !== null && bodyWidth < NARROW_WIDTH;
+  const wide = bodyWidth === null || bodyWidth >= WIDE_WIDTH;
 
   const pinnedAt = pinned === null ? -1 : state.history.indexOf(pinned);
   const following = pinnedAt < 0;
@@ -264,18 +267,8 @@ const App: React.FC = () => {
         onFollow={(next) => updateFile({ follow: next })}
         viewMode={viewMode}
         onViewMode={setViewMode}
-        compact={narrow}
+        compact={!wide}
       />
-      {state.history.length > 1 && (
-        <Timeline
-          count={state.history.length}
-          index={cursor}
-          following={following}
-          snapshot={active}
-          onIndex={(next) => setPinned(state.history[next] ?? null)}
-          onLive={() => setPinned(null)}
-        />
-      )}
       {state.phase === 'idle' && (
         <div style={styles.placeholder}>
           <p style={styles.placeholderLead}>
@@ -305,7 +298,7 @@ const App: React.FC = () => {
         <div style={styles.brand}>
           <span style={styles.brandMark}>D</span>
           <span style={styles.brandName}>DbgAlgo</span>
-          {!narrow && (
+          {wide && (
             <>
               <span style={styles.brandSlash}>/</span>
               <span style={styles.brandSubtitle}>Estrutura de Dados</span>
@@ -313,22 +306,37 @@ const App: React.FC = () => {
           )}
         </div>
 
-        <div style={styles.site}>
-          <span style={{ ...styles.siteDot, backgroundColor: PHASE_COLOR[state.phase] }} />
-          {site === null ? (
-            <span style={styles.siteLead}>Aguardando a primeira pausa</span>
-          ) : (
-            <>
-              {!narrow && <span style={styles.siteLead}>Pausado em</span>}
-              <span style={styles.siteFunction}>{site.function}()</span>
-              {!narrow && (
-                <span style={styles.siteWhere}>
-                  linha {site.line}
-                  {site.file === '' ? '' : ` (${site.file})`}
-                </span>
-              )}
-            </>
-          )}
+        {state.history.length > 1 && (
+          <div style={styles.headerMiddle}>
+            <Timeline
+              count={state.history.length}
+              index={cursor}
+              following={following}
+              compact={!wide}
+              onIndex={(next) => setPinned(state.history[next] ?? null)}
+              onLive={() => setPinned(null)}
+            />
+          </div>
+        )}
+
+        <div style={styles.headerRight}>
+          <div style={styles.site}>
+            <span style={{ ...styles.siteDot, backgroundColor: PHASE_COLOR[state.phase] }} />
+            {site === null ? (
+              <span style={styles.siteLead}>Aguardando a primeira pausa</span>
+            ) : (
+              <>
+                {wide && <span style={styles.siteLead}>Pausado em</span>}
+                <span style={styles.siteFunction}>{site.function}()</span>
+                {!narrow && (
+                  <span style={styles.siteWhere}>
+                    linha {site.line}
+                    {wide && site.file !== '' ? ` (${site.file})` : ''}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </header>
 

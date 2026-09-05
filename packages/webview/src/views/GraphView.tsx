@@ -28,6 +28,7 @@ import {
 } from '../session/persistence';
 import type { ScreenState } from '../session/state';
 import { ColumnButton, ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
+import { ListIcon } from '../ui/icons';
 import { RootRow } from '../ui/graph/RootRow';
 import { Theme } from '../ui/theme';
 import { styles } from '../ui/graph/GraphView.styles';
@@ -694,7 +695,15 @@ const GraphView: React.FC<GraphViewProps> = ({
             }
             onScroll={onColumnScroll}
           >
-            <h4 style={styles.columnTitle}>Variáveis por frame</h4>
+            <header style={styles.columnHead}>
+              <h4 style={styles.columnTitle}>
+                <ListIcon />
+                Variáveis por frame
+              </h4>
+              <span style={styles.columnCount}>
+                {model.frames.length === 1 ? '1 frame' : `${model.frames.length} frames`}
+              </span>
+            </header>
             {model.frames.map((frame) => (
               <section key={frame.id} style={styles.frame}>
                 <button
@@ -724,8 +733,8 @@ const GraphView: React.FC<GraphViewProps> = ({
               </section>
             ))}
             {model.globals.length > 0 && (
-              <section style={styles.frame}>
-                <h5 style={styles.columnTitle}>Globais do arquivo</h5>
+              <section style={styles.globals}>
+                <h5 style={styles.globalsTitle}>Globais do arquivo</h5>
                 <div style={styles.roots}>
                   {model.globals.map((root) => (
                     <RootRow

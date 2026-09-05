@@ -34,6 +34,10 @@ export const RootRow: React.FC<{
 };
 
 function cellStyle(root: FrameRoot): React.CSSProperties {
+  if (root.status === 'null') {
+    return styles.rootNull;
+  }
+
   if (root.status !== 'ok') {
     return styles.rootStatus;
   }

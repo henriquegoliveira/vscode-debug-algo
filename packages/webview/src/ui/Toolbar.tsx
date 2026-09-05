@@ -1,6 +1,14 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { LayoutChoice } from '../model/layoutRule';
 import type { FrameMode, ViewMode } from '../session/persistence';
+import {
+  ChevronIcon,
+  FollowIcon,
+  FrameIcon,
+  LayoutIcon,
+  NullIcon,
+  StackIcon,
+} from './icons';
 import { styles } from './Toolbar.styles';
 
 export const ZOOM_STEP = 1.25;
@@ -80,6 +88,102 @@ export const ZoomControl: React.FC<{
   </div>
 );
 
+const DrawMenu: React.FC<{
+  choice: LayoutChoice;
+  viewMode: ViewMode;
+  onGraphChoice: (choice: LayoutChoice) => void;
+  onViewMode: (mode: ViewMode) => void;
+}> = ({ choice, viewMode, onGraphChoice, onViewMode }) => {
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  const current =
+    MODES.find((entry) => entry.value === viewMode) ??
+    (CHOICES.find((entry) => entry.value === choice) as { label: string });
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const onPointerDown = (event: MouseEvent) => {
+      if (!(boxRef.current?.contains(event.target as Node) ?? false)) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener('mousedown', onPointerDown);
+
+    return () => window.removeEventListener('mousedown', onPointerDown);
+  }, [open]);
+
+  const pick = (run: () => void): void => {
+    run();
+    setOpen(false);
+  };
+
+  return (
+    <div
+      ref={boxRef}
+      style={styles.menuBox}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && open) {
+          event.stopPropagation();
+          setOpen(false);
+        }
+      }}
+    >
+      <button
+        type="button"
+        className="dbga-pill"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        title="Como desenhar a estrutura"
+        onClick={() => setOpen(!open)}
+      >
+        <LayoutIcon />
+        <span style={styles.pillLead}>Desenho:</span>
+        <strong style={styles.pillValue}>{current.label}</strong>
+        <ChevronIcon />
+      </button>
+
+      {open && (
+        <div role="menu" style={styles.menu}>
+          <div style={styles.menuTitle}>Grafo de ponteiros</div>
+          {CHOICES.map((entry) => (
+            <button
+              key={entry.value}
+              type="button"
+              role="menuitemradio"
+              className="dbga-menuitem"
+              aria-checked={viewMode === 'graph' && choice === entry.value}
+              onClick={() => pick(() => onGraphChoice(entry.value))}
+            >
+              {entry.label}
+            </button>
+          ))}
+
+          <div style={styles.menuGroup}>
+            <div style={styles.menuTitle}>Outras visualizações</div>
+            {MODES.map((entry) => (
+              <button
+                key={entry.value}
+                type="button"
+                role="menuitemradio"
+                className="dbga-menuitem"
+                aria-checked={viewMode === entry.value}
+                onClick={() => pick(() => onViewMode(entry.value))}
+              >
+                {entry.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Toolbar: React.FC<{
   choice: LayoutChoice;
   onGraphChoice: (choice: LayoutChoice) => void;
@@ -108,33 +212,12 @@ const Toolbar: React.FC<{
   compact,
 }) => (
   <div style={compact ? { ...styles.bar, ...styles.barCompact } : styles.bar}>
-    <select
-      style={styles.select}
-      value={viewMode === 'graph' ? choice : viewMode}
-      title="Como desenhar a estrutura"
-      onChange={(event) => {
-        const value = event.target.value;
-        const mode = MODES.find((entry) => entry.value === value);
-
-        if (mode !== undefined) {
-          onViewMode(mode.value);
-          return;
-        }
-
-        onGraphChoice(value as LayoutChoice);
-      }}
-    >
-      {CHOICES.map((entry) => (
-        <option key={entry.value} value={entry.value}>
-          {entry.label}
-        </option>
-      ))}
-      {MODES.map((entry) => (
-        <option key={entry.value} value={entry.value}>
-          {entry.label}
-        </option>
-      ))}
-    </select>
+    <DrawMenu
+      choice={choice}
+      viewMode={viewMode}
+      onGraphChoice={onGraphChoice}
+      onViewMode={onViewMode}
+    />
 
     {viewMode !== 'recursion' && (
       <>
@@ -148,7 +231,8 @@ const Toolbar: React.FC<{
             title="Mostrar só o que vem do frame onde a execução parou"
             onClick={() => onFrameMode('current')}
           >
-            atual
+            <FrameIcon />
+            {compact ? 'atual' : 'Frame atual'}
           </button>
 
           <button
@@ -158,7 +242,8 @@ const Toolbar: React.FC<{
             title="Mostrar o que vem de todos os frames"
             onClick={() => onFrameMode('all')}
           >
-            todos
+            <StackIcon />
+            {compact ? 'todos' : 'Todos os frames'}
           </button>
         </div>
       </>
@@ -175,7 +260,8 @@ const Toolbar: React.FC<{
           title="Desenhar os ponteiros nulos como terminais no grafo"
           onClick={() => onNullTerminals(!nullTerminals)}
         >
-          NULL
+          <NullIcon />
+          {compact ? 'NULL' : 'Exibir nulos'}
         </button>
 
         <button
@@ -185,7 +271,8 @@ const Toolbar: React.FC<{
           title="Trazer o canvas para o frame onde a execução parou a cada pausa"
           onClick={() => onFollow(!follow)}
         >
-          seguir
+          <FollowIcon />
+          {compact ? 'seguir' : 'Seguir execução'}
         </button>
       </>
     )}

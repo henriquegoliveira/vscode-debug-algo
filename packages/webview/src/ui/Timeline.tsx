@@ -1,12 +1,11 @@
-import { PANEL } from './chrome';
+import { HEADER_CAPSULE } from './chrome';
 import React from 'react';
-import type { GraphSnapshot } from 'dbga-contract';
 
 interface TimelineProps {
   count: number;
   index: number;
   following: boolean;
-  snapshot: GraphSnapshot | null;
+  compact: boolean;
   onIndex: (index: number) => void;
   onLive: () => void;
 }
@@ -15,12 +14,11 @@ const Timeline: React.FC<TimelineProps> = ({
   count,
   index,
   following,
-  snapshot,
+  compact,
   onIndex,
   onLive,
 }) => {
   const behind = count - 1 - index;
-  const site = siteOf(snapshot);
 
   return (
     <div style={following ? styles.bar : { ...styles.bar, ...styles.barReviewing }}>
@@ -38,7 +36,7 @@ const Timeline: React.FC<TimelineProps> = ({
 
       <input
         type="range"
-        style={styles.range}
+        style={compact ? { ...styles.range, ...styles.rangeCompact } : styles.range}
         min={0}
         max={count - 1}
         step={1}
@@ -61,13 +59,6 @@ const Timeline: React.FC<TimelineProps> = ({
         {index + 1}/{count}
       </span>
 
-      {site !== '' && (
-        <>
-          <span className="dbga-sep" />
-          <span style={styles.site}>{site}</span>
-        </>
-      )}
-
       <span className="dbga-sep" />
 
       <button
@@ -87,48 +78,26 @@ const Timeline: React.FC<TimelineProps> = ({
   );
 };
 
-function siteOf(snapshot: GraphSnapshot | null): string {
-  const frame = snapshot?.frames[0];
-  if (frame === undefined) {
-    return '';
-  }
-
-  return `${frame.function}:${frame.line}`;
-}
-
 const styles: Record<string, React.CSSProperties> = {
   bar: {
-    ...PANEL,
-    zIndex: 3,
-    top: '8px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '6px',
-    padding: '4px 6px',
-    maxWidth: 'calc(100% - 360px)',
+    ...HEADER_CAPSULE,
+    fontFamily: 'var(--vscode-font-family, sans-serif)',
   },
-  range: { width: '140px', accentColor: 'var(--vscode-focusBorder, #007fd4)' },
+  range: {
+    width: '150px',
+    margin: 0,
+    accentColor: 'var(--vscode-focusBorder, #007fd4)',
+  },
+  rangeCompact: { width: '70px' },
   label: {
     fontFamily: 'var(--vscode-editor-font-family, monospace)',
     fontSize: 'var(--dbga-text-meta)',
     color: 'var(--vscode-descriptionForeground, #a0a0a0)',
     whiteSpace: 'nowrap',
   },
-  site: {
-    fontFamily: 'var(--vscode-editor-font-family, monospace)',
-    fontSize: 'var(--dbga-text-meta)',
-    color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    maxWidth: '220px',
-  },
   barReviewing: {
     borderColor: 'var(--vscode-inputValidation-warningBorder, #b89500)',
-    boxShadow:
-      'var(--dbga-shadow-panel), 0 0 0 1px var(--vscode-inputValidation-warningBorder, #b89500)',
+    backgroundColor: 'var(--vscode-inputValidation-warningBackground, #4d3b16)',
   },
   reviewing: {
     padding: '1px 6px',
@@ -136,8 +105,8 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: 'var(--dbga-text-meta)',
     fontWeight: 600,
     whiteSpace: 'nowrap',
-    backgroundColor: 'var(--vscode-inputValidation-warningBackground, #4d3b16)',
-    color: 'var(--vscode-inputValidation-warningBorder, #b89500)',
+    backgroundColor: 'var(--vscode-inputValidation-warningBorder, #b89500)',
+    color: 'var(--vscode-editor-background, #101010)',
   },
 };
 
