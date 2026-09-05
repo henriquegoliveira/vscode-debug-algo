@@ -1,6 +1,6 @@
 import type { RootInspection } from '../../model/inspection';
 import { styles } from './InspectorOverlay.styles';
-import { Entries, Target } from './Entries';
+import { MetaBlock, Target } from './Entries';
 import type { Select } from './types';
 import React from 'react';
 
@@ -9,8 +9,7 @@ export const RootBody: React.FC<{ inspection: RootInspection; onSelect: Select }
   onSelect,
 }) => (
   <>
-    <div style={styles.address}>{inspection.frame}</div>
-    <Entries entries={inspection.entries} />
+    <MetaBlock address={inspection.frame} entries={inspection.entries} />
 
     {inspection.value !== null && (
       <section style={styles.section}>

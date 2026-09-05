@@ -29,6 +29,12 @@ export function formatValue(value: Value | null | undefined): string {
   }
 }
 
+export function fileName(path: string): string {
+  const cut = Math.max(path.lastIndexOf('/'), path.lastIndexOf('\\'));
+
+  return cut === -1 ? path : path.slice(cut + 1);
+}
+
 export function valueKey(value: Value | null | undefined): string {
   if (value === null || value === undefined) {
     return '';

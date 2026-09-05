@@ -1,7 +1,7 @@
 import type { Inspection, NodeInspection } from '../../model/inspection';
 import { styles } from './InspectorOverlay.styles';
 import { ArraySection } from './ArraySection';
-import { Entries, Target } from './Entries';
+import { MetaBlock, Target } from './Entries';
 import type { Select } from './types';
 import React from 'react';
 
@@ -24,8 +24,7 @@ export const NodeBody: React.FC<{ inspection: NodeInspection; onSelect: Select }
   onSelect,
 }) => (
   <>
-    <div style={styles.address}>{inspection.address}</div>
-    <Entries entries={inspection.entries} />
+    <MetaBlock address={inspection.address} entries={inspection.entries} />
 
     {inspection.uncertain && <div style={styles.warn}>union: o membro ativo é incerto</div>}
 

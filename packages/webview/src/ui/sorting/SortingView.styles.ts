@@ -1,3 +1,4 @@
+import { PANEL } from '../chrome';
 import type { CSSProperties } from 'react';
 
 export const CELL_HEIGHT = 24;
@@ -26,7 +27,7 @@ export const styles: Record<string, CSSProperties> = {
     padding: '12px',
     width: 'max-content',
     fontFamily: 'var(--vscode-editor-font-family, monospace)',
-    fontSize: '12px',
+    fontSize: 'var(--dbga-text-body)',
   },
   empty: { opacity: 0.6, padding: '12px' },
   track: {
@@ -69,7 +70,7 @@ export const styles: Record<string, CSSProperties> = {
     left: 0,
     height: INDEX_HEIGHT,
     textAlign: 'center',
-    fontSize: '9px',
+    fontSize: 'var(--dbga-text-note)',
     opacity: 0.45,
   },
   marker: {
@@ -77,7 +78,7 @@ export const styles: Record<string, CSSProperties> = {
     left: 0,
     height: MARKER_HEIGHT - 2,
     boxSizing: 'border-box',
-    fontSize: '10px',
+    fontSize: 'var(--dbga-text-micro)',
     padding: '0 2px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -86,22 +87,19 @@ export const styles: Record<string, CSSProperties> = {
   },
   cut: { position: 'absolute', top: INDEX_HEIGHT, left: 0, padding: '4px 6px', opacity: 0.55 },
   picker: {
-    position: 'absolute',
-    zIndex: 2,
+    ...PANEL,
     top: '8px',
     left: '8px',
     display: 'flex',
     flexDirection: 'column',
     gap: '4px',
-    padding: '4px',
+    padding: '5px',
     maxWidth: '45%',
-    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    border: '1px solid var(--vscode-editorWidget-border, #333)',
-    borderRadius: '4px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
-    fontFamily: 'var(--vscode-font-family, sans-serif)',
-    fontSize: '12px',
   },
   pickerRow: { display: 'flex', flexWrap: 'wrap', gap: '4px', alignItems: 'center' },
-  pickerLabel: { opacity: 0.6, minWidth: '68px' },
+  pickerLabel: {
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+    fontSize: 'var(--dbga-text-meta)',
+    minWidth: '68px',
+  },
 };

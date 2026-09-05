@@ -28,6 +28,7 @@ import {
 } from '../session/persistence';
 import type { ScreenState } from '../session/state';
 import { ColumnButton, ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
+import { ListIcon } from '../ui/icons';
 import { RootRow } from '../ui/graph/RootRow';
 import { Theme } from '../ui/theme';
 import { styles } from '../ui/graph/GraphView.styles';
@@ -694,7 +695,15 @@ const GraphView: React.FC<GraphViewProps> = ({
             }
             onScroll={onColumnScroll}
           >
-            <h4 style={styles.columnTitle}>Variáveis por frame</h4>
+            <header style={styles.columnHead}>
+              <h4 style={styles.columnTitle}>
+                <ListIcon />
+                Variáveis por frame
+              </h4>
+              <span style={styles.columnCount}>
+                {model.frames.length === 1 ? '1 frame' : `${model.frames.length} frames`}
+              </span>
+            </header>
             {model.frames.map((frame) => (
               <section key={frame.id} style={styles.frame}>
                 <button
@@ -705,31 +714,37 @@ const GraphView: React.FC<GraphViewProps> = ({
                   onClick={() => toggleFrame(frame.id)}
                 >
                   <span className="dbga-box" />
-                  <span>
-                    {frame.function} #{frame.frameLevel}
+                  <span>{frame.function}</span>
+                  <span style={styles.frameLevel}>
+                    #{frame.frameLevel}
+                    {frame.frameLevel === 0 ? ' (atual)' : ''}
                   </span>
                 </button>
-                {frame.roots.map((root) => (
-                  <RootRow
-                    key={root.id}
-                    root={root}
-                    active={root.canvasId !== null && root.id === selectedId}
-                    onSelect={onSelect}
-                  />
-                ))}
+                <div style={styles.roots}>
+                  {frame.roots.map((root) => (
+                    <RootRow
+                      key={root.id}
+                      root={root}
+                      active={root.canvasId !== null && root.id === selectedId}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </div>
               </section>
             ))}
             {model.globals.length > 0 && (
-              <section style={styles.frame}>
-                <h5 style={styles.columnTitle}>Globais do arquivo</h5>
-                {model.globals.map((root) => (
-                  <RootRow
-                    key={root.id}
-                    root={root}
-                    active={root.canvasId !== null && root.id === selectedId}
-                    onSelect={onSelect}
-                  />
-                ))}
+              <section style={styles.globals}>
+                <h5 style={styles.globalsTitle}>Globais do arquivo</h5>
+                <div style={styles.roots}>
+                  {model.globals.map((root) => (
+                    <RootRow
+                      key={root.id}
+                      root={root}
+                      active={root.canvasId !== null && root.id === selectedId}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </div>
               </section>
             )}
           </aside>

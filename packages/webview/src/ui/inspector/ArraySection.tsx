@@ -15,6 +15,15 @@ export const ArraySection: React.FC<{ array: ArrayView; onSelect: Select }> = ({
 
     {array.state === 'unexpanded' && <div style={styles.warn}>vetor não expandido</div>}
 
+    {array.state !== 'unexpanded' && (
+      <div style={styles.columnsRow}>
+        <span>índice</span>
+        <span style={styles.columnsRight}>
+          {array.state === 'cells' ? 'valor' : 'aponta para'}
+        </span>
+      </div>
+    )}
+
     {array.state === 'cells' &&
       array.cells.map((cell) => (
         <div key={cell.index} style={styles.row}>

@@ -9,7 +9,9 @@ export const TerminalBody: React.FC<{ inspection: TerminalInspection; onSelect: 
   onSelect,
 }) => (
   <>
-    <div style={styles.address}>{inspection.originAddress}</div>
+    <section style={styles.meta}>
+      <div style={styles.address}>{inspection.originAddress}</div>
+    </section>
     <section style={styles.section}>
       <h5 style={styles.sectionTitle}>{inspection.originType}</h5>
       <div style={styles.row}>
