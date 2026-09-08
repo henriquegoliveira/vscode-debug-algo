@@ -9,6 +9,7 @@ export interface ScreenState {
   sessionId: string | null;
   snapshot: GraphSnapshot | null;
   history: GraphSnapshot[];
+  pauses: number;
   error: string | null;
   file: string | null;
   fileView: unknown;
@@ -19,6 +20,7 @@ export const INITIAL_STATE: ScreenState = {
   sessionId: null,
   snapshot: null,
   history: [],
+  pauses: 0,
   error: null,
   file: null,
   fileView: null,
@@ -27,7 +29,8 @@ export const INITIAL_STATE: ScreenState = {
 export function reduce(state: ScreenState, message: ExtensionMessage): ScreenState {
   switch (message.type) {
     case 'snapshot': {
-      const kept = state.sessionId === message.sessionId ? state.history : [];
+      const same = state.sessionId === message.sessionId;
+      const kept = same ? state.history : [];
       const history = [...kept, message.snapshot];
       return {
         ...state,
@@ -35,6 +38,7 @@ export function reduce(state: ScreenState, message: ExtensionMessage): ScreenSta
         sessionId: message.sessionId,
         snapshot: message.snapshot,
         history: history.slice(Math.max(0, history.length - Math.max(1, message.depth))),
+        pauses: same ? state.pauses + 1 : 1,
         error: null,
       };
     }
@@ -43,12 +47,14 @@ export function reduce(state: ScreenState, message: ExtensionMessage): ScreenSta
       if (last === null) {
         return state;
       }
+      const same = state.sessionId === message.sessionId;
       return {
         ...state,
         phase: 'live',
         sessionId: message.sessionId,
         snapshot: last,
         history: message.entries,
+        pauses: same ? Math.max(state.pauses, message.entries.length) : message.entries.length,
         error: null,
       };
     }
