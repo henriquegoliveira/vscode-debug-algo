@@ -19,6 +19,8 @@ import { callStackModel } from '../model/callStack';
 import type { Pass } from '../model/graph/types';
 import { MAX_SCALE, MIN_SCALE } from '../session/persistence';
 import type { ScreenState } from '../session/state';
+import { overContent } from './gestures';
+import { GridLayer } from '../ui/GridLayer';
 import { ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
 import { Connector } from '../ui/recursion/Connector';
 import { FrameCardView } from '../ui/recursion/FrameCardView';
@@ -207,11 +209,19 @@ const RecursionView: React.FC<RecursionViewProps> = ({
     }
 
     const wheel = (event: WheelEvent): void => {
+      if (!overContent(event.target, box, stackRef.current)) {
+        return;
+      }
+
       event.preventDefault();
       zoomBy(event.deltaY < 0 ? 1 : -1);
     };
 
     const down = (event: PointerEvent): void => {
+      if (!overContent(event.target, box, stackRef.current)) {
+        return;
+      }
+
       halt();
 
       const from = { x: event.clientX, y: event.clientY };
@@ -260,6 +270,7 @@ const RecursionView: React.FC<RecursionViewProps> = ({
 
   return (
     <div ref={viewportBoxRef} style={styles.viewport}>
+      <GridLayer viewport={viewport} />
       <div
         ref={stackRef}
         style={{

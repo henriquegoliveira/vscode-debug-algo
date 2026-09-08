@@ -1,5 +1,4 @@
 import type { ArrayNode, GraphSnapshot, Root, Value } from 'dbga-contract';
-import { textSize } from '../geometry/boxes';
 import { formatValue, valueKey } from './format';
 import { frameGroupKey, nodeCanvasId, rootCanvasId } from './graph/ids';
 
@@ -13,13 +12,11 @@ export interface Marker {
   name: string;
   function: string;
   frameLevel: number;
-  origin: Root['origin'];
   index: number;
 }
 
 export interface Cell {
   index: number;
-  value: Value;
   text: string;
   slot: string;
   changed: boolean;
@@ -31,9 +28,7 @@ export interface ArrayTrack {
   key: string;
   names: string[];
   type: string;
-  elementType: string;
   length: number;
-  numeric: boolean;
   truncated: boolean;
   cells: Cell[];
   markers: Marker[];
@@ -46,10 +41,9 @@ export interface SortingModel {
   tracks: ArrayTrack[];
 }
 
-const NUMERIC_KINDS = ['int', 'real', 'char'];
-
 export function sortingModel(
   snapshot: GraphSnapshot,
+  advance: number,
   previous?: GraphSnapshot | null,
   frames?: Set<string>,
 ): SortingModel {
@@ -58,11 +52,10 @@ export function sortingModel(
   const tracks = arrayNodes(snapshot).map((node) => {
     const names = namesOf(snapshot, node.id);
     const key = names.length === 0 ? node.type : names.join('|');
-    const numeric = node.cells.every((cell) => NUMERIC_KINDS.includes(cell.t));
     const changed = changedCells(before?.get(key), node.cells);
     const slots = slotsOf(key, node.cells);
     const markers = markersFor(snapshot, node, frames);
-    const cellWidth = widthOf(node.cells);
+    const cellWidth = widthOf(node.cells, advance);
 
     return {
       cellWidth,
@@ -72,13 +65,10 @@ export function sortingModel(
       key,
       names,
       type: node.type,
-      elementType: node.elementType,
       length: node.length,
-      numeric,
       truncated: node.truncated,
       cells: node.cells.map((value, index) => ({
         index,
-        value,
         text: formatValue(value),
         slot: slots[index],
         changed: changed.has(index),
@@ -154,7 +144,6 @@ function markersFor(snapshot: GraphSnapshot, node: ArrayNode, frames?: Set<strin
       name: root.name,
       function: root.function,
       frameLevel: root.frameLevel,
-      origin: root.origin,
       index: value.v,
     });
   });
@@ -172,10 +161,13 @@ function inFrames(root: Root, frames: Set<string> | undefined): boolean {
   return frames === undefined || root.origin === 'global' || frames.has(frameGroupKey(root));
 }
 
-function widthOf(cells: Value[]): number {
-  const widest = cells.reduce((most, cell) => Math.max(most, textSize(formatValue(cell)).width), 0);
+function widthOf(cells: Value[], advance: number): number {
+  const widest = cells.reduce((most, cell) => Math.max(most, formatValue(cell).length), 0);
 
-  return Math.min(Math.max(Math.ceil(widest) + CELL_PADDING, MIN_CELL_WIDTH), MAX_CELL_WIDTH);
+  return Math.min(
+    Math.max(Math.ceil(widest * advance) + CELL_PADDING, MIN_CELL_WIDTH),
+    MAX_CELL_WIDTH,
+  );
 }
 
 function trackKeys(snapshot: GraphSnapshot): Map<string, Value[]> {

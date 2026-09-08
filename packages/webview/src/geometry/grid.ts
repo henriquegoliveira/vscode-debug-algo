@@ -24,6 +24,11 @@ export interface GridPlan {
   rows: number;
 }
 
+export interface GridPattern {
+  size: number;
+  radius: number;
+}
+
 export function gridStep(scale: number): number {
   if (!Number.isFinite(scale) || scale <= 0) {
     return GRID_BASE;
@@ -46,6 +51,12 @@ export function gridPlan(view: GridView): GridPlan {
     columns: span(view.left + view.width - left, step),
     rows: span(view.top + view.height - top, step),
   };
+}
+
+export function gridPattern(scale: number): GridPattern {
+  const step = gridStep(scale);
+
+  return { size: Number.isFinite(scale) && scale > 0 ? step * scale : step, radius: GRID_DOT / 2 };
 }
 
 function span(distance: number, step: number): number {

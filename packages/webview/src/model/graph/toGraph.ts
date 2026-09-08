@@ -72,9 +72,7 @@ export function toGraph(
     sizes.set(node.id, nodeMetrics(card, kind, theme, false).box);
   });
 
-  const laid = options.nullTerminals
-    ? withTerminals(view, nullFieldsByOrigin, sizes, theme)
-    : view;
+  const laid = options.nullTerminals ? withTerminals(view, nullFieldsByOrigin, sizes, theme) : view;
 
   const levels = structuralLevels(laid);
   const seats = treePositions(laid, sizes);
@@ -218,7 +216,6 @@ export function toGraph(
       name: root.name,
       type: root.type,
       origin: root.origin,
-      category: root.category,
       status: root.status,
       value: formatValue(root.value),
     };

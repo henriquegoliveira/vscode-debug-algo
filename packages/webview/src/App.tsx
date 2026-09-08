@@ -409,6 +409,7 @@ const App: React.FC = () => {
         {viewMode === 'sorting' && (
           <SortingView
             state={view}
+            theme={theme}
             pass={pass}
             panel={panel}
             updatePanel={updatePanel}
