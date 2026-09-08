@@ -31,7 +31,7 @@ export interface InvokeOptions {
 }
 
 const PYTHON_MISSING_MESSAGE =
-  'DbgAlgo precisa de um depurador com Python embutido e o desta sessão não tem. ' +
+  'DebugAlgo precisa de um depurador com Python embutido e o desta sessão não tem. ' +
   'Use o CodeLLDB, que traz o próprio LLDB, ou um GDB com Python ' +
   '(no Windows, mingw-w64-x86_64-gdb pelo MSYS2).';
 
@@ -43,7 +43,7 @@ const PROBE_BACKOFF_MS = 10;
 const STALE_AFTER_MS = 6 * 60 * 60 * 1000;
 
 const PYTHON_PROBE_MESSAGE =
-  'DbgAlgo injetou Python no depurador e nada foi escrito em disco. As duas causas possíveis são ' +
+  'DebugAlgo injetou Python no depurador e nada foi escrito em disco. As duas causas possíveis são ' +
   'um depurador sem Python embutido e um caminho de arquivo que não sobreviveu ao console do ' +
   'depurador. Confira se o GDB tem Python (gdb --configuration) e se a pasta temporária do sistema ' +
   'é gravável.';

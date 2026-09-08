@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { ExtractionOptions } from './extractorInvoker';
 import { DEFAULT_HISTORY_DEPTH } from '../channels/snapshotBroker';
 
-const SECTION = 'dbgAlgo';
+const SECTION = 'debugAlgo';
 const DYNAMIC_ARRAYS = 'dynamicArrays';
 const VIEW = 'view';
 
@@ -97,7 +97,7 @@ export async function flushFileViews(): Promise<void> {
       .update(VIEW, { ...viewBucket(), ...batch }, vscode.ConfigurationTarget.Workspace);
   } catch (error) {
     void vscode.window.showErrorMessage(
-      `DbgAlgo não conseguiu guardar a configuração da visualização: ${String(error)}`,
+      `DebugAlgo não conseguiu guardar a configuração da visualização: ${String(error)}`,
     );
   }
 }

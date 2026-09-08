@@ -86,7 +86,7 @@ export class DebugSessionManager implements vscode.Disposable {
     const pid = this.sessionPids.get(session.id);
     if (pid == undefined) {
       console.warn(
-        `[DbgAlgo] sessao ${session.id} parou mas o PID do processo depurado ainda nao foi capturado`,
+        `[DebugAlgo] sessao ${session.id} parou mas o PID do processo depurado ainda nao foi capturado`,
       );
       return;
     }
@@ -123,14 +123,14 @@ export class DebugSessionManager implements vscode.Disposable {
         void vscode.window.showErrorMessage(err.message);
         return;
       }
-      console.error(`[DbgAlgo] falha ao extrair/ler snapshot da sessao ${session.id}`, err);
+      console.error(`[DebugAlgo] falha ao extrair/ler snapshot da sessao ${session.id}`, err);
 
       if (opportunistic) {
         return;
       }
 
       const message =
-        'DbgAlgo não conseguiu extrair as estruturas nesta pausa: ' +
+        'DebugAlgo não conseguiu extrair as estruturas nesta pausa: ' +
         (err instanceof Error ? err.message : String(err));
 
       this.onError(message, session);
