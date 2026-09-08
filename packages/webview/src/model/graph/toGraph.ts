@@ -1,5 +1,6 @@
 import { EDGE_WIDTH, HIGHLIGHT_WIDTH, arrowScale } from '../../geometry/arrows';
-import { type Box, type Placed, labelBox } from '../../geometry/boxes';
+import { type Box, type Placed } from '../../geometry/boxes';
+import { nodeMetrics } from '../../geometry/nodeMetrics';
 import { orbitSeat, wedgeAngles } from '../../geometry/orbit';
 import {
   type TreePosition,
@@ -20,7 +21,7 @@ import {
   rootCanvasId,
   terminalCanvasId,
 } from './ids';
-import { NULL_MARK, baseNames, cardLabel, describeNode } from './labels';
+import { baseNames, describeNode, rootsCard, terminalCard } from './labels';
 import { styled } from './style';
 import {
   type CanvasEdge,
@@ -66,12 +67,12 @@ export function toGraph(
   const sizes = new Map<string, Box>();
 
   view.nodes.forEach((node) => {
-    const { kind, label } = describeNode(node, options);
+    const { kind, card } = describeNode(node, options);
 
-    sizes.set(node.id, labelBox(label, kind));
+    sizes.set(node.id, nodeMetrics(card, kind, theme, false).box);
   });
 
-  const laid = options.nullTerminals ? withTerminals(view, nullFieldsByOrigin, sizes) : view;
+  const laid = options.nullTerminals ? withTerminals(view, nullFieldsByOrigin, sizes, theme) : view;
 
   const levels = structuralLevels(laid);
   const seats = treePositions(laid, sizes);
@@ -114,7 +115,7 @@ export function toGraph(
       const id = terminalCanvasId(from);
 
       nodes.push(
-        styled(id, 'null', NULL_MARK, theme, levels.get(id), seats.get(id), options.pinned),
+        styled(id, 'null', terminalCard(), theme, levels.get(id), seats.get(id), options.pinned),
       );
       edges.push({
         id: `${EDGE_PREFIX}${from}:${NULL_FIELD}`,
@@ -162,9 +163,9 @@ export function toGraph(
   cards.forEach((card, rank) => {
     const held = cardRoots.get(card.node) as Root[];
     const degraded = held.find((root) => root.status !== 'ok');
-    const label = cardLabel(held);
+    const balloon = rootsCard(held);
     const kind: CanvasNodeKind = degraded === undefined ? 'root' : 'rootDegraded';
-    const box = labelBox(label, kind);
+    const box = nodeMetrics(balloon, kind, theme, false).box;
     const berth = orbitSeat(seats.get(card.node), rank, occupied, wedges.get(card.node), box);
 
     if (berth !== undefined) {
@@ -174,7 +175,7 @@ export function toGraph(
     const change = options.highlight?.get(card.node);
 
     nodes.push(
-      styled(card.id, kind, label, theme, levels.get(card.node), berth, options.pinned, change),
+      styled(card.id, kind, balloon, theme, levels.get(card.node), berth, options.pinned, change),
     );
     edges.push({
       id: `${ROOT_EDGE_PREFIX}${card.id}`,
@@ -215,7 +216,6 @@ export function toGraph(
       name: root.name,
       type: root.type,
       origin: root.origin,
-      category: root.category,
       status: root.status,
       value: formatValue(root.value),
     };
@@ -246,16 +246,18 @@ function withTerminals(
   view: GraphSnapshot,
   nullFieldsByOrigin: Map<string, string[]>,
   sizes: Map<string, Box>,
+  theme: Theme,
 ): GraphSnapshot {
   const extraNodes: GraphNode[] = [];
   const extraEdges: GraphEdge[] = [];
+  const terminal = nodeMetrics(terminalCard(), 'null', theme, false).box;
 
   nullFieldsByOrigin.forEach((fields, from) => {
     const id = terminalCanvasId(from);
 
     extraNodes.push({ kind: 'opaque', id, reason: 'notExpanded' });
     extraEdges.push({ from, field: `${[...fields].sort(byField)[0]}${NULL_FIELD}`, to: id });
-    sizes.set(id, labelBox(NULL_MARK, 'null'));
+    sizes.set(id, terminal);
   });
 
   return {
@@ -305,7 +307,7 @@ function reciprocalSmooth(
 function edgeFont(theme: Theme): CanvasEdge['font'] {
   return {
     color: theme.edge.label,
-    size: 10,
+    size: theme.text.field,
     strokeWidth: 0,
     face: theme.fontFace,
     background: theme.edge.labelBackground,
@@ -320,12 +322,12 @@ function canvasNode(
   pinned: boolean,
   options: GraphOptions,
 ): CanvasNode {
-  const { kind, label } = describeNode(node, options);
+  const { kind, card } = describeNode(node, options);
 
   return styled(
     nodeCanvasId(node.id),
     kind,
-    label,
+    card,
     theme,
     level,
     seat,

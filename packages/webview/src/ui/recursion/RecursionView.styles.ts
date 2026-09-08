@@ -1,3 +1,5 @@
+import type { RootInk } from '../../model/graph/labels';
+import { PANEL_HEAD } from '../chrome';
 import type { CSSProperties } from 'react';
 
 export const styles: Record<string, CSSProperties> = {
@@ -18,43 +20,61 @@ export const styles: Record<string, CSSProperties> = {
     flexDirection: 'column',
     alignItems: 'center',
     width: 'max-content',
+    padding: '12px',
     fontFamily: 'var(--vscode-editor-font-family, monospace)',
-    fontSize: '12px',
+    fontSize: 'var(--dbga-text-body)',
   },
   card: {
-    minWidth: '220px',
-    padding: '8px 10px',
-    borderRadius: '4px',
+    minWidth: '248px',
+    borderRadius: 'var(--dbga-radius-panel)',
     backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    border: '1px solid var(--vscode-editorWidget-border, #454545)',
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.3)',
+    border: '1px solid var(--vscode-editorWidget-border, #333)',
+    boxShadow: 'var(--dbga-shadow-panel)',
+    overflow: 'hidden',
   },
-  cardCurrent: { borderColor: 'var(--vscode-focusBorder, #007fd4)', borderWidth: '2px' },
-  cardHeader: {
+  cardCurrent: {
+    borderColor: 'var(--vscode-focusBorder, #007fd4)',
+    boxShadow: 'inset 0 0 0 1px var(--vscode-focusBorder, #007fd4), var(--dbga-shadow-panel)',
+  },
+  cardHead: { ...PANEL_HEAD, gap: '6px' },
+  cardFunction: {
     fontWeight: 600,
-    marginBottom: '6px',
-    color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
-  cardEmpty: { opacity: 0.55, padding: '2px 0' },
+  cardLevel: {
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+    fontSize: 'var(--dbga-text-meta)',
+  },
+  cardSite: {
+    marginLeft: 'auto',
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+    fontSize: 'var(--dbga-text-meta)',
+    whiteSpace: 'nowrap',
+  },
+  cardBody: { padding: '5px 4px' },
+  cardEmpty: {
+    padding: '1px 8px',
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+    fontStyle: 'italic',
+  },
   parameter: { fontStyle: 'italic' },
   rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
-  rootValue: {
-    marginLeft: 'auto',
-    color: 'var(--vscode-charts-green, #b5cea8)',
-    wordBreak: 'break-all',
+  rootType: {
+    color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
+    opacity: 0.8,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
-  rootChanged: {
-    color: 'var(--vscode-editor-foreground, #d4d4d4)',
-    fontWeight: 700,
-  },
+  rootChanged: { color: 'var(--vscode-editor-foreground, #d4d4d4)', fontWeight: 700 },
   connector: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: '2px',
-    padding: '4px 0',
-    opacity: 0.6,
-    fontSize: '10px',
+    gap: '3px',
+    padding: '5px 0',
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+    fontSize: 'var(--dbga-text-micro)',
   },
   connectorLine: {
     width: '1px',
@@ -62,4 +82,11 @@ export const styles: Record<string, CSSProperties> = {
     backgroundColor: 'var(--vscode-charts-lines, #9a9a9a)',
   },
   connectorLabel: { whiteSpace: 'nowrap' },
+};
+
+export const rootInkStyles: Record<RootInk, CSSProperties> = {
+  value: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
+  address: { marginLeft: 'auto', color: 'var(--vscode-charts-yellow, #dcdcaa)' },
+  null: { marginLeft: 'auto', color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
+  status: { marginLeft: 'auto', color: 'var(--vscode-charts-orange, #ce9178)' },
 };

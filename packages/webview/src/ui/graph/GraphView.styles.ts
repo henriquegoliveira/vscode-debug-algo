@@ -1,13 +1,16 @@
+import type { RootInk } from '../../model/graph/labels';
+import { PANEL_HEAD, SECTION_TITLE } from '../chrome';
 import type { CSSProperties } from 'react';
 
 export const styles: Record<string, CSSProperties> = {
   column: {
     flex: '0 0 auto',
     overflowY: 'auto',
-    padding: '8px 10px',
+    padding: '0 10px 12px 10px',
     boxSizing: 'border-box',
-    fontFamily: 'monospace',
-    fontSize: '12px',
+    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
+    fontFamily: 'var(--vscode-editor-font-family, monospace)',
+    fontSize: 'var(--dbga-text-body)',
   },
   divider: {
     flex: '0 0 auto',
@@ -21,24 +24,63 @@ export const styles: Record<string, CSSProperties> = {
     top: 0,
     bottom: 0,
     left: 0,
-    backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
     borderRight: '1px solid var(--vscode-editorWidget-border, #333)',
-    boxShadow: '2px 0 8px rgba(0, 0, 0, 0.35)',
+    boxShadow: 'var(--dbga-shadow-panel)',
   },
-  dividerFloating: { position: 'absolute', zIndex: 3, top: 0, bottom: 0 },
-  columnTitle: { margin: '0 0 8px 0', fontSize: '12px', opacity: 0.7 },
-  frame: { marginBottom: '10px' },
+  columnHead: {
+    ...PANEL_HEAD,
+    position: 'sticky',
+    zIndex: 1,
+    top: 0,
+    margin: '0 -10px 10px -10px',
+    justifyContent: 'space-between',
+  },
+  columnTitle: { ...SECTION_TITLE, display: 'flex', alignItems: 'center', gap: '6px' },
+  columnCount: {
+    flex: '0 0 auto',
+    padding: '1px 6px',
+    borderRadius: 'var(--dbga-radius-pill)',
+    backgroundColor: 'var(--vscode-badge-background, #4d4d4d)',
+    color: 'var(--vscode-badge-foreground, #ffffff)',
+    fontFamily: 'var(--vscode-editor-font-family, monospace)',
+    fontSize: 'var(--dbga-text-micro)',
+    whiteSpace: 'nowrap',
+  },
+  frame: { marginBottom: '14px' },
+  frameLevel: { color: 'var(--vscode-descriptionForeground, #a0a0a0)', fontWeight: 400 },
+  globals: {
+    marginBottom: '14px',
+    paddingTop: '10px',
+    borderTop: '1px solid var(--vscode-editorWidget-border, #333)',
+  },
+  globalsTitle: { ...SECTION_TITLE, margin: '0 0 6px 0' },
+  roots: {
+    marginTop: '3px',
+    marginLeft: '7px',
+    paddingLeft: '3px',
+    borderLeft: '1px solid var(--vscode-panel-border, #8a8a8a)',
+  },
   root: {
     display: 'flex',
     gap: '6px',
-    paddingLeft: '8px',
+    padding: '2px 4px 2px 8px',
     whiteSpace: 'nowrap',
     alignItems: 'baseline',
   },
   rootName: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
-  rootType: { opacity: 0.55, overflow: 'hidden', textOverflow: 'ellipsis' },
-  rootValue: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
-  rootStatus: { marginLeft: 'auto', color: 'var(--vscode-charts-orange, #ce9178)' },
+  rootType: {
+    color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
+    opacity: 0.8,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
   canvas: { flex: 1, position: 'relative', minWidth: 0 },
   network: { position: 'absolute', inset: 0, outline: 'none' },
+};
+
+export const rootInkStyles: Record<RootInk, CSSProperties> = {
+  value: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
+  address: { marginLeft: 'auto', color: 'var(--vscode-charts-yellow, #dcdcaa)' },
+  null: { marginLeft: 'auto', color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
+  status: { marginLeft: 'auto', color: 'var(--vscode-charts-orange, #ce9178)' },
 };

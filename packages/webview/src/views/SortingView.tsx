@@ -19,13 +19,17 @@ import type { Pass } from '../model/graph/types';
 import { type Marker, defaultTracks, sortingModel } from '../model/sorting';
 import { type Camera, type PanelState, MAX_SCALE, MIN_SCALE } from '../session/persistence';
 import type { ScreenState } from '../session/state';
+import { overContent } from './gestures';
+import { GridLayer } from '../ui/GridLayer';
 import { ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
+import type { Theme } from '../ui/theme';
 import { TrackView } from '../ui/sorting/TrackView';
 import { styles } from '../ui/sorting/SortingView.styles';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 interface SortingViewProps {
   state: ScreenState;
+  theme: Theme;
   pass: Pass;
   panel: PanelState;
   updatePanel: (patch: Partial<PanelState>) => void;
@@ -37,6 +41,7 @@ interface SortingViewProps {
 
 const SortingView: React.FC<SortingViewProps> = ({
   state,
+  theme,
   pass,
   panel,
   updatePanel,
@@ -70,16 +75,19 @@ const SortingView: React.FC<SortingViewProps> = ({
     [updatePanel],
   );
 
+  const advance = theme.advance.name;
+
   const model = useMemo(
     () =>
       state.snapshot === null
         ? null
         : sortingModel(
             state.snapshot,
+            advance,
             pass.of === state.snapshot ? pass.previous : null,
             enabledFrames,
           ),
-    [state.snapshot, pass, enabledFrames],
+    [state.snapshot, advance, pass, enabledFrames],
   );
 
   const enabled = useMemo(() => {
@@ -252,11 +260,19 @@ const SortingView: React.FC<SortingViewProps> = ({
     }
 
     const wheel = (event: WheelEvent): void => {
+      if (!overContent(event.target, box, stackRef.current)) {
+        return;
+      }
+
       event.preventDefault();
       zoomBy(event.deltaY < 0 ? 1 : -1);
     };
 
     const down = (event: PointerEvent): void => {
+      if (!overContent(event.target, box, stackRef.current)) {
+        return;
+      }
+
       halt();
 
       const from = { x: event.clientX, y: event.clientY };
@@ -324,6 +340,7 @@ const SortingView: React.FC<SortingViewProps> = ({
 
   return (
     <div ref={viewportBoxRef} style={styles.viewport}>
+      <GridLayer viewport={viewport} />
       <div
         ref={stackRef}
         style={{

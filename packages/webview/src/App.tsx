@@ -1,5 +1,6 @@
 import { styles } from './App.styles';
 import { changeHighlight, changedNodes } from './model/graph/changes';
+import { fileName } from './model/format';
 import { frameKey, parseCanvasId } from './model/graph/ids';
 import { NO_CHANGES, Pass } from './model/graph/types';
 import { annotationTargets, buildIndex, inspect } from './model/inspection';
@@ -13,7 +14,7 @@ import {
   ViewMode,
   coerceFile,
 } from './session/persistence';
-import { useSnapshotChannel } from './session/state';
+import { type ScreenPhase, useSnapshotChannel } from './session/state';
 import { usePanelState } from './session/usePanelState';
 import { ChangeLegend } from './ui/ChangeLegend';
 import Timeline from './ui/Timeline';
@@ -27,6 +28,14 @@ import type { ExtractionError, GraphSnapshot } from 'dbga-contract';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const NARROW_WIDTH = 620;
+
+const WIDE_WIDTH = 900;
+
+const PHASE_COLOR: Record<ScreenPhase, string> = {
+  idle: 'var(--vscode-descriptionForeground, #a0a0a0)',
+  live: 'var(--vscode-charts-green, #89d185)',
+  ended: 'var(--vscode-charts-orange, #ce9178)',
+};
 
 const App: React.FC = () => {
   const state = useSnapshotChannel();
@@ -46,6 +55,7 @@ const App: React.FC = () => {
 
   const embedded = isEmbedded();
   const narrow = bodyWidth !== null && bodyWidth < NARROW_WIDTH;
+  const wide = bodyWidth === null || bodyWidth >= WIDE_WIDTH;
 
   const pinnedAt = pinned === null ? -1 : state.history.indexOf(pinned);
   const following = pinnedAt < 0;
@@ -235,6 +245,8 @@ const App: React.FC = () => {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [select]);
 
+  const site = pauseSite(active, state.file);
+
   const meta = active === null ? null : active.meta;
   const loud = meta === null ? [] : meta.errors.filter((error) => !isQuiet(error));
   const quiet = meta === null ? 0 : meta.errors.length - loud.length;
@@ -255,18 +267,8 @@ const App: React.FC = () => {
         onFollow={(next) => updateFile({ follow: next })}
         viewMode={viewMode}
         onViewMode={setViewMode}
-        compact={narrow}
+        compact={!wide}
       />
-      {state.history.length > 1 && (
-        <Timeline
-          count={state.history.length}
-          index={cursor}
-          following={following}
-          snapshot={active}
-          onIndex={(next) => setPinned(state.history[next] ?? null)}
-          onLive={() => setPinned(null)}
-        />
-      )}
       {state.phase === 'idle' && (
         <div style={styles.placeholder}>
           <p style={styles.placeholderLead}>
@@ -292,11 +294,51 @@ const App: React.FC = () => {
 
   return (
     <div style={styles.shell}>
-      <div style={narrow ? { ...styles.header, ...styles.headerCompact } : styles.header}>
-        <h3 style={narrow ? { ...styles.title, ...styles.titleCompact } : styles.title}>
-          DbgAlgo - Estrutura de Dados
-        </h3>
-      </div>
+      <header style={narrow ? { ...styles.header, ...styles.headerCompact } : styles.header}>
+        <div style={styles.brand}>
+          <span style={styles.brandMark}>D</span>
+          <span style={styles.brandName}>DbgAlgo</span>
+          {wide && (
+            <>
+              <span style={styles.brandSlash}>/</span>
+              <span style={styles.brandSubtitle}>Estrutura de Dados</span>
+            </>
+          )}
+        </div>
+
+        {state.history.length > 1 && (
+          <div style={styles.headerMiddle}>
+            <Timeline
+              count={state.history.length}
+              index={cursor}
+              following={following}
+              compact={!wide}
+              onIndex={(next) => setPinned(state.history[next] ?? null)}
+              onLive={() => setPinned(null)}
+            />
+          </div>
+        )}
+
+        <div style={styles.headerRight}>
+          <div style={styles.site}>
+            <span style={{ ...styles.siteDot, backgroundColor: PHASE_COLOR[state.phase] }} />
+            {site === null ? (
+              <span style={styles.siteLead}>Aguardando a primeira pausa</span>
+            ) : (
+              <>
+                {wide && <span style={styles.siteLead}>Pausado em</span>}
+                <span style={styles.siteFunction}>{site.function}()</span>
+                {!narrow && (
+                  <span style={styles.siteWhere}>
+                    linha {site.line}
+                    {wide && site.file !== '' ? ` (${site.file})` : ''}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </header>
 
       {state.error !== null && <div style={styles.errorBanner}>{state.error}</div>}
       {state.phase === 'ended' && <div style={styles.endedBanner}>Sessão encerrada.</div>}
@@ -367,6 +409,7 @@ const App: React.FC = () => {
         {viewMode === 'sorting' && (
           <SortingView
             state={view}
+            theme={theme}
             pass={pass}
             panel={panel}
             updatePanel={updatePanel}
@@ -400,6 +443,19 @@ const App: React.FC = () => {
     </div>
   );
 };
+
+function pauseSite(
+  snapshot: GraphSnapshot | null,
+  file: string | null,
+): { function: string; line: number; file: string } | null {
+  const frame = snapshot?.frames[0];
+
+  if (frame === undefined) {
+    return null;
+  }
+
+  return { function: frame.function, line: frame.line, file: fileName(file ?? frame.file) };
+}
 
 function isQuiet(error: ExtractionError): boolean {
   return error.scope === 'annotation' && error.message === 'annotationUnresolved';

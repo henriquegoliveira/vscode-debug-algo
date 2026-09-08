@@ -1,4 +1,4 @@
-import { type Box, labelBox } from '../geometry/boxes';
+import type { Box } from '../geometry/boxes';
 import {
   CAMERA_DURATION,
   FIT_MIN_SCALE,
@@ -14,7 +14,7 @@ import {
 } from '../geometry/camera';
 import { changeHighlight, focusTarget } from '../model/graph/changes';
 import { rootFollowers, toGraph } from '../model/graph/toGraph';
-import { GraphModel, Pass } from '../model/graph/types';
+import { CanvasNode, GraphModel, Pass } from '../model/graph/types';
 import { visibleSnapshot } from '../model/graph/visibility';
 import { LayoutKind, layoutForChoice, promotes } from '../model/layoutRule';
 import {
@@ -28,11 +28,15 @@ import {
 } from '../session/persistence';
 import type { ScreenState } from '../session/state';
 import { ColumnButton, ZOOM_STEP, ZoomControl } from '../ui/Toolbar';
+import { ListIcon } from '../ui/icons';
 import { RootRow } from '../ui/graph/RootRow';
 import { Theme } from '../ui/theme';
 import { styles } from '../ui/graph/GraphView.styles';
 import { remove } from './dataSet';
-import { NETWORK_OPTIONS, layoutOptions } from './networkOptions';
+import { paintGrid } from './gridPainter';
+import { layoutOptions, networkOptions } from './networkOptions';
+import { nodePainter } from './nodePainter';
+import { remeasureNodes } from './remeasure';
 import { type Seat, type Trail, seatPayload } from './seats';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DataSet } from 'vis-data';
@@ -104,6 +108,9 @@ const GraphView: React.FC<GraphViewProps> = ({
   const followersRef = useRef<Map<string, string[]>>(new Map());
   const cardOfRef = useRef<Map<string, string>>(new Map());
   const boxesRef = useRef<Map<string, Box>>(new Map());
+  const specsRef = useRef<Map<string, CanvasNode>>(new Map());
+  const themeRef = useRef<Theme>(theme);
+  const measureRef = useRef<number | null>(null);
   const layoutRenderedRef = useRef<LayoutKind | null>(null);
   const trailRef = useRef<Trail | null>(null);
   const glideRef = useRef<number | null>(null);
@@ -315,15 +322,18 @@ const GraphView: React.FC<GraphViewProps> = ({
     nodesRef.current = nodes;
     edgesRef.current = edges;
 
-    const network = new Network(
-      containerRef.current,
-      { nodes, edges },
-      {
-        ...NETWORK_OPTIONS,
-        ...layoutOptions('default'),
-      },
-    );
+    const painter = nodePainter({
+      node: (id) => specsRef.current.get(id),
+      theme: () => themeRef.current,
+    });
+
+    const network = new Network(containerRef.current, { nodes, edges }, networkOptions(painter));
+    network.setOptions(layoutOptions('default'));
     networkRef.current = network;
+
+    network.on('beforeDrawing', (context: CanvasRenderingContext2D) =>
+      paintGrid(context, themeRef.current, network.getScale()),
+    );
 
     const beginTrail = (ids: string[]): void => {
       const placed = network.getPositions();
@@ -415,6 +425,11 @@ const GraphView: React.FC<GraphViewProps> = ({
     });
 
     return () => {
+      if (measureRef.current !== null) {
+        window.cancelAnimationFrame(measureRef.current);
+        measureRef.current = null;
+      }
+
       network.destroy();
       networkRef.current = null;
       nodesRef.current = null;
@@ -423,6 +438,7 @@ const GraphView: React.FC<GraphViewProps> = ({
   }, [onSelect, panelRef]);
 
   useEffect(() => {
+    themeRef.current = theme;
     followRef.current = follow;
     releaseRef.current = () => updateFile({ follow: false });
   });
@@ -553,8 +569,9 @@ const GraphView: React.FC<GraphViewProps> = ({
     cardOfRef.current = new Map(
       model.cards.flatMap((card) => card.roots.map((root) => [root, card.id] as const)),
     );
+    specsRef.current = new Map(model.canvas.nodes.map((node) => [node.id, node] as const));
     boxesRef.current = new Map(
-      model.canvas.nodes.map((node) => [node.id, labelBox(node.label, node.kind)] as const),
+      model.canvas.nodes.map((node) => [node.id, node.metrics.box] as const),
     );
 
     if (layout === null && model.canvas.nodes.length > 0) {
@@ -576,6 +593,15 @@ const GraphView: React.FC<GraphViewProps> = ({
     if (network === null) {
       return;
     }
+
+    if (measureRef.current !== null) {
+      window.cancelAnimationFrame(measureRef.current);
+    }
+
+    measureRef.current = window.requestAnimationFrame(() => {
+      measureRef.current = null;
+      remeasureNodes(network);
+    });
 
     if (selectedId === null) {
       network.unselectAll();
@@ -694,7 +720,15 @@ const GraphView: React.FC<GraphViewProps> = ({
             }
             onScroll={onColumnScroll}
           >
-            <h4 style={styles.columnTitle}>Variáveis por frame</h4>
+            <header style={styles.columnHead}>
+              <h4 style={styles.columnTitle}>
+                <ListIcon />
+                Variáveis por frame
+              </h4>
+              <span style={styles.columnCount}>
+                {model.frames.length === 1 ? '1 frame' : `${model.frames.length} frames`}
+              </span>
+            </header>
             {model.frames.map((frame) => (
               <section key={frame.id} style={styles.frame}>
                 <button
@@ -705,31 +739,37 @@ const GraphView: React.FC<GraphViewProps> = ({
                   onClick={() => toggleFrame(frame.id)}
                 >
                   <span className="dbga-box" />
-                  <span>
-                    {frame.function} #{frame.frameLevel}
+                  <span>{frame.function}</span>
+                  <span style={styles.frameLevel}>
+                    #{frame.frameLevel}
+                    {frame.frameLevel === 0 ? ' (atual)' : ''}
                   </span>
                 </button>
-                {frame.roots.map((root) => (
-                  <RootRow
-                    key={root.id}
-                    root={root}
-                    active={root.canvasId !== null && root.id === selectedId}
-                    onSelect={onSelect}
-                  />
-                ))}
+                <div style={styles.roots}>
+                  {frame.roots.map((root) => (
+                    <RootRow
+                      key={root.id}
+                      root={root}
+                      active={root.canvasId !== null && root.id === selectedId}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </div>
               </section>
             ))}
             {model.globals.length > 0 && (
-              <section style={styles.frame}>
-                <h5 style={styles.columnTitle}>Globais do arquivo</h5>
-                {model.globals.map((root) => (
-                  <RootRow
-                    key={root.id}
-                    root={root}
-                    active={root.canvasId !== null && root.id === selectedId}
-                    onSelect={onSelect}
-                  />
-                ))}
+              <section style={styles.globals}>
+                <h5 style={styles.globalsTitle}>Globais do arquivo</h5>
+                <div style={styles.roots}>
+                  {model.globals.map((root) => (
+                    <RootRow
+                      key={root.id}
+                      root={root}
+                      active={root.canvasId !== null && root.id === selectedId}
+                      onSelect={onSelect}
+                    />
+                  ))}
+                </div>
               </section>
             )}
           </aside>

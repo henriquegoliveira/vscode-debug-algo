@@ -20,6 +20,7 @@ const InspectorOverlay: React.FC<Props> = ({
 }) => (
   <aside style={styles.overlay}>
     <header style={styles.head}>
+      <span style={{ ...styles.swatch, backgroundColor: swatchColor(inspection) }} />
       <span style={styles.title}>{heading(inspection)}</span>
       <button
         type="button"
@@ -59,5 +60,23 @@ const InspectorOverlay: React.FC<Props> = ({
     )}
   </aside>
 );
+
+function swatchColor(inspection: Props['inspection']): string {
+  if (inspection.space === 'terminal') {
+    return 'var(--vscode-descriptionForeground, #a0a0a0)';
+  }
+
+  if (inspection.space !== 'node') {
+    return 'var(--vscode-charts-blue, #569cd6)';
+  }
+
+  if (inspection.recordType !== null) {
+    return 'var(--vscode-charts-green, #4ec9b0)';
+  }
+
+  return inspection.arrays.length > 0
+    ? 'var(--vscode-charts-purple, #c586c0)'
+    : 'var(--vscode-descriptionForeground, #a0a0a0)';
+}
 
 export default InspectorOverlay;
