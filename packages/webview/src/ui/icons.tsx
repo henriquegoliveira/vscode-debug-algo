@@ -55,3 +55,10 @@ export const ListIcon: React.FC = () => (
     <path d="M4 6h16M4 10h16M4 14h16M4 18h16" />
   </svg>
 );
+
+export const HistoryIcon: React.FC = () => (
+  <svg {...BASE} aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
+  </svg>
+);
