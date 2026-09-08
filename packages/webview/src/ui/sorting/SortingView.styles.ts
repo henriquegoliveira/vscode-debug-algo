@@ -1,4 +1,4 @@
-import { PANEL } from '../chrome';
+import { PANEL, PANEL_HEAD } from '../chrome';
 import type { CSSProperties } from 'react';
 
 export const CELL_HEIGHT = 24;
@@ -6,6 +6,8 @@ export const CELL_HEIGHT = 24;
 export const INDEX_HEIGHT = 14;
 
 export const MARKER_HEIGHT = 18;
+
+export const CUT_ROOM = 56;
 
 export const styles: Record<string, CSSProperties> = {
   viewport: {
@@ -29,17 +31,26 @@ export const styles: Record<string, CSSProperties> = {
     fontFamily: 'var(--vscode-editor-font-family, monospace)',
     fontSize: 'var(--dbga-text-body)',
   },
-  empty: { opacity: 0.6, padding: '12px' },
+  empty: { padding: '12px', color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
   track: {
-    padding: '8px 10px',
-    borderRadius: '4px',
+    borderRadius: 'var(--dbga-radius-panel)',
     backgroundColor: 'var(--vscode-editorWidget-background, #252526)',
-    border: '1px solid var(--vscode-editorWidget-border, #454545)',
+    border: '1px solid var(--vscode-editorWidget-border, #333)',
+    boxShadow: 'var(--dbga-shadow-panel)',
+    overflow: 'hidden',
   },
-  trackHeader: { display: 'flex', gap: '8px', alignItems: 'baseline', marginBottom: '6px' },
+  trackHead: { ...PANEL_HEAD, padding: '3px 4px' },
   trackNames: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)', fontWeight: 600 },
-  trackType: { opacity: 0.55 },
-  trackTruncated: { color: 'var(--vscode-charts-orange, #d7ba7d)' },
+  trackType: {
+    color: 'var(--vscode-symbolIcon-classForeground, #4ec9b0)',
+    opacity: 0.8,
+  },
+  trackTruncated: {
+    marginLeft: 'auto',
+    color: 'var(--vscode-charts-orange, #d7ba7d)',
+    fontSize: 'var(--dbga-text-meta)',
+  },
+  trackBody: { padding: '8px 10px' },
   ribbon: { position: 'relative' },
   cell: {
     position: 'absolute',
@@ -52,7 +63,7 @@ export const styles: Record<string, CSSProperties> = {
     textAlign: 'center',
     borderRadius: '3px',
     backgroundColor: 'var(--vscode-editor-background, #1e1e1e)',
-    border: '1px solid var(--vscode-editorWidget-border, #454545)',
+    border: '1px solid var(--vscode-editorWidget-border, #333)',
     color: 'var(--vscode-charts-green, #b5cea8)',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -70,8 +81,8 @@ export const styles: Record<string, CSSProperties> = {
     left: 0,
     height: INDEX_HEIGHT,
     textAlign: 'center',
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
     fontSize: 'var(--dbga-text-note)',
-    opacity: 0.45,
   },
   marker: {
     position: 'absolute',
@@ -85,7 +96,16 @@ export const styles: Record<string, CSSProperties> = {
     textOverflow: 'ellipsis',
     transition: 'transform 320ms ease-in-out, top 320ms ease-in-out',
   },
-  cut: { position: 'absolute', top: INDEX_HEIGHT, left: 0, padding: '4px 6px', opacity: 0.55 },
+  cut: {
+    position: 'absolute',
+    top: INDEX_HEIGHT,
+    left: 0,
+    padding: '4px 6px',
+    lineHeight: `${CELL_HEIGHT - 14}px`,
+    color: 'var(--vscode-charts-orange, #d7ba7d)',
+    fontSize: 'var(--dbga-text-micro)',
+    whiteSpace: 'nowrap',
+  },
   picker: {
     ...PANEL,
     top: '8px',

@@ -16,7 +16,6 @@ export interface FrameCard {
 export interface CallStackModel {
   frames: FrameCard[];
   globals: FrameRoot[];
-  currentLevel: number;
 }
 
 export function callStackModel(
@@ -70,7 +69,7 @@ export function callStackModel(
     };
   });
 
-  return { frames, globals, currentLevel: 0 };
+  return { frames, globals };
 }
 
 function toFrameRoot(root: Root): FrameRoot {
@@ -81,7 +80,6 @@ function toFrameRoot(root: Root): FrameRoot {
     name: root.name,
     type: root.type,
     origin: root.origin,
-    category: root.category,
     status: root.status,
     value: formatValue(root.value),
   };

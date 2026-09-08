@@ -71,9 +71,7 @@ export function nodeMetrics(
   footer: boolean,
 ): NodeMetrics {
   const showFooter = footer && card.address !== null;
-  const lines = showFooter
-    ? [...card.lines, addressLine(card.address as string)]
-    : [...card.lines];
+  const lines = showFooter ? [...card.lines, addressLine(card.address as string)] : [...card.lines];
 
   const heights = lines.map((line) => Math.round(theme.text[line.tier] * LINE_HEIGHT));
   const stacked =

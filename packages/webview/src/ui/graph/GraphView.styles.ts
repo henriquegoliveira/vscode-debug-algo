@@ -1,3 +1,4 @@
+import type { RootInk } from '../../model/graph/labels';
 import { PANEL_HEAD, SECTION_TITLE } from '../chrome';
 import type { CSSProperties } from 'react';
 
@@ -73,10 +74,13 @@ export const styles: Record<string, CSSProperties> = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  rootValue: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
-  rootAddress: { marginLeft: 'auto', color: 'var(--vscode-charts-yellow, #dcdcaa)' },
-  rootNull: { marginLeft: 'auto', color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
-  rootStatus: { marginLeft: 'auto', color: 'var(--vscode-charts-orange, #ce9178)' },
   canvas: { flex: 1, position: 'relative', minWidth: 0 },
   network: { position: 'absolute', inset: 0, outline: 'none' },
+};
+
+export const rootInkStyles: Record<RootInk, CSSProperties> = {
+  value: { marginLeft: 'auto', color: 'var(--vscode-charts-green, #b5cea8)' },
+  address: { marginLeft: 'auto', color: 'var(--vscode-charts-yellow, #dcdcaa)' },
+  null: { marginLeft: 'auto', color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
+  status: { marginLeft: 'auto', color: 'var(--vscode-charts-orange, #ce9178)' },
 };

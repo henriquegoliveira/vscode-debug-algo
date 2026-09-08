@@ -13,18 +13,24 @@ export const FrameCardView: React.FC<{
     ref={cardRef}
     style={frame.isCurrent ? { ...styles.card, ...styles.cardCurrent } : styles.card}
   >
-    <div style={styles.cardHeader}>
-      {frame.function} #{frame.level}
+    <div style={styles.cardHead}>
+      <span style={styles.cardFunction}>{frame.function}</span>
+      <span style={styles.cardLevel}>#{frame.level}</span>
+      <span style={styles.cardSite}>
+        {frame.file === '' ? `linha ${frame.line}` : `${frame.file}:${frame.line}`}
+      </span>
     </div>
-    {frame.roots.map((root) => (
-      <RootLine
-        key={root.id}
-        root={root}
-        changed={frame.changedRoots.has(root.id)}
-        active={root.id === selectedId}
-        onSelect={onSelect}
-      />
-    ))}
-    {frame.roots.length === 0 && <div style={styles.cardEmpty}>sem variáveis</div>}
+    <div style={styles.cardBody}>
+      {frame.roots.map((root) => (
+        <RootLine
+          key={root.id}
+          root={root}
+          changed={frame.changedRoots.has(root.id)}
+          active={root.id === selectedId}
+          onSelect={onSelect}
+        />
+      ))}
+      {frame.roots.length === 0 && <div style={styles.cardEmpty}>sem variáveis</div>}
+    </div>
   </div>
 );

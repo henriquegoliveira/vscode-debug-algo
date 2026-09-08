@@ -1,14 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import type { LayoutChoice } from '../model/layoutRule';
 import type { FrameMode, ViewMode } from '../session/persistence';
-import {
-  ChevronIcon,
-  FollowIcon,
-  FrameIcon,
-  LayoutIcon,
-  NullIcon,
-  StackIcon,
-} from './icons';
+import { ChevronIcon, FollowIcon, FrameIcon, LayoutIcon, NullIcon, StackIcon } from './icons';
 import { styles } from './Toolbar.styles';
 
 export const ZOOM_STEP = 1.25;

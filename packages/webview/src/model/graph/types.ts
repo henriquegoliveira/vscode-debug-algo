@@ -49,7 +49,6 @@ export interface FrameRoot {
   name: string;
   type: string;
   origin: Root['origin'];
-  category: Root['category'];
   status: Root['status'];
   value: string;
 }

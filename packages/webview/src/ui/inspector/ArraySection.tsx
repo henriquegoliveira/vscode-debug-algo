@@ -18,9 +18,7 @@ export const ArraySection: React.FC<{ array: ArrayView; onSelect: Select }> = ({
     {array.state !== 'unexpanded' && (
       <div style={styles.columnsRow}>
         <span>índice</span>
-        <span style={styles.columnsRight}>
-          {array.state === 'cells' ? 'valor' : 'aponta para'}
-        </span>
+        <span style={styles.columnsRight}>{array.state === 'cells' ? 'valor' : 'aponta para'}</span>
       </div>
     )}
 

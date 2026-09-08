@@ -9,6 +9,8 @@ const MAX_LABEL_ENTRIES = 2;
 
 const MAX_CELL_PREVIEW = 2;
 
+export type RootInk = 'value' | 'address' | 'null' | 'status';
+
 export function rootCell(root: FrameRoot): string {
   if (root.status !== 'ok') {
     return root.status;
@@ -19,6 +21,18 @@ export function rootCell(root: FrameRoot): string {
   }
 
   return root.target ?? '';
+}
+
+export function rootInk(root: FrameRoot): RootInk {
+  if (root.status === 'null') {
+    return 'null';
+  }
+
+  if (root.status !== 'ok') {
+    return 'status';
+  }
+
+  return root.value === '' ? 'address' : 'value';
 }
 
 const ARRAY_CELLS = 'cells';
@@ -181,12 +195,7 @@ function opaqueCard(node: Extract<GraphNode, { kind: 'opaque' }>): NodeCard {
   };
 }
 
-function card(
-  type: string | null,
-  lines: CardLine[],
-  hidden: number,
-  address: string,
-): NodeCard {
+function card(type: string | null, lines: CardLine[], hidden: number, address: string): NodeCard {
   const head: CardLine[] = type === null ? [] : [{ tier: 'type', ink: 'accent', left: type }];
   const tail: CardLine[] = hidden > 0 ? [{ tier: 'note', ink: 'muted', left: `+${hidden}` }] : [];
 
