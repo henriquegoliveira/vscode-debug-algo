@@ -1,7 +1,7 @@
 import { ChangeKind } from '../../ui/theme';
-import { nodeCanvasId } from './ids';
+import { EDGE_PREFIX, nodeCanvasId } from './ids';
 import { unique } from './labels';
-import type { NodeChanges, Pass } from './types';
+import type { CanvasEdge, NodeChanges, Pass } from './types';
 import type { GraphNode, GraphSnapshot } from 'dbga-contract';
 
 export function changedNodes(previous: GraphSnapshot, next: GraphSnapshot): NodeChanges {
@@ -85,6 +85,12 @@ export function changeHighlight(pass: Pass, of: GraphSnapshot | null): Map<strin
   pass.changes.created.forEach((id) => marks.set(id, 'created'));
 
   return marks;
+}
+
+export function changedEdges(changes: NodeChanges, edges: CanvasEdge[]): CanvasEdge[] {
+  const wanted = new Set(changes.edges.map((key) => `${EDGE_PREFIX}${key}`));
+
+  return edges.filter((edge) => wanted.has(edge.id));
 }
 
 export function focusTarget(

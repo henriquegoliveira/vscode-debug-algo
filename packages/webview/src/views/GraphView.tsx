@@ -1,18 +1,28 @@
 import type { Box } from '../geometry/boxes';
 import {
   CAMERA_DURATION,
+  type Extent,
+  FIT_FILL,
+  FIT_MAX_SCALE,
   FIT_MIN_SCALE,
+  FIT_MIN_SHARE,
   FOCUS_FILL,
   FOCUS_MAX_SCALE,
   FOCUS_MIN_SCALE,
   FOCUS_MIN_SHARE,
+  FOLLOW_FILL,
+  FOLLOW_MAX_SCALE,
+  FOLLOW_MIN_SCALE,
+  type Frame,
   Viewport,
   cameraPlan,
+  followPlan,
   interpolate,
   settled,
   steppedScale,
 } from '../geometry/camera';
-import { changeHighlight, focusTarget } from '../model/graph/changes';
+import { ORIGIN, type Seat, anchorShift, planMotion, shiftSeats } from '../geometry/motion';
+import { changeHighlight, changedEdges, focusTarget } from '../model/graph/changes';
 import { rootFollowers, toGraph } from '../model/graph/toGraph';
 import { CanvasNode, GraphModel, Pass } from '../model/graph/types';
 import { visibleSnapshot } from '../model/graph/visibility';
@@ -34,10 +44,11 @@ import { Theme } from '../ui/theme';
 import { styles } from '../ui/graph/GraphView.styles';
 import { remove } from './dataSet';
 import { paintGrid } from './gridPainter';
+import { type MotionHandle, createMotion } from './motion';
 import { layoutOptions, networkOptions } from './networkOptions';
 import { nodePainter } from './nodePainter';
 import { remeasureNodes } from './remeasure';
-import { type Seat, type Trail, seatPayload } from './seats';
+import { type Trail, parentOf, seatMap, seatPayload } from './seats';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DataSet } from 'vis-data';
 import { Edge, Network, Node } from 'vis-network';
@@ -113,6 +124,9 @@ const GraphView: React.FC<GraphViewProps> = ({
   const measureRef = useRef<number | null>(null);
   const layoutRenderedRef = useRef<LayoutKind | null>(null);
   const trailRef = useRef<Trail | null>(null);
+  const seatsRef = useRef<Map<string, Seat>>(new Map());
+  const motionRef = useRef<MotionHandle | null>(null);
+  const motionPassRef = useRef<Pass | null>(null);
   const glideRef = useRef<number | null>(null);
   const saveRef = useRef<number | null>(null);
   const rememberRef = useRef<() => void>(() => undefined);
@@ -220,67 +234,113 @@ const GraphView: React.FC<GraphViewProps> = ({
     [halt],
   );
 
-  const frameOn = useCallback(
-    (ids: string[], floor: number, lazy: boolean): void => {
-      const network = networkRef.current;
-      const box = containerRef.current;
+  const extentOf = useCallback((ids: string[]): Extent | null => {
+    const network = networkRef.current;
 
-      if (network === null || box === null || ids.length === 0) {
+    if (network === null || ids.length === 0) {
+      return null;
+    }
+
+    const placed = network.getPositions(ids);
+    const boxes = boxesRef.current;
+    const seats = ids
+      .map((id) => {
+        const at = seatsRef.current.get(id) ?? placed[id];
+
+        return at === undefined ? null : { at, box: boxes.get(id) ?? EMPTY_BOX };
+      })
+      .filter((seat): seat is { at: Seat; box: Box } => seat !== null);
+
+    if (seats.length === 0) {
+      return null;
+    }
+
+    return {
+      left: Math.min(...seats.map((seat) => seat.at.x - seat.box.width / 2)),
+      right: Math.max(...seats.map((seat) => seat.at.x + seat.box.width / 2)),
+      top: Math.min(...seats.map((seat) => seat.at.y - seat.box.height / 2)),
+      bottom: Math.max(...seats.map((seat) => seat.at.y + seat.box.height / 2)),
+    };
+  }, []);
+
+  const viewport = useCallback((): { frame: Frame; at: Viewport } | null => {
+    const network = networkRef.current;
+    const box = containerRef.current;
+
+    if (network === null || box === null) {
+      return null;
+    }
+
+    const at = network.getViewPosition();
+
+    return {
+      frame: { width: box.clientWidth, height: box.clientHeight },
+      at: { x: at.x, y: at.y, scale: network.getScale() },
+    };
+  }, []);
+
+  const focusNodes = useCallback(
+    (ids: string[]) => {
+      const seen = viewport();
+      const extent = extentOf(ids);
+
+      if (seen === null || extent === null) {
         return;
       }
-
-      const placed = network.getPositions(ids);
-      const boxes = boxesRef.current;
-      const seats = ids
-        .map((id) => {
-          const at = placed[id];
-
-          return at === undefined ? null : { id, at, box: boxes.get(id) ?? EMPTY_BOX };
-        })
-        .filter((seat): seat is { id: string; at: Seat; box: Box } => seat !== null);
-
-      if (seats.length === 0) {
-        return;
-      }
-
-      const extent = {
-        left: Math.min(...seats.map((seat) => seat.at.x - seat.box.width / 2)),
-        right: Math.max(...seats.map((seat) => seat.at.x + seat.box.width / 2)),
-        top: Math.min(...seats.map((seat) => seat.at.y - seat.box.height / 2)),
-        bottom: Math.max(...seats.map((seat) => seat.at.y + seat.box.height / 2)),
-      };
 
       glide(
-        cameraPlan(
-          extent,
-          { width: box.clientWidth, height: box.clientHeight },
-          network.getScale(),
-          {
-            fill: FOCUS_FILL,
-            floor,
-            ceiling: FOCUS_MAX_SCALE,
-            share: FOCUS_MIN_SHARE,
-            lazy,
-          },
-        ),
+        cameraPlan(extent, seen.frame, seen.at.scale, {
+          fill: FOCUS_FILL,
+          floor: FOCUS_MIN_SCALE,
+          ceiling: FOCUS_MAX_SCALE,
+          share: FOCUS_MIN_SHARE,
+          lazy: true,
+        }),
       );
     },
-    [glide],
+    [glide, extentOf, viewport],
   );
 
-  const revealNodes = useCallback(
-    (ids: string[]) => frameOn(ids, FOCUS_MIN_SCALE, true),
-    [frameOn],
+  const drawnIds = useCallback((): string[] => (nodesRef.current?.getIds() ?? []) as string[], []);
+
+  const followGraph = useCallback(
+    (ids: string[]) => {
+      const seen = viewport();
+      const graph = extentOf(drawnIds());
+
+      if (seen === null || graph === null) {
+        return;
+      }
+
+      glide(
+        followPlan(graph, extentOf(ids), seen.frame, {
+          fill: FOLLOW_FILL,
+          floor: FOLLOW_MIN_SCALE,
+          ceiling: FOLLOW_MAX_SCALE,
+        }),
+      );
+    },
+    [glide, extentOf, viewport, drawnIds],
   );
 
   const fitAll = useCallback(() => {
-    const nodes = nodesRef.current;
-    if (nodes === null) {
+    const seen = viewport();
+    const extent = extentOf(drawnIds());
+
+    if (seen === null || extent === null) {
       return;
     }
 
-    frameOn(nodes.getIds() as string[], FIT_MIN_SCALE, false);
-  }, [frameOn]);
+    glide(
+      cameraPlan(extent, seen.frame, seen.at.scale, {
+        fill: FIT_FILL,
+        floor: FIT_MIN_SCALE,
+        ceiling: FIT_MAX_SCALE,
+        share: FIT_MIN_SHARE,
+        lazy: false,
+      }),
+    );
+  }, [glide, extentOf, viewport, drawnIds]);
 
   const zoomBy = useCallback(
     (direction: number) => {
@@ -325,11 +385,13 @@ const GraphView: React.FC<GraphViewProps> = ({
     const painter = nodePainter({
       node: (id) => specsRef.current.get(id),
       theme: () => themeRef.current,
+      alpha: (id) => motionRef.current?.alphaOf(id) ?? 1,
     });
 
     const network = new Network(containerRef.current, { nodes, edges }, networkOptions(painter));
     network.setOptions(layoutOptions('default'));
     networkRef.current = network;
+    motionRef.current = createMotion(network, edges);
 
     network.on('beforeDrawing', (context: CanvasRenderingContext2D) =>
       paintGrid(context, themeRef.current, network.getScale()),
@@ -430,6 +492,9 @@ const GraphView: React.FC<GraphViewProps> = ({
         measureRef.current = null;
       }
 
+      motionRef.current?.stop();
+      motionRef.current = null;
+
       network.destroy();
       networkRef.current = null;
       nodesRef.current = null;
@@ -450,7 +515,7 @@ const GraphView: React.FC<GraphViewProps> = ({
         return;
       }
 
-      const at = network.getPositions([id])[id];
+      const at = seatsRef.current.get(id) ?? network.getPositions([id])[id];
       if (at === undefined) {
         return;
       }
@@ -578,11 +643,19 @@ const GraphView: React.FC<GraphViewProps> = ({
       return;
     }
 
-    const placed = networkRef.current?.getPositions() ?? {};
+    const placed = (networkRef.current?.getPositions() ?? {}) as Record<string, Seat>;
     const relayout = layoutRenderedRef.current !== layout;
     layoutRenderedRef.current = layout;
+    const authoritative = layout === 'hierarchical';
 
-    const payload = seatPayload(model.canvas.nodes, placed, layout === 'hierarchical', relayout);
+    const targets = seatMap(model.canvas.nodes);
+    const anchored = shiftSeats(
+      targets,
+      authoritative && !relayout ? anchorShift(targets, seatsRef.current) : ORIGIN,
+    );
+    seatsRef.current = authoritative ? anchored : new Map();
+
+    const payload = seatPayload(model.canvas.nodes, anchored, placed, authoritative);
 
     remove(edges, model.canvas.edges);
     remove(nodes, model.canvas.nodes);
@@ -592,6 +665,20 @@ const GraphView: React.FC<GraphViewProps> = ({
     const network = networkRef.current;
     if (network === null) {
       return;
+    }
+
+    const replay = motionPassRef.current !== pass;
+    motionPassRef.current = pass;
+
+    if (authoritative) {
+      const parents = parentOf(model.canvas.edges);
+
+      motionRef.current?.run(
+        relayout || pass.first
+          ? []
+          : planMotion(anchored, new Map(Object.entries(placed)), (id) => parents.get(id)),
+        replay && !pass.first ? changedEdges(pass.changes, model.canvas.edges) : [],
+      );
     }
 
     if (measureRef.current !== null) {
@@ -620,7 +707,7 @@ const GraphView: React.FC<GraphViewProps> = ({
     if (revealRequestRef.current === selectedId) {
       revealRef.current(drawn);
     }
-  }, [model, layout, selectedId, onSelectInvalid, revealRequestRef]);
+  }, [model, layout, pass, selectedId, onSelectInvalid, revealRequestRef]);
 
   const aim = useMemo(() => {
     const snapshot = state.snapshot;
@@ -653,6 +740,12 @@ const GraphView: React.FC<GraphViewProps> = ({
       return;
     }
 
+    if (follow) {
+      restoredRef.current = true;
+      followGraph(aim);
+      return;
+    }
+
     if (pass.first) {
       const saved = restoredRef.current ? null : panelRef.current.camera;
       restoredRef.current = true;
@@ -664,15 +757,8 @@ const GraphView: React.FC<GraphViewProps> = ({
 
       network.moveTo({ position: { x: saved.x, y: saved.y }, scale: saved.scale });
       setScale(saved.scale);
-      return;
     }
-
-    if (!follow || aim.length === 0) {
-      return;
-    }
-
-    revealNodes(aim);
-  }, [model, layout, follow, aim, revealNodes, fitAll, pass, state.snapshot, panelRef]);
+  }, [model, layout, follow, aim, followGraph, fitAll, pass, state.snapshot, panelRef]);
 
   const startDrag = useCallback(
     (event: React.MouseEvent) => {
@@ -800,7 +886,7 @@ const GraphView: React.FC<GraphViewProps> = ({
           onStep={zoomBy}
           onReset={() => zoomTo(1)}
           onFit={fitAll}
-          onFocus={() => revealNodes(aimRef.current)}
+          onFocus={() => focusNodes(aimRef.current)}
           canFocus={aim.length > 0}
         />
         {children}

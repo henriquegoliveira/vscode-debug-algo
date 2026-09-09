@@ -45,11 +45,7 @@ export function networkOptions(painter: NodePaint): Options {
 
 function physicsFor(kind: LayoutKind): Options['physics'] {
   if (kind === 'hierarchical') {
-    return {
-      enabled: true,
-      solver: 'barnesHut',
-      barnesHut: { springLength: 110, avoidOverlap: 0.4 },
-    };
+    return { enabled: false };
   }
 
   if (kind === 'physics') {

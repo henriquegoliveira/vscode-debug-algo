@@ -5,8 +5,6 @@ import type { GraphSnapshot, Root } from 'dbga-contract';
 
 export const RECIPROCAL_ROUNDNESS = 0.25;
 
-export const DRIFT_TOLERANCE = 220;
-
 export type CanvasArrows = 'to' | { to: { enabled: true; scaleFactor: number } };
 
 export type CanvasSmooth =
