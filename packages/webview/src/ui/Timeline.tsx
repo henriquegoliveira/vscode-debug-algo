@@ -22,8 +22,6 @@ const Timeline: React.FC<TimelineProps> = ({
 
   return (
     <div style={following ? styles.bar : { ...styles.bar, ...styles.barReviewing }}>
-      {!following && <span style={styles.reviewing}>revendo</span>}
-
       <button
         type="button"
         className="dbga-icon"
@@ -55,10 +53,6 @@ const Timeline: React.FC<TimelineProps> = ({
         &#9654;
       </button>
 
-      <span style={styles.label}>
-        {index + 1}/{count}
-      </span>
-
       <span className="dbga-sep" />
 
       <button
@@ -89,24 +83,9 @@ const styles: Record<string, React.CSSProperties> = {
     accentColor: 'var(--vscode-focusBorder, #007fd4)',
   },
   rangeCompact: { width: '70px' },
-  label: {
-    fontFamily: 'var(--vscode-editor-font-family, monospace)',
-    fontSize: 'var(--dbga-text-meta)',
-    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
-    whiteSpace: 'nowrap',
-  },
   barReviewing: {
     borderColor: 'var(--vscode-inputValidation-warningBorder, #b89500)',
     backgroundColor: 'var(--vscode-inputValidation-warningBackground, #4d3b16)',
-  },
-  reviewing: {
-    padding: '1px 6px',
-    borderRadius: 'var(--dbga-radius-control)',
-    fontSize: 'var(--dbga-text-meta)',
-    fontWeight: 600,
-    whiteSpace: 'nowrap',
-    backgroundColor: 'var(--vscode-inputValidation-warningBorder, #b89500)',
-    color: 'var(--vscode-editor-background, #101010)',
   },
 };
 

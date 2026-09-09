@@ -19,6 +19,7 @@ import { usePanelState } from './session/usePanelState';
 import { ChangeLegend } from './ui/ChangeLegend';
 import Timeline from './ui/Timeline';
 import Toolbar from './ui/Toolbar';
+import { HistoryIcon } from './ui/icons';
 import InspectorOverlay from './ui/inspector/InspectorOverlay';
 import { useTheme } from './ui/useTheme';
 import GraphView from './views/GraphView';
@@ -247,6 +248,21 @@ const App: React.FC = () => {
 
   const site = pauseSite(active, state.file);
 
+  const behind = state.history.length - 1 - cursor;
+  const pauseNumber = state.pauses - behind;
+  const dropped = state.pauses - state.history.length;
+  const pauseTitle =
+    state.pauses === 0
+      ? undefined
+      : [
+          following
+            ? `Pausa ${pauseNumber}, a mais recente`
+            : `Revisando a pausa ${pauseNumber}, com ${behind} depois dela`,
+          dropped > 0
+            ? `${state.history.length} guardadas; as ${dropped} primeiras saíram da janela`
+            : `${state.history.length} guardadas`,
+        ].join(' · ');
+
   const meta = active === null ? null : active.meta;
   const loud = meta === null ? [] : meta.errors.filter((error) => !isQuiet(error));
   const quiet = meta === null ? 0 : meta.errors.length - loud.length;
@@ -295,13 +311,25 @@ const App: React.FC = () => {
   return (
     <div style={styles.shell}>
       <header style={narrow ? { ...styles.header, ...styles.headerCompact } : styles.header}>
-        <div style={styles.brand}>
-          <span style={styles.brandMark}>D</span>
-          <span style={styles.brandName}>DbgAlgo</span>
-          {wide && (
+        <div style={styles.pause} title={pauseTitle}>
+          {state.pauses > 0 && (
             <>
-              <span style={styles.brandSlash}>/</span>
-              <span style={styles.brandSubtitle}>Estrutura de Dados</span>
+              <HistoryIcon />
+              {!narrow && <span style={styles.pauseLead}>Pausa</span>}
+              <span style={styles.pauseNumber}>{pauseNumber}</span>
+              {state.pauses > 1 && (
+                <span style={styles.pauseTotal}>
+                  {narrow ? `/${state.pauses}` : `de ${state.pauses}`}
+                </span>
+              )}
+              {state.pauses > 1 && (!narrow || !following) && (
+                <>
+                  <span className="dbga-sep" />
+                  <span style={following ? styles.pauseState : styles.pauseReviewing}>
+                    {following ? 'ao vivo' : 'revisando'}
+                  </span>
+                </>
+              )}
             </>
           )}
         </div>

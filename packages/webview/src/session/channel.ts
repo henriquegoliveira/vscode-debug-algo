@@ -92,11 +92,11 @@ function connectOverWebSocket(onMessage: SnapshotListener): () => void {
   });
 
   socket.addEventListener('close', () => {
-    console.log('[DbgAlgo] conexao encerrada pelo servidor');
+    console.log('[DebugAlgo] conexao encerrada pelo servidor');
   });
 
   socket.addEventListener('error', () => {
-    console.log('[DbgAlgo] falha na conexao com o servidor');
+    console.log('[DebugAlgo] falha na conexao com o servidor');
   });
 
   return () => socket.close();

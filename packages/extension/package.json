@@ -1,6 +1,6 @@
 {
   "name": "dbga-extension",
-  "displayName": "DbgAlgo",
+  "displayName": "DebugAlgo",
   "description": "Visualize data structures during debugging",
   "version": "0.1.0",
   "publisher": "henriquegoliveira",
@@ -19,60 +19,60 @@
   "contributes": {
     "commands": [
       {
-        "command": "dbg-algo.start",
+        "command": "debug-algo.start",
         "title": "Iniciar Visualização",
-        "category": "DbgAlgo"
+        "category": "DebugAlgo"
       },
       {
-        "command": "dbg-algo.annotateArray",
+        "command": "debug-algo.annotateArray",
         "title": "Anotar vetor dinâmico (v@n)",
-        "category": "DbgAlgo",
+        "category": "DebugAlgo",
         "icon": "$(symbol-array)"
       },
       {
-        "command": "dbg-algo.startServer",
+        "command": "debug-algo.startServer",
         "title": "Iniciar Visualização no Navegador",
-        "category": "DbgAlgo"
+        "category": "DebugAlgo"
       }
     ],
     "configuration": {
-      "title": "DbgAlgo",
+      "title": "DebugAlgo",
       "properties": {
-        "dbgAlgo.dynamicArrays": {
+        "debugAlgo.dynamicArrays": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "default": []
         },
-        "dbgAlgo.rootFilter": {
+        "debugAlgo.rootFilter": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "default": []
         },
-        "dbgAlgo.limits.maxNodes": {
+        "debugAlgo.limits.maxNodes": {
           "type": "number",
           "minimum": 1,
           "default": 2000
         },
-        "dbgAlgo.limits.maxEdges": {
+        "debugAlgo.limits.maxEdges": {
           "type": "number",
           "minimum": 1,
           "default": 6000
         },
-        "dbgAlgo.limits.maxCells": {
+        "debugAlgo.limits.maxCells": {
           "type": "number",
           "minimum": 1,
           "default": 64
         },
-        "dbgAlgo.limits.historyDepth": {
+        "debugAlgo.limits.historyDepth": {
           "type": "number",
           "minimum": 1,
           "default": 20
         },
-        "dbgAlgo.view": {
+        "debugAlgo.view": {
           "type": "object",
           "scope": "resource",
           "default": {}
@@ -82,22 +82,22 @@
     "menus": {
       "commandPalette": [
         {
-          "command": "dbg-algo.start",
+          "command": "debug-algo.start",
           "when": "true"
         },
         {
-          "command": "dbg-algo.annotateArray",
+          "command": "debug-algo.annotateArray",
           "when": "true"
         },
         {
-          "command": "dbg-algo.startServer",
+          "command": "debug-algo.startServer",
           "when": "true"
         }
       ],
       "editor/title": [
         {
-          "command": "dbg-algo.annotateArray",
-          "when": "activeWebviewPanelId == dbgAlgoWebview",
+          "command": "debug-algo.annotateArray",
+          "when": "activeWebviewPanelId == debugAlgoWebview",
           "group": "navigation"
         }
       ]

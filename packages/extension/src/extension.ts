@@ -17,7 +17,7 @@ import { WebviewChannel } from './channels/webviewChannel';
 import { HttpWsChannel, MissingBundleError } from './channels/httpWsChannel';
 
 const SERVER_FAILED_MESSAGE =
-  'DbgAlgo não conseguiu abrir o servidor local da Visualização. Tente de novo; se continuar ' +
+  'DebugAlgo não conseguiu abrir o servidor local da Visualização. Tente de novo; se continuar ' +
   'falhando, algo no sistema está bloqueando conexões em 127.0.0.1.';
 
 const OPEN_IN_BROWSER_ACTION = 'Abrir no navegador';
@@ -55,7 +55,7 @@ export class ExtensionController {
   }
 
   public activate(): void {
-    console.log('Extensão DbgAlgo ativada com sucesso!');
+    console.log('Extensão DebugAlgo ativada com sucesso!');
 
     void sweepStaleTempFiles();
 
@@ -63,9 +63,11 @@ export class ExtensionController {
 
     this.context.subscriptions.push(
       vscode.debug.onDidTerminateDebugSession((session) => this.broker.publishSessionEnd(session)),
-      vscode.commands.registerCommand('dbg-algo.start', () => this.startVisualizerCommand()),
-      vscode.commands.registerCommand('dbg-algo.annotateArray', () => this.annotateArrayCommand()),
-      vscode.commands.registerCommand('dbg-algo.startServer', () => this.startServerCommand()),
+      vscode.commands.registerCommand('debug-algo.start', () => this.startVisualizerCommand()),
+      vscode.commands.registerCommand('debug-algo.annotateArray', () =>
+        this.annotateArrayCommand(),
+      ),
+      vscode.commands.registerCommand('debug-algo.startServer', () => this.startServerCommand()),
     );
   }
 

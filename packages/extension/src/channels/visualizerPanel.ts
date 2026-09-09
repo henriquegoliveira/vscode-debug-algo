@@ -3,8 +3,8 @@ import * as fs from 'fs';
 import { randomBytes } from 'crypto';
 import { webviewContentSecurityPolicy } from './contentSecurityPolicy';
 
-const VIEW_TYPE = 'dbgAlgoWebview';
-const PANEL_TITLE = 'DbgAlgo Visualizer';
+const VIEW_TYPE = 'debugAlgoWebview';
+const PANEL_TITLE = 'DebugAlgo Visualizer';
 
 const MEDIA_DIRECTORY = 'media';
 const ASSETS_DIRECTORY = 'assets';
@@ -21,7 +21,7 @@ const BUNDLE_PLACEHOLDER = '%BUNDLE%';
 const NONCE_BYTES = 16;
 
 export const MISSING_BUNDLE_MESSAGE =
-  'DbgAlgo não encontrou os arquivos da interface e não pode abrir o Visualizer. ' +
+  'DebugAlgo não encontrou os arquivos da interface e não pode abrir o Visualizer. ' +
   'Construa o bundle da interface, se estiver rodando pelo código-fonte, ou reinstale a extensão.';
 
 export class VisualizerPanel implements vscode.Disposable {
