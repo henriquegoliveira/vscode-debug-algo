@@ -86,6 +86,56 @@ export function cameraPlan(
   return { x: centre.x, y: centre.y, scale: wanted };
 }
 
+export const FOLLOW_FILL = 0.9;
+export const FOLLOW_MIN_SCALE = 0.35;
+export const FOLLOW_MAX_SCALE = 1;
+
+export interface FollowLimits {
+  fill: number;
+  floor: number;
+  ceiling: number;
+}
+
+export function followPlan(
+  graph: Extent,
+  aim: Extent | null,
+  frame: Frame,
+  limits: FollowLimits,
+): Viewport {
+  const fit = fitScale(graph, frame, limits.fill);
+
+  if (fit >= limits.floor) {
+    return { ...centreOf(graph), scale: Math.min(fit, limits.ceiling) };
+  }
+
+  const at = { ...centreOf(aim ?? graph), scale: limits.floor };
+
+  return {
+    x: within(at.x, graph.left, graph.right, frame.width / (2 * at.scale)),
+    y: within(at.y, graph.top, graph.bottom, frame.height / (2 * at.scale)),
+    scale: at.scale,
+  };
+}
+
+function fitScale(extent: Extent, frame: Frame, fill: number): number {
+  const width = Math.max(extent.right - extent.left, 1);
+  const height = Math.max(extent.bottom - extent.top, 1);
+
+  return Math.min(frame.width / width, frame.height / height) * fill;
+}
+
+function centreOf(extent: Extent): { x: number; y: number } {
+  return { x: (extent.left + extent.right) / 2, y: (extent.top + extent.bottom) / 2 };
+}
+
+function within(at: number, low: number, high: number, half: number): number {
+  if (high - low <= half * 2) {
+    return (low + high) / 2;
+  }
+
+  return Math.min(Math.max(at, low + half), high - half);
+}
+
 export function steppedScale(
   current: number,
   direction: number,

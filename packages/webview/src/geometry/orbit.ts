@@ -14,9 +14,14 @@ export const ORBIT_STEPS = 19;
 
 export const ORBIT_RINGS = [1, 1.45, 1.9, 2.35, 2.8];
 
+export const UPPER_START = 180;
+
+export const UPPER_END = 360;
+
 export function wedgeAngles(
   snapshot: GraphSnapshot,
   seats: Map<string, TreePosition>,
+  upward = false,
 ): Map<string, number> {
   const neighbours = new Map<string, Set<string>>();
 
@@ -60,6 +65,8 @@ export function wedgeAngles(
 
     let widest = -1;
     let middle = ROOT_BASE_ANGLE;
+    let openest = 0;
+    let aimed = ROOT_BASE_ANGLE;
 
     around.forEach((angle, position) => {
       const next = position + 1 < around.length ? around[position + 1] : around[0] + 360;
@@ -69,9 +76,18 @@ export function wedgeAngles(
         widest = gap;
         middle = angle + gap / 2;
       }
+
+      const over = upperOverlap(angle, next);
+
+      if (over.size > openest) {
+        openest = over.size;
+        aimed = over.middle;
+      }
     });
 
-    angles.set(id, ((middle % 360) + 360) % 360);
+    const chosen = upward && openest > 0 ? aimed : middle;
+
+    angles.set(id, ((chosen % 360) + 360) % 360);
   });
 
   return angles;
@@ -122,6 +138,23 @@ export function alternate(step: number): number {
   const turn = Math.ceil(step / 2);
 
   return step % 2 === 0 ? turn : -turn;
+}
+
+function upperOverlap(from: number, to: number): { size: number; middle: number } {
+  let size = 0;
+  let middle = (from + to) / 2;
+
+  [0, 360].forEach((turn) => {
+    const low = Math.max(from, UPPER_START + turn);
+    const high = Math.min(to, UPPER_END + turn);
+
+    if (high - low > size) {
+      size = high - low;
+      middle = (low + high) / 2;
+    }
+  });
+
+  return { size, middle };
 }
 
 function degrees(radians: number): number {

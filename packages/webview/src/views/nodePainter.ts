@@ -30,6 +30,7 @@ export interface Drawn {
 export interface PaintSource {
   node: (id: string) => CanvasNode | undefined;
   theme: () => Theme;
+  alpha: (id: string) => number;
 }
 
 export function nodePainter(source: PaintSource): (args: PaintArgs) => Drawn {
@@ -42,9 +43,17 @@ export function nodePainter(source: PaintSource): (args: PaintArgs) => Drawn {
 
     const theme = source.theme();
     const metrics = state.selected ? node.metricsSelected : node.metrics;
+    const alpha = source.alpha(id);
 
     return {
-      drawNode: () => paint(ctx, x, y, node, metrics, theme, state.selected),
+      drawNode: () => {
+        if (alpha <= 0) {
+          return;
+        }
+
+        ctx.globalAlpha = alpha;
+        paint(ctx, x, y, node, metrics, theme, state.selected);
+      },
       nodeDimensions: { width: metrics.box.width, height: metrics.box.height },
     };
   };
