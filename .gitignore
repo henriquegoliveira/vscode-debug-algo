@@ -33,3 +33,6 @@ vscode-profile-*
 
 .env
 .env.test
+
+# Cobertura de testes
+coverage/

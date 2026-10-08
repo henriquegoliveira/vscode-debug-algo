@@ -9,5 +9,5 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": []
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "test/**/*"]
 }
