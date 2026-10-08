@@ -1,0 +1,134 @@
+name: tests
+
+on:
+  push:
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CODELLDB_VERSION: 1.12.3
+
+jobs:
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install Node dependencies
+        run: |
+          corepack enable
+          yarn install --immutable
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Check generated contract types
+        run: yarn workspace dbga-extension check:types
+
+      - name: Build
+        run: |
+          yarn workspace dbga-webview build
+          yarn workspace dbga-extension build
+
+      - name: Unit tests (TypeScript)
+        run: yarn test:coverage
+
+      - name: Install GDB and the CodeLLDB debugger
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdb
+          curl -sSL -o codelldb.vsix "https://github.com/vadimcn/codelldb/releases/download/v$CODELLDB_VERSION/codelldb-linux-x64.vsix"
+          unzip -q codelldb.vsix -d "$RUNNER_TEMP/codelldb"
+          echo "DBGA_LLDB=$RUNNER_TEMP/codelldb/extension/lldb/bin/lldb" >> "$GITHUB_ENV"
+
+      - name: Check that both debuggers load the extractor
+        run: |
+          gdb --version | head -1
+          gdb -nx -batch -ex "python import sys; sys.path.insert(0, 'packages/extension/scripts'); import dbga_extractor_gdb; print(sys.version)"
+          "$DBGA_LLDB" --batch --no-lldbinit -o "script import sys; sys.path.insert(0, 'packages/extension/scripts'); import dbga_extractor_lldb; print(sys.version)"
+
+      - name: Extractor harness (GDB and LLDB)
+        env:
+          DBGA_FOREIGN_STACK: 1
+        run: yarn test:e2e
+
+      - name: Integration tests (VS Code)
+        if: ${{ !cancelled() }}
+        run: xvfb-run -a yarn test:integration
+
+      - uses: actions/setup-python@v7
+        if: ${{ !cancelled() }}
+        with:
+          python-version: '3.12'
+
+      - name: Unit tests (Python)
+        if: ${{ !cancelled() }}
+        run: |
+          pip install -r requirements-dev.txt
+          yarn test:py --cov=packages/extension/scripts --cov-report=term
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage-linux
+          path: coverage/
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Install Node dependencies
+        run: |
+          corepack enable
+          yarn install --immutable
+
+      - name: Unit tests (TypeScript)
+        run: yarn test
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          release: false
+          update: false
+          install: make mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-gdb
+
+      - name: Build the targets
+        shell: msys2 {0}
+        run: make -C tests/targets
+
+      - name: Install the CodeLLDB debugger
+        shell: pwsh
+        run: |
+          $vsix = Join-Path $env:RUNNER_TEMP 'codelldb.zip'
+          Invoke-WebRequest -Uri "https://github.com/vadimcn/codelldb/releases/download/v$env:CODELLDB_VERSION/codelldb-win32-x64.vsix" -OutFile $vsix
+          Expand-Archive -Path $vsix -DestinationPath (Join-Path $env:RUNNER_TEMP 'codelldb')
+          "DBGA_LLDB=$env:RUNNER_TEMP\codelldb\extension\lldb\bin\lldb.exe" >> $env:GITHUB_ENV
+
+      - name: Extractor harness (GDB and LLDB)
+        shell: pwsh
+        run: |
+          $env:PATH = "C:\msys64\ucrt64\bin;$env:PATH"
+          node tests/run_extractors.mjs
+
+      - uses: actions/setup-python@v7
+        if: ${{ !cancelled() }}
+        with:
+          python-version: '3.12'
+
+      - name: Unit tests (Python)
+        if: ${{ !cancelled() }}
+        run: |
+          pip install -r requirements-dev.txt
+          yarn test:py
