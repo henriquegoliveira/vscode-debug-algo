@@ -1,0 +1,3 @@
+[tool.pytest.ini_options]
+testpaths = ["packages/extension/test/python"]
+pythonpath = ["packages/extension/scripts"]

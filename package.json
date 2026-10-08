@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:py": "python -m pytest"
   },
   "devDependencies": {
     "@eslint/js": "^9",
