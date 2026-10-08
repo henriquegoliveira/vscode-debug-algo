@@ -40,3 +40,4 @@ coverage/
 # Ambiente Python de testes
 .venv/
 .pytest_cache/
+.coverage
