@@ -4,6 +4,7 @@ import { DebugSessionManager } from './debug/debugSessionManager';
 import { ExtractorInvoker, sweepStaleTempFiles } from './debug/extractorInvoker';
 import { SnapshotReader } from './debug/snapshotReader';
 import { warnIfNoSupportedDebugSession } from './debug/debuggerAvailability';
+import { withMingwAbi } from './debug/mingwAbi';
 import {
   appendDynamicArray,
   flushFileViews,
@@ -63,6 +64,10 @@ export class ExtensionController {
 
     this.context.subscriptions.push(
       vscode.debug.onDidTerminateDebugSession((session) => this.broker.publishSessionEnd(session)),
+      vscode.debug.registerDebugConfigurationProvider('lldb', {
+        resolveDebugConfigurationWithSubstitutedVariables: (folder, config) =>
+          withMingwAbi(config, process.platform),
+      }),
       vscode.commands.registerCommand('debug-algo.start', () => this.startVisualizerCommand()),
       vscode.commands.registerCommand('debug-algo.annotateArray', () =>
         this.annotateArrayCommand(),

@@ -95,7 +95,7 @@ jobs:
           yarn install --immutable
 
       - name: Unit tests (TypeScript)
-        run: yarn test
+        run: yarn test:coverage
 
       - uses: msys2/setup-msys2@v2
         with:
@@ -122,6 +122,10 @@ jobs:
           $env:PATH = "C:\msys64\ucrt64\bin;$env:PATH"
           node tests/run_extractors.mjs
 
+      - name: Integration tests (VS Code)
+        if: ${{ !cancelled() }}
+        run: yarn test:integration
+
       - uses: actions/setup-python@v7
         if: ${{ !cancelled() }}
         with:
@@ -131,4 +135,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           pip install -r requirements-dev.txt
-          yarn test:py
+          yarn test:py --cov=packages/extension/scripts --cov-report=term
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: coverage-windows
+          path: coverage/
