@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import * as os from 'node:os';
 import * as path from 'node:path';
 
+import { declaredDivergence, stackGarbageIsStable } from './divergence.mjs';
 import { normalize, normalizeSequence, firstDifference } from './normalize.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -18,7 +19,8 @@ const SCRIPTS = path.join(ROOT, 'packages', 'extension', 'scripts');
 const SCHEMA = path.join(ROOT, 'packages', 'extension', 'schemas', 'graph-snapshot.schema.json');
 
 const EXE = process.platform === 'win32' ? '.exe' : '';
-const BASELINE_PLATFORM = 'linux';
+
+export const MINGW_ABI_COMMAND = 'settings set plugin.object-file.pe-coff.abi gnu';
 
 const SCENES = {
   linked_list_simple: { breakAt: 'remove_node' },
@@ -61,33 +63,6 @@ const ASSERTIONS = {
   linked_list_cyclic: assertLinkedListCyclic,
 };
 
-const WINDOWS_DIVERGENCE = {
-  linked_list_simple: ['baseline'],
-  linked_list_cyclic: ['baseline'],
-  huffman: ['baseline', 'parity'],
-  class_reference: ['parity'],
-  garbage_pointer: ['parity'],
-  sorting_quick_random: ['baseline'],
-};
-
-const UNINITIALIZED_READS = {
-  linked_list_simple: ['baseline', 'parity'],
-  linked_list_cyclic: ['baseline', 'parity'],
-  garbage_pointer: ['baseline', 'parity'],
-  huffman: ['baseline', 'parity'],
-};
-
-export function declaredDivergence(target, platform, kind, env = process.env) {
-  if (platform !== BASELINE_PLATFORM && (WINDOWS_DIVERGENCE[target] ?? []).includes(kind)) {
-    return true;
-  }
-  return !stackGarbageIsStable(platform, env) && (UNINITIALIZED_READS[target] ?? []).includes(kind);
-}
-
-export function stackGarbageIsStable(platform, env = process.env) {
-  return platform === BASELINE_PLATFORM && !env.DBGA_FOREIGN_STACK;
-}
-
 const DEBUGGERS = {
   gdb: {
     label: 'GDB',
@@ -102,7 +77,11 @@ const DEBUGGERS = {
     label: 'LLDB',
     module: 'dbga_extractor_lldb',
     resolve: resolveLldb,
-    flags: ['--batch', '--no-lldbinit'],
+    flags: [
+      '--batch',
+      '--no-lldbinit',
+      ...(process.platform === 'win32' ? ['-O', MINGW_ABI_COMMAND] : []),
+    ],
     command: (text) => ['-o', text],
     script: (code) => ['-o', `script ${code}`],
     breakpoint: (where) => `b ${where}`,
@@ -613,7 +592,7 @@ function checkParity(job, snapshots, fail, note) {
       const message =
         `paridade ${DEBUGGERS[first].label} x ${DEBUGGERS[key].label} em ${difference.path}: ` +
         `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`;
-      if (declaredDivergence(job.target, process.platform, 'parity')) {
+      if (declaredDivergence(job.label, process.platform, 'parity')) {
         note(`${message} — divergencia declarada`);
       } else {
         fail(message);
@@ -654,7 +633,7 @@ function checkBaseline(job, normalized, fail, note, update) {
     `linha de base em ${difference.path}: ` +
     `${JSON.stringify(difference.left)} != ${JSON.stringify(difference.right)}`;
 
-  if (declaredDivergence(job.target, process.platform, 'baseline')) {
+  if (declaredDivergence(job.label, process.platform, 'baseline')) {
     note(`${message} — divergencia declarada`);
     return;
   }

@@ -3,7 +3,9 @@ import { readFileSync, readdirSync, statSync } from 'fs';
 import { tmpdir } from 'os';
 import * as path from 'path';
 import * as vscode from 'vscode';
+import { declaredDivergence } from '../../../../tests/divergence.mjs';
 import { firstDifference, normalize } from '../../../../tests/normalize.mjs';
+import { MINGW_ABI_COMMAND } from '../../src/debug/mingwAbi';
 
 const SNAPSHOT_FILE = /^dbg-algo-snapshot-\d+\.json$/;
 const EXE = process.platform === 'win32' ? '.exe' : '';
@@ -29,6 +31,16 @@ function breakpointAt(file: string): vscode.SourceBreakpoint {
   return new vscode.SourceBreakpoint(
     new vscode.Location(vscode.Uri.file(file), new vscode.Position(line, 0)),
   );
+}
+
+function launch(root: string, name: string): vscode.DebugConfiguration {
+  return {
+    type: 'lldb',
+    request: 'launch',
+    name: `DebugAlgo integration: ${name}`,
+    program: path.join(root, 'targets', 'bin', `${name}${EXE}`),
+    cwd: path.join(root, 'targets'),
+  };
 }
 
 function snapshotWrittenAfter(start: number): string | undefined {
@@ -73,8 +85,36 @@ describe('a pause under CodeLLDB', () => {
     vscode.debug.removeBreakpoints(vscode.debug.breakpoints);
   });
 
+  it('reads MinGW executables with the GNU ABI only on Windows', async () => {
+    const folder = testsFolder();
+    const [{ name, source }] = TARGETS;
+    vscode.debug.addBreakpoints([breakpointAt(path.join(folder.uri.fsPath, 'targets', source))]);
+
+    const session = new Promise<vscode.DebugSession>((resolve) => {
+      const listener = vscode.debug.onDidStartDebugSession((started) => {
+        listener.dispose();
+        resolve(started);
+      });
+    });
+
+    assert.ok(await vscode.debug.startDebugging(folder, launch(folder.uri.fsPath, name)));
+    const commands: unknown = (await session).configuration.initCommands;
+
+    assert.strictEqual(
+      Array.isArray(commands) && commands.includes(MINGW_ABI_COMMAND),
+      process.platform === 'win32',
+    );
+  });
+
   TARGETS.forEach(({ name, source }) => {
-    it(`extracts the same graph as the harness baseline for ${name}`, async () => {
+    it(`extracts the same graph as the harness baseline for ${name}`, async function () {
+      if (
+        declaredDivergence(name, process.platform, 'baseline') ||
+        declaredDivergence(name, process.platform, 'parity')
+      ) {
+        this.skip();
+      }
+
       const folder = testsFolder();
       const root = folder.uri.fsPath;
       const expected = JSON.parse(
@@ -84,13 +124,7 @@ describe('a pause under CodeLLDB', () => {
       vscode.debug.addBreakpoints([breakpointAt(path.join(root, 'targets', source))]);
 
       const start = Date.now();
-      const started = await vscode.debug.startDebugging(folder, {
-        type: 'lldb',
-        request: 'launch',
-        name: `DebugAlgo integration: ${name}`,
-        program: path.join(root, 'targets', 'bin', `${name}${EXE}`),
-        cwd: path.join(root, 'targets'),
-      });
+      const started = await vscode.debug.startDebugging(folder, launch(root, name));
       assert.ok(started, 'the debug session did not start');
 
       const actual = normalize(await waitForSnapshot(start));
