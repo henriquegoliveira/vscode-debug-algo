@@ -47,11 +47,6 @@ export const styles: Record<string, CSSProperties> = {
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   },
-  pauseState: { color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
-  pauseReviewing: {
-    color: 'var(--vscode-inputValidation-warningBorder, #b89500)',
-    fontWeight: 600,
-  },
   site: {
     ...HEADER_CAPSULE,
     padding: '0 10px',
@@ -101,10 +96,6 @@ export const styles: Record<string, CSSProperties> = {
   alarmScope: { opacity: 0.7, minWidth: '80px' },
   alarmReference: { color: 'var(--vscode-symbolIcon-variableForeground, #9cdcfe)' },
   body: { flex: 1, display: 'flex', minHeight: 0, position: 'relative' },
-  bodyReviewing: {
-    outline: '2px solid var(--vscode-inputValidation-warningBorder, #b89500)',
-    outlineOffset: '-2px',
-  },
   placeholder: {
     position: 'absolute',
     inset: 0,

@@ -322,14 +322,6 @@ const App: React.FC = () => {
                   {narrow ? `/${state.pauses}` : `de ${state.pauses}`}
                 </span>
               )}
-              {state.pauses > 1 && (!narrow || !following) && (
-                <>
-                  <span className="dbga-sep" />
-                  <span style={following ? styles.pauseState : styles.pauseReviewing}>
-                    {following ? 'ao vivo' : 'revisando'}
-                  </span>
-                </>
-              )}
             </>
           )}
         </div>
@@ -400,10 +392,7 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <div
-        ref={bodyRef}
-        style={following ? styles.body : { ...styles.body, ...styles.bodyReviewing }}
-      >
+      <div ref={bodyRef} style={styles.body}>
         {viewMode === 'graph' && (
           <GraphView
             state={view}

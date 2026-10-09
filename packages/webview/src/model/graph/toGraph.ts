@@ -77,7 +77,7 @@ export function toGraph(
   const levels = structuralLevels(laid);
   const seats = treePositions(laid, sizes);
   const reciprocal = reciprocalPairs(view);
-  const wedges = wedgeAngles(laid, seats);
+  const wedges = wedgeAngles(laid, seats, options.pinned);
   const occupied: Placed[] = [...seats.entries()].map(([id, at]) => ({
     ...at,
     box: sizes.get(id) ?? { width: 0, height: 0 },

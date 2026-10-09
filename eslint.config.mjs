@@ -11,6 +11,10 @@ export default [
     ignores: [
       '**/.yarn/**',
       '**/dist/**',
+      '**/out/**',
+      '**/.vscode-test/**',
+      '**/.venv/**',
+      'coverage/**',
       'packages/extension/media/**',
       '**/node_modules/**',
       '**/.cache/**',
@@ -50,6 +54,15 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.node,
+      },
+    },
+  },
+
+  {
+    files: ['packages/extension/test/integration/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.mocha,
       },
     },
   },

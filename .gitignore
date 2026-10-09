@@ -33,3 +33,11 @@ vscode-profile-*
 
 .env
 .env.test
+
+# Cobertura de testes
+coverage/
+
+# Ambiente Python de testes
+.venv/
+.pytest_cache/
+.coverage
