@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import type { ExtensionMessage, GraphSnapshot } from 'dbga-contract';
 import { INITIAL_STATE, ScreenState, reduce } from '../../src/session/state';
-import { linkedList } from '../snapshots';
+import { EMPTY_ORIENTATION, foldOrientation } from '../../src/model/orientation';
+import { intValue, linkedList, tree } from '../snapshots';
 
 const pause = (value: number): GraphSnapshot => linkedList([['0x10', value]], [['0x10', null]]);
 
@@ -12,6 +13,20 @@ const snapshot = (sessionId: string, of: GraphSnapshot, depth = 20): ExtensionMe
   snapshot: of,
   depth,
 });
+
+const searchTree = (high: number): GraphSnapshot =>
+  tree(
+    ['right', 'left'],
+    [
+      ['0x10', [intValue(50)]],
+      ['0x20', [intValue(30)]],
+      ['0x30', [intValue(high)]],
+    ],
+    [
+      ['0x10', 'left', '0x20'],
+      ['0x10', 'right', '0x30'],
+    ],
+  );
 
 const run = (messages: ExtensionMessage[], from: ScreenState = INITIAL_STATE): ScreenState =>
   messages.reduce(reduce, from);
@@ -97,5 +112,20 @@ describe('reduce', () => {
 
     expect(state.file).toBe('/src/list.c');
     expect(state.fileView).toBeNull();
+  });
+
+  it('fixes the side of the children and forgets it in a new session', () => {
+    const fixed = run([snapshot('a', searchTree(70))]);
+
+    expect(fixed.orientation.sides).toEqual({ Tree: ['left', 'right'] });
+    expect(run([snapshot('b', pause(1))], fixed).orientation).toBe(EMPTY_ORIENTATION);
+  });
+
+  it('folds a replayed history as it would fold the pauses one by one', () => {
+    const entries = [searchTree(10), searchTree(70)];
+    const replayed = reduce(INITIAL_STATE, { v: 1, type: 'history', sessionId: 'a', entries });
+
+    expect(replayed.orientation).toEqual(entries.reduce(foldOrientation, EMPTY_ORIENTATION));
+    expect(replayed.orientation).toEqual(run(entries.map((of) => snapshot('a', of))).orientation);
   });
 });

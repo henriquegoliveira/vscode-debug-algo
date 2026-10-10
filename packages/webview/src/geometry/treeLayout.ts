@@ -29,26 +29,74 @@ export function byField(left: string, right: string): number {
   return Number(a[2] ?? -1) - Number(b[2] ?? -1);
 }
 
-export function baseField(field: string): string {
-  const open = field.indexOf('[');
-
-  return open === -1 ? field : field.slice(0, open);
+export interface TreeOrder {
+  fields: Map<string, string[]>;
+  back: Set<string>;
 }
 
-export function backFields(snapshot: GraphSnapshot): Set<string> {
+export interface BackDecision {
+  back: Set<string>;
+  reached: string[];
+}
+
+export function baseField(field: string): string {
+  const cut = field.search(/[[@]/);
+
+  return cut === -1 ? field : field.slice(0, cut);
+}
+
+export function fieldOrder(
+  declared: string[] | undefined,
+): (left: string, right: string) => number {
+  const rank = (field: string): number => {
+    const index = declared?.indexOf(baseField(field)) ?? -1;
+
+    return index === -1 ? Number.MAX_SAFE_INTEGER : index;
+  };
+
+  return (left, right) => rank(left) - rank(right) || byField(left, right);
+}
+
+export function declaredOrder(snapshot: GraphSnapshot, back: Set<string>): TreeOrder {
+  const fields = new Map<string, string[]>();
+
+  snapshot.meta.observedTypes.forEach((type) =>
+    fields.set(
+      type.type,
+      type.pointerFields.filter((field) => !back.has(field)),
+    ),
+  );
+
+  return { fields, back };
+}
+
+export function backFields(snapshot: GraphSnapshot, fixed: readonly string[] = []): Set<string> {
+  return backDecision(snapshot, fixed).back;
+}
+
+export function backDecision(snapshot: GraphSnapshot, fixed: readonly string[] = []): BackDecision {
   const byPair = new Map<string, string[]>();
+  const steps = new Map<string, Map<string, string>>();
 
   snapshot.edges.forEach((edge) => {
     if (edge.to === null) {
       return;
     }
 
+    const field = baseField(edge.field);
     const key = `${edge.from} ${edge.to}`;
     const known = byPair.get(key);
     if (known === undefined) {
-      byPair.set(key, [baseField(edge.field)]);
-    } else if (!known.includes(baseField(edge.field))) {
-      known.push(baseField(edge.field));
+      byPair.set(key, [field]);
+    } else if (!known.includes(field)) {
+      known.push(field);
+    }
+
+    const out = steps.get(edge.from);
+    if (out === undefined) {
+      steps.set(edge.from, new Map([[edge.field, edge.to]]));
+    } else {
+      out.set(edge.field, edge.to);
     }
   });
 
@@ -72,36 +120,90 @@ export function backFields(snapshot: GraphSnapshot): Set<string> {
     fields.forEach((field) => reverse.forEach((other) => link(field, other)));
   });
 
+  const starts = [
+    ...new Set(
+      snapshot.roots.filter((root) => root.node !== null).map((root) => root.node as string),
+    ),
+  ];
+  const reach = (field: string): number => {
+    let total = 0;
+
+    starts.forEach((start) => {
+      const seen = new Set([start]);
+      let at = steps.get(start)?.get(field);
+
+      while (at !== undefined && !seen.has(at)) {
+        seen.add(at);
+        total += 1;
+        at = steps.get(at)?.get(field);
+      }
+    });
+
+    return total;
+  };
+
+  const declared = (field: string): number =>
+    Math.max(-1, ...snapshot.meta.observedTypes.map((type) => type.pointerFields.indexOf(field)));
+
   const back = new Set<string>();
+  const reached: string[] = [];
 
   for (;;) {
-    let chosen: string | null = null;
-    let best = 0;
+    const live = new Map<string, number>();
 
     partners.forEach((others, field) => {
       if (back.has(field)) {
         return;
       }
 
-      const live = [...others].filter((other) => !back.has(other) && other !== field).length;
-      if (live > best || (live === best && live > 0 && (chosen === null || field < chosen))) {
-        chosen = field;
-        best = live;
+      const count = [...others].filter((other) => !back.has(other) && other !== field).length;
+      if (count > 0) {
+        live.set(field, count);
       }
     });
 
-    if (chosen === null) {
-      return back;
+    if (live.size === 0) {
+      return { back, reached };
     }
 
-    back.add(chosen);
+    const most = Math.max(...live.values());
+    const tied = [...live.keys()].filter((field) => live.get(field) === most).sort(byField);
+    const kept = fixed.find((field) => tied.includes(field));
+
+    if (tied.length === 1) {
+      back.add(tied[0]);
+    } else if (kept !== undefined) {
+      back.add(kept);
+    } else {
+      const lengths = tied.map(reach);
+      const least = Math.min(...lengths);
+      const shortest = tied.filter((_, index) => lengths[index] === least);
+
+      if (shortest.length === 1) {
+        back.add(shortest[0]);
+        reached.push(shortest[0]);
+      } else {
+        const latest = Math.max(...shortest.map(declared));
+        back.add(shortest.find((field) => declared(field) === latest) as string);
+      }
+    }
   }
 }
 
-export function structuralForest(snapshot: GraphSnapshot): StructuralForest {
+export function structuralForest(
+  snapshot: GraphSnapshot,
+  order: TreeOrder = declaredOrder(snapshot, backFields(snapshot)),
+): StructuralForest {
   const outgoing = new Map<string, { field: string; to: string }[]>();
   const indegree = new Map<string, number>();
-  const back = backFields(snapshot);
+  const back = order.back;
+  const types = new Map<string, string>();
+
+  snapshot.nodes.forEach((node) => {
+    if (node.kind === 'record') {
+      types.set(node.id, node.type);
+    }
+  });
 
   snapshot.nodes.forEach((node) => indegree.set(node.id, 0));
 
@@ -125,7 +227,11 @@ export function structuralForest(snapshot: GraphSnapshot): StructuralForest {
     indegree.set(edge.to, (indegree.get(edge.to) as number) + 1);
   });
 
-  outgoing.forEach((steps) => steps.sort((a, b) => byField(a.field, b.field)));
+  outgoing.forEach((steps, from) => {
+    const compare = fieldOrder(order.fields.get(types.get(from) ?? ''));
+
+    steps.sort((a, b) => compare(a.field, b.field));
+  });
 
   const ordered = snapshot.nodes.map((node) => node.id).sort();
   const depth = new Map<string, number>();
@@ -179,8 +285,8 @@ export function structuralForest(snapshot: GraphSnapshot): StructuralForest {
   return { depth, children, roots };
 }
 
-export function structuralLevels(snapshot: GraphSnapshot): Map<string, number> {
-  return structuralForest(snapshot).depth;
+export function structuralLevels(snapshot: GraphSnapshot, order?: TreeOrder): Map<string, number> {
+  return structuralForest(snapshot, order).depth;
 }
 
 export function levelRows(
@@ -218,8 +324,9 @@ export function levelRows(
 export function treePositions(
   snapshot: GraphSnapshot,
   sizes?: Map<string, Box>,
+  order?: TreeOrder,
 ): Map<string, TreePosition> {
-  const { depth, children, roots } = structuralForest(snapshot);
+  const { depth, children, roots } = structuralForest(snapshot, order);
   const positions = new Map<string, TreePosition>();
   const rows = levelRows(depth, sizes);
   const halfOf = (id: string): number => (sizes?.get(id)?.width ?? NODE_SPACING - BOX_GAP) / 2;

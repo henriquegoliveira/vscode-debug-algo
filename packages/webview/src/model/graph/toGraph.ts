@@ -3,8 +3,12 @@ import { type Box, type Placed } from '../../geometry/boxes';
 import { nodeMetrics } from '../../geometry/nodeMetrics';
 import { orbitSeat, wedgeAngles } from '../../geometry/orbit';
 import {
+  type TreeOrder,
   type TreePosition,
-  byField,
+  backFields,
+  baseField,
+  declaredOrder,
+  fieldOrder,
   structuralLevels,
   treePositions,
 } from '../../geometry/treeLayout';
@@ -15,6 +19,7 @@ import {
   NULL_FIELD,
   ROOT_EDGE_PREFIX,
   cardCanvasId,
+  emptySeatId,
   frameGroupKey,
   frameKey,
   nodeCanvasId,
@@ -72,10 +77,11 @@ export function toGraph(
     sizes.set(node.id, nodeMetrics(card, kind, theme, false).box);
   });
 
-  const laid = options.nullTerminals ? withTerminals(view, nullFieldsByOrigin, sizes, theme) : view;
+  const order = options.order ?? declaredOrder(view, backFields(view));
+  const laid = withSeats(view, nullFieldsByOrigin, sizes, theme, order, options.nullTerminals);
 
-  const levels = structuralLevels(laid);
-  const seats = treePositions(laid, sizes);
+  const levels = structuralLevels(laid, order);
+  const seats = treePositions(laid, sizes, order);
   const reciprocal = reciprocalPairs(view);
   const wedges = wedgeAngles(laid, seats, options.pinned);
   const occupied: Placed[] = [...seats.entries()].map(([id, at]) => ({
@@ -242,23 +248,59 @@ export function toGraph(
   return { canvas: { nodes, edges }, frames, globals, cards };
 }
 
-function withTerminals(
+function withSeats(
   view: GraphSnapshot,
   nullFieldsByOrigin: Map<string, string[]>,
   sizes: Map<string, Box>,
   theme: Theme,
+  order: TreeOrder,
+  nullTerminals: boolean,
 ): GraphSnapshot {
   const extraNodes: GraphNode[] = [];
   const extraEdges: GraphEdge[] = [];
   const terminal = nodeMetrics(terminalCard(), 'null', theme, false).box;
+  const named = (field: string): boolean => baseField(field) === field && !order.back.has(field);
+  const types = new Map<string, string>();
+  const filled = new Set<string>();
+
+  view.nodes.forEach((node) => {
+    if (node.kind === 'record') {
+      types.set(node.id, node.type);
+    }
+  });
+
+  view.edges.forEach((edge) => {
+    if (edge.to !== null && named(edge.field)) {
+      filled.add(edge.from);
+    }
+  });
+
+  const place = (from: string, id: string, field: string): void => {
+    extraNodes.push({ kind: 'opaque', id, reason: 'notExpanded' });
+    extraEdges.push({ from, field: `${field}${NULL_FIELD}`, to: id });
+    sizes.set(id, terminal);
+  };
 
   nullFieldsByOrigin.forEach((fields, from) => {
-    const id = terminalCanvasId(from);
+    const ranked = [...fields].sort(fieldOrder(order.fields.get(types.get(from) ?? '')));
+    const empty = filled.has(from) ? ranked.filter(named) : [];
 
-    extraNodes.push({ kind: 'opaque', id, reason: 'notExpanded' });
-    extraEdges.push({ from, field: `${[...fields].sort(byField)[0]}${NULL_FIELD}`, to: id });
-    sizes.set(id, terminal);
+    empty.forEach((field, index) =>
+      place(
+        from,
+        nullTerminals && index === 0 ? terminalCanvasId(from) : emptySeatId(from, field),
+        field,
+      ),
+    );
+
+    if (nullTerminals && empty.length === 0) {
+      place(from, terminalCanvasId(from), ranked[0]);
+    }
   });
+
+  if (extraNodes.length === 0) {
+    return view;
+  }
 
   return {
     ...view,

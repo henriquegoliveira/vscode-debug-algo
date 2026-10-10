@@ -1,5 +1,6 @@
 import { useEffect, useReducer } from 'react';
 import type { ExtensionMessage, GraphSnapshot } from 'dbga-contract';
+import { EMPTY_ORIENTATION, type Orientation, foldOrientation } from '../model/orientation';
 import { connectSnapshotChannel } from './channel';
 
 export type ScreenPhase = 'idle' | 'live' | 'ended';
@@ -10,6 +11,7 @@ export interface ScreenState {
   snapshot: GraphSnapshot | null;
   history: GraphSnapshot[];
   pauses: number;
+  orientation: Orientation;
   error: string | null;
   file: string | null;
   fileView: unknown;
@@ -21,6 +23,7 @@ export const INITIAL_STATE: ScreenState = {
   snapshot: null,
   history: [],
   pauses: 0,
+  orientation: EMPTY_ORIENTATION,
   error: null,
   file: null,
   fileView: null,
@@ -39,6 +42,10 @@ export function reduce(state: ScreenState, message: ExtensionMessage): ScreenSta
         snapshot: message.snapshot,
         history: history.slice(Math.max(0, history.length - Math.max(1, message.depth))),
         pauses: same ? state.pauses + 1 : 1,
+        orientation: foldOrientation(
+          same ? state.orientation : EMPTY_ORIENTATION,
+          message.snapshot,
+        ),
         error: null,
       };
     }
@@ -55,6 +62,10 @@ export function reduce(state: ScreenState, message: ExtensionMessage): ScreenSta
         snapshot: last,
         history: message.entries,
         pauses: same ? Math.max(state.pauses, message.entries.length) : message.entries.length,
+        orientation: message.entries.reduce(
+          foldOrientation,
+          same ? state.orientation : EMPTY_ORIENTATION,
+        ),
         error: null,
       };
     }

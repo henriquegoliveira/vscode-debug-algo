@@ -89,3 +89,54 @@ export function linkedList(
     edges: links.map(([from, to]) => ({ from, field: 'next', to, type: 'Node *' })),
   };
 }
+
+export function textValue(v: string, truncated = false): Value {
+  return { t: 'text', v, truncated };
+}
+
+export function tree(
+  pointerFields: string[],
+  keys: [string, Value[]][],
+  links: [string, string, string | null][],
+  roots: string[] = keys.length === 0 ? [] : [keys[0][0]],
+  scalarFields: string[] = ['key', 'color'],
+): GraphSnapshot {
+  return {
+    meta: {
+      version: 2,
+      debugger: 'GDB',
+      debuggerVersion: '17.2',
+      generatedAt: 0,
+      truncated: false,
+      truncationReasons: [],
+      framesScanned: 1,
+      framesSkipped: 0,
+      observedTypes: [
+        {
+          type: 'Tree',
+          pointerFields,
+          scalarFields: scalarFields.slice(0, keys[0]?.[1].length ?? 0),
+          count: keys.length,
+          maxDegree: 2,
+        },
+      ],
+      errors: [],
+    },
+    frames: [{ level: 0, function: 'main', file: '/src/tree.c', line: 12 }],
+    roots: roots.map((node, index) => pointerRoot(`r${'o'.repeat(index)}t`, node)),
+    nodes: keys.map(([id, values]) => ({
+      kind: 'record',
+      id,
+      type: 'Tree',
+      aggregate: 'struct',
+      sizeBytes: 32,
+      fields: values.map((value, index) => ({
+        name: scalarFields[index],
+        type: value.t === 'text' ? 'char *' : 'int',
+        value,
+      })),
+      arrays: [],
+    })),
+    edges: links.map(([from, field, to]) => ({ from, field, to, type: 'Tree *' })),
+  };
+}
