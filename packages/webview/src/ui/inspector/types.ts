@@ -7,6 +7,9 @@ export interface Props {
   embedded: boolean;
   fields: Record<string, FieldChoice>;
   onFieldChoice: (type: string, choice: FieldChoice | undefined) => void;
+  sides: string[];
+  mirrored: string[];
+  onMirror: (type: string) => void;
   onAnnotate: (annotation: string) => boolean;
   onSelect: (canvasId: string) => void;
   onClose: () => void;

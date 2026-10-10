@@ -9,9 +9,25 @@ import {
 } from '../../src/geometry/treeLayout';
 import {
   binarySearchTreeSnapshot,
+  intValue,
   linkedListCyclicSnapshot,
   linkedListDoubleSnapshot,
+  tree,
 } from '../snapshots';
+
+const lowHigh = (declared: string[]) =>
+  tree(
+    declared,
+    [
+      ['0x10', [intValue(50)]],
+      ['0x20', [intValue(30)]],
+      ['0x30', [intValue(70)]],
+    ],
+    [
+      ['0x10', 'esq', '0x20'],
+      ['0x10', 'dir', '0x30'],
+    ],
+  );
 
 describe('byField', () => {
   it('orders by name and then by numeric index', () => {
@@ -116,5 +132,18 @@ describe('treePositions', () => {
     };
 
     expect(treePositions(reversed)).toEqual(treePositions(snapshot));
+  });
+
+  it('puts children in declaration order, not in alphabetical order', () => {
+    const positions = treePositions(lowHigh(['esq', 'dir']));
+
+    expect(positions.get('0x20')?.x as number).toBeLessThan(positions.get('0x30')?.x as number);
+  });
+
+  it('follows the order it is given', () => {
+    const order = { fields: new Map([['Tree', ['dir', 'esq']]]), back: new Set<string>() };
+    const positions = treePositions(lowHigh(['esq', 'dir']), undefined, order);
+
+    expect(positions.get('0x30')?.x as number).toBeLessThan(positions.get('0x20')?.x as number);
   });
 });

@@ -1,6 +1,7 @@
 import { styles } from './InspectorOverlay.styles';
 import { AnnotateSection } from './AnnotateSection';
 import { CardBody } from './CardBody';
+import { ChildSides } from './ChildSides';
 import { LabelFields } from './LabelFields';
 import { NodeBody, heading } from './NodeBody';
 import { RootBody } from './RootBody';
@@ -14,6 +15,9 @@ const InspectorOverlay: React.FC<Props> = ({
   embedded,
   fields,
   onFieldChoice,
+  sides,
+  mirrored,
+  onMirror,
   onAnnotate,
   onSelect,
   onClose,
@@ -42,6 +46,15 @@ const InspectorOverlay: React.FC<Props> = ({
         choice={fields[inspection.recordType]}
         embedded={embedded}
         onChoice={onFieldChoice}
+      />
+    )}
+    {inspection.space === 'node' && inspection.recordType !== null && sides.length >= 2 && (
+      <ChildSides
+        type={inspection.recordType}
+        sides={sides}
+        mirrored={mirrored.includes(inspection.recordType)}
+        embedded={embedded}
+        onMirror={onMirror}
       />
     )}
     {inspection.space === 'terminal' && (

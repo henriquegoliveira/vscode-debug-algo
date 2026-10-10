@@ -1,5 +1,6 @@
 import type { GraphSnapshot } from 'dbga-contract';
 import { backFields, baseField } from '../geometry/treeLayout';
+import { EMPTY_ORIENTATION, type Orientation } from './orientation';
 
 export type LayoutKind = 'hierarchical' | 'physics' | 'default';
 
@@ -17,22 +18,32 @@ export function promotes(from: LayoutKind, to: LayoutKind): boolean {
   return LAYOUT_RANK[to] > LAYOUT_RANK[from];
 }
 
-export function layoutForChoice(choice: LayoutChoice, snapshot: GraphSnapshot): LayoutKind {
-  return choice === 'auto' ? resolveLayout(snapshot) : choice;
+export function layoutForChoice(
+  choice: LayoutChoice,
+  snapshot: GraphSnapshot,
+  orientation: Orientation = EMPTY_ORIENTATION,
+): LayoutKind {
+  return choice === 'auto' ? resolveLayout(snapshot, orientation) : choice;
 }
 
-export function resolveLayout(snapshot: GraphSnapshot): LayoutKind {
+export function resolveLayout(
+  snapshot: GraphSnapshot,
+  orientation: Orientation = EMPTY_ORIENTATION,
+): LayoutKind {
   const hasPointerField = snapshot.meta.observedTypes.some((type) => type.pointerFields.length > 0);
 
   if (!hasPointerField) {
     return 'default';
   }
 
-  return forwardDegree(snapshot) >= 2 ? 'hierarchical' : 'physics';
+  return forwardDegree(snapshot, orientation) >= 2 ? 'hierarchical' : 'physics';
 }
 
-export function forwardDegree(snapshot: GraphSnapshot): number {
-  const back = backFields(snapshot);
+export function forwardDegree(
+  snapshot: GraphSnapshot,
+  orientation: Orientation = EMPTY_ORIENTATION,
+): number {
+  const back = backFields(snapshot, orientation.back);
   const degree = new Map<string, number>();
 
   snapshot.edges.forEach((edge) => {

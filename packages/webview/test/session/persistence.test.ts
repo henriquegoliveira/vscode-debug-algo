@@ -81,6 +81,7 @@ describe('coerceFile', () => {
         frameMode: 'some',
         follow: 1,
         viewMode: 'table',
+        mirrored: ['Tree', 1],
       }),
     ).toEqual(DEFAULT_FILE_VIEW);
   });
@@ -93,6 +94,7 @@ describe('coerceFile', () => {
       follow: true,
       viewMode: 'sorting',
       fields: { Node: 'all' },
+      mirrored: ['Tree'],
     });
 
     expect(view).toEqual({
@@ -102,6 +104,7 @@ describe('coerceFile', () => {
       follow: true,
       viewMode: 'sorting',
       fields: { Node: 'all' },
+      mirrored: ['Tree'],
     });
   });
 

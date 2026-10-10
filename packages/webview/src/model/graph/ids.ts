@@ -6,6 +6,8 @@ const TERMINAL_PREFIX = 't:';
 
 const ROOT_PREFIX = 'r:';
 
+const SEAT_PREFIX = 's:';
+
 export const EDGE_PREFIX = 'e:';
 
 export const ROOT_EDGE_PREFIX = 're:';
@@ -22,6 +24,10 @@ export function nodeCanvasId(address: string): string {
 
 export function terminalCanvasId(address: string): string {
   return `${TERMINAL_PREFIX}${address}`;
+}
+
+export function emptySeatId(address: string, field: string): string {
+  return `${SEAT_PREFIX}${address}:${field}`;
 }
 
 export function rootKey(root: Root): string {

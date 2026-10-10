@@ -5,6 +5,7 @@ import { frameKey, parseCanvasId } from './model/graph/ids';
 import { NO_CHANGES, Pass } from './model/graph/types';
 import { annotationTargets, buildIndex, inspect } from './model/inspection';
 import { type LayoutChoice, type LayoutKind, resolveLayout } from './model/layoutRule';
+import { childSides, treeOrder } from './model/orientation';
 import { isEmbedded, sendAnnotation, sendSaveView } from './session/channel';
 import {
   FieldChoice,
@@ -133,6 +134,14 @@ const App: React.FC = () => {
     [index, selectedId, enabledFrames],
   );
 
+  const sides = useMemo(() => {
+    const type = inspection?.space === 'node' ? inspection.recordType : null;
+
+    return active === null || type === null
+      ? []
+      : childSides(active, treeOrder(active, state.orientation, fileView.mirrored), type);
+  }, [active, inspection, state.orientation, fileView.mirrored]);
+
   const annotations = useMemo(
     () =>
       index === null || selectedId === null
@@ -185,6 +194,13 @@ const App: React.FC = () => {
 
     updateFile({ fields });
   };
+
+  const toggleMirror = (type: string): void =>
+    updateFile({
+      mirrored: fileView.mirrored.includes(type)
+        ? fileView.mirrored.filter((entry) => entry !== type)
+        : [...fileView.mirrored, type],
+    });
 
   const setViewMode = (mode: ViewMode): void => updateFile({ viewMode: mode });
 
@@ -300,6 +316,9 @@ const App: React.FC = () => {
           embedded={embedded}
           fields={fileView.fields}
           onFieldChoice={setFieldChoice}
+          sides={sides}
+          mirrored={fileView.mirrored}
+          onMirror={toggleMirror}
           onAnnotate={sendAnnotation}
           onSelect={(canvasId) => select(canvasId, true)}
           onClose={() => select(null)}

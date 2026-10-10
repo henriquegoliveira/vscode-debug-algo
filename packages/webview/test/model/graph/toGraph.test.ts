@@ -6,8 +6,27 @@ import {
   binarySearchTreeSnapshot,
   classReferenceSnapshot,
   linkedListCyclicSnapshot,
+  intValue,
   linkedListDoubleSnapshot,
+  tree,
 } from '../../snapshots';
+
+const lone = (
+  side: string,
+  extra: [string, string, string | null][] = [],
+  declared = ['left', 'right'],
+) =>
+  tree(
+    declared,
+    [
+      ['0x10', [intValue(50)]],
+      ['0x20', [intValue(side === 'left' ? 30 : 70)]],
+    ],
+    [['0x10', side, '0x20'], ['0x10', side === 'left' ? 'right' : 'left', null], ...extra],
+  );
+
+const xOf = (model: ReturnType<typeof toGraph>, id: string): number =>
+  model.canvas.nodes.find((node) => node.id === id)?.x as number;
 
 const ids = (model: ReturnType<typeof toGraph>, kind?: string): string[] =>
   model.canvas.nodes
@@ -65,6 +84,45 @@ describe('toGraph', () => {
         expect(Number.isFinite(node.x)).toBe(true);
         expect(Number.isFinite(node.y)).toBe(true);
       });
+  });
+
+  it('seats a lone child on its own side of the parent', () => {
+    const right = toGraph(lone('right'));
+    const left = toGraph(lone('left'));
+
+    expect(xOf(right, 'n:0x20')).toBeGreaterThan(xOf(right, 'n:0x10'));
+    expect(xOf(left, 'n:0x20')).toBeLessThan(xOf(left, 'n:0x10'));
+  });
+
+  it('puts the NULL terminal on the seat the empty side already held', () => {
+    const off = toGraph(lone('left'));
+    const on = toGraph(lone('left'), FALLBACK_THEME, { ...DEFAULT_OPTIONS, nullTerminals: true });
+
+    expect(xOf(on, 't:0x10')).toBeGreaterThan(xOf(on, 'n:0x10'));
+    expect(xOf(on, 'n:0x10')).toBe(xOf(off, 'n:0x10'));
+    expect(xOf(on, 'n:0x20')).toBe(xOf(off, 'n:0x20'));
+  });
+
+  it('reserves no seat for a null way back nor for an array slot', () => {
+    const plain = toGraph(lone('left'));
+    const parented = toGraph(
+      lone(
+        'left',
+        [
+          ['0x10', 'parent', null],
+          ['0x20', 'parent', '0x10'],
+        ],
+        ['left', 'right', 'parent'],
+      ),
+    );
+    const slotted = toGraph(lone('left', [['0x10', 'kids[0]', null]]));
+
+    expect(xOf(parented, 'n:0x20') - xOf(parented, 'n:0x10')).toBe(
+      xOf(plain, 'n:0x20') - xOf(plain, 'n:0x10'),
+    );
+    expect(xOf(slotted, 'n:0x20') - xOf(slotted, 'n:0x10')).toBe(
+      xOf(plain, 'n:0x20') - xOf(plain, 'n:0x10'),
+    );
   });
 
   it('terminates on a cyclic list and draws the cycle as plain edges', () => {
