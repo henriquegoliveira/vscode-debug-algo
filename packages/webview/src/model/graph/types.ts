@@ -1,4 +1,5 @@
 import type { NodeCard, NodeMetrics } from '../../geometry/nodeMetrics';
+import type { TreeOrder } from '../../geometry/treeLayout';
 import type { FieldChoice } from '../../session/persistence';
 import { CanvasNodeKind, ChangeKind, NodePalette } from '../../ui/theme';
 import type { GraphSnapshot, Root } from 'dbga-contract';
@@ -79,6 +80,7 @@ export interface GraphOptions {
   fields?: Record<string, FieldChoice>;
   highlight?: Map<string, ChangeKind>;
   highlightEdges?: Set<string>;
+  order?: TreeOrder;
 }
 
 export interface NodeChanges {

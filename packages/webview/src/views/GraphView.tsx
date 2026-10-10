@@ -27,6 +27,7 @@ import { rootFollowers, toGraph } from '../model/graph/toGraph';
 import { CanvasNode, GraphModel, Pass } from '../model/graph/types';
 import { visibleSnapshot } from '../model/graph/visibility';
 import { LayoutKind, layoutForChoice, promotes } from '../model/layoutRule';
+import { treeOrder } from '../model/orientation';
 import {
   FileView,
   MAX_COLUMN_WIDTH,
@@ -152,6 +153,14 @@ const GraphView: React.FC<GraphViewProps> = ({
     [pass, state.snapshot],
   );
 
+  const order = useMemo(
+    () =>
+      state.snapshot === null
+        ? undefined
+        : treeOrder(state.snapshot, state.orientation, fileView.mirrored),
+    [state.snapshot, state.orientation, fileView.mirrored],
+  );
+
   const model = useMemo(
     () =>
       state.snapshot === null
@@ -163,9 +172,11 @@ const GraphView: React.FC<GraphViewProps> = ({
             fields: fileView.fields,
             highlight,
             highlightEdges,
+            order,
           }),
     [
       state.snapshot,
+      order,
       theme,
       fileView.nullTerminals,
       fileView.fields,
@@ -587,7 +598,11 @@ const GraphView: React.FC<GraphViewProps> = ({
     const choice = fileView.layoutChoice;
     const applied = choice === 'auto' ? `auto:${state.sessionId ?? ''}` : `manual:${choice}`;
     const scope = `${state.file ?? ''}|${applied}`;
-    const kind = layoutForChoice(choice, visibleSnapshot(snapshot, enabledFrames));
+    const kind = layoutForChoice(
+      choice,
+      visibleSnapshot(snapshot, enabledFrames),
+      state.orientation,
+    );
     const last = layoutAppliedRef.current;
 
     if (last !== null && last.scope === scope) {
@@ -602,6 +617,7 @@ const GraphView: React.FC<GraphViewProps> = ({
   }, [
     state.snapshot,
     state.sessionId,
+    state.orientation,
     state.file,
     fileView.layoutChoice,
     enabledFrames,

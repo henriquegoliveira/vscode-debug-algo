@@ -28,6 +28,7 @@ export interface FileView {
   frameMode: FrameMode;
   follow: boolean;
   fields: Record<string, FieldChoice>;
+  mirrored: string[];
   viewMode: ViewMode;
 }
 
@@ -50,6 +51,7 @@ export const DEFAULT_FILE_VIEW: FileView = {
   frameMode: 'current',
   follow: false,
   fields: {},
+  mirrored: [],
   viewMode: 'graph',
 };
 
@@ -169,7 +171,7 @@ export function coerceViews(stored: unknown): Record<string, FileView> {
 export function coerceFile(stored: unknown): FileView {
   const raw = asRecord(stored);
   if (raw === null) {
-    return { ...DEFAULT_FILE_VIEW, fields: {} };
+    return { ...DEFAULT_FILE_VIEW, fields: {}, mirrored: [] };
   }
 
   return {
@@ -183,6 +185,7 @@ export function coerceFile(stored: unknown): FileView {
       : DEFAULT_FILE_VIEW.frameMode,
     follow: typeof raw.follow === 'boolean' ? raw.follow : DEFAULT_FILE_VIEW.follow,
     fields: coerceFields(raw.fields),
+    mirrored: stringList(raw.mirrored) ?? [],
     viewMode: VIEW_MODES.includes(raw.viewMode as ViewMode)
       ? (raw.viewMode as ViewMode)
       : DEFAULT_FILE_VIEW.viewMode,
