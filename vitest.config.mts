@@ -5,7 +5,13 @@ export default defineConfig({
     projects: [
       { test: { name: 'contract', include: ['packages/contract/test/**/*.test.ts'] } },
       { test: { name: 'webview', include: ['packages/webview/test/**/*.test.ts'] } },
-      { test: { name: 'extension', include: ['packages/extension/test/unit/**/*.test.ts'] } },
+      {
+        test: {
+          name: 'extension',
+          include: ['packages/extension/test/unit/**/*.test.ts'],
+          benchmark: { include: ['packages/extension/test/bench/**/*.bench.ts'] },
+        },
+      },
       { test: { name: 'harness', include: ['tests/*.test.mjs'] } },
     ],
     coverage: {

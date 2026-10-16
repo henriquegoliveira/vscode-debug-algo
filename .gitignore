@@ -34,8 +34,9 @@ vscode-profile-*
 .env
 .env.test
 
-# Cobertura de testes
+# Cobertura e relatorio de testes
 coverage/
+reports/
 
 # Ambiente Python de testes
 .venv/

@@ -524,16 +524,22 @@ function checkObservedTypes(snapshot, fail) {
   }
 }
 
-function parseArguments(argv) {
+export function parseArguments(argv) {
   const keys = [];
   const names = [];
   let update = false;
+  let json = null;
 
-  for (const item of argv) {
+  for (let index = 0; index < argv.length; index += 1) {
+    const item = argv[index];
     if (item === '--gdb' || item === '--lldb') {
       keys.push(item.slice(2));
     } else if (item === '--update-expected') {
       update = true;
+    } else if (item === '--json') {
+      json = argv[index + 1];
+      if (json === undefined || json.startsWith('--')) throw new Error('--json pede um arquivo');
+      index += 1;
     } else if (item.startsWith('--')) {
       throw new Error(`opcao desconhecida ${item}`);
     } else {
@@ -541,7 +547,7 @@ function parseArguments(argv) {
     }
   }
 
-  return { keys: keys.length > 0 ? keys : ['gdb', 'lldb'], names, update };
+  return { keys: keys.length > 0 ? keys : ['gdb', 'lldb'], names, update, json };
 }
 
 function extract(job, key, validate, fail, note) {
@@ -644,7 +650,7 @@ function checkBaseline(job, normalized, fail, note, update) {
 function main() {
   mkdirSync(OUTPUT, { recursive: true });
 
-  const { keys, names, update } = parseArguments(process.argv.slice(2));
+  const { keys, names, update, json } = parseArguments(process.argv.slice(2));
   const available = targetsIn(readdirSync(BIN), (target) => sourceFile(target) !== null);
   const targets = names.length > 0 ? available.filter((t) => names.includes(t)) : available;
   const jobs = targets.flatMap((target) => [
@@ -691,6 +697,7 @@ function main() {
   const validate = new Ajv({ allErrors: true }).compile(JSON.parse(readFileSync(SCHEMA, 'utf8')));
 
   let failures = 0;
+  const records = [];
 
   for (const job of jobs) {
     const problems = [];
@@ -699,8 +706,11 @@ function main() {
     const note = (message) => notes.add(message);
 
     const snapshots = {};
+    const seconds = {};
     for (const key of keys) {
+      const start = performance.now();
       const list = extract(job, key, validate, fail, note);
+      seconds[key] = (performance.now() - start) / 1000;
       if (list !== null) snapshots[key] = list;
     }
 
@@ -709,6 +719,19 @@ function main() {
 
     if (problems.length > 0) failures += 1;
     report(job.label, problems, notes, snapshots, keys);
+    records.push(record(job, problems, notes, snapshots, keys, seconds));
+  }
+
+  if (json !== null) {
+    mkdirSync(path.dirname(path.resolve(json)), { recursive: true });
+    const debuggers = Object.fromEntries(keys.map((key) => [key, versionOf(DEBUGGERS[key])]));
+    const document = {
+      generatedAt: new Date().toISOString(),
+      platform: process.platform,
+      debuggers,
+      jobs: records,
+    };
+    writeFileSync(json, `${JSON.stringify(document, null, 2)}\n`);
   }
 
   const labels = keys.map((key) => DEBUGGERS[key].label).join(' + ');
@@ -736,6 +759,37 @@ function report(target, problems, notes, snapshots, keys) {
     for (const problem of problems) console.log(`        ${problem}`);
   }
   for (const item of notes) console.log(`        nota: ${item}`);
+}
+
+function record(job, problems, notes, snapshots, keys, seconds) {
+  const list = snapshots[keys[0]] ?? [];
+  const snapshot = list[list.length - 1];
+  const status = problems.length > 0 ? 'falha' : notes.size > 0 ? 'nota' : 'ok';
+
+  return {
+    target: job.label,
+    status,
+    pauses: list.length,
+    roots: snapshot?.roots.length ?? null,
+    nodes: snapshot?.nodes.length ?? null,
+    edges: snapshot?.edges.length ?? null,
+    frames: snapshot?.meta.framesScanned ?? null,
+    errors: snapshot?.meta.errors.length ?? null,
+    truncated: snapshot?.meta.truncated ? snapshot.meta.truncationReasons : [],
+    seconds,
+    notes: [...notes],
+    problems,
+  };
+}
+
+function versionOf(debuggerSpec) {
+  try {
+    return execFileSync(debuggerSpec.resolve(), ['--version'], { encoding: 'utf8' })
+      .trim()
+      .split('\n')[0];
+  } catch {
+    return null;
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
