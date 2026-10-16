@@ -48,7 +48,7 @@ export default [
   },
 
   {
-    files: ['tests/**/*.mjs'],
+    files: ['tests/**/*.mjs', 'tools/**/*.mjs', 'packages/extension/.vscode-test.mjs'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
