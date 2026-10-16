@@ -22,14 +22,9 @@ const LAYERS = [
     ],
   },
   {
-    key: 'pytest',
-    outputs: ['pytest.xml', 'pytest-cov.json'],
-    args: [
-      'test:py',
-      '--junitxml=reports/pytest.xml',
-      '--cov=packages/extension/scripts',
-      '--cov-report=json:reports/pytest-cov.json',
-    ],
+    key: 'harness',
+    outputs: ['harness.json'],
+    args: ['test:e2e', '--json', 'reports/harness.json'],
   },
   {
     key: 'integration',
@@ -38,9 +33,14 @@ const LAYERS = [
     env: { DBGA_XUNIT: path.join(REPORTS, 'integracao.xml') },
   },
   {
-    key: 'harness',
-    outputs: ['harness.json'],
-    args: ['test:e2e', '--json', 'reports/harness.json'],
+    key: 'pytest',
+    outputs: ['pytest.xml', 'pytest-cov.json'],
+    args: [
+      'test:py',
+      '--junitxml=reports/pytest.xml',
+      '--cov=packages/extension/scripts',
+      '--cov-report=json:reports/pytest-cov.json',
+    ],
   },
 ];
 
