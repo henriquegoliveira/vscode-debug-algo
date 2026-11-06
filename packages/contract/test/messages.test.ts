@@ -19,6 +19,29 @@ describe('isExtensionMessage', () => {
       true,
     );
     expect(isExtensionMessage(envelope({ type: 'view', file: null, state: null }))).toBe(true);
+    expect(
+      isExtensionMessage(
+        envelope({ type: 'locale', language: 'pt-br', bundle: { Pause: 'Pausa' } }),
+      ),
+    ).toBe(true);
+  });
+
+  it('accepts a locale message without a bundle, as English arrives after postMessage', () => {
+    expect(isExtensionMessage(envelope({ type: 'locale', language: 'en' }))).toBe(true);
+    expect(
+      isExtensionMessage(envelope({ type: 'locale', language: 'en', bundle: undefined })),
+    ).toBe(true);
+  });
+
+  it('rejects a locale message without a language or with a bundle that is not an object', () => {
+    expect(isExtensionMessage(envelope({ type: 'locale' }))).toBe(false);
+    expect(isExtensionMessage(envelope({ type: 'locale', language: 7 }))).toBe(false);
+    expect(isExtensionMessage(envelope({ type: 'locale', language: 'en', bundle: 'x' }))).toBe(
+      false,
+    );
+    expect(isExtensionMessage(envelope({ type: 'locale', language: 'en', bundle: null }))).toBe(
+      false,
+    );
   });
 
   it('rejects a different protocol version', () => {
@@ -27,7 +50,7 @@ describe('isExtensionMessage', () => {
   });
 
   it('rejects unknown types and values that are not objects', () => {
-    expect(isExtensionMessage(envelope({ type: 'locale', language: 'en' }))).toBe(false);
+    expect(isExtensionMessage(envelope({ type: 'theme', language: 'en' }))).toBe(false);
     expect(isExtensionMessage(envelope({ type: 'ready' }))).toBe(false);
     expect(isExtensionMessage(null)).toBe(false);
     expect(isExtensionMessage('{"v":1}')).toBe(false);

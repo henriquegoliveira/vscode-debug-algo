@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 
 export const styles: Record<string, CSSProperties> = {
   shell: { display: 'flex', flexDirection: 'column', height: '100%' },
+  shellPending: { visibility: 'hidden' },
   header: {
     flex: '0 0 auto',
     display: 'flex',

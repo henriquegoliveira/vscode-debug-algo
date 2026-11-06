@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import type { Inspection, NodeInspection } from '../../model/inspection';
 import { styles } from './InspectorOverlay.styles';
 import { ArraySection } from './ArraySection';
@@ -26,7 +27,9 @@ export const NodeBody: React.FC<{ inspection: NodeInspection; onSelect: Select }
   <>
     <MetaBlock address={inspection.address} entries={inspection.entries} />
 
-    {inspection.uncertain && <div style={styles.warn}>union: o membro ativo é incerto</div>}
+    {inspection.uncertain && (
+      <div style={styles.warn}>{l10n.t('union: the active member is uncertain')}</div>
+    )}
 
     {inspection.errors.map((error, position) => (
       <div key={position} style={styles.warn}>

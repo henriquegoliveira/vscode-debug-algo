@@ -4,6 +4,7 @@ const { resolve } = require('path');
 
 const isWatch = process.argv.includes('--watch');
 const isTests = process.argv.includes('--tests');
+const isProduction = process.argv.includes('--production');
 const outDir = resolve(__dirname, 'dist');
 
 mkdirSync(outDir, { recursive: true });
@@ -17,7 +18,7 @@ const buildOptions = {
   target: ['node20'],
   external: ['vscode', 'bufferutil', 'utf-8-validate'],
   minify: !isWatch,
-  sourcemap: true,
+  sourcemap: !isProduction,
   loader: { '.ts': 'ts' },
 };
 

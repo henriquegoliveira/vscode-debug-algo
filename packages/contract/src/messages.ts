@@ -48,6 +48,14 @@ export interface ViewMessage {
   id?: string;
 }
 
+export interface LocaleMessage {
+  v: typeof PROTOCOL_VERSION;
+  type: 'locale';
+  language: string;
+  bundle?: Record<string, string>;
+  id?: string;
+}
+
 export interface AnnotateMessage {
   v: typeof PROTOCOL_VERSION;
   type: 'annotate';
@@ -66,7 +74,7 @@ export interface SaveViewMessage {
 export type WebviewMessage = ReadyMessage | AnnotateMessage | SaveViewMessage;
 
 export type ExtensionMessage =
-  SnapshotMessage | HistoryMessage | SessionEndMessage | ErrorMessage | ViewMessage;
+  SnapshotMessage | HistoryMessage | SessionEndMessage | ErrorMessage | ViewMessage | LocaleMessage;
 
 interface Envelope {
   v: unknown;
@@ -79,6 +87,8 @@ interface Envelope {
   annotation?: unknown;
   file?: unknown;
   state?: unknown;
+  language?: unknown;
+  bundle?: unknown;
   id?: unknown;
 }
 
@@ -132,6 +142,11 @@ export function isExtensionMessage(value: unknown): value is ExtensionMessage {
       return (
         (typeof envelope.file === 'string' || envelope.file === null) &&
         (isObject(envelope.state) || envelope.state === null || envelope.state === undefined)
+      );
+    case 'locale':
+      return (
+        typeof envelope.language === 'string' &&
+        (envelope.bundle === undefined || isObject(envelope.bundle))
       );
     default:
       return false;

@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import type { ArrayView } from '../../model/inspection';
 import { styles } from './InspectorOverlay.styles';
 import { Target } from './Entries';
@@ -13,12 +14,14 @@ export const ArraySection: React.FC<{ array: ArrayView; onSelect: Select }> = ({
       {array.name}[{array.length}] <span style={styles.rowType}>{array.elementType}</span>
     </h5>
 
-    {array.state === 'unexpanded' && <div style={styles.warn}>vetor não expandido</div>}
+    {array.state === 'unexpanded' && <div style={styles.warn}>{l10n.t('array not expanded')}</div>}
 
     {array.state !== 'unexpanded' && (
       <div style={styles.columnsRow}>
-        <span>índice</span>
-        <span style={styles.columnsRight}>{array.state === 'cells' ? 'valor' : 'aponta para'}</span>
+        <span>{l10n.t('index')}</span>
+        <span style={styles.columnsRight}>
+          {array.state === 'cells' ? l10n.t('value') : l10n.t('points to')}
+        </span>
       </div>
     )}
 
@@ -38,6 +41,8 @@ export const ArraySection: React.FC<{ array: ArrayView; onSelect: Select }> = ({
         </div>
       ))}
 
-    {array.truncated && <div style={styles.warn}>vetor truncado no limite de células</div>}
+    {array.truncated && (
+      <div style={styles.warn}>{l10n.t('array truncated at the cell limit')}</div>
+    )}
   </section>
 );

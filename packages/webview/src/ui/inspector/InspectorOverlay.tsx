@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import { styles } from './InspectorOverlay.styles';
 import { AnnotateSection } from './AnnotateSection';
 import { CardBody } from './CardBody';
@@ -30,7 +31,7 @@ const InspectorOverlay: React.FC<Props> = ({
         type="button"
         className="dbga-icon dbga-icon-close"
         style={styles.close}
-        title="Fechar (Esc)"
+        title={l10n.t('Close (Esc)')}
         onClick={onClose}
       >
         &#10005;

@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@egjs/hammerjs": "^2.0.17",
+    "@vscode/l10n": "^0.0.18",
     "component-emitter": "^2.0.0",
     "dbga-contract": "workspace:^",
     "keycharm": "^0.4.0",

@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import type { FrameRoot } from '../../model/graph/types';
 import { styles } from './RecursionView.styles';
 import { RootLine } from './RootLine';
@@ -10,7 +11,7 @@ export const GlobalsCardView: React.FC<{
 }> = ({ roots, selectedId, onSelect }) => (
   <div style={styles.card}>
     <div style={styles.cardHead}>
-      <span style={styles.cardFunction}>Globais do arquivo</span>
+      <span style={styles.cardFunction}>{l10n.t('File globals')}</span>
     </div>
     <div style={styles.cardBody}>
       {roots.map((root) => (
