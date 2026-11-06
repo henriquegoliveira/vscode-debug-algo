@@ -97,7 +97,7 @@ export async function flushFileViews(): Promise<void> {
       .update(VIEW, { ...viewBucket(), ...batch }, vscode.ConfigurationTarget.Workspace);
   } catch (error) {
     void vscode.window.showErrorMessage(
-      `DebugAlgo não conseguiu guardar a configuração da visualização: ${String(error)}`,
+      vscode.l10n.t('DebugAlgo could not save the visualization settings: {0}', String(error)),
     );
   }
 }

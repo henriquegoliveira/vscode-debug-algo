@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import React, { useEffect, useRef, useState } from 'react';
 import type { LayoutChoice } from '../model/layoutRule';
 import type { FrameMode, ViewMode } from '../session/persistence';
@@ -6,15 +7,15 @@ import { styles } from './Toolbar.styles';
 
 export const ZOOM_STEP = 1.25;
 
-const CHOICES: { value: LayoutChoice; label: string }[] = [
-  { value: 'auto', label: 'Automático' },
-  { value: 'physics', label: 'Em lista' },
-  { value: 'hierarchical', label: 'Em árvore' },
+const choices = (): { value: LayoutChoice; label: string }[] => [
+  { value: 'auto', label: l10n.t('Automatic') },
+  { value: 'physics', label: l10n.t('As a list') },
+  { value: 'hierarchical', label: l10n.t('As a tree') },
 ];
 
-const MODES: { value: ViewMode; label: string }[] = [
-  { value: 'recursion', label: 'Recursão' },
-  { value: 'sorting', label: 'Ordenação' },
+const modes = (): { value: ViewMode; label: string }[] => [
+  { value: 'recursion', label: l10n.t('Recursion') },
+  { value: 'sorting', label: l10n.t('Sorting') },
 ];
 
 export const ColumnButton: React.FC<{
@@ -31,8 +32,12 @@ export const ColumnButton: React.FC<{
     aria-pressed={open}
     title={
       shown === total
-        ? `${open ? 'Ocultar' : 'Mostrar'} as ${total} variáveis`
-        : `${open ? 'Ocultar' : 'Mostrar'} a coluna — ${shown} de ${total} variáveis no grafo`
+        ? open
+          ? l10n.t('Hide the {0} variables', total)
+          : l10n.t('Show the {0} variables', total)
+        : open
+          ? l10n.t('Hide the column — {0} of {1} variables in the graph', shown, total)
+          : l10n.t('Show the column — {0} of {1} variables in the graph', shown, total)
     }
     onClick={() => onToggle(!open)}
   >
@@ -49,22 +54,32 @@ export const ZoomControl: React.FC<{
   canFocus: boolean;
 }> = ({ scale, onStep, onReset, onFit, onFocus, canFocus }) => (
   <div style={styles.zoom}>
-    <button type="button" className="dbga-zoom" title="Afastar" onClick={() => onStep(-1)}>
+    <button
+      type="button"
+      className="dbga-zoom"
+      title={l10n.t('Zoom out')}
+      onClick={() => onStep(-1)}
+    >
       &minus;
     </button>
     <button
       type="button"
       className="dbga-zoom dbga-zoom-label"
-      title="Voltar ao tamanho natural"
+      title={l10n.t('Back to natural size')}
       onClick={onReset}
     >
       {Math.round(scale * 100)}%
     </button>
-    <button type="button" className="dbga-zoom" title="Aproximar" onClick={() => onStep(1)}>
+    <button type="button" className="dbga-zoom" title={l10n.t('Zoom in')} onClick={() => onStep(1)}>
       +
     </button>
     <span className="dbga-sep" />
-    <button type="button" className="dbga-zoom" title="Enquadrar o grafo inteiro" onClick={onFit}>
+    <button
+      type="button"
+      className="dbga-zoom"
+      title={l10n.t('Fit the whole graph')}
+      onClick={onFit}
+    >
       &#9974;
     </button>
     <button
@@ -72,7 +87,9 @@ export const ZoomControl: React.FC<{
       className="dbga-zoom"
       disabled={!canFocus}
       title={
-        canFocus ? 'Ir até o que mudou nesta pausa' : 'Nada mudou nesta pausa que esteja no grafo'
+        canFocus
+          ? l10n.t('Go to what changed at this pause')
+          : l10n.t('Nothing that changed at this pause is in the graph')
       }
       onClick={onFocus}
     >
@@ -91,8 +108,8 @@ const DrawMenu: React.FC<{
   const boxRef = useRef<HTMLDivElement>(null);
 
   const current =
-    MODES.find((entry) => entry.value === viewMode) ??
-    (CHOICES.find((entry) => entry.value === choice) as { label: string });
+    modes().find((entry) => entry.value === viewMode) ??
+    (choices().find((entry) => entry.value === choice) as { label: string });
 
   useEffect(() => {
     if (!open) {
@@ -131,19 +148,19 @@ const DrawMenu: React.FC<{
         className="dbga-pill"
         aria-expanded={open}
         aria-haspopup="menu"
-        title="Como desenhar a estrutura"
+        title={l10n.t('How to draw the structure')}
         onClick={() => setOpen(!open)}
       >
         <LayoutIcon />
-        <span style={styles.pillLead}>Desenho:</span>
+        <span style={styles.pillLead}>{l10n.t('Drawing:')}</span>
         <strong style={styles.pillValue}>{current.label}</strong>
         <ChevronIcon />
       </button>
 
       {open && (
         <div role="menu" style={styles.menu}>
-          <div style={styles.menuTitle}>Grafo de ponteiros</div>
-          {CHOICES.map((entry) => (
+          <div style={styles.menuTitle}>{l10n.t('Pointer graph')}</div>
+          {choices().map((entry) => (
             <button
               key={entry.value}
               type="button"
@@ -157,8 +174,8 @@ const DrawMenu: React.FC<{
           ))}
 
           <div style={styles.menuGroup}>
-            <div style={styles.menuTitle}>Outras visualizações</div>
-            {MODES.map((entry) => (
+            <div style={styles.menuTitle}>{l10n.t('Other views')}</div>
+            {modes().map((entry) => (
               <button
                 key={entry.value}
                 type="button"
@@ -216,27 +233,27 @@ const Toolbar: React.FC<{
       <>
         <span className="dbga-sep" />
 
-        <div className="dbga-segment" role="group" aria-label="Frames no grafo">
+        <div className="dbga-segment" role="group" aria-label={l10n.t('Frames in the graph')}>
           <button
             type="button"
             className="dbga-chip"
             aria-pressed={!manual && frameMode === 'current'}
-            title="Mostrar só o que vem do frame onde a execução parou"
+            title={l10n.t('Show only what comes from the frame where execution stopped')}
             onClick={() => onFrameMode('current')}
           >
             <FrameIcon />
-            {compact ? 'atual' : 'Frame atual'}
+            {compact ? l10n.t('current') : l10n.t('Current frame')}
           </button>
 
           <button
             type="button"
             className="dbga-chip"
             aria-pressed={!manual && frameMode === 'all'}
-            title="Mostrar o que vem de todos os frames"
+            title={l10n.t('Show what comes from all frames')}
             onClick={() => onFrameMode('all')}
           >
             <StackIcon />
-            {compact ? 'todos' : 'Todos os frames'}
+            {compact ? l10n.t('all') : l10n.t('All frames')}
           </button>
         </div>
       </>
@@ -250,22 +267,22 @@ const Toolbar: React.FC<{
           type="button"
           className="dbga-chip"
           aria-pressed={nullTerminals}
-          title="Desenhar os ponteiros nulos como terminais no grafo"
+          title={l10n.t('Draw null pointers as terminals in the graph')}
           onClick={() => onNullTerminals(!nullTerminals)}
         >
           <NullIcon />
-          {compact ? 'NULL' : 'Exibir nulos'}
+          {compact ? 'NULL' : l10n.t('Show nulls')}
         </button>
 
         <button
           type="button"
           className="dbga-chip"
           aria-pressed={follow}
-          title="Trazer o canvas para o frame onde a execução parou a cada pausa"
+          title={l10n.t('Bring the canvas to the frame where execution stopped at each pause')}
           onClick={() => onFollow(!follow)}
         >
           <FollowIcon />
-          {compact ? 'seguir' : 'Seguir execução'}
+          {compact ? l10n.t('follow') : l10n.t('Follow execution')}
         </button>
       </>
     )}

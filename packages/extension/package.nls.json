@@ -1,0 +1,13 @@
+{
+  "command.start.title": "Open Visualizer",
+  "command.annotateArray.title": "Annotate Dynamic Array (v@n)",
+  "command.startServer.title": "Open Visualizer in Browser",
+  "config.dynamicArrays.markdownDescription": "Length annotations for pointers to heap arrays, written `pointer@length` or `function:pointer@length`. Both sides are evaluated in the paused frame, and the length may be a literal.",
+  "config.rootFilter.markdownDescription": "When not empty, only variables with these names are used as roots of the graph.",
+  "config.limits.maxNodes.markdownDescription": "Maximum number of nodes read in one snapshot. Reaching it marks the snapshot as truncated.",
+  "config.limits.maxEdges.markdownDescription": "Maximum number of edges read in one snapshot. Reaching it marks the snapshot as truncated.",
+  "config.limits.maxCells.markdownDescription": "Maximum number of elements read per array.",
+  "config.limits.historyDepth.markdownDescription": "Number of pauses kept for the history slider.",
+  "config.view.markdownDescription": "Internal view state of the DebugAlgo panel, saved per debugged file. Written by the panel; not meant to be edited by hand.",
+  "capabilities.untrustedWorkspaces.description": "DebugAlgo runs Python inside the debugger of the workspace's debug sessions, so it is disabled in Restricted Mode."
+}

@@ -20,7 +20,7 @@ export class SnapshotReader {
 
     if (!this.validate(json)) {
       const errors = this.validateFn.errors?.map((e) => `${e.schemaPath} ${e.message}`).join('; ');
-      throw new Error(`snapshot em '${filePath}' nao bate com o schema: ${errors}`);
+      throw new Error(`the snapshot at '${filePath}' does not match the schema: ${errors}`);
     }
 
     return json as GraphSnapshot;
@@ -45,7 +45,7 @@ export class SnapshotReader {
     }
 
     throw new Error(
-      `nao consegui ler o snapshot em '${filePath}' apos ${READ_ATTEMPTS} tentativas: ${String(lastError)}`,
+      `could not read the snapshot at '${filePath}' after ${READ_ATTEMPTS} attempts: ${String(lastError)}`,
     );
   }
 }

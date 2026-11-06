@@ -48,7 +48,7 @@
   "capabilities": {
     "untrustedWorkspaces": {
       "supported": false,
-      "description": "DebugAlgo runs Python inside the debugger of the workspace's debug sessions, so it is disabled in Restricted Mode."
+      "description": "%capabilities.untrustedWorkspaces.description%"
     },
     "virtualWorkspaces": false
   },
@@ -56,22 +56,23 @@
     "onDebug"
   ],
   "main": "./dist/extension.js",
+  "l10n": "./l10n",
   "contributes": {
     "commands": [
       {
         "command": "debug-algo.start",
-        "title": "Iniciar Visualização",
+        "title": "%command.start.title%",
         "category": "DebugAlgo"
       },
       {
         "command": "debug-algo.annotateArray",
-        "title": "Anotar vetor dinâmico (v@n)",
+        "title": "%command.annotateArray.title%",
         "category": "DebugAlgo",
         "icon": "$(symbol-array)"
       },
       {
         "command": "debug-algo.startServer",
-        "title": "Iniciar Visualização no Navegador",
+        "title": "%command.startServer.title%",
         "category": "DebugAlgo"
       }
     ],
@@ -83,39 +84,46 @@
           "items": {
             "type": "string"
           },
-          "default": []
+          "default": [],
+          "markdownDescription": "%config.dynamicArrays.markdownDescription%"
         },
         "debugAlgo.rootFilter": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "default": []
+          "default": [],
+          "markdownDescription": "%config.rootFilter.markdownDescription%"
         },
         "debugAlgo.limits.maxNodes": {
           "type": "number",
           "minimum": 1,
-          "default": 2000
+          "default": 2000,
+          "markdownDescription": "%config.limits.maxNodes.markdownDescription%"
         },
         "debugAlgo.limits.maxEdges": {
           "type": "number",
           "minimum": 1,
-          "default": 6000
+          "default": 6000,
+          "markdownDescription": "%config.limits.maxEdges.markdownDescription%"
         },
         "debugAlgo.limits.maxCells": {
           "type": "number",
           "minimum": 1,
-          "default": 64
+          "default": 64,
+          "markdownDescription": "%config.limits.maxCells.markdownDescription%"
         },
         "debugAlgo.limits.historyDepth": {
           "type": "number",
           "minimum": 1,
-          "default": 20
+          "default": 20,
+          "markdownDescription": "%config.limits.historyDepth.markdownDescription%"
         },
         "debugAlgo.view": {
           "type": "object",
           "scope": "resource",
-          "default": {}
+          "default": {},
+          "markdownDescription": "%config.view.markdownDescription%"
         }
       }
     },
@@ -149,7 +157,8 @@
     "typecheck": "tsc --noEmit",
     "gen:types": "json2ts schemas/graph-snapshot.schema.json -o ../contract/src/graphSnapshot.ts --additionalProperties false --style.singleQuote --style.printWidth 100",
     "check:types": "yarn gen:types && git diff --exit-code ../contract/src/graphSnapshot.ts",
-    "test:integration": "yarn workspace dbga-webview build && node esbuild.js && tsc --noEmit -p test/integration && node esbuild.js --tests && vscode-test"
+    "test:integration": "yarn workspace dbga-webview build && node esbuild.js && tsc --noEmit -p test/integration && node esbuild.js --tests && vscode-test",
+    "l10n:export": "npx --yes @vscode/l10n-dev@0.0.35 export --outDir ./l10n ./src ../webview/src"
   },
   "dependencies": {
     "ajv": "^8.20.0",
@@ -165,6 +174,7 @@
     "@types/ws": "^8.18.1",
     "@vscode/test-cli": "^0.0.15",
     "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.1.0",
     "esbuild": "^0.27.4",
     "json-schema-to-typescript": "^15.0.4",
     "typescript": "~5.9.3"

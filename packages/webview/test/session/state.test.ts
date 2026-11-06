@@ -102,6 +102,17 @@ describe('reduce', () => {
     expect(reduce(failed, snapshot('a', pause(5))).error).toBeNull();
   });
 
+  it('starts without a language and keeps the graph when the locale arrives', () => {
+    const last = pause(4);
+    const live = run([snapshot('a', last)]);
+    const localized = reduce(live, { v: 1, type: 'locale', language: 'pt-br' });
+
+    expect(INITIAL_STATE.language).toBeNull();
+    expect(localized.language).toBe('pt-br');
+    expect(localized.snapshot).toBe(last);
+    expect(localized.pauses).toBe(live.pauses);
+  });
+
   it('normalizes an absent view state to null', () => {
     const state = reduce(INITIAL_STATE, {
       v: 1,

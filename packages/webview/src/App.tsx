@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import { styles } from './App.styles';
 import { changeHighlight, changedNodes } from './model/graph/changes';
 import { fileName } from './model/format';
@@ -272,11 +273,11 @@ const App: React.FC = () => {
       ? undefined
       : [
           following
-            ? `Pausa ${pauseNumber}, a mais recente`
-            : `Revisando a pausa ${pauseNumber}, com ${behind} depois dela`,
+            ? l10n.t('Pause {0}, the most recent', pauseNumber)
+            : l10n.t('Reviewing pause {0}, with {1} after it', pauseNumber, behind),
           dropped > 0
-            ? `${state.history.length} guardadas; as ${dropped} primeiras saíram da janela`
-            : `${state.history.length} guardadas`,
+            ? l10n.t('{0} stored; the first {1} left the window', state.history.length, dropped)
+            : l10n.t('{0} stored', state.history.length),
         ].join(' · ');
 
   const meta = active === null ? null : active.meta;
@@ -304,9 +305,9 @@ const App: React.FC = () => {
       {state.phase === 'idle' && (
         <div style={styles.placeholder}>
           <p style={styles.placeholderLead}>
-            A estrutura aparece aqui na primeira pausa da depuração.
+            {l10n.t('The structure appears here at the first debugger pause.')}
           </p>
-          <p style={styles.placeholderHint}>Coloque um breakpoint e inicie a depuração.</p>
+          <p style={styles.placeholderHint}>{l10n.t('Set a breakpoint and start debugging.')}</p>
         </div>
       )}
       {inspection !== null && (
@@ -328,17 +329,19 @@ const App: React.FC = () => {
   );
 
   return (
-    <div style={styles.shell}>
+    <div
+      style={state.language === null ? { ...styles.shell, ...styles.shellPending } : styles.shell}
+    >
       <header style={narrow ? { ...styles.header, ...styles.headerCompact } : styles.header}>
         <div style={styles.pause} title={pauseTitle}>
           {state.pauses > 0 && (
             <>
               <HistoryIcon />
-              {!narrow && <span style={styles.pauseLead}>Pausa</span>}
+              {!narrow && <span style={styles.pauseLead}>{l10n.t('Pause')}</span>}
               <span style={styles.pauseNumber}>{pauseNumber}</span>
               {state.pauses > 1 && (
                 <span style={styles.pauseTotal}>
-                  {narrow ? `/${state.pauses}` : `de ${state.pauses}`}
+                  {narrow ? `/${state.pauses}` : l10n.t('of {0}', state.pauses)}
                 </span>
               )}
             </>
@@ -362,14 +365,14 @@ const App: React.FC = () => {
           <div style={styles.site}>
             <span style={{ ...styles.siteDot, backgroundColor: PHASE_COLOR[state.phase] }} />
             {site === null ? (
-              <span style={styles.siteLead}>Aguardando a primeira pausa</span>
+              <span style={styles.siteLead}>{l10n.t('Waiting for the first pause')}</span>
             ) : (
               <>
-                {wide && <span style={styles.siteLead}>Pausado em</span>}
+                {wide && <span style={styles.siteLead}>{l10n.t('Paused in')}</span>}
                 <span style={styles.siteFunction}>{site.function}()</span>
                 {!narrow && (
                   <span style={styles.siteWhere}>
-                    linha {site.line}
+                    {l10n.t('line {0}', site.line)}
                     {wide && site.file !== '' ? ` (${site.file})` : ''}
                   </span>
                 )}
@@ -380,14 +383,14 @@ const App: React.FC = () => {
       </header>
 
       {state.error !== null && <div style={styles.errorBanner}>{state.error}</div>}
-      {state.phase === 'ended' && <div style={styles.endedBanner}>Sessão encerrada.</div>}
+      {state.phase === 'ended' && <div style={styles.endedBanner}>{l10n.t('Session ended.')}</div>}
 
       {alarming && meta !== null && (
         <div style={styles.alarmBanner}>
           <div style={styles.alarmRows}>
             {meta.truncated && (
               <div style={styles.alarmRow}>
-                <span style={styles.alarmScope}>Grafo truncado</span>
+                <span style={styles.alarmScope}>{l10n.t('Graph truncated')}</span>
                 <span>{meta.truncationReasons.join(', ')}</span>
               </div>
             )}
@@ -403,7 +406,7 @@ const App: React.FC = () => {
             type="button"
             className="dbga-icon dbga-icon-close"
             style={styles.alarmClose}
-            title="Fechar o aviso"
+            title={l10n.t('Dismiss the warning')}
             onClick={() => setDismissed(signature)}
           >
             &#10005;
@@ -468,9 +471,9 @@ const App: React.FC = () => {
         <span>
           frames {enabledFrames.size}/{frameIds.length}
         </span>
-        {!narrow && <span>{state.file ?? active?.frames[0]?.file ?? 'arquivo desconhecido'}</span>}
-        {!embedded && !narrow && <span>sem gravação nesta aba</span>}
-        {quiet > 0 && <span>anotações de outro programa {quiet}</span>}
+        {!narrow && <span>{state.file ?? active?.frames[0]?.file ?? l10n.t('unknown file')}</span>}
+        {!embedded && !narrow && <span>{l10n.t('not saved in this tab')}</span>}
+        {quiet > 0 && <span>{l10n.t('annotations from another program {0}', quiet)}</span>}
         {highlight.size > 0 && <ChangeLegend changes={highlight} theme={theme} />}
         <span style={styles.footerLayout}>
           {viewMode === 'graph' ? `layout ${layout ?? '—'}` : ''}

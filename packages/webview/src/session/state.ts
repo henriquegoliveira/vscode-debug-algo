@@ -15,6 +15,7 @@ export interface ScreenState {
   error: string | null;
   file: string | null;
   fileView: unknown;
+  language: string | null;
 }
 
 export const INITIAL_STATE: ScreenState = {
@@ -27,6 +28,7 @@ export const INITIAL_STATE: ScreenState = {
   error: null,
   file: null,
   fileView: null,
+  language: null,
 };
 
 export function reduce(state: ScreenState, message: ExtensionMessage): ScreenState {
@@ -75,6 +77,8 @@ export function reduce(state: ScreenState, message: ExtensionMessage): ScreenSta
       return { ...state, phase: 'ended' };
     case 'error':
       return { ...state, error: message.message };
+    case 'locale':
+      return { ...state, language: message.language };
   }
 }
 

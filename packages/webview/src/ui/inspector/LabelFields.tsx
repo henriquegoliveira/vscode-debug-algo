@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import type { FieldChoice } from '../../session/persistence';
 import { styles } from './InspectorOverlay.styles';
 import React from 'react';
@@ -35,7 +36,7 @@ export const LabelFields: React.FC<{
 
   return (
     <section style={styles.section}>
-      <h5 style={styles.sectionTitle}>campos no rótulo de {type}</h5>
+      <h5 style={styles.sectionTitle}>{l10n.t('fields in the {0} label', type)}</h5>
       <div style={styles.modeRow}>
         <button
           type="button"
@@ -43,7 +44,7 @@ export const LabelFields: React.FC<{
           aria-pressed={choice === undefined}
           onClick={() => onChoice(type, undefined)}
         >
-          automático
+          {l10n.t('automatic')}
         </button>
         <button
           type="button"
@@ -51,7 +52,7 @@ export const LabelFields: React.FC<{
           aria-pressed={choice === 'all'}
           onClick={() => onChoice(type, 'all')}
         >
-          todos
+          {l10n.t('all')}
         </button>
         <button
           type="button"
@@ -59,7 +60,7 @@ export const LabelFields: React.FC<{
           aria-pressed={choice === 'none'}
           onClick={() => onChoice(type, 'none')}
         >
-          nenhum
+          {l10n.t('none')}
         </button>
       </div>
       {names.map((name) => (
@@ -76,8 +77,10 @@ export const LabelFields: React.FC<{
       ))}
       <div style={styles.annotateNote}>
         {embedded
-          ? 'A escolha vale para todo nó deste tipo e é guardada por arquivo depurado.'
-          : 'O navegador é somente leitura: a escolha vale nesta aba e não vai para as settings.'}
+          ? l10n.t('The choice applies to every node of this type and is stored per debugged file.')
+          : l10n.t(
+              'The browser is read-only: the choice applies in this tab and is not written to the settings.',
+            )}
       </div>
     </section>
   );

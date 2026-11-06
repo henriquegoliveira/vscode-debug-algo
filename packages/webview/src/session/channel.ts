@@ -4,6 +4,7 @@ import {
   WebviewMessage,
   isExtensionMessage,
 } from 'dbga-contract';
+import { applyLocale } from './locale';
 
 declare function acquireVsCodeApi(): VsCodeApi;
 
@@ -92,11 +93,11 @@ function connectOverWebSocket(onMessage: SnapshotListener): () => void {
   });
 
   socket.addEventListener('close', () => {
-    console.log('[DebugAlgo] conexao encerrada pelo servidor');
+    console.log('[DebugAlgo] connection closed by the server');
   });
 
   socket.addEventListener('error', () => {
-    console.log('[DebugAlgo] falha na conexao com o servidor');
+    console.log('[DebugAlgo] connection to the server failed');
   });
 
   return () => socket.close();
@@ -126,5 +127,8 @@ function deliver(payload: unknown, onMessage: SnapshotListener): void {
     return;
   }
 
+  if (payload.type === 'locale') {
+    applyLocale(payload);
+  }
   onMessage(payload);
 }

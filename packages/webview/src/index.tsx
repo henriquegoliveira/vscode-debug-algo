@@ -8,5 +8,5 @@ if (container) {
   const root = createRoot(container);
   root.render(<App />);
 } else {
-  console.error('Elemento root não encontrado no HTML.');
+  console.error('Root element not found in the HTML.');
 }

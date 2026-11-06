@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import type { CardInspection } from '../../model/inspection';
 import { styles } from './InspectorOverlay.styles';
 import { Target } from './Entries';
@@ -10,13 +11,13 @@ export const CardBody: React.FC<{ inspection: CardInspection; onSelect: Select }
 }) => (
   <>
     <section style={styles.section}>
-      <h5 style={styles.sectionTitle}>variáveis</h5>
+      <h5 style={styles.sectionTitle}>{l10n.t('variables')}</h5>
       {inspection.variables.map((variable) => (
         <div key={variable.canvasId} style={styles.row}>
           <span style={styles.rowName}>{variable.name}</span>
           <span style={styles.rowType}>{variable.frame}</span>
           <button type="button" style={styles.link} onClick={() => onSelect(variable.canvasId)}>
-            {variable.status === 'ok' ? 'detalhe' : variable.status}
+            {variable.status === 'ok' ? l10n.t('detail') : variable.status}
           </button>
         </div>
       ))}
