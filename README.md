@@ -1,14 +1,12 @@
-# vscode-dbg-algo
+# DebugAlgo
 
-## Test report
+A VS Code extension that draws the data structures of a C or C++ program while you debug it. Every
+time the debugger pauses, the list, tree or graph is redrawn with the state at that moment.
 
-With the Python environment from [requirements-dev.txt](requirements-dev.txt) active:
+It is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=henriquegoliveira.debug-algo).
+The install and usage guide is in the [extension README](packages/extension/README.md). To run it
+from source or work on the tests, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-```bash
-yarn test:report   # runs every test layer and writes reports/relatorio-testes.pdf
-yarn bench         # measures the WebSocket transport and adds its page to the same PDF
-```
+## License
 
-`yarn test:report` accepts `--skip-integration`, `--skip-harness` and `--figures <dir>` (each chart
-also as a single-page PDF). It exits with a non-zero code when any layer fails, after drawing the
-report.
+GPL-3.0 or later. The full text is in [packages/extension/LICENSE](packages/extension/LICENSE).
