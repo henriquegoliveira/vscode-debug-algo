@@ -158,7 +158,7 @@
     "gen:types": "json2ts schemas/graph-snapshot.schema.json -o ../contract/src/graphSnapshot.ts --additionalProperties false --style.singleQuote --style.printWidth 100",
     "check:types": "yarn gen:types && git diff --exit-code ../contract/src/graphSnapshot.ts",
     "test:integration": "yarn workspace dbga-webview build && node esbuild.js && tsc --noEmit -p test/integration && node esbuild.js --tests && vscode-test",
-    "l10n:export": "npx --yes @vscode/l10n-dev@0.0.35 export --outDir ./l10n ./src ../webview/src",
+    "l10n:export": "npx --yes @vscode/l10n-dev@0.0.35 export --outDir ./l10n ./src ../webview/src ../demo/src",
     "vscode:prepublish": "yarn workspace dbga-webview build && tsc --noEmit && node esbuild.js --production",
     "package": "vsce package"
   },

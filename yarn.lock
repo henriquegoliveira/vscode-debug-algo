@@ -2543,7 +2543,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dbga-webview@workspace:packages/webview":
+"dbga-demo@workspace:packages/demo":
+  version: 0.0.0-use.local
+  resolution: "dbga-demo@workspace:packages/demo"
+  dependencies:
+    "@types/react": "npm:^19.2.14"
+    "@types/react-dom": "npm:^19.2.3"
+    "@vscode/l10n": "npm:^0.0.18"
+    dbga-contract: "workspace:^"
+    dbga-webview: "workspace:^"
+    esbuild: "npm:^0.28.0"
+    react: "npm:^19.2.4"
+    react-dom: "npm:^19.2.4"
+    typescript: "npm:~5.9.3"
+  languageName: unknown
+  linkType: soft
+
+"dbga-webview@workspace:^, dbga-webview@workspace:packages/webview":
   version: 0.0.0-use.local
   resolution: "dbga-webview@workspace:packages/webview"
   dependencies:
