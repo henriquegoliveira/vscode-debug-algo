@@ -19,7 +19,7 @@ const buildOptions = {
   sourcemap: isWatch ? 'inline' : false,
   format: 'esm',
   target: ['es2020'],
-  loader: { '.tsx': 'tsx', '.ts': 'ts' },
+  loader: { '.tsx': 'tsx', '.ts': 'ts', '.svg': 'dataurl' },
   plugins: [
     {
       name: 'copy-html',
