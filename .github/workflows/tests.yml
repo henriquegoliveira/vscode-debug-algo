@@ -30,12 +30,12 @@ jobs:
         run: yarn lint
 
       - name: Check generated contract types
-        run: yarn workspace dbga-extension check:types
+        run: yarn workspace debug-algo check:types
 
       - name: Build
         run: |
           yarn workspace dbga-webview build
-          yarn workspace dbga-extension build
+          yarn workspace debug-algo build
 
       - name: Unit tests (TypeScript)
         run: yarn test:coverage
