@@ -1,9 +1,25 @@
 {
-  "name": "dbga-extension",
+  "name": "debug-algo",
   "displayName": "DebugAlgo",
   "description": "Visualize data structures during debugging",
   "version": "0.1.0",
   "publisher": "henriquegoliveira",
+  "preview": true,
+  "license": "GPL-3.0-or-later",
+  "icon": "assets/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/henriquegoliveira/vscode-debug-algo.git",
+    "directory": "packages/extension"
+  },
+  "bugs": {
+    "url": "https://github.com/henriquegoliveira/vscode-debug-algo/issues"
+  },
+  "homepage": "https://github.com/henriquegoliveira/vscode-debug-algo#readme",
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -12,6 +28,30 @@
     "Visualization",
     "Education"
   ],
+  "keywords": [
+    "c",
+    "cpp",
+    "data structures",
+    "linked list",
+    "binary tree",
+    "graph",
+    "pointers",
+    "visualization",
+    "gdb",
+    "lldb",
+    "algorithms",
+    "education"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false,
+      "description": "DebugAlgo runs Python inside the debugger of the workspace's debug sessions, so it is disabled in Restricted Mode."
+    },
+    "virtualWorkspaces": false
+  },
   "activationEvents": [
     "onDebug"
   ],

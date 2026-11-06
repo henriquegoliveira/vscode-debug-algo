@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:py": "python -m pytest",
-    "test:integration": "yarn workspace dbga-extension test:integration",
+    "test:integration": "yarn workspace debug-algo test:integration",
     "test:e2e": "make -C tests/targets && node tests/run_extractors.mjs",
     "test:report": "node tools/report/test-report.mjs",
     "bench": "node tools/report/test-report.mjs --bench"

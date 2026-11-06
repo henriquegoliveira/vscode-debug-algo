@@ -2013,27 +2013,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"dbga-extension@workspace:packages/extension":
-  version: 0.0.0-use.local
-  resolution: "dbga-extension@workspace:packages/extension"
-  dependencies:
-    "@types/express": "npm:^5.0.6"
-    "@types/mocha": "npm:^10"
-    "@types/node": "npm:^20"
-    "@types/vscode": "npm:^1.95.0"
-    "@types/ws": "npm:^8.18.1"
-    "@vscode/test-cli": "npm:^0.0.15"
-    "@vscode/test-electron": "npm:^3.1.0"
-    ajv: "npm:^8.20.0"
-    dbga-contract: "workspace:^"
-    esbuild: "npm:^0.27.4"
-    express: "npm:^5.2.1"
-    json-schema-to-typescript: "npm:^15.0.4"
-    typescript: "npm:~5.9.3"
-    ws: "npm:^8.20.0"
-  languageName: unknown
-  linkType: soft
-
 "dbga-webview@workspace:packages/webview":
   version: 0.0.0-use.local
   resolution: "dbga-webview@workspace:packages/webview"
@@ -2053,6 +2032,27 @@ __metadata:
     vis-data: "npm:^8.0.3"
     vis-network: "npm:^10.0.2"
     vis-util: "npm:^6.0.0"
+  languageName: unknown
+  linkType: soft
+
+"debug-algo@workspace:packages/extension":
+  version: 0.0.0-use.local
+  resolution: "debug-algo@workspace:packages/extension"
+  dependencies:
+    "@types/express": "npm:^5.0.6"
+    "@types/mocha": "npm:^10"
+    "@types/node": "npm:^20"
+    "@types/vscode": "npm:^1.95.0"
+    "@types/ws": "npm:^8.18.1"
+    "@vscode/test-cli": "npm:^0.0.15"
+    "@vscode/test-electron": "npm:^3.1.0"
+    ajv: "npm:^8.20.0"
+    dbga-contract: "workspace:^"
+    esbuild: "npm:^0.27.4"
+    express: "npm:^5.2.1"
+    json-schema-to-typescript: "npm:^15.0.4"
+    typescript: "npm:~5.9.3"
+    ws: "npm:^8.20.0"
   languageName: unknown
   linkType: soft
 
