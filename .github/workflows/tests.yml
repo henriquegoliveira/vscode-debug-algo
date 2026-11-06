@@ -36,6 +36,7 @@ jobs:
         run: |
           yarn workspace dbga-webview build
           yarn workspace debug-algo build
+          yarn workspace dbga-demo build
 
       - name: Unit tests (TypeScript)
         run: yarn test:coverage

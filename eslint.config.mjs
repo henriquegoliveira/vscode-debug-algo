@@ -48,7 +48,12 @@ export default [
   },
 
   {
-    files: ['tests/**/*.mjs', 'tools/**/*.mjs', 'packages/extension/.vscode-test.mjs'],
+    files: [
+      'tests/**/*.mjs',
+      'tools/**/*.mjs',
+      'packages/extension/.vscode-test.mjs',
+      'packages/demo/record.mjs',
+    ],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -68,7 +73,7 @@ export default [
   },
 
   {
-    files: ['packages/webview/src/**/*.{ts,tsx,js,jsx}'],
+    files: ['packages/webview/src/**/*.{ts,tsx,js,jsx}', 'packages/demo/src/**/*.{ts,tsx,js,jsx}'],
     plugins: {
       react: reactPlugin,
       'react-hooks': reactHooksPlugin,

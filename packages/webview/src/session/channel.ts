@@ -20,6 +20,8 @@ let acquired: VsCodeApi | undefined;
 
 export type SnapshotListener = (message: ExtensionMessage) => void;
 
+export type SnapshotConnector = (onMessage: SnapshotListener) => () => void;
+
 export function isEmbedded(): boolean {
   return typeof acquireVsCodeApi === 'function';
 }
@@ -122,7 +124,7 @@ function parse(payload: string): unknown {
   }
 }
 
-function deliver(payload: unknown, onMessage: SnapshotListener): void {
+export function deliver(payload: unknown, onMessage: SnapshotListener): void {
   if (!isExtensionMessage(payload)) {
     return;
   }

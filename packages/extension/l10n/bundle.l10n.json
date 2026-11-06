@@ -109,5 +109,14 @@
   "how many elements": "how many elements",
   "Annotate": "Annotate",
   "A number, or the name of the variable that holds the size.": "A number, or the name of the variable that holds the size.",
-  "The browser is read-only: the annotation only takes effect from the VS Code panel.": "The browser is read-only: the annotation only takes effect from the VS Code panel."
+  "The browser is read-only: the annotation only takes effect from the VS Code panel.": "The browser is read-only: the annotation only takes effect from the VS Code panel.",
+  "Interactive demo": "Interactive demo",
+  "Run to the next pause": "Run to the next pause",
+  "Continue (F5)": "Continue (F5)",
+  "Start the program again (Ctrl+Shift+F5)": "Start the program again (Ctrl+Shift+F5)",
+  "Restart": "Restart",
+  "Program finished": "Program finished",
+  "Pause {0} of {1}": "Pause {0} of {1}",
+  "Get the extension": "Get the extension",
+  "A red-black tree in C receives the keys 50, 30, 70, 20, 40, 60, 80, 10 and 45. Each pause stops at fixInsertion, right after a key goes in and before the tree is rebalanced. Everything below the toolbar is the real DebugAlgo panel, fed with snapshots recorded under GDB.": "A red-black tree in C receives the keys 50, 30, 70, 20, 40, 60, 80, 10 and 45. Each pause stops at fixInsertion, right after a key goes in and before the tree is rebalanced. Everything below the toolbar is the real DebugAlgo panel, fed with snapshots recorded under GDB."
 }

@@ -44,6 +44,11 @@ yarn bench         # measures the WebSocket transport and adds its page to the s
 writes each chart as a single-page PDF. If any layer fails, the report is still written, and the
 command exits with a non-zero code.
 
+## Demo
+
+`yarn workspace dbga-demo build` builds the page into `packages/demo/dist`.
+`yarn workspace dbga-demo record` records the pauses again through the harness, under GDB.
+
 ## Packaging
 
 ```bash

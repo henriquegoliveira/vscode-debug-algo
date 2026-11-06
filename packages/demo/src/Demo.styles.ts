@@ -1,0 +1,50 @@
+import type { CSSProperties } from 'react';
+
+export const styles: Record<string, CSSProperties> = {
+  page: { display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh' },
+  header: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: '10px',
+    padding: '8px 12px',
+    backgroundColor: 'var(--vscode-sideBar-background, #252526)',
+    borderBottom: '1px solid var(--vscode-editorWidget-border, #454545)',
+  },
+  brand: { display: 'flex', alignItems: 'center', gap: '8px' },
+  logo: { width: '28px', height: '28px' },
+  title: { fontSize: 'var(--dbga-text-title)', fontWeight: 600 },
+  badge: {
+    fontSize: 'var(--dbga-text-micro)',
+    padding: '1px 6px',
+    borderRadius: 'var(--dbga-radius-pill)',
+    border: '1px solid var(--vscode-editorWidget-border, #454545)',
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+  },
+  controls: { display: 'flex', alignItems: 'center', gap: '6px' },
+  status: { color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
+  spacer: { flex: 1 },
+  link: { color: 'var(--vscode-textLink-foreground, #3794ff)', textDecoration: 'none' },
+  scenario: {
+    width: '100%',
+    margin: 0,
+    color: 'var(--vscode-descriptionForeground, #a0a0a0)',
+    fontSize: 'var(--dbga-text-meta)',
+  },
+  body: { display: 'flex', flex: 1, minHeight: 0 },
+  code: {
+    width: 'clamp(240px, 34vw, 520px)',
+    flexShrink: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    borderRight: '1px solid var(--vscode-editorWidget-border, #454545)',
+  },
+  tab: {
+    padding: '6px 12px',
+    fontSize: 'var(--dbga-text-meta)',
+    backgroundColor: 'var(--vscode-tab-activeBackground, #1e1e1e)',
+    borderBottom: '1px solid var(--vscode-editorWidget-border, #454545)',
+  },
+  codeBody: { flex: 1, minHeight: 0 },
+  visualizer: { flex: 1, minWidth: 0, position: 'relative' },
+};

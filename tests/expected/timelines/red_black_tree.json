@@ -1,0 +1,4619 @@
+[
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 1,
+          "maxDegree": 0
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 50,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 0,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 2,
+          "maxDegree": 1
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#14",
+        "indirections": 1,
+        "node": "#14",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 30,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#14",
+        "indirections": 1,
+        "node": "#14",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 1,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 3,
+          "maxDegree": 2
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#15",
+        "indirections": 1,
+        "node": "#15",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 70,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#15",
+        "indirections": 1,
+        "node": "#15",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 2,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#15",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 70,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 4,
+          "maxDegree": 2
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#16",
+        "indirections": 1,
+        "node": "#16",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 20,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#16",
+        "indirections": 1,
+        "node": "#16",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#14",
+        "indirections": 1,
+        "node": "#14",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 3,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#15",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 70,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#16",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 20,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 5,
+          "maxDegree": 3
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#17",
+        "indirections": 1,
+        "node": "#17",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 40,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#17",
+        "indirections": 1,
+        "node": "#17",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#14",
+        "indirections": 1,
+        "node": "#14",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 4,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#15",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 70,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#16",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 20,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#17",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 40,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": "#17",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 6,
+          "maxDegree": 3
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#18",
+        "indirections": 1,
+        "node": "#18",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 60,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#18",
+        "indirections": 1,
+        "node": "#18",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#15",
+        "indirections": 1,
+        "node": "#15",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 5,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#15",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 70,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#16",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 20,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#17",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 40,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#18",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 60,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": "#17",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "left",
+        "to": "#18",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "parent",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 7,
+          "maxDegree": 3
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#19",
+        "indirections": 1,
+        "node": "#19",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 80,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#19",
+        "indirections": 1,
+        "node": "#19",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#15",
+        "indirections": 1,
+        "node": "#15",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 6,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#15",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 70,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#16",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 20,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#17",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 40,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#18",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 60,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#19",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 80,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": "#17",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "left",
+        "to": "#18",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "right",
+        "to": "#19",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "parent",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "parent",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 8,
+          "maxDegree": 3
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#20",
+        "indirections": 1,
+        "node": "#20",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 10,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#20",
+        "indirections": 1,
+        "node": "#20",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#16",
+        "indirections": 1,
+        "node": "#16",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 7,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#15",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 70,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#16",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 20,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#17",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 40,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#18",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 60,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#19",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 80,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#20",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 10,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": "#17",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "left",
+        "to": "#18",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "right",
+        "to": "#19",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "left",
+        "to": "#20",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "parent",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "parent",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#20",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#20",
+        "field": "parent",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#20",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  },
+  {
+    "meta": {
+      "version": 2,
+      "debugger": "",
+      "debuggerVersion": "",
+      "generatedAt": 0,
+      "truncated": false,
+      "truncationReasons": [],
+      "framesScanned": 3,
+      "framesSkipped": 0,
+      "observedTypes": [
+        {
+          "type": "RedBlackNode",
+          "pointerFields": [
+            "left",
+            "right",
+            "parent"
+          ],
+          "scalarFields": [
+            "key",
+            "color"
+          ],
+          "count": 9,
+          "maxDegree": 3
+        }
+      ],
+      "errors": []
+    },
+    "roots": [
+      {
+        "name": "pt",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#0",
+        "target": "#21",
+        "indirections": 1,
+        "node": "#21",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "fixInsertion",
+        "frameLevel": 0,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#2",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "key",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "int",
+        "category": "scalar",
+        "address": "#4",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 45,
+          "signed": true
+        }
+      },
+      {
+        "name": "newNode",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#5",
+        "target": "#21",
+        "indirections": 1,
+        "node": "#21",
+        "status": "ok"
+      },
+      {
+        "name": "pt",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#6",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "ptParent",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#8",
+        "target": "#17",
+        "indirections": 1,
+        "node": "#17",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "insertion",
+        "frameLevel": 1,
+        "origin": "parameter",
+        "type": "RedBlackNode **",
+        "category": "pointer",
+        "address": "#9",
+        "target": "#3",
+        "indirections": 2,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "deepest",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#10",
+        "target": "#7",
+        "indirections": 1,
+        "node": null,
+        "status": "null"
+      },
+      {
+        "name": "i",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#11",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 8,
+          "signed": true
+        }
+      },
+      {
+        "name": "keys",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int[9]",
+        "category": "aggregate",
+        "address": "#12",
+        "target": null,
+        "indirections": 0,
+        "node": "#12",
+        "status": "ok"
+      },
+      {
+        "name": "ptRoot",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "RedBlackNode *",
+        "category": "pointer",
+        "address": "#3",
+        "target": "#1",
+        "indirections": 1,
+        "node": "#1",
+        "status": "ok"
+      },
+      {
+        "name": "total",
+        "function": "main",
+        "frameLevel": 2,
+        "origin": "local",
+        "type": "int",
+        "category": "scalar",
+        "address": "#13",
+        "target": null,
+        "indirections": 0,
+        "node": null,
+        "status": "ok",
+        "value": {
+          "t": "int",
+          "v": 9,
+          "signed": true
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "kind": "record",
+        "id": "#1",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 50,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "array",
+        "id": "#12",
+        "type": "int[9]",
+        "elementType": "int",
+        "length": 9,
+        "cells": [
+          {
+            "t": "int",
+            "v": 50,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 30,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 70,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 20,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 40,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 60,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 80,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 10,
+            "signed": true
+          },
+          {
+            "t": "int",
+            "v": 45,
+            "signed": true
+          }
+        ],
+        "cellsArePointers": false,
+        "truncated": false,
+        "origin": "static"
+      },
+      {
+        "kind": "record",
+        "id": "#14",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 30,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#15",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 70,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#16",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 20,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#17",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 40,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 1,
+              "name": "BLACK"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#18",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 60,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#19",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 80,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#20",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 10,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      },
+      {
+        "kind": "record",
+        "id": "#21",
+        "type": "RedBlackNode",
+        "aggregate": "struct",
+        "sizeBytes": 32,
+        "fields": [
+          {
+            "name": "key",
+            "type": "int",
+            "value": {
+              "t": "int",
+              "v": 45,
+              "signed": true
+            }
+          },
+          {
+            "name": "color",
+            "type": "Color",
+            "value": {
+              "t": "enum",
+              "v": 0,
+              "name": "RED"
+            }
+          }
+        ],
+        "arrays": []
+      }
+    ],
+    "edges": [
+      {
+        "from": "#1",
+        "field": "left",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "parent",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#1",
+        "field": "right",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "left",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#14",
+        "field": "right",
+        "to": "#17",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "left",
+        "to": "#18",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "parent",
+        "to": "#1",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#15",
+        "field": "right",
+        "to": "#19",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "left",
+        "to": "#20",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#16",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "parent",
+        "to": "#14",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#17",
+        "field": "right",
+        "to": "#21",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "parent",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#18",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "parent",
+        "to": "#15",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#19",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#20",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#20",
+        "field": "parent",
+        "to": "#16",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#20",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#21",
+        "field": "left",
+        "to": null,
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#21",
+        "field": "parent",
+        "to": "#17",
+        "type": "RedBlackNode *"
+      },
+      {
+        "from": "#21",
+        "field": "right",
+        "to": null,
+        "type": "RedBlackNode *"
+      }
+    ],
+    "frames": [
+      {
+        "level": 0,
+        "function": "fixInsertion",
+        "file": "red_black_tree.c",
+        "line": 166
+      },
+      {
+        "level": 1,
+        "function": "insertion",
+        "file": "red_black_tree.c",
+        "line": 239
+      },
+      {
+        "level": 2,
+        "function": "main",
+        "file": "red_black_tree.c",
+        "line": 37
+      }
+    ]
+  }
+]

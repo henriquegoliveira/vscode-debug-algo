@@ -109,5 +109,14 @@
   "how many elements": "quantos elementos",
   "Annotate": "Anotar",
   "A number, or the name of the variable that holds the size.": "Um número, ou o nome da variável que guarda o tamanho.",
-  "The browser is read-only: the annotation only takes effect from the VS Code panel.": "O navegador é somente leitura: a anotação só vale pelo painel do VS Code."
+  "The browser is read-only: the annotation only takes effect from the VS Code panel.": "O navegador é somente leitura: a anotação só vale pelo painel do VS Code.",
+  "Interactive demo": "Demonstração interativa",
+  "Run to the next pause": "Executar até a próxima pausa",
+  "Continue (F5)": "Continuar (F5)",
+  "Start the program again (Ctrl+Shift+F5)": "Começar o programa de novo (Ctrl+Shift+F5)",
+  "Restart": "Reiniciar",
+  "Program finished": "Programa encerrado",
+  "Pause {0} of {1}": "Pausa {0} de {1}",
+  "Get the extension": "Instalar a extensão",
+  "A red-black tree in C receives the keys 50, 30, 70, 20, 40, 60, 80, 10 and 45. Each pause stops at fixInsertion, right after a key goes in and before the tree is rebalanced. Everything below the toolbar is the real DebugAlgo panel, fed with snapshots recorded under GDB.": "Uma árvore rubro-negra em C recebe as chaves 50, 30, 70, 20, 40, 60, 80, 10 e 45. Cada pausa para em fixInsertion, logo depois que uma chave entra e antes de a árvore ser rebalanceada. Tudo abaixo da barra é o painel de verdade do DebugAlgo, alimentado com snapshots gravados no GDB."
 }

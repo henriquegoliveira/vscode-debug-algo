@@ -37,7 +37,11 @@ const SCENES = {
   sorting_heap: { continues: 5 },
 };
 
-const TIMELINES = ['sorting_merge', 'recursion'];
+const TIMELINES = {
+  sorting_merge: {},
+  recursion: {},
+  red_black_tree: { breakAt: 'fixInsertion', continues: 8 },
+};
 
 const VARIANTS = {
   dynamic_array: {
@@ -249,12 +253,11 @@ function sourceOf(target) {
   return { file: path.basename(candidate), text: readFileSync(candidate, 'utf8') };
 }
 
-function pauseCount(target) {
-  return (SCENES[target]?.continues ?? 0) + 1;
+function timelineScene(target) {
+  return { ...(SCENES[target] ?? {}), ...TIMELINES[target] };
 }
 
-function sceneArgs(target, debuggerSpec, dumps, options) {
-  const scene = SCENES[target] ?? {};
+function sceneArgs(target, scene, debuggerSpec, dumps, options) {
   const args = [];
 
   if (scene.breakAt !== undefined) {
@@ -310,14 +313,14 @@ function runTarget(job, key) {
   const args = single
     ? [
         ...debuggerSpec.flags,
-        ...sceneArgs(job.target, debuggerSpec, null, job.options),
+        ...sceneArgs(job.target, job.scene, debuggerSpec, null, job.options),
         ...debuggerSpec.script(importCommand(debuggerSpec)),
         ...debuggerSpec.script(dumpCommand(debuggerSpec, outPaths[0], job.options)),
         path.join(BIN, job.target + EXE),
       ]
     : [
         ...debuggerSpec.flags,
-        ...sceneArgs(job.target, debuggerSpec, outPaths, job.options),
+        ...sceneArgs(job.target, job.scene, debuggerSpec, outPaths, job.options),
         path.join(BIN, job.target + EXE),
       ];
 
@@ -660,6 +663,7 @@ function main() {
       label: target,
       file: target,
       options: {},
+      scene: SCENES[target] ?? {},
       count: 1,
       baseline: path.join(EXPECTED, `${target}.json`),
     },
@@ -669,10 +673,11 @@ function main() {
       label: `${target}#${variant}`,
       file: `${target}.${variant}`,
       options,
+      scene: SCENES[target] ?? {},
       count: 1,
       baseline: path.join(EXPECTED, `${target}.${variant}.json`),
     })),
-    ...(TIMELINES.includes(target)
+    ...(Object.hasOwn(TIMELINES, target)
       ? [
           {
             target,
@@ -680,7 +685,8 @@ function main() {
             label: `${target}#timeline`,
             file: `${target}.timeline`,
             options: {},
-            count: pauseCount(target),
+            scene: timelineScene(target),
+            count: (timelineScene(target).continues ?? 0) + 1,
             baseline: path.join(TIMELINES_EXPECTED, `${target}.json`),
           },
         ]

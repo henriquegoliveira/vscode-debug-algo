@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from 'react';
 import type { ExtensionMessage, GraphSnapshot } from 'dbga-contract';
 import { EMPTY_ORIENTATION, type Orientation, foldOrientation } from '../model/orientation';
-import { connectSnapshotChannel } from './channel';
+import { type SnapshotConnector, connectSnapshotChannel } from './channel';
 
 export type ScreenPhase = 'idle' | 'live' | 'ended';
 
@@ -82,10 +82,12 @@ export function reduce(state: ScreenState, message: ExtensionMessage): ScreenSta
   }
 }
 
-export function useSnapshotChannel(): ScreenState {
+export function useSnapshotChannel(
+  connect: SnapshotConnector = connectSnapshotChannel,
+): ScreenState {
   const [state, dispatch] = useReducer(reduce, INITIAL_STATE);
 
-  useEffect(() => connectSnapshotChannel(dispatch), []);
+  useEffect(() => connect(dispatch), [connect]);
 
   return state;
 }
