@@ -290,6 +290,7 @@ const App: React.FC = () => {
     <>
       <Toolbar
         choice={fileView.layoutChoice}
+        layout={layout}
         onGraphChoice={setGraphChoice}
         nullTerminals={fileView.nullTerminals}
         onNullTerminals={(nullTerminals) => updateFile({ nullTerminals })}

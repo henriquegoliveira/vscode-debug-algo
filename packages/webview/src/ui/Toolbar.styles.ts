@@ -27,6 +27,7 @@ export const styles: Record<string, CSSProperties> = {
   },
   menuBox: { position: 'relative', display: 'flex' },
   pillLead: { color: 'var(--vscode-descriptionForeground, #a0a0a0)' },
+  pillIcon: { width: '20px', height: '20px', flexShrink: 0 },
   pillValue: { color: 'var(--vscode-charts-blue, #569cd6)', fontWeight: 600 },
   menu: {
     position: 'absolute',
