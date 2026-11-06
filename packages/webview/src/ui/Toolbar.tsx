@@ -1,8 +1,9 @@
 import * as l10n from '@vscode/l10n';
 import React, { useEffect, useRef, useState } from 'react';
-import type { LayoutChoice } from '../model/layoutRule';
+import type { LayoutChoice, LayoutKind } from '../model/layoutRule';
 import type { FrameMode, ViewMode } from '../session/persistence';
-import { ChevronIcon, FollowIcon, FrameIcon, LayoutIcon, NullIcon, StackIcon } from './icons';
+import { ChevronIcon, FollowIcon, FrameIcon, NullIcon, StackIcon } from './icons';
+import { viewIcon } from './viewIcon';
 import { styles } from './Toolbar.styles';
 
 export const ZOOM_STEP = 1.25;
@@ -100,10 +101,11 @@ export const ZoomControl: React.FC<{
 
 const DrawMenu: React.FC<{
   choice: LayoutChoice;
+  layout: LayoutKind | null;
   viewMode: ViewMode;
   onGraphChoice: (choice: LayoutChoice) => void;
   onViewMode: (mode: ViewMode) => void;
-}> = ({ choice, viewMode, onGraphChoice, onViewMode }) => {
+}> = ({ choice, layout, viewMode, onGraphChoice, onViewMode }) => {
   const [open, setOpen] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
@@ -151,7 +153,7 @@ const DrawMenu: React.FC<{
         title={l10n.t('How to draw the structure')}
         onClick={() => setOpen(!open)}
       >
-        <LayoutIcon />
+        <img src={viewIcon(viewMode, choice, layout)} style={styles.pillIcon} alt="" />
         <span style={styles.pillLead}>{l10n.t('Drawing:')}</span>
         <strong style={styles.pillValue}>{current.label}</strong>
         <ChevronIcon />
@@ -196,6 +198,7 @@ const DrawMenu: React.FC<{
 
 const Toolbar: React.FC<{
   choice: LayoutChoice;
+  layout: LayoutKind | null;
   onGraphChoice: (choice: LayoutChoice) => void;
   nullTerminals: boolean;
   onNullTerminals: (enabled: boolean) => void;
@@ -209,6 +212,7 @@ const Toolbar: React.FC<{
   compact: boolean;
 }> = ({
   choice,
+  layout,
   onGraphChoice,
   nullTerminals,
   onNullTerminals,
@@ -224,6 +228,7 @@ const Toolbar: React.FC<{
   <div style={compact ? { ...styles.bar, ...styles.barCompact } : styles.bar}>
     <DrawMenu
       choice={choice}
+      layout={layout}
       viewMode={viewMode}
       onGraphChoice={onGraphChoice}
       onViewMode={onViewMode}

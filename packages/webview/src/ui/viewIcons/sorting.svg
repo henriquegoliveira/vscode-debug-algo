@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" fill="none"><g>
+<path d="M173.5 173.5L222 222" stroke="#1E2329" stroke-width="26" stroke-linecap="round" />
+<path d="M112 192C156.183 192 192 156.183 192 112C192 67.8172 156.183 32 112 32C67.8172 32 32 67.8172 32 112C32 156.183 67.8172 192 112 192Z" fill="white" />
+<g>
+<path d="M79.6 97.6H58V119.2H79.6V97.6Z" fill="white" stroke="#1E2329" stroke-opacity="0.45" stroke-width="2.7" />
+<path d="M101.2 97.6H79.6V119.2H101.2V97.6Z" fill="#FDEBC8" stroke="#F59E0B" stroke-width="3.6" />
+<path d="M122.8 97.6H101.2V119.2H122.8V97.6Z" fill="#FDEBC8" stroke="#F59E0B" stroke-width="3.6" />
+<path d="M144.4 97.6H122.8V119.2H144.4V97.6Z" fill="white" stroke="#1E2329" stroke-opacity="0.45" stroke-width="2.7" />
+<path d="M166 97.6H144.4V119.2H166V97.6Z" fill="white" stroke="#1E2329" stroke-opacity="0.45" stroke-width="2.7" />
+<path d="M94.45 126.4H86.35C84.1132 126.4 82.3 128.213 82.3 130.45C82.3 132.687 84.1132 134.5 86.35 134.5H94.45C96.6867 134.5 98.5 132.687 98.5 130.45C98.5 128.213 96.6867 126.4 94.45 126.4Z" fill="#2F6FDB" fill-opacity="0.85" />
+<path d="M116.05 126.4H107.95C105.713 126.4 103.9 128.213 103.9 130.45C103.9 132.687 105.713 134.5 107.95 134.5H116.05C118.287 134.5 120.1 132.687 120.1 130.45C120.1 128.213 118.287 126.4 116.05 126.4Z" fill="#2F6FDB" fill-opacity="0.85" />
+<path d="M90.4 92.2C97.6 80.2 104.8 80.2 112 92.2" stroke="#F59E0B" stroke-width="3.6" stroke-linecap="round" />
+<path d="M112 94L103.9 89.5L110.2 84.1L112 94Z" fill="#F59E0B" />
+</g>
+<path d="M112 192C156.183 192 192 156.183 192 112C192 67.8172 156.183 32 112 32C67.8172 32 32 67.8172 32 112C32 156.183 67.8172 192 112 192Z" stroke="#1E2329" stroke-width="14" />
+</g>
+</svg>
