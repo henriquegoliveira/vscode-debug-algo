@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import {
   type Viewport,
   CAMERA_DURATION,
@@ -360,7 +361,7 @@ const SortingView: React.FC<SortingViewProps> = ({
         ))}
         {drawn.length === 0 && (
           <div style={styles.empty}>
-            Nenhum vetor está sendo mostrado. Ligue um na lista do canto superior esquerdo.
+            {l10n.t('No array is being shown. Turn one on in the list at the top left.')}
           </div>
         )}
       </div>
@@ -368,14 +369,14 @@ const SortingView: React.FC<SortingViewProps> = ({
       {model !== null && model.tracks.length > 0 && (
         <div style={styles.picker}>
           <div style={styles.pickerRow}>
-            <span style={styles.pickerLabel}>vetores</span>
+            <span style={styles.pickerLabel}>{l10n.t('arrays')}</span>
             {model.tracks.map((track) => (
               <button
                 key={track.key}
                 type="button"
                 className="dbga-chip"
                 aria-pressed={enabled.has(track.key)}
-                title={`${track.type} com ${track.length} posições`}
+                title={l10n.t('{0} with {1} positions', track.type, track.length)}
                 onClick={() => toggleTrack(track.key)}
               >
                 {track.names.length === 0 ? track.type : track.names.join(', ')}
@@ -384,7 +385,7 @@ const SortingView: React.FC<SortingViewProps> = ({
           </div>
           {legend.length > 0 && (
             <div style={styles.pickerRow}>
-              <span style={styles.pickerLabel}>marcadores</span>
+              <span style={styles.pickerLabel}>{l10n.t('markers')}</span>
               {legend.map((marker) => (
                 <button
                   key={marker.id}

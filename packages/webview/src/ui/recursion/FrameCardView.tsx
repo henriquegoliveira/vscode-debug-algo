@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import type { FrameCard } from '../../model/callStack';
 import { styles } from './RecursionView.styles';
 import { RootLine } from './RootLine';
@@ -17,7 +18,7 @@ export const FrameCardView: React.FC<{
       <span style={styles.cardFunction}>{frame.function}</span>
       <span style={styles.cardLevel}>#{frame.level}</span>
       <span style={styles.cardSite}>
-        {frame.file === '' ? `linha ${frame.line}` : `${frame.file}:${frame.line}`}
+        {frame.file === '' ? l10n.t('line {0}', frame.line) : `${frame.file}:${frame.line}`}
       </span>
     </div>
     <div style={styles.cardBody}>
@@ -30,7 +31,7 @@ export const FrameCardView: React.FC<{
           onSelect={onSelect}
         />
       ))}
-      {frame.roots.length === 0 && <div style={styles.cardEmpty}>sem variáveis</div>}
+      {frame.roots.length === 0 && <div style={styles.cardEmpty}>{l10n.t('no variables')}</div>}
     </div>
   </div>
 );

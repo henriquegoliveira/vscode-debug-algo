@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import { type ArrayTrack, markersByIndex } from '../../model/sorting';
 import { CELL_HEIGHT, CUT_ROOM, INDEX_HEIGHT, MARKER_HEIGHT, styles } from './SortingView.styles';
 import React from 'react';
@@ -31,7 +32,7 @@ export const TrackView: React.FC<{
           <span style={styles.trackType}>{track.type}</span>
           {track.truncated && (
             <span style={styles.trackTruncated}>
-              {track.cells.length} de {track.length}
+              {l10n.t('{0} of {1}', track.cells.length, track.length)}
             </span>
           )}
         </button>
@@ -92,7 +93,10 @@ export const TrackView: React.FC<{
                 ...styles.cut,
                 transform: `translateX(${track.cells.length * track.step}px)`,
               }}
-              title={`${track.length - track.cells.length} posições além do limite de leitura`}
+              title={l10n.t(
+                '{0} positions beyond the read limit',
+                track.length - track.cells.length,
+              )}
             >
               +{track.length - track.cells.length}
             </span>

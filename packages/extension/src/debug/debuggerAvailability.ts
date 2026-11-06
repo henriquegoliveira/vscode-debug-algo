@@ -7,20 +7,20 @@ const CODELLDB_EXTENSION_ID = 'vadimcn.vscode-lldb';
 
 const WINDOWS_LLDB_HINT_KEY = 'debug-algo.windowsLldbHintShown';
 
-const INSTALL_CPPTOOLS_ACTION = 'Instalar C/C++ (cpptools)';
-const INSTALL_CODELLDB_ACTION = 'Instalar CodeLLDB';
+const INSTALL_CPPTOOLS_ACTION = vscode.l10n.t('Install C/C++ (cpptools)');
+const INSTALL_CODELLDB_ACTION = vscode.l10n.t('Install CodeLLDB');
 
-const MISSING_EXTENSIONS_MESSAGE =
-  'DebugAlgo precisa da extensão C/C++ (cpptools) ou CodeLLDB para depurar e ' +
-  'extrair as estruturas de dados. Nenhuma das duas está instalada.';
+const MISSING_EXTENSIONS_MESSAGE = vscode.l10n.t(
+  'DebugAlgo needs the C/C++ extension (cpptools) or CodeLLDB to debug and extract data structures. Neither is installed.',
+);
 
-const NO_ACTIVE_SESSION_MESSAGE =
-  'DebugAlgo não encontrou nenhuma sessão de depuração ativa em C/C++ (cpptools ou CodeLLDB). ' +
-  'Inicie uma sessão de debug para ver a visualização atualizar a cada pausa.';
+const NO_ACTIVE_SESSION_MESSAGE = vscode.l10n.t(
+  'DebugAlgo found no active C/C++ debug session (cpptools or CodeLLDB). Start a debug session to see the visualization update at every pause.',
+);
 
-const WINDOWS_LLDB_HINT =
-  'No Windows o GDB é instalado à parte e nem todo build traz Python, que o DebugAlgo precisa ' +
-  'para extrair as estruturas de dados. O CodeLLDB traz o próprio depurador e dispensa essa configuração.';
+const WINDOWS_LLDB_HINT = vscode.l10n.t(
+  'On Windows, GDB is installed separately and not every build includes the Python that DebugAlgo needs to extract data structures. CodeLLDB bundles its own debugger and needs no such setup.',
+);
 
 export function warnIfNoSupportedDebugSession(sessionManager: DebugSessionManager): void {
   const activeType = sessionManager.detectDebuggerType(vscode.debug.activeDebugSession);

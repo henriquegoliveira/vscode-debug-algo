@@ -30,10 +30,9 @@ export interface InvokeOptions {
   threadId: number;
 }
 
-const PYTHON_MISSING_MESSAGE =
-  'DebugAlgo precisa de um depurador com Python embutido e o desta sessão não tem. ' +
-  'Use o CodeLLDB, que traz o próprio LLDB, ou um GDB com Python ' +
-  '(no Windows, mingw-w64-x86_64-gdb pelo MSYS2).';
+const PYTHON_MISSING_MESSAGE = vscode.l10n.t(
+  'DebugAlgo needs a debugger with embedded Python, and the one in this session has none. Use CodeLLDB, which bundles its own LLDB and Python, or a GDB built with Python (on Windows, mingw-w64-ucrt-x86_64-gdb from MSYS2 UCRT64).',
+);
 
 const FRAME_LEVELS = 20;
 
@@ -42,11 +41,9 @@ const PROBE_BACKOFF_MS = 10;
 
 const STALE_AFTER_MS = 6 * 60 * 60 * 1000;
 
-const PYTHON_PROBE_MESSAGE =
-  'DebugAlgo injetou Python no depurador e nada foi escrito em disco. As duas causas possíveis são ' +
-  'um depurador sem Python embutido e um caminho de arquivo que não sobreviveu ao console do ' +
-  'depurador. Confira se o GDB tem Python (gdb --configuration) e se a pasta temporária do sistema ' +
-  'é gravável.';
+const PYTHON_PROBE_MESSAGE = vscode.l10n.t(
+  'DebugAlgo injected Python into the debugger and nothing was written to disk. The two possible causes are a debugger without embedded Python and a file path that did not survive the debugger console. Check that GDB has Python (gdb --configuration) and that the system temporary folder is writable.',
+);
 
 export class DebuggerPythonMissingError extends Error {
   constructor(
@@ -139,7 +136,10 @@ export class ExtractorInvoker {
     const frame = frames?.[0];
     if (frame === undefined) {
       throw new Error(
-        `nao consegui resolver o frame da thread ${threadId}: stackTrace voltou sem frames`,
+        vscode.l10n.t(
+          'could not resolve the frame of thread {0}: stackTrace returned no frames',
+          threadId,
+        ),
       );
     }
 

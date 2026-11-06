@@ -1,0 +1,13 @@
+{
+  "command.start.title": "Iniciar Visualização",
+  "command.annotateArray.title": "Anotar vetor dinâmico (v@n)",
+  "command.startServer.title": "Iniciar Visualização no Navegador",
+  "config.dynamicArrays.markdownDescription": "Anotações de comprimento para ponteiros que apontam para vetores no heap, na forma `ponteiro@comprimento` ou `função:ponteiro@comprimento`. Os dois lados são avaliados no frame pausado, e o comprimento pode ser um literal.",
+  "config.rootFilter.markdownDescription": "Quando não vazio, só as variáveis com esses nomes entram como raízes do grafo.",
+  "config.limits.maxNodes.markdownDescription": "Número máximo de nós lidos num snapshot. Ao atingi-lo, o snapshot é marcado como truncado.",
+  "config.limits.maxEdges.markdownDescription": "Número máximo de arestas lidas num snapshot. Ao atingi-lo, o snapshot é marcado como truncado.",
+  "config.limits.maxCells.markdownDescription": "Número máximo de elementos lidos por vetor.",
+  "config.limits.historyDepth.markdownDescription": "Número de pausas guardadas para o controle de histórico.",
+  "config.view.markdownDescription": "Estado interno de visualização do painel do DebugAlgo, guardado por arquivo depurado. Escrito pelo painel; não é para edição manual.",
+  "capabilities.untrustedWorkspaces.description": "O DebugAlgo executa Python dentro do depurador das sessões de depuração do workspace, por isso fica desativado no Modo Restrito."
+}

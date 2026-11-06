@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import type { Box } from '../geometry/boxes';
 import {
   CAMERA_DURATION,
@@ -825,10 +826,12 @@ const GraphView: React.FC<GraphViewProps> = ({
             <header style={styles.columnHead}>
               <h4 style={styles.columnTitle}>
                 <ListIcon />
-                Variáveis por frame
+                {l10n.t('Variables by frame')}
               </h4>
               <span style={styles.columnCount}>
-                {model.frames.length === 1 ? '1 frame' : `${model.frames.length} frames`}
+                {model.frames.length === 1
+                  ? l10n.t('1 frame')
+                  : l10n.t('{0} frames', model.frames.length)}
               </span>
             </header>
             {model.frames.map((frame) => (
@@ -837,14 +840,14 @@ const GraphView: React.FC<GraphViewProps> = ({
                   type="button"
                   className="dbga-check"
                   aria-pressed={frame.enabled}
-                  title="Mostrar as variáveis deste frame no grafo"
+                  title={l10n.t("Show this frame's variables in the graph")}
                   onClick={() => toggleFrame(frame.id)}
                 >
                   <span className="dbga-box" />
                   <span>{frame.function}</span>
                   <span style={styles.frameLevel}>
                     #{frame.frameLevel}
-                    {frame.frameLevel === 0 ? ' (atual)' : ''}
+                    {frame.frameLevel === 0 ? ` ${l10n.t('(current)')}` : ''}
                   </span>
                 </button>
                 <div style={styles.roots}>
@@ -861,7 +864,7 @@ const GraphView: React.FC<GraphViewProps> = ({
             ))}
             {model.globals.length > 0 && (
               <section style={styles.globals}>
-                <h5 style={styles.globalsTitle}>Globais do arquivo</h5>
+                <h5 style={styles.globalsTitle}>{l10n.t('File globals')}</h5>
                 <div style={styles.roots}>
                   {model.globals.map((root) => (
                     <RootRow

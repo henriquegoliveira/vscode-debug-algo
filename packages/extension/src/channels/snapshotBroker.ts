@@ -71,6 +71,13 @@ export class SnapshotBroker implements vscode.Disposable {
   }
 
   public replay(channel: SnapshotChannel): void {
+    channel.post({
+      v: PROTOCOL_VERSION,
+      type: 'locale',
+      language: vscode.env.language,
+      bundle: vscode.l10n.bundle,
+    });
+
     if (this.history.length === 0 || this.lastSessionId === undefined) {
       return;
     }

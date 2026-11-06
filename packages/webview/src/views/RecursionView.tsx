@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import {
   type Viewport,
   CAMERA_DURATION,
@@ -286,12 +287,12 @@ const RecursionView: React.FC<RecursionViewProps> = ({
               onSelect={onSelect}
               cardRef={(el) => registerCard(frame.level, el)}
             />
-            {index < frames.length - 1 && <Connector label="foi chamado por" />}
+            {index < frames.length - 1 && <Connector label={l10n.t('called by')} />}
           </React.Fragment>
         ))}
         {globals.length > 0 && (
           <>
-            {frames.length > 0 && <Connector label="globais do arquivo" />}
+            {frames.length > 0 && <Connector label={l10n.t('file globals')} />}
             <GlobalsCardView roots={globals} selectedId={selectedId} onSelect={onSelect} />
           </>
         )}

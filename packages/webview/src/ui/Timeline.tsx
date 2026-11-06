@@ -1,3 +1,4 @@
+import * as l10n from '@vscode/l10n';
 import { HEADER_CAPSULE } from './chrome';
 import React from 'react';
 
@@ -25,7 +26,7 @@ const Timeline: React.FC<TimelineProps> = ({
       <button
         type="button"
         className="dbga-icon"
-        title="Pausa anterior"
+        title={l10n.t('Previous pause')}
         disabled={index <= 0}
         onClick={() => onIndex(index - 1)}
       >
@@ -39,14 +40,14 @@ const Timeline: React.FC<TimelineProps> = ({
         max={count - 1}
         step={1}
         value={index}
-        title="Percorrer as pausas guardadas"
+        title={l10n.t('Step through the stored pauses')}
         onChange={(event) => onIndex(Number(event.target.value))}
       />
 
       <button
         type="button"
         className="dbga-icon"
-        title="Próxima pausa"
+        title={l10n.t('Next pause')}
         disabled={index >= count - 1}
         onClick={() => onIndex(index + 1)}
       >
@@ -61,12 +62,12 @@ const Timeline: React.FC<TimelineProps> = ({
         aria-pressed={following}
         title={
           following
-            ? 'Acompanhando a pausa mais recente'
-            : `Voltar para a pausa mais recente (${behind} depois desta)`
+            ? l10n.t('Following the most recent pause')
+            : l10n.t('Back to the most recent pause ({0} after this one)', behind)
         }
         onClick={onLive}
       >
-        ao vivo
+        {l10n.t('live')}
       </button>
     </div>
   );

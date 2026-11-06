@@ -17,11 +17,11 @@ import { SnapshotBroker } from './channels/snapshotBroker';
 import { WebviewChannel } from './channels/webviewChannel';
 import { HttpWsChannel, MissingBundleError } from './channels/httpWsChannel';
 
-const SERVER_FAILED_MESSAGE =
-  'DebugAlgo não conseguiu abrir o servidor local da Visualização. Tente de novo; se continuar ' +
-  'falhando, algo no sistema está bloqueando conexões em 127.0.0.1.';
+const SERVER_FAILED_MESSAGE = vscode.l10n.t(
+  'DebugAlgo could not start the local visualization server. Try again; if it keeps failing, something on the system is blocking connections to 127.0.0.1.',
+);
 
-const OPEN_IN_BROWSER_ACTION = 'Abrir no navegador';
+const OPEN_IN_BROWSER_ACTION = vscode.l10n.t('Open in Browser');
 
 export class ExtensionController {
   private sessionManager: DebugSessionManager;
@@ -56,7 +56,7 @@ export class ExtensionController {
   }
 
   public activate(): void {
-    console.log('Extensão DebugAlgo ativada com sucesso!');
+    console.log('DebugAlgo extension activated');
 
     void sweepStaleTempFiles();
 
@@ -143,7 +143,10 @@ export class ExtensionController {
 }
 
 function serverReadyMessage(url: string): string {
-  return `Visualização disponível em ${url} — o link já está na área de transferência.`;
+  return vscode.l10n.t(
+    'Visualization available at {0} — the link is already on the clipboard.',
+    url,
+  );
 }
 
 let controller: ExtensionController | undefined;
