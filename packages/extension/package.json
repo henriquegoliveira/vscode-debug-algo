@@ -158,7 +158,9 @@
     "gen:types": "json2ts schemas/graph-snapshot.schema.json -o ../contract/src/graphSnapshot.ts --additionalProperties false --style.singleQuote --style.printWidth 100",
     "check:types": "yarn gen:types && git diff --exit-code ../contract/src/graphSnapshot.ts",
     "test:integration": "yarn workspace dbga-webview build && node esbuild.js && tsc --noEmit -p test/integration && node esbuild.js --tests && vscode-test",
-    "l10n:export": "npx --yes @vscode/l10n-dev@0.0.35 export --outDir ./l10n ./src ../webview/src"
+    "l10n:export": "npx --yes @vscode/l10n-dev@0.0.35 export --outDir ./l10n ./src ../webview/src",
+    "vscode:prepublish": "yarn workspace dbga-webview build && tsc --noEmit && node esbuild.js --production",
+    "package": "vsce package"
   },
   "dependencies": {
     "ajv": "^8.20.0",
@@ -178,5 +180,11 @@
     "esbuild": "^0.27.4",
     "json-schema-to-typescript": "^15.0.4",
     "typescript": "~5.9.3"
+  },
+  "vsce": {
+    "dependencies": false,
+    "yarn": true,
+    "baseContentUrl": "https://github.com/henriquegoliveira/vscode-debug-algo/blob/HEAD/packages/extension",
+    "baseImagesUrl": "https://github.com/henriquegoliveira/vscode-debug-algo/raw/HEAD/packages/extension"
   }
 }

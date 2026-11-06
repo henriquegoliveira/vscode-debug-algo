@@ -1,0 +1,11 @@
+src/**
+test/**
+out/**
+node_modules/**
+.vscode-test/**
+.vscode-test.mjs
+esbuild.js
+tsconfig.json
+**/*.map
+**/__pycache__/**
+**/*.pyc
