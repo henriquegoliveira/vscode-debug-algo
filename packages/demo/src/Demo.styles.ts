@@ -1,7 +1,13 @@
 import type { CSSProperties } from 'react';
 
 export const styles: Record<string, CSSProperties> = {
-  page: { display: 'flex', flexDirection: 'column', width: '100vw', height: '100vh' },
+  page: {
+    position: 'fixed',
+    inset: 0,
+    display: 'flex',
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
   header: {
     display: 'flex',
     flexWrap: 'wrap',

@@ -56,14 +56,19 @@ function highlight(text: string): React.ReactNode[] {
 }
 
 export const CodePane: React.FC<{ source: string; line: number | null }> = ({ source, line }) => {
+  const paneRef = useRef<HTMLDivElement>(null);
   const currentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    currentRef.current?.scrollIntoView({ block: 'center' });
+    const pane = paneRef.current;
+    const current = currentRef.current;
+    if (pane !== null && current !== null) {
+      pane.scrollTop = current.offsetTop - (pane.clientHeight - current.offsetHeight) / 2;
+    }
   }, [line]);
 
   return (
-    <div style={styles.pane}>
+    <div ref={paneRef} style={styles.pane}>
       {source.split('\n').map((text, position) => {
         const number = position + 1;
         const current = number === line;

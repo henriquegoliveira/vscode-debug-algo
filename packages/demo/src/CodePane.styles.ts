@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react';
 
 export const styles: Record<string, CSSProperties> = {
   pane: {
+    position: 'relative',
     height: '100%',
     overflow: 'auto',
     backgroundColor: 'var(--vscode-editor-background, #1e1e1e)',
