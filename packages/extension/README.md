@@ -3,6 +3,8 @@
 See your linked lists, trees and graphs in C and C++ while you debug. Every time the debugger stops,
 DebugAlgo reads the program's structures and redraws what changed.
 
+You can try it without installing anything in the [interactive demo](https://henriquegoliveira.github.io/vscode-debug-algo/): a red-black tree in C, pause by pause, in the same panel as the extension.
+
 ## What it does
 
 - Draws lists (singly and doubly linked, circular, with or without a head node), trees and graphs
