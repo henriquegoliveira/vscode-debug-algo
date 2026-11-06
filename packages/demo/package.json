@@ -1,0 +1,23 @@
+{
+  "name": "dbga-demo",
+  "private": true,
+  "scripts": {
+    "build": "tsc --noEmit && node esbuild.js",
+    "dev": "node esbuild.js --watch",
+    "typecheck": "tsc --noEmit",
+    "record": "node record.mjs"
+  },
+  "dependencies": {
+    "@vscode/l10n": "^0.0.18",
+    "dbga-contract": "workspace:^",
+    "dbga-webview": "workspace:^",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "esbuild": "^0.28.0",
+    "typescript": "~5.9.3"
+  }
+}

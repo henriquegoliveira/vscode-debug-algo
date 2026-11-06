@@ -7,7 +7,12 @@ import { NO_CHANGES, Pass } from './model/graph/types';
 import { annotationTargets, buildIndex, inspect } from './model/inspection';
 import { type LayoutChoice, type LayoutKind, resolveLayout } from './model/layoutRule';
 import { childSides, treeOrder } from './model/orientation';
-import { isEmbedded, sendAnnotation, sendSaveView } from './session/channel';
+import {
+  type SnapshotConnector,
+  isEmbedded,
+  sendAnnotation,
+  sendSaveView,
+} from './session/channel';
 import {
   FieldChoice,
   FileView,
@@ -40,8 +45,8 @@ const PHASE_COLOR: Record<ScreenPhase, string> = {
   ended: 'var(--vscode-charts-orange, #ce9178)',
 };
 
-const App: React.FC = () => {
-  const state = useSnapshotChannel();
+const App: React.FC<{ connect?: SnapshotConnector }> = ({ connect }) => {
+  const state = useSnapshotChannel(connect);
   const theme = useTheme();
   const [panel, updatePanel, panelRef] = usePanelState();
 
