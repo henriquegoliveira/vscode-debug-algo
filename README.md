@@ -8,7 +8,3 @@ You can try it without installing anything in the [interactive demo](https://hen
 It is on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=henriquegoliveira.debug-algo).
 The install and usage guide is in the [extension README](packages/extension/README.md). To run it
 from source or work on the tests, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## License
-
-GPL-3.0 or later. The full text is in [packages/extension/LICENSE](packages/extension/LICENSE).

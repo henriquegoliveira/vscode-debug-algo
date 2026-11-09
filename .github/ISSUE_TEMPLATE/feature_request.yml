@@ -1,0 +1,18 @@
+name: Feature request
+description: A structure, view or behavior you would like DebugAlgo to have.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What you are trying to do
+      description: The situation where DebugAlgo falls short today.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What you would like
+      description: How you picture it working. Code samples or sketches are welcome.
+    validations:
+      required: true

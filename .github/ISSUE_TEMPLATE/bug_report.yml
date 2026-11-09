@@ -1,0 +1,61 @@
+name: Bug report
+description: Something is drawn wrong, missing, or the panel does not work.
+labels: [bug]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected to see instead. A screenshot of the panel helps.
+    validations:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Code that reproduces it
+      description: The smallest C or C++ program that shows the problem, and the line where you paused.
+      render: c
+  - type: input
+    id: extension-version
+    attributes:
+      label: DebugAlgo version
+      placeholder: '0.1.0'
+    validations:
+      required: true
+  - type: input
+    id: vscode-version
+    attributes:
+      label: VS Code version
+      placeholder: '1.95.0'
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - Windows
+        - macOS
+    validations:
+      required: true
+  - type: dropdown
+    id: debugger
+    attributes:
+      label: Debugger
+      options:
+        - GDB (C/C++ extension)
+        - LLDB (CodeLLDB)
+    validations:
+      required: true
+  - type: input
+    id: debugger-version
+    attributes:
+      label: Debugger and compiler versions
+      description: Output of `gdb --version` or the CodeLLDB version, and `gcc --version`.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Messages
+      description: Any error DebugAlgo showed, and anything relevant from the Debug Console.
+      render: text
